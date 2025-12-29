@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام متابعة القضايا - مؤسسة محمود عبد الحميد</title>
+    <title>لوحة متابعة القضية - مؤسسة محمود عبد الحميد</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Google Calendar API -->
+    <script src="https://apis.google.com/js/api.js"></script>
     <style>
         :root {
             --primary-dark: #020617;
@@ -58,6 +60,12 @@
             transition: all 0.3s ease; 
         }
         
+        .card-glass:hover { 
+            border-color: rgba(191, 149, 63, 0.4); 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.2);
+        }
+        
         .gold-border {
             position: relative;
             overflow: hidden;
@@ -81,23 +89,58 @@
             pointer-events: none;
         }
         
-        .input-field {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+        
+        .status-active { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .status-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-hearing { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .status-completed { background: rgba(107, 114, 128, 0.1); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.3); }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--primary-dark);
+            border-radius: 1.5rem;
+            border: 1px solid var(--gold-solid);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .ticket-card {
+            border-right: 4px solid;
             transition: all 0.3s ease;
         }
         
-        .input-field:focus {
-            outline: none;
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
-        }
+        .ticket-pending { border-color: #f59e0b; }
+        .ticket-answered { border-color: #22c55e; }
+        .ticket-closed { border-color: #9ca3af; }
         
-        .security-badge {
-            background: rgba(37, 99, 235, 0.1);
-            border: 1px solid rgba(37, 99, 235, 0.3);
-            color: #60a5fa;
+        .calendar-event {
+            border-right: 4px solid var(--gold-solid);
+            background: rgba(191, 149, 63, 0.05);
         }
         
         .whatsapp-float { 
@@ -122,434 +165,783 @@
         .whatsapp-float:hover { 
             transform: scale(1.1); 
         }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gradient-to-b from-gray-900 to-black">
+<body class="min-h-screen bg-gradient-to-b from-gray-900 to-black">
 
     <!-- زر الواتساب العائم -->
     <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- الهيدر المشابه للموقع الرئيسي -->
-    <header class="border-b border-gold-solid/30 bg-black/90 backdrop-blur-lg">
-        <nav class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <!-- الهيدر -->
+    <header class="border-b border-gold-solid/30 bg-black/90 backdrop-blur-lg sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <a href="../index.html" class="flex items-center gap-3">
-                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-16 h-16 object-contain">
+                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-12 h-12 object-contain">
                     <div class="flex flex-col">
                         <h1 class="text-lg font-black gold-text serif-font">محمود عبد الحميد</h1>
-                        <p class="text-[10px] text-gray-300 font-bold">المحامي بالنقض والدستورية العليا</p>
+                        <p class="text-[10px] text-gray-300">لوحة متابعة القضية</p>
                     </div>
                 </a>
             </div>
             
-            <div class="hidden md:flex items-center gap-6 text-sm font-bold">
-                <a href="../index.html" class="text-white hover:gold-text transition">الرئيسية</a>
-                <a href="../index.html#booking" class="text-white hover:gold-text transition">طلب استشارة</a>
-                <a href="tel:01101076000" class="text-white hover:gold-text transition">اتصل بنا</a>
+            <div class="hidden md:flex items-center gap-6">
+                <div class="text-right">
+                    <p class="text-sm text-gray-300">مرحباً</p>
+                    <p class="font-bold gold-text" id="clientNameDisplay">أحمد محمد</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold-solid to-transparent flex items-center justify-center">
+                    <i class="fas fa-user gold-text"></i>
+                </div>
             </div>
             
-            <a href="../index.html" class="text-sm text-gray-400 hover:text-white">
-                <i class="fas fa-home ml-2"></i>
-                العودة للرئيسية
-            </a>
-        </nav>
+            <button onclick="logout()" class="text-sm bg-red-900/20 hover:bg-red-900/40 text-red-400 px-4 py-2 rounded-lg transition">
+                <i class="fas fa-sign-out-alt ml-2"></i>
+                تسجيل خروج
+            </button>
+        </div>
     </header>
 
     <!-- المحتوى الرئيسي -->
-    <main class="flex-1 flex items-center justify-center p-4">
-        <div class="max-w-4xl w-full">
-            <!-- قسم البطاقة الرئيسية -->
-            <div class="card-glass gold-border p-2 mb-8">
-                <div class="p-8 md:p-12">
-                    <div class="text-center mb-10">
-                        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold-solid to-transparent flex items-center justify-center">
-                            <i class="fas fa-lock text-3xl gold-text"></i>
-                        </div>
-                        <h1 class="text-3xl md:text-4xl font-black gold-text mb-4">نظام متابعة القضايا</h1>
-                        <p class="text-gray-300 text-lg">تابع قضيتك بكل سهولة وأمان مع مؤسسة محمود عبد الحميد للمحاماة</p>
+    <main class="p-4 lg:p-6 max-w-6xl mx-auto">
+        <!-- معلومات القضية الأساسية -->
+        <div class="card-glass gold-border p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 info-grid">
+                <div>
+                    <p class="text-gray-400 text-sm mb-1">رقم القضية</p>
+                    <p class="text-xl font-bold gold-text" id="caseNumberDisplay">٢٠٢٤/١٢٣٤٥</p>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-sm mb-1">المحكمة</p>
+                    <p class="text-xl font-bold" id="courtNameDisplay">أسوان الابتدائية - الدائرة الخامسة</p>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-sm mb-1">الخصم</p>
+                    <p class="text-xl font-bold" id="opponentNameDisplay">شركة الأمل للاستثمار العقاري</p>
+                </div>
+                <div>
+                    <p class="text-gray-400 text-sm mb-1">حالة القضية</p>
+                    <p class="text-xl font-bold">
+                        <span class="status-badge status-active" id="caseStatusDisplay">قيد النظر</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-6 pt-6 border-t border-white/10">
+                <p class="text-gray-400 text-sm mb-1">موضوع القضية</p>
+                <p class="text-lg font-bold" id="caseSubjectDisplay">دعوى تعويض عن عيوب خفية في عقد بيع عقار - المطالبة بمبلغ ٢٥٠,٠٠٠ جنيه</p>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- العمود الأول: الجلسات -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- الجلسة السابقة -->
+                <div class="card-glass gold-border p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold gold-text">الجلسة السابقة</h2>
+                        <span class="status-badge status-completed">منتهية</span>
                     </div>
                     
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <!-- نموذج الدخول -->
-                        <div class="space-y-8">
-                            <div>
-                                <h2 class="text-2xl font-bold gold-text mb-6">الدخول لمتابعة قضيتك</h2>
-                                <p class="text-gray-300 mb-6">أدخل بيانات الدخول الخاصة بقضيتك للاطلاع على آخر التحديثات والمستندات</p>
-                            </div>
-                            
-                            <form id="loginForm" class="space-y-6">
-                                <div>
-                                    <label class="block text-white mb-2 font-bold">رقم القضية</label>
-                                    <input type="text" 
-                                           id="caseNumber" 
-                                           placeholder="مثال: 2024/12345"
-                                           class="input-field w-full p-4 rounded-xl"
-                                           required>
-                                    <p class="text-gray-400 text-sm mt-2">يمكنك العثور عليه في أوراق القضية أو مراسلات المحامي</p>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-white mb-2 font-bold">رقم الهاتف المسجل</label>
-                                    <input type="tel" 
-                                           id="clientPhone" 
-                                           placeholder="مثال: 01101076000"
-                                           class="input-field w-full p-4 rounded-xl"
-                                           required>
-                                    <p class="text-gray-400 text-sm mt-2">نفس رقم الهاتف الذي قدمته عند بدء القضية</p>
-                                </div>
-                                
-                                <div id="otpSection" class="hidden">
-                                    <label class="block text-white mb-2 font-bold">كود التحقق</label>
-                                    <div class="flex gap-2">
-                                        <input type="text" 
-                                               maxlength="1"
-                                               class="input-field w-16 h-16 text-center text-2xl rounded-lg"
-                                               oninput="moveToNext(this, 1)">
-                                        <input type="text" 
-                                               maxlength="1"
-                                               class="input-field w-16 h-16 text-center text-2xl rounded-lg"
-                                               oninput="moveToNext(this, 2)">
-                                        <input type="text" 
-                                               maxlength="1"
-                                               class="input-field w-16 h-16 text-center text-2xl rounded-lg"
-                                               oninput="moveToNext(this, 3)">
-                                        <input type="text" 
-                                               maxlength="1"
-                                               class="input-field w-16 h-16 text-center text-2xl rounded-lg"
-                                               oninput="moveToNext(this, 4)">
-                                    </div>
-                                    <div class="flex justify-between items-center mt-2">
-                                        <button type="button" onclick="resendOTP()" class="text-gold-solid text-sm hover:underline">
-                                            إعادة إرسال الكود
-                                        </button>
-                                        <span id="otpTimer" class="text-gray-400 text-sm">02:00</span>
-                                    </div>
-                                </div>
-                                
-                                <button type="button" onclick="login()" class="gold-btn w-full py-4 rounded-xl text-lg font-bold">
-                                    <i class="fas fa-sign-in-alt ml-2"></i>
-                                    الدخول إلى القضية
-                                </button>
-                                
-                                <div class="text-center">
-                                    <p class="text-gray-400">
-                                        أول مرة تستخدم النظام؟
-                                        <a href="../index.html#booking" class="text-gold-solid hover:underline font-bold">
-                                            تواصل معنا لإنشاء حساب
-                                        </a>
-                                    </p>
-                                </div>
-                            </form>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">التاريخ:</span>
+                            <span class="font-bold text-lg">٢٥ مارس ٢٠٢٤</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">الوقت:</span>
+                            <span class="font-bold">٠٩:٠٠ صباحاً</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">المحكمة:</span>
+                            <span class="font-bold">أسوان الابتدائية - قاعة ٣</span>
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <span class="text-gray-400">الموضوع:</span>
+                            <span class="font-bold text-right">جلسة سماع شهود ومرافعة أولية</span>
                         </div>
                         
-                        <!-- قسم المعلومات والمساعدة -->
-                        <div class="space-y-8">
-                            <div class="card-glass p-6 rounded-2xl">
-                                <h3 class="text-xl font-bold gold-text mb-4">
-                                    <i class="fas fa-info-circle ml-2"></i>
-                                    معلومات مهمة
-                                </h3>
-                                <ul class="space-y-3 text-gray-300">
-                                    <li class="flex items-start">
-                                        <i class="fas fa-check text-gold-solid ml-3 mt-1"></i>
-                                        <span>النظام يعمل على مدار الساعة لمتابعة قضيتك</span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i class="fas fa-check text-gold-solid ml-3 mt-1"></i>
-                                        <span>يمكنك الاطلاع على آخر التحديثات والجلسات</span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i class="fas fa-check text-gold-solid ml-3 mt-1"></i>
-                                        <span>إمكانية تحميل المستندات والملفات الخاصة بالقضية</span>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <i class="fas fa-check text-gold-solid ml-3 mt-1"></i>
-                                        <span>التواصل المباشر مع المحامي عبر النظام</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <div class="card-glass p-6 rounded-2xl">
-                                <h3 class="text-xl font-bold gold-text mb-4">
-                                    <i class="fas fa-shield-alt ml-2"></i>
-                                    الحماية والأمان
-                                </h3>
-                                <div class="space-y-3">
-                                    <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fas fa-lock text-gold-solid"></i>
-                                            <span class="text-sm">تشفير البيانات</span>
-                                        </div>
-                                        <span class="security-badge text-xs px-2 py-1 rounded">مفعل</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fas fa-user-shield text-gold-solid"></i>
-                                            <span class="text-sm">حماية الخصوصية</span>
-                                        </div>
-                                        <span class="security-badge text-xs px-2 py-1 rounded">مفعل</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fas fa-history text-gold-solid"></i>
-                                            <span class="text-sm">سجلات المراجعة</span>
-                                        </div>
-                                        <span class="security-badge text-xs px-2 py-1 rounded">مفعل</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-gradient-to-r from-gray-900 to-black border border-gray-800 rounded-2xl p-6">
-                                <h4 class="font-bold text-white mb-4">هل تحتاج مساعدة؟</h4>
-                                <div class="space-y-3">
-                                    <a href="tel:01101076000" 
-                                       class="flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 rounded-lg transition">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fas fa-phone text-gold-solid"></i>
-                                            <span>الاتصال المباشر</span>
-                                        </div>
-                                        <i class="fas fa-arrow-left text-gray-400"></i>
-                                    </a>
-                                    
-                                    <a href="https://wa.me/201101076000" target="_blank"
-                                       class="flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 rounded-lg transition">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fab fa-whatsapp text-green-400"></i>
-                                            <span>الواتساب</span>
-                                        </div>
-                                        <i class="fas fa-arrow-left text-gray-400"></i>
-                                    </a>
-                                    
-                                    <a href="../index.html#booking"
-                                       class="flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 rounded-lg transition">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fas fa-headset text-gold-solid"></i>
-                                            <span>استشارة فورية</span>
-                                        </div>
-                                        <i class="fas fa-arrow-left text-gray-400"></i>
-                                    </a>
-                                </div>
+                        <div class="mt-6 p-4 bg-blue-900/20 rounded-xl border border-blue-800">
+                            <h4 class="font-bold text-white mb-2">📋 قرار الجلسة:</h4>
+                            <p class="text-gray-300">
+                                تأجيل الدعوى لجلسة النطق بالحكم بتاريخ ١٥ أبريل ٢٠٢٤، 
+                                بعد استكمال سماع باقي الشهود ومراجعة المستندات المقدمة من الطرفين.
+                            </p>
+                            <div class="mt-3 flex items-center text-sm text-gray-400">
+                                <i class="fas fa-gavel ml-2"></i>
+                                القاضي: المستشار / علي محمود
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- رسائل الحالة -->
-            <div id="loadingMessage" class="hidden card-glass p-6 text-center mb-6">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold-solid mb-4"></div>
-                <p class="text-white">جاري التحقق من بيانات الدخول...</p>
-            </div>
-            
-            <div id="errorMessage" class="hidden card-glass p-6 bg-red-900/20 border border-red-800 mb-6">
-                <div class="flex items-center gap-3 mb-2">
-                    <i class="fas fa-exclamation-triangle text-red-400"></i>
-                    <h4 class="font-bold text-white">خطأ في الدخول</h4>
+
+                <!-- الجلسة القادمة -->
+                <div class="card-glass gold-border p-6 border-2 border-gold-solid/50">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold gold-text">الجلسة القادمة ⭐</h2>
+                        <span class="status-badge status-hearing">قريباً</span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">التاريخ:</span>
+                            <span class="font-bold text-xl text-gold-solid">١٥ أبريل ٢٠٢٤</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">الوقت:</span>
+                            <span class="font-bold text-lg">١٠:٠٠ صباحاً</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">المحكمة:</span>
+                            <span class="font-bold">أسوان الابتدائية - قاعة ٣</span>
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <span class="text-gray-400">الموضوع:</span>
+                            <span class="font-bold text-right text-lg">جلسة النطق بالحكم</span>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-green-900/20 rounded-xl border border-green-800">
+                            <h4 class="font-bold text-white mb-2">🎯 القرار المتوقع:</h4>
+                            <p class="text-gray-300">
+                                من المتوقع النطق بالحكم في الدعوى بعد دراسة كافة الأدلة والمستندات المقدمة، 
+                                حيث تبدو الأدلة في صالح موقفنا بناءً على ما تم تقديمه في الجلسات السابقة.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-4 p-4 bg-yellow-900/20 rounded-xl border border-yellow-800">
+                            <h4 class="font-bold text-white mb-2">📋 تعليمات الحضور:</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-yellow-400 text-xs ml-2 mt-1"></i>
+                                    <span>الحضور قبل الموعد بـ ٤٥ دقيقة على الأقل</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-yellow-400 text-xs ml-2 mt-1"></i>
+                                    <span>إحضار البطاقة الشخصية الأصلية</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-yellow-400 text-xs ml-2 mt-1"></i>
+                                    <span>ارتداء الملابس المناسبة للمحكمة</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-yellow-400 text-xs ml-2 mt-1"></i>
+                                    <span>الاتصال بالمحامي في حال أي طارئ</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button onclick="addToGoogleCalendar()" class="w-full gold-btn py-3 rounded-xl font-bold">
+                                <i class="fab fa-google ml-2"></i>
+                                إضافة إلى تقويم جوجل
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <p id="errorText" class="text-gray-300"></p>
+
+                <!-- التقويم القضائي -->
+                <div class="card-glass gold-border p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold gold-text">التقويم القضائي</h2>
+                        <button onclick="syncWithGoogleCalendar()" class="text-sm text-gold-solid hover:underline">
+                            <i class="fab fa-google ml-1"></i>
+                            مزامنة مع جوجل
+                        </button>
+                    </div>
+                    
+                    <div id="calendarEvents" class="space-y-4">
+                        <!-- سيتم ملؤه بالجافاسكريبت -->
+                        <div class="text-center py-8">
+                            <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold-solid"></div>
+                            <p class="text-gray-400 mt-2">جاري تحميل أحداث التقويم...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- العمود الثاني: التواصل وطلب التوضيح -->
+            <div class="space-y-6">
+                <!-- زر طلب توضيح -->
+                <div class="card-glass gold-border p-6 text-center">
+                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold-solid to-transparent flex items-center justify-center">
+                        <i class="fas fa-question-circle text-3xl gold-text"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold gold-text mb-4">هل تحتاج توضيحاً؟</h3>
+                    <p class="text-gray-300 mb-6">يمكنك طلب توضيح عن أي نقطة في قضيتك وسيرد عليك المحامي خلال ٢٤ ساعة عمل</p>
+                    <button onclick="openClarificationModal()" class="gold-btn w-full py-4 rounded-xl text-lg font-bold">
+                        <i class="fas fa-comment-dots ml-2"></i>
+                        طلب توضيح
+                    </button>
+                </div>
+
+                <!-- التذاكر السابقة -->
+                <div class="card-glass gold-border p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold gold-text">طلبات التوضيح السابقة</h3>
+                        <span class="text-sm text-gray-400" id="ticketsCount">(٣ طلبات)</span>
+                    </div>
+                    
+                    <div id="ticketsList" class="space-y-4">
+                        <!-- سيتم ملؤه بالجافاسكريبت -->
+                        <div class="ticket-card ticket-answered card-glass p-4 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold text-white">سؤال عن موعد الجلسة</h4>
+                                <span class="text-xs text-gray-400">منذ يومين</span>
+                            </div>
+                            <p class="text-gray-300 text-sm mb-3">هل يمكن تأجيل الجلسة لظرف طارئ؟</p>
+                            <div class="flex justify-between items-center">
+                                <span class="status-badge status-active">تم الرد</span>
+                                <button onclick="viewTicket(1)" class="text-sm text-gold-solid hover:underline">
+                                    عرض التفاصيل
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <button onclick="viewAllTickets()" class="text-gold-solid hover:underline">
+                            عرض جميع الطلبات <i class="fas fa-arrow-left ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- التواصل المباشر -->
+                <div class="card-glass gold-border p-6">
+                    <h3 class="text-xl font-bold gold-text mb-6">التواصل المباشر</h3>
+                    
+                    <div class="space-y-4">
+                        <a href="tel:01101076000" 
+                           class="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-lg bg-blue-900/20 flex items-center justify-center">
+                                    <i class="fas fa-phone text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold">اتصال فوري</p>
+                                    <p class="text-sm text-gray-400">٠١١٠١٠٧٦٠٠٠</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-left text-gray-400"></i>
+                        </a>
+                        
+                        <a href="https://wa.me/201101076000" target="_blank"
+                           class="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-lg bg-green-900/20 flex items-center justify-center">
+                                    <i class="fab fa-whatsapp text-green-400"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold">الواتساب</p>
+                                    <p class="text-sm text-gray-400">مراسلة سريعة</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-left text-gray-400"></i>
+                        </a>
+                        
+                        <a href="../index.html#booking"
+                           class="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-lg bg-gold-solid/20 flex items-center justify-center">
+                                    <i class="fas fa-calendar-check gold-text"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold">حجز موعد</p>
+                                    <p class="text-sm text-gray-400">زيارة المكتب</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-left text-gray-400"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- معلومات مهمة -->
+                <div class="card-glass gold-border p-6">
+                    <h3 class="text-xl font-bold gold-text mb-4">معلومات مهمة</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-clock text-gold-solid ml-3 mt-1"></i>
+                            <span>ساعات العمل: الأحد - الخميس ٩ص - ٥م</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-gold-solid ml-3 mt-1"></i>
+                            <span>العنوان: أسوان - أمام مجمع المحاكم</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope text-gold-solid ml-3 mt-1"></i>
+                            <span>البريد: ma.legal.eg@outlook.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-gold-solid ml-3 mt-1"></i>
+                            <span>للطوارئ: الاتصال على الرقم الرئيسي</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </main>
 
     <!-- الفوتر -->
-    <footer class="border-t border-gray-800 bg-black/50 py-8">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="mb-6">
-                <h3 class="text-lg font-bold gold-text mb-4">مؤسسة محمود عبد الحميد للمحاماة</h3>
-                <p class="text-gray-400">المحامي بالنقض والدستورية العليا - خبرة أكثر من ٢٠ عاماً</p>
+    <footer class="border-t border-gray-800 bg-black/50 py-6 mt-8">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-right">
+                    <p class="text-gray-400">مؤسسة محمود عبد الحميد للمحاماة</p>
+                    <p class="text-sm text-gray-500">المحامي بالنقض والدستورية العليا</p>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <a href="../index.html" class="text-gray-400 hover:text-white transition">
+                        <i class="fas fa-home"></i>
+                        <span class="mr-2">الموقع الرئيسي</span>
+                    </a>
+                    <a href="client-login.html" class="text-gray-400 hover:text-white transition">
+                        <i class="fas fa-sync"></i>
+                        <span class="mr-2">تغيير القضية</span>
+                    </a>
+                </div>
+                
+                <div class="text-center md:text-left">
+                    <p class="text-sm text-gray-500">
+                        <i class="fas fa-lock ml-2"></i>
+                        جلسة آمنة تنتهي عند الإغلاق
+                        <span class="mx-2">•</span>
+                        © ٢٠٢٥
+                    </p>
+                </div>
             </div>
-            
-            <div class="flex justify-center gap-6 text-white/60 mb-6 text-xl">
-                <a href="https://wa.me/201101076000" target="_blank" class="hover:text-green-400 transition">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
-                <a href="../index.html" class="hover:gold-text transition">
-                    <i class="fas fa-home"></i>
-                </a>
-                <a href="mailto:ma.legal.eg@outlook.com" class="hover:text-blue-400 transition">
-                    <i class="fas fa-envelope"></i>
-                </a>
-            </div>
-            
-            <p class="text-gray-500 text-sm">
-                <i class="fas fa-lock ml-2"></i>
-                جميع البيانات محمية ومشفرة وفق أعلى معايير الأمان
-                <span class="mx-2">•</span>
-                © ٢٠٢٥ جميع الحقوق محفوظة
-            </p>
         </div>
     </footer>
 
-    <!-- السكريبت -->
+    <!-- مودال طلب التوضيح -->
+    <div id="clarificationModal" class="modal-overlay">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold gold-text">طلب توضيح جديد</h3>
+                <button onclick="closeClarificationModal()" class="text-2xl gold-text">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="clarificationForm" class="space-y-6">
+                <div>
+                    <label class="block text-white mb-2 font-bold">عنوان الطلب</label>
+                    <input type="text" 
+                           id="ticketTitle" 
+                           placeholder="مثال: سؤال عن موعد الجلسة القادمة"
+                           class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white"
+                           required>
+                </div>
+                
+                <div>
+                    <label class="block text-white mb-2 font-bold">التوضيح المطلوب</label>
+                    <textarea id="ticketContent" 
+                              rows="6"
+                              placeholder="اكتب هنا التوضيح الذي تريده من المحامي..."
+                              class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white"
+                              required></textarea>
+                    <p class="text-gray-400 text-sm mt-2">سيتم الرد عليك خلال ٢٤ ساعة عمل</p>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeClarificationModal()" 
+                            class="flex-1 py-3 border border-white/20 rounded-xl hover:bg-white/10 transition">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="flex-1 gold-btn py-3 rounded-xl font-bold">
+                        <i class="fas fa-paper-plane ml-2"></i>
+                        إرسال الطلب
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- مودال عرض التذكرة -->
+    <div id="ticketModal" class="modal-overlay">
+        <div class="modal-content p-6 max-w-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold gold-text">تفاصيل الطلب</h3>
+                <button onclick="closeTicketModal()" class="text-2xl gold-text">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="ticketDetails" class="space-y-6">
+                <!-- سيتم ملؤه بالجافاسكريبت -->
+            </div>
+        </div>
+    </div>
+
+    <!-- السكريبت الرئيسي -->
     <script>
-        // بيانات تجريبية للقضايا
-        const sampleCases = {
-            "2024/12345": {
-                phone: "01101076000",
-                name: "أحمد محمد",
-                caseTitle: "قضية تعويضات عقارية",
-                status: "قيد النظر",
-                otpEnabled: true
+        // بيانات تجريبية للقضية
+        const caseData = {
+            caseNumber: sessionStorage.getItem('caseNumber') || '٢٠٢٤/١٢٣٤٥',
+            clientName: sessionStorage.getItem('clientName') || 'أحمد محمد',
+            courtName: 'أسوان الابتدائية - الدائرة الخامسة',
+            opponentName: 'شركة الأمل للاستثمار العقاري',
+            caseSubject: 'دعوى تعويض عن عيوب خفية في عقد بيع عقار - المطالبة بمبلغ ٢٥٠,٠٠٠ جنيه',
+            caseStatus: 'قيد النظر',
+            
+            previousHearing: {
+                date: '٢٥ مارس ٢٠٢٤',
+                time: '٠٩:٠٠ صباحاً',
+                court: 'أسوان الابتدائية - قاعة ٣',
+                subject: 'جلسة سماع شهود ومرافعة أولية',
+                decision: 'تأجيل الدعوى لجلسة النطق بالحكم بتاريخ ١٥ أبريل ٢٠٢٤، بعد استكمال سماع باقي الشهود ومراجعة المستندات المقدمة من الطرفين.',
+                judge: 'المستشار / علي محمود'
             },
-            "2024/54321": {
-                phone: "01234567890", 
-                name: "سارة محمود",
-                caseTitle: "قضية منازعات تجارية",
-                status: "جلسة قادمة",
-                otpEnabled: false
-            }
+            
+            nextHearing: {
+                date: '١٥ أبريل ٢٠٢٤',
+                time: '١٠:٠٠ صباحاً',
+                court: 'أسوان الابتدائية - قاعة ٣',
+                subject: 'جلسة النطق بالحكم',
+                expectedDecision: 'من المتوقع النطق بالحكم في الدعوى بعد دراسة كافة الأدلة والمستندات المقدمة، حيث تبدو الأدلة في صالح موقفنا بناءً على ما تم تقديمه في الجلسات السابقة.'
+            },
+            
+            calendarEvents: [
+                { id: 1, title: 'جلسة النطق بالحكم', date: '2024-04-15', time: '10:00', type: 'hearing' },
+                { id: 2, title: 'اجتماع مع الخبير', date: '2024-04-10', time: '14:00', type: 'meeting' },
+                { id: 3, title: 'موعد تسليم المستندات', date: '2024-04-05', time: '11:00', type: 'deadline' },
+                { id: 4, title: 'استشارة مع محامي الطرف الآخر', date: '2024-03-30', time: '16:00', type: 'consultation' }
+            ],
+            
+            tickets: [
+                { 
+                    id: 1, 
+                    title: 'سؤال عن موعد الجلسة', 
+                    content: 'هل يمكن تأجيل الجلسة لظرف طارئ؟', 
+                    date: '2024-04-01', 
+                    status: 'answered',
+                    answer: 'نعم يمكن طلب تأجيل الجلسة لأسباب قاهرة. يرجى إبلاغنا بالأسباب وسنتخذ الإجراءات اللازمة.',
+                    answerDate: '2024-04-02'
+                },
+                { 
+                    id: 2, 
+                    title: 'استفسار عن المستندات', 
+                    content: 'هل أحتاج لإحضار أي مستندات إضافية للجلسة القادمة؟', 
+                    date: '2024-03-28', 
+                    status: 'answered',
+                    answer: 'لا تحتاج لمستندات إضافية. جميع المستندات المطلوبة موجودة في الملف وقد تم تقديمها للمحكمة.',
+                    answerDate: '2024-03-29'
+                },
+                { 
+                    id: 3, 
+                    title: 'تكلفة الإجراءات', 
+                    content: 'هل هناك أي تكاليف إضافية متوقعة؟', 
+                    date: '2024-03-20', 
+                    status: 'pending',
+                    answer: null,
+                    answerDate: null
+                }
+            ]
         };
-        
-        // متغيرات OTP
-        let otpTimer;
-        let otpTimeLeft = 120;
-        
-        function moveToNext(input, nextIndex) {
-            if (input.value.length === 1) {
-                const nextInput = document.querySelector(`#otpSection input:nth-child(${nextIndex + 1})`);
-                if (nextInput) nextInput.focus();
-            }
-        }
-        
-        function startOTPTimer() {
-            otpTimeLeft = 120;
-            updateOTPTimer();
-            
-            otpTimer = setInterval(() => {
-                otpTimeLeft--;
-                updateOTPTimer();
-                
-                if (otpTimeLeft <= 0) {
-                    clearInterval(otpTimer);
-                    document.getElementById('otpTimer').textContent = "انتهى الوقت";
-                }
-            }, 1000);
-        }
-        
-        function updateOTPTimer() {
-            const minutes = Math.floor(otpTimeLeft / 60);
-            const seconds = otpTimeLeft % 60;
-            document.getElementById('otpTimer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-        
-        function resendOTP() {
-            // محاكاة إعادة إرسال OTP
-            alert('تم إرسال كود تحقق جديد إلى هاتفك');
-            startOTPTimer();
-        }
-        
-        function login() {
-            const caseNumber = document.getElementById('caseNumber').value.trim();
-            const phone = document.getElementById('clientPhone').value.trim();
-            
-            // إظهار رسالة التحميل
-            document.getElementById('loadingMessage').classList.remove('hidden');
-            document.getElementById('errorMessage').classList.add('hidden');
-            
-            // محاكاة وقت التحقق
-            setTimeout(() => {
-                document.getElementById('loadingMessage').classList.add('hidden');
-                
-                // التحقق من وجود القضية
-                if (sampleCases[caseNumber]) {
-                    const caseData = sampleCases[caseNumber];
-                    
-                    if (caseData.phone === phone) {
-                        if (caseData.otpEnabled) {
-                            // إظهار قسم OTP
-                            document.getElementById('otpSection').classList.remove('hidden');
-                            startOTPTimer();
-                            alert('تم إرسال كود تحقق إلى هاتفك: 1234');
-                        } else {
-                            // الانتقال مباشرة إلى لوحة التحكم
-                            redirectToDashboard(caseNumber, caseData);
-                        }
-                    } else {
-                        showError('رقم الهاتف غير متطابق مع رقم القضية');
-                    }
-                } else {
-                    showError('رقم القضية غير صحيح أو غير مسجل في النظام');
-                }
-            }, 1500);
-        }
-        
-        function verifyOTP() {
-            const inputs = document.querySelectorAll('#otpSection input');
-            let otp = '';
-            inputs.forEach(input => otp += input.value);
-            
-            if (otp === '1234') { // كود تحقق تجريبي
-                const caseNumber = document.getElementById('caseNumber').value.trim();
-                const caseData = sampleCases[caseNumber];
-                redirectToDashboard(caseNumber, caseData);
-            } else {
-                showError('كود التحقق غير صحيح');
-            }
-        }
-        
-        function redirectToDashboard(caseNumber, caseData) {
-            // تخزين بيانات الجلسة
-            sessionStorage.setItem('caseNumber', caseNumber);
-            sessionStorage.setItem('clientName', caseData.name);
-            sessionStorage.setItem('caseTitle', caseData.caseTitle);
-            sessionStorage.setItem('caseStatus', caseData.status);
-            
-            // الانتقال إلى لوحة التحكم
-            window.location.href = 'client-dashboard.html';
-        }
-        
-        function showError(message) {
-            document.getElementById('errorText').textContent = message;
-            document.getElementById('errorMessage').classList.remove('hidden');
-        }
-        
-        // إعداد استماع للنموذج
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            login();
-        });
-        
-        // إعداد استماع لحقول OTP
-        document.querySelectorAll('#otpSection input').forEach((input, index) => {
-            input.addEventListener('input', function(e) {
-                if (this.value.length === 1) {
-                    moveToNext(this, index + 1);
-                }
-                
-                // التحقق تلقائياً عند إدخال الرقم الرابع
-                if (index === 3 && this.value.length === 1) {
-                    setTimeout(verifyOTP, 500);
-                }
-            });
-            
-            // للسماح بالحذف والتنقل بالسهام
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
-                    const prevInput = document.querySelector(`#otpSection input:nth-child(${index})`);
-                    if (prevInput) prevInput.focus();
-                }
-                
-                if (e.key === 'ArrowLeft' && index > 0) {
-                    const prevInput = document.querySelector(`#otpSection input:nth-child(${index})`);
-                    if (prevInput) prevInput.focus();
-                }
-                
-                if (e.key === 'ArrowRight' && index < 3) {
-                    const nextInput = document.querySelector(`#otpSection input:nth-child(${index + 2})`);
-                    if (nextInput) nextInput.focus();
-                }
-            });
-        });
         
         // تهيئة الصفحة
         document.addEventListener('DOMContentLoaded', function() {
-            // تحميل أي بيانات أولية
-            console.log('نظام متابعة القضايا - جاهز للاستخدام');
+            loadCaseData();
+            loadCalendarEvents();
+            loadTickets();
+            setupEventListeners();
+        });
+        
+        function loadCaseData() {
+            // تعبئة بيانات القضية
+            document.getElementById('clientNameDisplay').textContent = caseData.clientName;
+            document.getElementById('caseNumberDisplay').textContent = caseData.caseNumber;
+            document.getElementById('courtNameDisplay').textContent = caseData.courtName;
+            document.getElementById('opponentNameDisplay').textContent = caseData.opponentName;
+            document.getElementById('caseSubjectDisplay').textContent = caseData.caseSubject;
+            document.getElementById('caseStatusDisplay').textContent = caseData.caseStatus;
+            
+            // تحديث عدد التذاكر
+            document.getElementById('ticketsCount').textContent = `(${caseData.tickets.length} طلبات)`;
+        }
+        
+        function loadCalendarEvents() {
+            const container = document.getElementById('calendarEvents');
+            
+            if (caseData.calendarEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-calendar-times text-4xl text-gray-600 mb-4"></i>
+                        <p class="text-gray-400">لا توجد أحداث في التقويم</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = caseData.calendarEvents.map(event => {
+                const eventDate = new Date(event.date);
+                const formattedDate = eventDate.toLocaleDateString('ar-EG', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div class="calendar-event p-4 rounded-xl">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white">${event.title}</h4>
+                            <span class="text-sm text-gray-400">${event.time}</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-2">${formattedDate}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs px-2 py-1 rounded ${getEventTypeClass(event.type)}">
+                                ${getEventTypeText(event.type)}
+                            </span>
+                            <button onclick="addEventToGoogleCalendar(event)" class="text-xs text-gold-solid hover:underline">
+                                <i class="fas fa-plus ml-1"></i>
+                                إضافة
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function loadTickets() {
+            const container = document.getElementById('ticketsList');
+            
+            container.innerHTML = caseData.tickets.slice(0, 3).map(ticket => {
+                const ticketDate = new Date(ticket.date);
+                const timeAgo = getTimeAgo(ticketDate);
+                
+                return `
+                    <div class="ticket-card ticket-${ticket.status} card-glass p-4 rounded-lg">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white">${ticket.title}</h4>
+                            <span class="text-xs text-gray-400">${timeAgo}</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-3">${ticket.content.substring(0, 60)}...</p>
+                        <div class="flex justify-between items-center">
+                            <span class="status-badge ${getTicketStatusClass(ticket.status)}">
+                                ${getTicketStatusText(ticket.status)}
+                            </span>
+                            <button onclick="viewTicket(${ticket.id})" class="text-sm text-gold-solid hover:underline">
+                                عرض التفاصيل
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function setupEventListeners() {
+            // نموذج طلب التوضيح
+            document.getElementById('clarificationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitClarificationTicket();
+            });
+        }
+        
+        // دوال المساعدة
+        function getEventTypeClass(type) {
+            switch(type) {
+                case 'hearing': return 'bg-red-900/20 text-red-400';
+                case 'meeting': return 'bg-blue-900/20 text-blue-400';
+                case 'deadline': return 'bg-yellow-900/20 text-yellow-400';
+                case 'consultation': return 'bg-green-900/20 text-green-400';
+                default: return 'bg-gray-900/20 text-gray-400';
+            }
+        }
+        
+        function getEventTypeText(type) {
+            switch(type) {
+                case 'hearing': return 'جلسة';
+                case 'meeting': return 'اجتماع';
+                case 'deadline': return 'موعد نهائي';
+                case 'consultation': return 'استشارة';
+                default: return 'حدث';
+            }
+        }
+        
+        function getTicketStatusClass(status) {
+            switch(status) {
+                case 'answered': return 'status-active';
+                case 'pending': return 'status-pending';
+                case 'closed': return 'status-completed';
+                default: return 'status-pending';
+            }
+        }
+        
+        function getTicketStatusText(status) {
+            switch(status) {
+                case 'answered': return 'تم الرد';
+                case 'pending': return 'قيد الانتظار';
+                case 'closed': return 'مغلق';
+                default: return 'قيد الانتظار';
+            }
+        }
+        
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'اليوم';
+            if (diffDays === 1) return 'أمس';
+            if (diffDays < 7) return `منذ ${diffDays} أيام`;
+            if (diffDays < 30) return `منذ ${Math.floor(diffDays / 7)} أسابيع`;
+            return `منذ ${Math.floor(diffDays / 30)} أشهر`;
+        }
+        
+        // دوال المودال
+        function openClarificationModal() {
+            document.getElementById('clarificationModal').classList.add('active');
+        }
+        
+        function closeClarificationModal() {
+            document.getElementById('clarificationModal').classList.remove('active');
+            document.getElementById('clarificationForm').reset();
+        }
+        
+        function viewTicket(ticketId) {
+            const ticket = caseData.tickets.find(t => t.id === ticketId);
+            if (!ticket) return;
+            
+            const container = document.getElementById('ticketDetails');
+            const ticketDate = new Date(ticket.date).toLocaleDateString('ar-EG', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            container.innerHTML = `
+                <div class="card-glass p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="text-xl font-bold text-white">${ticket.title}</h4>
+                        <span class="text-sm text-gray-400">${ticketDate}</span>
+                    </div>
+                    <div class="mb-6">
+                        <p class="text-gray-400 text-sm mb-2">سؤال العميل:</p>
+                        <p class="text-white bg-white/5 p-4 rounded-lg">${ticket.content}</p>
+                    </div>
+                    
+                    ${ticket.answer ? `
+                        <div>
+                            <p class="text-gray-400 text-sm mb-2">رد المحامي:</p>
+                            <p class="text-white bg-green-900/10 p-4 rounded-lg border border-green-800">${ticket.answer}</p>
+                            <p class="text-gray-400 text-sm mt-2 text-left">
+                                <i class="fas fa-clock ml-2"></i>
+                                تاريخ الرد: ${new Date(ticket.answerDate).toLocaleDateString('ar-EG')}
+                            </p>
+                        </div>
+                    ` : `
+                        <div class="text-center py-6">
+                            <i class="fas fa-clock text-3xl text-yellow-400 mb-4"></i>
+                            <p class="text-gray-300">جاري انتظار رد المحامي على طلبك</p>
+                            <p class="text-gray-400 text-sm mt-2">سيتم الرد خلال ٢٤ ساعة عمل</p>
+                        </div>
+                    `}
+                </div>
+            `;
+            
+            document.getElementById('ticketModal').classList.add('active');
+        }
+        
+        function closeTicketModal() {
+            document.getElementById('ticketModal').classList.remove('active');
+        }
+        
+        function viewAllTickets() {
+            // يمكن إضافة صفحة منفصلة لعرض جميع التذاكر
+            alert('سيتم إضافة صفحة لعرض جميع طلبات التوضيح في التحديث القادم');
+        }
+        
+        // دوال التفاعل مع جوجل كالندر
+        function addToGoogleCalendar() {
+            const event = {
+                title: `جلسة قضائية: ${caseData.caseSubject.substring(0, 50)}...`,
+                description: `جلسة النطق بالحكم في القضية رقم ${caseData.caseNumber}\nالمحكمة: ${caseData.nextHearing.court}\nالقرار المتوقع: ${caseData.nextHearing.expectedDecision}`,
+                start: '2024-04-15T10:00:00',
+                end: '2024-04-15T12:00:00',
+                location: caseData.nextHearing.court
+            };
+            
+            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}&dates=20240415T080000Z/20240415T100000Z`;
+            
+            window.open(googleCalendarUrl, '_blank');
+            
+            alert('تم فتح صفحة إضافة الحدث إلى تقويم جوجل. يرجى تأكيد الإضافة.');
+        }
+        
+        function syncWithGoogleCalendar() {
+            // محاكاة مزامنة مع جوجل كالندر
+            alert('جاري مزامنة الأحداث مع تقويم جوجل...\n\nملاحظة: في النسخة الكاملة سيتم ربط حساب جوجل كالندر الخاص بالمحامي لعرض الأحداث الحقيقية.');
+            
+            // إظهار رسالة نجاح
+            setTimeout(() => {
+                loadCalendarEvents();
+                alert('تمت المزامنة بنجاح!');
+            }, 1500);
+        }
+        
+        function addEventToGoogleCalendar(event) {
+            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=20240415T080000Z/20240415T100000Z`;
+            window.open(googleCalendarUrl, '_blank');
+        }
+        
+        // دالة إرسال طلب التوضيح
+        function submitClarificationTicket() {
+            const title = document.getElementById('ticketTitle').value.trim();
+            const content = document.getElementById('ticketContent').value.trim();
+            
+            if (!title || !content) {
+                alert('يرجى ملء جميع الحقول');
+                return;
+            }
+            
+            // محاكاة إرسال الطلب
+            const newTicket = {
+                id: caseData.tickets.length + 1,
+                title: title,
+                content: content,
+                date: new Date().toISOString().split('T')[0],
+                status: 'pending',
+                answer: null,
+                answerDate: null
+            };
+            
+            caseData.tickets.unshift(newTicket);
+            
+            // إعادة تحميل التذاكر
+            loadTickets();
+            
+            // إغلاق المودال
+            closeClarificationModal();
+            
+            // رسالة نجاح
+            alert('تم إرسال طلب التوضيح بنجاح!\n\nسيتم الرد عليك خلال ٢٤ ساعة عمل.');
+            
+            // هنا يمكن إضافة كود إرسال حقيقي إلى الخادم
+            console.log('طلب توضيح جديد:', newTicket);
+        }
+        
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج من النظام؟')) {
+                sessionStorage.clear();
+                window.location.href = 'client-login.html';
+            }
+        }
+        
+        // إغلاق المودال عند الضغط على ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeClarificationModal();
+                closeTicketModal();
+            }
         });
     </script>
 </body>

@@ -197,37 +197,6 @@
             filter: brightness(1) contrast(1.2);
         }
         
-        /* تحسينات للأجهزة المحمولة */
-        @media (max-width: 768px) {
-            .bg-section {
-                background-attachment: scroll !important;
-                background-position: center !important;
-            }
-            
-            .section-title {
-                font-size: 2.5rem !important;
-            }
-            
-            .gold-btn {
-                padding: 12px 20px !important;
-                font-size: 14px !important;
-            }
-            
-            /* تعديلات للهيدر على الجوال */
-            .nav-buttons {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 10px !important;
-                width: 100% !important;
-            }
-            
-            .nav-buttons a {
-                width: 100% !important;
-                text-align: center !important;
-                justify-content: center !important;
-            }
-        }
-        
         /* تأثيرات دخول للمحتوى */
         .fade-in-up {
             opacity: 0;
@@ -354,37 +323,71 @@
             border-color: transparent;
         }
         
-        /* تعديلات للهيدر - جعل الأزرار عمودية */
-        .nav-buttons {
+        /* ===== تعديلات جديدة للهيدر ===== */
+        .nav-buttons-container {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            align-items: center;
-            width: 180px;
+            min-width: 180px;
         }
         
-        .nav-buttons a {
+        .nav-buttons-container a {
             width: 100%;
             text-align: center;
             justify-content: center;
             padding: 12px 20px;
             font-size: 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
         
         @media (max-width: 1024px) {
-            .nav-buttons {
-                width: 160px;
+            .nav-buttons-container {
+                min-width: 160px;
             }
             
-            .nav-buttons a {
+            .nav-buttons-container a {
                 padding: 10px 15px;
                 font-size: 13px;
             }
         }
         
+        /* تحسينات للأجهزة المحمولة */
         @media (max-width: 768px) {
-            .nav-buttons {
-                width: 100%;
+            .bg-section {
+                background-attachment: scroll !important;
+                background-position: center !important;
+            }
+            
+            .section-title {
+                font-size: 2.5rem !important;
+            }
+            
+            .nav-buttons-container {
+                min-width: 100%;
+                margin-top: 20px;
+            }
+        }
+        
+        /* تعديل الهيدر ليكون أكثر تناسقًا */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        @media (max-width: 1280px) {
+            .header-nav {
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .nav-buttons-container {
+                display: none;
             }
         }
     </style>
@@ -396,7 +399,7 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- الهيدر مع إضافة زر "تابع قضيتك" -->
+    <!-- الهيدر مع إضافة زر "تابع قضيتك" في الواجهة الرئيسية -->
     <header class="fixed w-full z-[100] header-glass">
         <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -406,28 +409,34 @@
                     <p class="text-[10px] md:text-xs text-gray-300 font-bold mt-1">المحامي بالنقض والدستورية العليا</p>
                 </div>
             </div>
-            <div class="hidden lg:flex items-center gap-8 font-bold text-sm">
-                <a href="#about" class="text-white hover:gold-text transition">عن المؤسسة</a>
-                <a href="#specialties" class="text-white hover:gold-text transition">تخصصاتنا</a>
-                <a href="#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
-                <a href="#blog" class="text-white hover:gold-text transition">المدونة</a>
-                <div class="nav-buttons">
+            
+            <div class="header-nav">
+                <div class="hidden lg:flex items-center gap-8 font-bold text-sm">
+                    <a href="#about" class="text-white hover:gold-text transition">عن المؤسسة</a>
+                    <a href="#specialties" class="text-white hover:gold-text transition">تخصصاتنا</a>
+                    <a href="#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
+                    <a href="#blog" class="text-white hover:gold-text transition">المدونة</a>
+                </div>
+                
+                <!-- مجموعة الأزرار العمودية في الهيدر الرئيسي -->
+                <div class="nav-buttons-container hidden lg:block">
                     <!-- زر طلب استشارة فورية -->
                     <a href="#booking" onclick="switchTabAndScroll('consult')"
-                       class="gold-btn px-4 py-2.5 rounded-lg text-xs flex items-center justify-center gap-2 w-full">
+                       class="gold-btn">
                         <i class="fas fa-comments"></i> طلب استشارة فورية
                     </a>
                     <!-- زر حجز موعد مقابلة -->
                     <a href="#booking" onclick="switchTabAndScroll('visit')"
-                       class="px-4 py-2.5 border border-white/20 rounded-lg hover:bg-white/10 transition text-white text-xs flex items-center justify-center gap-2 w-full">
+                       class="border border-white/20 hover:bg-white/10 transition text-white">
                         <i class="fas fa-calendar-check"></i> حجز موعد مقابلة
                     </a>
                     <!-- زر تابع قضيتك -->
-                    <a href="client-inquiry.html" class="track-case-btn px-4 py-2.5 rounded-lg text-xs flex items-center justify-center gap-2 w-full">
+                    <a href="client-inquiry.html" class="track-case-btn">
                         <i class="fas fa-search"></i> تابع قضيتك
                     </a>
                 </div>
             </div>
+            
             <button id="menu-toggle" class="lg:hidden text-2xl gold-text">
                 <i class="fas fa-bars-staggered"></i>
             </button>
@@ -543,7 +552,7 @@
                 <div class="inline-block">
                     <img src="me.jpg"
                          class="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-2 border-gold-solid rounded-2xl shadow-2xl shadow-gold-glow/50 object-cover mx-auto enhanced-image"
-                         alt="الأستاذ محمود عبد الحميد"
+                         alt="الأستاذ محمود عبد الحmيد"
                          loading="lazy">
                 </div>
                 

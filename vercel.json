@@ -1,23 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "images/*",
-      "use": "@vercel/static"
-    }
-  ],
+  
+  // حذفنا "builds" كاملة → Vercel يكتشف الـ static files تلقائيًا (html, js, css, images)
+  
   "routes": [
     {
       "src": "/admin",
@@ -64,9 +49,11 @@
       "dest": "/index.html"
     }
   ],
+
   "env": {
     "NODE_ENV": "production"
   },
+
   "headers": [
     {
       "source": "/(.*)",
@@ -98,6 +85,7 @@
       ]
     }
   ],
+
   "rewrites": [
     {
       "source": "/blog-config\\.json",
@@ -108,6 +96,7 @@
       "destination": "https://malegal.vercel.app/blog/$1"
     }
   ],
+
   "redirects": [
     {
       "source": "/تابع-قضيتك",
@@ -135,16 +124,20 @@
       "permanent": true
     }
   ],
+
   "github": {
     "silent": true,
     "autoAlias": true
   },
+
   "regions": ["cdg1"],
+
   "functions": {
     "api/**/*.js": {
       "maxDuration": 10
     }
   },
+
   "crons": [
     {
       "path": "/api/cleanup",

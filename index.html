@@ -197,6 +197,37 @@
             filter: brightness(1) contrast(1.2);
         }
         
+        /* تحسينات للأجهزة المحمولة */
+        @media (max-width: 768px) {
+            .bg-section {
+                background-attachment: scroll !important;
+                background-position: center !important;
+            }
+            
+            .section-title {
+                font-size: 2.5rem !important;
+            }
+            
+            .gold-btn {
+                padding: 12px 20px !important;
+                font-size: 14px !important;
+            }
+            
+            /* تعديلات للهيدر على الجوال */
+            .nav-buttons {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 10px !important;
+                width: 100% !important;
+            }
+            
+            .nav-buttons a {
+                width: 100% !important;
+                text-align: center !important;
+                justify-content: center !important;
+            }
+        }
+        
         /* تأثيرات دخول للمحتوى */
         .fade-in-up {
             opacity: 0;
@@ -311,10 +342,6 @@
             color: white;
             font-weight: 600;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
         }
         
         .track-case-btn:hover {
@@ -323,71 +350,21 @@
             border-color: transparent;
         }
         
-        /* ===== تعديلات جديدة للهيدر ===== */
-        .nav-buttons-container {
+        /* تعديلات للهيدر */
+        .nav-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            min-width: 180px;
-        }
-        
-        .nav-buttons-container a {
-            width: 100%;
-            text-align: center;
-            justify-content: center;
-            padding: 12px 20px;
-            font-size: 14px;
-            border-radius: 8px;
-            display: flex;
+            gap: 15px;
             align-items: center;
-            gap: 8px;
-            text-decoration: none;
         }
         
         @media (max-width: 1024px) {
-            .nav-buttons-container {
-                min-width: 160px;
+            .nav-buttons {
+                gap: 10px;
             }
             
-            .nav-buttons-container a {
-                padding: 10px 15px;
-                font-size: 13px;
-            }
-        }
-        
-        /* تحسينات للأجهزة المحمولة */
-        @media (max-width: 768px) {
-            .bg-section {
-                background-attachment: scroll !important;
-                background-position: center !important;
-            }
-            
-            .section-title {
-                font-size: 2.5rem !important;
-            }
-            
-            .nav-buttons-container {
-                min-width: 100%;
-                margin-top: 20px;
-            }
-        }
-        
-        /* تعديل الهيدر ليكون أكثر تناسقًا */
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-        
-        @media (max-width: 1280px) {
-            .header-nav {
-                gap: 20px;
-            }
-        }
-        
-        @media (max-width: 1024px) {
-            .nav-buttons-container {
-                display: none;
+            .nav-buttons a {
+                padding: 8px 15px !important;
+                font-size: 14px !important;
             }
         }
     </style>
@@ -399,7 +376,7 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- الهيدر مع إضافة زر "تابع قضيتك" في الواجهة الرئيسية -->
+    <!-- الهيدر مع إضافة زر "تابع قضيتك" -->
     <header class="fixed w-full z-[100] header-glass">
         <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -409,34 +386,24 @@
                     <p class="text-[10px] md:text-xs text-gray-300 font-bold mt-1">المحامي بالنقض والدستورية العليا</p>
                 </div>
             </div>
-            
-            <div class="header-nav">
-                <div class="hidden lg:flex items-center gap-8 font-bold text-sm">
-                    <a href="#about" class="text-white hover:gold-text transition">عن المؤسسة</a>
-                    <a href="#specialties" class="text-white hover:gold-text transition">تخصصاتنا</a>
-                    <a href="#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
-                    <a href="#blog" class="text-white hover:gold-text transition">المدونة</a>
-                </div>
-                
-                <!-- مجموعة الأزرار العمودية في الهيدر الرئيسي -->
-                <div class="nav-buttons-container hidden lg:block">
-                    <!-- زر طلب استشارة فورية -->
-                    <a href="#booking" onclick="switchTabAndScroll('consult')"
-                       class="gold-btn">
-                        <i class="fas fa-comments"></i> طلب استشارة فورية
-                    </a>
-                    <!-- زر حجز موعد مقابلة -->
-                    <a href="#booking" onclick="switchTabAndScroll('visit')"
-                       class="border border-white/20 hover:bg-white/10 transition text-white">
-                        <i class="fas fa-calendar-check"></i> حجز موعد مقابلة
-                    </a>
-                    <!-- زر تابع قضيتك -->
-                    <a href="client-inquiry.html" class="track-case-btn">
+            <div class="hidden lg:flex items-center gap-8 font-bold text-sm">
+                <a href="#about" class="text-white hover:gold-text transition">عن المؤسسة</a>
+                <a href="#specialties" class="text-white hover:gold-text transition">تخصصاتنا</a>
+                <a href="#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
+                <a href="#blog" class="text-white hover:gold-text transition">المدونة</a>
+                <div class="nav-buttons">
+                    <!-- تم إضافة زر "تابع قضيتك" هنا -->
+                    <a href="client-inquiry.html" class="track-case-btn px-4 py-2.5 rounded-lg text-xs flex items-center gap-2">
                         <i class="fas fa-search"></i> تابع قضيتك
+                    </a>
+                    <a href="#booking" onclick="switchTabAndScroll('consult')"
+                       class="gold-btn px-4 py-2.5 rounded-lg text-xs">طلب استشارة فورية</a>
+                    <a href="#booking" onclick="switchTabAndScroll('visit')"
+                       class="px-4 py-2.5 border border-white/20 rounded-lg hover:bg-white/10 transition text-white text-xs">
+                        حجز موعد مقابلة
                     </a>
                 </div>
             </div>
-            
             <button id="menu-toggle" class="lg:hidden text-2xl gold-text">
                 <i class="fas fa-bars-staggered"></i>
             </button>
@@ -454,23 +421,22 @@
             <a href="#vision" onclick="closeMenu()" class="gold-text">الرؤية والأهداف</a>
             <a href="#blog" onclick="closeMenu()" class="gold-text">المدونة</a>
             <div class="flex flex-col gap-4 mt-4">
-                <!-- زر طلب استشارة فورية -->
-                <a href="#booking" onclick="closeMenu(); switchTab('consult')" class="gold-btn py-3 rounded-xl text-lg text-center flex items-center justify-center gap-2">
-                    <i class="fas fa-comments"></i> طلب استشارة فورية
+                <!-- زر "تابع قضيتك" في القائمة المتنقلة -->
+                <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg text-center">
+                    <i class="fas fa-search mr-2"></i> تابع قضيتك
                 </a>
-                <!-- زر حجز موعد مقابلة -->
+                <a href="#booking" onclick="closeMenu(); switchTab('consult')" class="gold-btn py-3 rounded-xl text-lg text-center">
+                    <i class="fas fa-comments mr-2"></i> طلب استشارة فورية
+                </a>
                 <a href="#booking" onclick="closeMenu(); switchTab('visit')" 
-                   class="py-3 border border-white/20 rounded-xl hover:bg-white/10 transition text-white text-lg text-center flex items-center justify-center gap-2">
-                    <i class="fas fa-calendar-check"></i> حجز موعد مقابلة
-                </a>
-                <!-- زر تابع قضيتك -->
-                <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg text-center flex items-center justify-center gap-2">
-                    <i class="fas fa-search"></i> تابع قضيتك
+                   class="py-3 border border-white/20 rounded-xl hover:bg-white/10 transition text-white text-lg text-center">
+                    <i class="fas fa-calendar-check mr-2"></i> حجز موعد مقابلة
                 </a>
             </div>
         </div>
     </div>
 
+    <!-- باقي الموقع يبقى كما هو تماماً بدون أي تغيير -->
     <!-- قسم الهيرو -->
     <section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 relative overflow-hidden bg-section"
          style="background-image: url('images/hero-bg.jpg');">
@@ -541,7 +507,7 @@
             </div>
 
             <div class="space-y-6 text-lg leading-relaxed text-white/90 text-justify serif-font mb-20 fade-in-up">
-                <p class="font-bold text-xl gold-text">عن مؤسسة محمود عبد الحميد - المحامي بالنقض والدستورية العليا</p>
+                <p class="font-bold text-xl gold-text">عن مؤسسة محمود عبد الحميد – المحامي بالنقض والدستورية العليا</p>
                 <p>تُعد مؤسسة محمود عبد الحميد للمحاماة مؤسسة قانونية متخصصة، تقوم على خبرة عميقة في العمل القضائي أمام محكمة النقض والمحكمة الدستورية العليا، وتقديم خدمات قانونية متكاملة للأفراد والشركات، وفق رؤية مهنية تقوم على الدقة والالتزام وحسن إدارة النزاع.</p>
                 <p>تتبنى المؤسسة نهجًا قانونيًا قائمًا على الدراسة المتأنية لكل قضية، وبناء الاستراتيجيات القانونية السليمة، بما يضمن حماية الحقوق وتحقيق أفضل النتائج الممكنة في إطار القانون. كما تحرص على تقديم الاستشارات القانونية بأسلوب واضح وعملي يراعي مصالح العملاء ويواكب التطورات التشريعية والقضائية.</p>
                 <p>وتلتزم المؤسسة بمعايير مهنية رفيعة في الأداء، تقوم على النزاهة والاستقلال والسرية التامة، مع إيمان راسخ بأن قوة المحامي لا تُقاس بكثرة القضايا، بل بعمق الفهم ودقة الترافع وحسن التقدير القانوني.</p>
@@ -552,7 +518,7 @@
                 <div class="inline-block">
                     <img src="me.jpg"
                          class="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] border-2 border-gold-solid rounded-2xl shadow-2xl shadow-gold-glow/50 object-cover mx-auto enhanced-image"
-                         alt="الأستاذ محمود عبد الحmيد"
+                         alt="الأستاذ محمود عبد الحميد"
                          loading="lazy">
                 </div>
                 

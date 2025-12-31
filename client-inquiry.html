@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تابع قضيتك - مؤسسة محمود عبد الحميد للمحاماة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: #020617;
+            color: #f8fafc;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('images/hero-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* الهيدر */
+        .header {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid #bf953f;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: #bf953f;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #bf953f;
+            color: #bf953f;
+        }
+        
+        .btn-secondary:hover {
+            background: #bf953f;
+            color: #020617;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
+            color: #020617;
+            border: none;
+        }
+        
+        /* محتوى الصفحة */
+        .inquiry-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+        }
+        
+        .inquiry-box {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(191, 149, 63, 0.2);
+            padding: 50px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
+        }
+        
+        .inquiry-box h1 {
+            font-size: 36px;
+            color: #bf953f;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .inquiry-box p {
+            color: #cbd5e1;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+            text-align: right;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #bf953f;
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(191, 149, 63, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #bf953f;
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
+        }
+        
+        .btn-inquiry {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
+            color: #020617;
+            padding: 18px 50px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        .btn-inquiry:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.3);
+        }
+        
+        .instructions {
+            background: rgba(191, 149, 63, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 40px;
+            text-align: right;
+            border-right: 4px solid #bf953f;
+        }
+        
+        .instructions h3 {
+            color: #bf953f;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .instructions li {
+            padding: 8px 0;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #bf953f;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        /* الفوتر */
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(191, 149, 63, 0.2);
+        }
+        
+        .footer p {
+            color: #94a3b8;
+        }
+        
+        .whatsapp-link {
+            color: #bf953f;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .whatsapp-link:hover {
+            color: #fcf6ba;
+        }
+        
+        @media (max-width: 768px) {
+            .inquiry-box {
+                padding: 30px;
+            }
+            
+            .inquiry-box h1 {
+                font-size: 28px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- الهيدر -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد">
+                    <span>مؤسسة محمود عبد الحميد للمحاماة</span>
+                </a>
+                <div class="nav-buttons">
+                    <a href="index.html#booking" onclick="switchTabAndScroll('consult')" class="btn btn-secondary">
+                        <i class="fas fa-comments"></i> استشارة قانونية
+                    </a>
+                    <a href="index.html" class="btn btn-primary">
+                        <i class="fas fa-home"></i> الرئيسية
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- محتوى الصفحة -->
+    <main>
+        <div class="inquiry-container">
+            <div class="inquiry-box">
+                <h1><i class="fas fa-search"></i> استعلام عن القضية</h1>
+                <p>أدخل بياناتك للاطلاع على آخر تطورات قضيتك بكل خصوصية</p>
+                
+                <form id="inquiryForm">
+                    <div class="form-group">
+                        <label for="phone">
+                            <i class="fas fa-phone"></i> رقم هاتف العميل
+                        </label>
+                        <input type="tel" id="phone" class="form-control" 
+                               placeholder="أدخل رقم الهاتف المسجل (مثال: 01012345678)" required
+                               pattern="[0-9]{11}">
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
+                            يجب أن يتكون من 11 رقمًا
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="caseCode">
+                            <i class="fas fa-file-contract"></i> رقم كود القضية
+                        </label>
+                        <input type="text" id="caseCode" class="form-control" 
+                               placeholder="أدخل الكود المكون من 8 أحرف إنجليزية كبيرة وأرقام" required
+                               pattern="[A-Z0-9]{8}">
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
+                            مثال: ABC123XY
+                        </small>
+                    </div>
+                    
+                    <button type="submit" class="btn-inquiry">
+                        <i class="fas fa-external-link-alt"></i> اطلع على القضية
+                    </button>
+                </form>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> ملاحظات هامة</h3>
+                    <ul>
+                        <li>تأكد من إدخال رقم الهاتف المسجل في ملف القضية</li>
+                        <li>الكود مكون من 8 أحرف إنجليزية كبيرة وأرقام</li>
+                        <li>إذا نسيت الكود، يرجى التواصل مع المكتب على الواتساب</li>
+                        <li>جميع البيانات محمية بسرية تامة</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- الفوتر -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
+            <p>للاستفسار: <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-link">
+                <i class="fab fa-whatsapp"></i> 01101076000
+            </a></p>
+        </div>
+    </footer>
+
+    <!-- Supabase Configuration Script -->
+    <script>
+        // ==================== إعداد Supabase ====================
+        const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
+
+        // تحميل مكتبة Supabase
+        async function loadSupabase() {
+            if (!window.supabase) {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js';
+                script.onload = initializeSupabase;
+                document.head.appendChild(script);
+            } else {
+                initializeSupabase();
+            }
+        }
+
+        // تهيئة Supabase
+        function initializeSupabase() {
+            try {
+                window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ تم تهيئة Supabase بنجاح');
+            } catch (error) {
+                console.error('❌ خطأ في تهيئة Supabase:', error);
+            }
+        }
+
+        // البحث عن القضية
+        async function searchCaseByPhoneAndCode(phone, caseCode) {
+            try {
+                if (!window.supabaseClient) {
+                    await loadSupabase();
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+
+                const { data, error } = await window.supabaseClient
+                    .from('cases')
+                    .select('*')
+                    .eq('client_phone', phone)
+                    .eq('case_code', caseCode)
+                    .single();
+
+                if (error) {
+                    console.log('لم يتم العثور على القضية أو خطأ في البحث');
+                    return null;
+                }
+                
+                // إرسال إشعار للمحامي
+                await sendLawyerNotification(caseCode, phone, data?.case_number || 'غير معروف');
+                
+                return data;
+            } catch (error) {
+                console.error('خطأ في البحث عن القضية:', error);
+                return null;
+            }
+        }
+
+        // إرسال إشعار للمحامي
+        async function sendLawyerNotification(caseCode, phone, caseNumber) {
+            try {
+                // هنا يمكنك استخدام EmailJS أو أي خدمة إشعارات
+                console.log(`📧 إشعار للمحامي: تم الاطلاع على القضية ${caseNumber} (كود: ${caseCode}) من رقم ${phone}`);
+                
+                // مثال باستخدام EmailJS (تحتاج لإضافة مفاتيحك)
+                /*
+                if (typeof emailjs !== 'undefined') {
+                    await emailjs.send("service_id", "template_id", {
+                        case_code: caseCode,
+                        case_number: caseNumber,
+                        client_phone: phone,
+                        inquiry_time: new Date().toLocaleString('ar-SA')
+                    });
+                }
+                */
+            } catch (error) {
+                console.error('خطأ في إرسال الإشعار:', error);
+            }
+        }
+
+        // ==================== معالجة النموذج ====================
+        document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value.trim();
+            const caseCode = document.getElementById('caseCode').value.trim().toUpperCase();
+            
+            // التحقق من صحة المدخلات
+            if (!phone.match(/^01[0-9]{9}$/)) {
+                alert('⚠️ يرجى إدخال رقم هاتف مصري صحيح (11 رقم، يبدأ بـ 01)');
+                return;
+            }
+            
+            if (!caseCode.match(/^[A-Z0-9]{8}$/)) {
+                alert('⚠️ يرجى إدخال كود قضية صحيح (8 أحرف إنجليزية كبيرة وأرقام)');
+                return;
+            }
+            
+            // عرض رسالة تحميل
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري البحث...';
+            submitBtn.disabled = true;
+            
+            try {
+                // البحث عن القضية في Supabase
+                const caseData = await searchCaseByPhoneAndCode(phone, caseCode);
+                
+                if (caseData) {
+                    // تخزين البيانات في localStorage للصفحة التالية
+                    localStorage.setItem('caseData', JSON.stringify(caseData));
+                    localStorage.setItem('inquiryPhone', phone);
+                    localStorage.setItem('inquiryCaseCode', caseCode);
+                    
+                    // الانتقال لصفحة النتائج
+                    window.location.href = 'inquiry-result.html';
+                } else {
+                    alert('❌ لم يتم العثور على القضية. يرجى التحقق من البيانات أو التواصل مع المكتب.');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('خطأ:', error);
+                alert('⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // تحميل Supabase عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSupabase();
+            
+            // وضع المؤشر على أول حقل
+            document.getElementById('phone').focus();
+        });
+    </script>
+</body>
+</html>

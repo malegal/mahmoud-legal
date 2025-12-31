@@ -1,0 +1,67 @@
+{
+  "version": 2,
+  
+  "routes": [
+    // صفحات خاصة (ضعها أولًا عشان تتفضل)
+    {
+      "src": "/admin",
+      "dest": "/admin.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "src": "/admin.html",
+      "dest": "/admin.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "src": "/client-inquiry",
+      "dest": "/client-inquiry.html"
+    },
+    {
+      "src": "/inquiry-result",
+      "dest": "/inquiry-result.html"
+    },
+
+    // الصور والـ assets (كمان قبل الـ catch-all)
+    {
+      "src": "/images/(.*)",
+      "dest": "/images/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*\\.(js|css))",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+
+    // API routes
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    },
+
+    // Catch-all الأخير فقط (للصفحة الرئيسية وأي حاجة تانية)
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+
+  // باقي الإعدادات زي ما هي (env, headers, rewrites, redirects, functions, crons...)
+  "env": { "NODE_ENV": "production" },
+  "headers": [ /* ... */ ],
+  "rewrites": [ /* ... */ ],
+  "redirects": [ /* ... */ ],
+  "github": { "silent": true, "autoAlias": true },
+  "regions": ["cdg1"],
+  "functions": { "api/**/*.js": { "maxDuration": 10 } },
+  "crons": [ { "path": "/api/cleanup", "schedule": "0 0 * * *" } ]
+}

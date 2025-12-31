@@ -1,9 +1,5 @@
 {
-  "version": 3,
-  "cleanUrls": true,
-  "trailingSlash": false,
   "rewrites": [
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/client-inquiry", "destination": "/client-inquiry.html" }
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }

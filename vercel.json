@@ -1,67 +1,119 @@
 {
   "version": 2,
-  
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "images/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "blog/*",
+      "use": "@vercel/static"
+    }
+  ],
   "routes": [
-    // صفحات خاصة (ضعها أولًا عشان تتفضل)
     {
-      "src": "/admin",
+      "src": "^/admin$",
       "dest": "/admin.html",
       "headers": {
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
-      "src": "/admin.html",
-      "dest": "/admin.html",
-      "headers": {
-        "Cache-Control": "no-cache, no-store, must-revalidate"
-      }
-    },
-    {
-      "src": "/client-inquiry",
+      "src": "^/client-inquiry$",
       "dest": "/client-inquiry.html"
     },
     {
-      "src": "/inquiry-result",
-      "dest": "/inquiry-result.html"
+      "src": "^/blog$",
+      "dest": "/blog.html"
     },
-
-    // الصور والـ assets (كمان قبل الـ catch-all)
     {
-      "src": "/images/(.*)",
-      "dest": "/images/$1",
+      "src": "^/blog/(.*)$",
+      "dest": "/blog/$1"
+    },
+    {
+      "src": "^/images/(.*)$",
+      "dest": "/images/$1"
+    },
+    {
+      "src": "^/(.*\\.(css|js|json|png|jpg|jpeg|gif|ico|svg|webp))$",
       "headers": {
         "Cache-Control": "public, max-age=31536000, immutable"
       }
     },
-    {
-      "src": "/(.*\\.(js|css))",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-
-    // API routes
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1",
-      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    },
-
-    // Catch-all الأخير فقط (للصفحة الرئيسية وأي حاجة تانية)
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      }
     }
   ],
-
-  // باقي الإعدادات زي ما هي (env, headers, rewrites, redirects, functions, crons...)
-  "env": { "NODE_ENV": "production" },
-  "headers": [ /* ... */ ],
-  "rewrites": [ /* ... */ ],
-  "redirects": [ /* ... */ ],
-  "github": { "silent": true, "autoAlias": true },
-  "regions": ["cdg1"],
-  "functions": { "api/**/*.js": { "maxDuration": 10 } },
-  "crons": [ { "path": "/api/cleanup", "schedule": "0 0 * * *" } ]
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/client-inquiry",
+      "destination": "/client-inquiry.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/dashboard",
+      "destination": "/admin",
+      "permanent": false
+    },
+    {
+      "source": "/track",
+      "destination": "/client-inquiry",
+      "permanent": false
+    }
+  ],
+  "trailingSlash": false,
+  "cleanUrls": true,
+  "framework": null,
+  "outputDirectory": null,
+  "installCommand": null,
+  "devCommand": null,
+  "buildCommand": null
 }

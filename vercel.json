@@ -6,46 +6,149 @@
       "use": "@vercel/static"
     },
     {
-      "src": "admin/*.html",
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "images/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "^/tracking/?$",
-      "dest": "/tracking.html",
+      "src": "/admin",
+      "dest": "/admin.html",
       "headers": {
-        "Cache-Control": "public, max-age=3600"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
-      "src": "^/admin/?$",
-      "dest": "/admin/login.html",
+      "src": "/admin.html",
+      "dest": "/admin.html",
       "headers": {
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1",
+      "src": "/client-inquiry",
+      "dest": "/client-inquiry.html"
+    },
+    {
+      "src": "/inquiry-result",
+      "dest": "/inquiry-result.html"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/images/$1",
       "headers": {
         "Cache-Control": "public, max-age=31536000, immutable"
       }
     },
     {
-      "src": "^/([^/.]+)/?$",
-      "dest": "/$1.html",
-      "check": true
+      "src": "/(.*\\.(js|css))",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html",
-      "headers": {
-        "Cache-Control": "public, max-age=3600"
-      }
+      "dest": "/index.html"
     }
   ],
   "env": {
     "NODE_ENV": "production"
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com/ajax/libs https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com/ajax/libs https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://iyhfafodhptcdwrjywek.supabase.co https://api.emailjs.com https://malegal.vercel.app; frame-ancestors 'none';"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/blog-config\\.json",
+      "destination": "https://malegal.vercel.app/blog-config.json"
+    },
+    {
+      "source": "/blog/(.*)",
+      "destination": "https://malegal.vercel.app/blog/$1"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/تابع-قضيتك",
+      "destination": "/client-inquiry.html",
+      "permanent": true
+    },
+    {
+      "source": "/نتيجة-الاستعلام",
+      "destination": "/inquiry-result.html",
+      "permanent": true
+    },
+    {
+      "source": "/الادارة",
+      "destination": "/admin.html",
+      "permanent": true
+    },
+    {
+      "source": "/استشارة-قانونية",
+      "destination": "/index.html#booking?tab=consult",
+      "permanent": true
+    },
+    {
+      "source": "/حجز-موعد",
+      "destination": "/index.html#booking?tab=visit",
+      "permanent": true
+    }
+  ],
+  "github": {
+    "silent": true,
+    "autoAlias": true
+  },
+  "regions": ["cdg1"],
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 10
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cleanup",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }

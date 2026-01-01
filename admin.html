@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم | نظام إدارة القضايا المتقدم</title>
-    <!-- Bootstrap 5 CSS -->
+    <title>لوحة التحكم | نظام إدارة القضايا</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Google Calendar API -->
-    <script src="https://apis.google.com/js/api.js"></script>
     <style>
         :root {
             --gold-primary: #D4AF37;
@@ -23,460 +17,156 @@
             --black-light: #333333;
             --bg-light: #F8F5E6;
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--black-primary);
-        }
-        
-        .header {
-            background: linear-gradient(135deg, var(--black-primary), var(--black-light));
-            color: var(--gold-primary);
-            border-bottom: 4px solid var(--gold-primary);
-            padding: 20px 0;
-            margin-bottom: 25px;
-        }
-        
-        .form-section {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-right: 5px solid var(--gold-primary);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .btn-gold {
-            background-color: var(--gold-primary);
-            color: var(--black-primary);
-            border: none;
-            font-weight: 600;
-            padding: 10px 25px;
-        }
-        
-        .btn-gold:hover {
-            background-color: var(--gold-dark);
-            color: white;
-        }
-        
-        .nav-tabs .nav-link.active {
-            background-color: var(--gold-primary);
-            color: var(--black-primary);
-            border-color: var(--gold-primary);
-            font-weight: 600;
-        }
-
-        .case-code-display {
-            font-family: 'Courier New', monospace;
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, var(--black-primary), var(--black-light));
-            color: var(--gold-primary);
-            padding: 12px 20px;
-            border-radius: 8px;
-            text-align: center;
-            border: 2px solid var(--gold-primary);
-        }
-
-        .session-card {
-            background: white;
-            border-right: 4px solid var(--gold-primary);
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            border-top: 5px solid var(--gold-primary);
-        }
-        
-        .case-status {
-            display: inline-block;
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        
-        .status-active { background-color: #e3f2fd; color: #1976d2; }
-        .status-pending { background-color: #fff3e0; color: #f57c00; }
-        .status-closed { background-color: #e8f5e9; color: #388e3c; }
-        .status-appeal { background-color: #fce4ec; color: #c2185b; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-light); color: var(--black-primary); }
+        .header { background: linear-gradient(135deg, var(--black-primary), var(--black-light)); color: var(--gold-primary); border-bottom: 4px solid var(--gold-primary); padding: 20px 0; margin-bottom: 25px; }
+        .form-section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; border-right: 5px solid var(--gold-primary); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .btn-gold { background-color: var(--gold-primary); color: var(--black-primary); border: none; font-weight: 600; padding: 10px 25px; }
+        .btn-gold:hover { background-color: var(--gold-dark); color: white; }
+        .nav-tabs .nav-link.active { background-color: var(--gold-primary); color: var(--black-primary); border-color: var(--gold-primary); font-weight: 600; }
+        .case-code-display { font-family: 'Courier New', monospace; font-size: 1.3rem; background: var(--black-primary); color: var(--gold-primary); padding: 15px; border-radius: 8px; text-align: center; border: 2px solid var(--gold-primary); }
+        .session-card { background: white; border-right: 4px solid var(--gold-primary); margin-bottom: 10px; padding: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .login-container { max-width: 400px; margin: 100px auto; padding: 300x; background: white; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-top: 5px solid var(--gold-primary); padding: 30px; }
     </style>
 </head>
 <body>
 
-<!-- صفحة الدخول -->
-<div id="loginPage" style="display: block;">
+<div id="loginPage">
     <div class="container">
         <div class="login-container">
             <h3 class="text-center mb-4"><i class="bi bi-scale-balanced me-2"></i>نظام إدارة القضايا</h3>
-            <p class="text-center text-muted mb-4">النسخة الذهبية - المحامي/محمود</p>
-            
-            <div class="mb-3">
-                <label class="form-label">اسم المستخدم</label>
-                <input type="text" class="form-control" id="username" value="mahmoud.legal@gmail.com" readonly>
-            </div>
-            
+            <p class="text-center text-muted mb-4">المحامي محمود - تسجيل الدخول</p>
             <div class="mb-4">
                 <label class="form-label">كلمة المرور</label>
                 <input type="password" class="form-control" id="password" placeholder="أدخل كلمة المرور">
             </div>
-            
             <div class="d-grid">
-                <button class="btn btn-gold" onclick="login()">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>دخول
-                </button>
-            </div>
-            
-            <div class="mt-3 text-center">
-                <small class="text-muted">كلمة المرور: Mahmoud 237</small>
+                <button class="btn btn-gold" onclick="login()">دخول</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- المحتوى الرئيسي (يظهر بعد الدخول) -->
 <div id="mainContent" style="display: none;">
     <div class="header text-center">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-outline-gold" onclick="logout()">
-                    <i class="bi bi-box-arrow-left me-2"></i>خروج
-                </button>
-                <div>
-                    <h1><i class="bi bi-scale-balanced me-2"></i>نظام إدارة القضايا المتقدم</h1>
-                    <p class="mb-0">لوحة تحكم المكتب - النسخة الذهبية</p>
-                </div>
-                <div class="text-start">
-                    <span id="currentDate" class="badge bg-gold text-dark"></span>
-                </div>
+        <div class="container d-flex justify-content-between align-items-center">
+            <button class="btn btn-outline-warning btn-sm" onclick="location.reload()">خروج</button>
+            <div>
+                <h1>نظام إدارة القضايا المتقدم</h1>
+                <p id="currentDate" class="mb-0"></p>
             </div>
+            <i class="bi bi-person-circle fs-2"></i>
         </div>
     </div>
 
     <div class="container">
-        <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
-            <li class="nav-item">
-                <button class="nav-link active" id="add-tab" data-bs-toggle="tab" data-bs-target="#addCase" type="button">إضافة قضية</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="sessions-tab" data-bs-toggle="tab" data-bs-target="#manageSessions" type="button">إدارة الجلسات</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="search-tab" data-bs-toggle="tab" data-bs-target="#searchCases" type="button">بحث واستعلام</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendarSync" type="button">مزامنة التقويم</button>
-            </li>
+        <ul class="nav nav-tabs mb-4" id="adminTabs">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#addCase">إضافة قضية</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#manageSessions">إدارة الجلسات</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#searchCases">بحث</button></li>
         </ul>
 
         <div class="tab-content">
-            <!-- إضافة قضية -->
             <div class="tab-pane fade show active" id="addCase">
                 <form id="caseForm">
                     <div class="form-section">
-                        <h5><i class="bi bi-person-badge me-2"></i>بيانات العميل</h5>
-                        <div class="row mt-3">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">اسم العميل *</label>
-                                <input type="text" class="form-control" id="clientName" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">رقم الهاتف *</label>
-                                <input type="tel" class="form-control" id="clientPhone" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">صفة العميل *</label>
-                                <select class="form-select" id="clientRole" required>
-                                    <option value="مدعي">مدعي</option>
-                                    <option value="مدعي عليه">مدعي عليه</option>
-                                    <option value="مستانف">مستانف</option>
-                                    <option value="مستانف ضده">مستانف ضده</option>
-                                    <option value="متهم">متهم</option>
-                                    <option value="مدعي بالحق المدني">مدعي بالحق المدني</option>
+                        <h5>بيانات العميل والقضية</h5>
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-4"><label>اسم العميل</label><input type="text" id="clientName" class="form-control" required></div>
+                            <div class="col-md-4"><label>الهاتف</label><input type="tel" id="clientPhone" class="form-control" required></div>
+                            <div class="col-md-4">
+                                <label>صفة العميل</label>
+                                <select id="clientRole" class="form-select">
+                                    <option>مدعي</option><option>مدعي عليه</option><option>متهم</option>
                                 </select>
                             </div>
+                            <div class="col-md-3"><label>رقم القضية</label><input type="text" id="caseNumber" class="form-control" required></div>
+                            <div class="col-md-3"><label>السنة</label><input type="text" id="caseYear" class="form-control" required></div>
+                            <div class="col-md-3">
+                                <label>نوع القضية</label>
+                                <select id="caseType" class="form-select">
+                                    <option value="مدني">مدني</option><option value="جنح">جنح</option><option value="جنايات">جنايات</option><option value="أسرة">أسرة</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>حالة القضية</label>
+                                <select id="caseStatus" class="form-select">
+                                    <option>جارية</option><option>منتهية</option><option>قيد الاستئناف</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6"><label>المحكمة</label><input type="text" id="courtName" class="form-control" required></div>
+                            <div class="col-md-6"><label>الدائرة</label><input type="text" id="circle" class="form-control" required></div>
+                            <div class="col-md-6"><label>اسم الخصم</label><input type="text" id="opponentName" class="form-control" required></div>
+                            <div class="col-md-12"><label>الموضوع</label><textarea id="caseSubject" class="form-control" rows="2" required></textarea></div>
                         </div>
                     </div>
-
-                    <div class="form-section">
-                        <h5><i class="bi bi-folder me-2"></i>بيانات القضية</h5>
-                        <div class="row mt-3">
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">رقم القضية *</label>
-                                <input type="text" class="form-control" id="caseNumber" required>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">سنة القضية *</label>
-                                <input type="text" class="form-control" id="caseYear" required>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">نوع القضية *</label>
-                                <select class="form-select" id="caseType" required>
-                                    <option value="مدني">مدني</option>
-                                    <option value="تجاري">تجاري</option>
-                                    <option value="عمالي">عمالي</option>
-                                    <option value="اداري">اداري</option>
-                                    <option value="أسرة">أسرة</option>
-                                    <option value="جنح">جنح</option>
-                                    <option value="جنايات">جنايات</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">حالة القضية *</label>
-                                <select class="form-select" id="caseStatus" required>
-                                    <option value="جارية">جارية</option>
-                                    <option value="منتهية">منتهية</option>
-                                    <option value="قيد الاستئناف">قيد الاستئناف</option>
-                                    <option value="معلقة">معلقة</option>
-                                    <option value="محكوم فيها">محكوم فيها</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">المحكمة *</label>
-                                <input type="text" class="form-control" id="courtName" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">الدائرة/القسم *</label>
-                                <input type="text" class="form-control" id="circle" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">اسم الخصم *</label>
-                                <input type="text" class="form-control" id="opponentName" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">صفة الخصم *</label>
-                                <select class="form-select" id="opponentRole" required>
-                                    <option value="مدعى عليه">مدعى عليه</option>
-                                    <option value="مدعي">مدعي</option>
-                                    <option value="خصم">خصم</option>
-                                    <option value="المدعي العام">المدعي العام</option>
-                                </select>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label">موضوع القضية *</label>
-                                <textarea class="form-control" id="caseSubject" rows="3" required></textarea>
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label">ملاحظات إضافية</label>
-                                <textarea class="form-control" id="notes" rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center mb-5">
-                        <button type="submit" class="btn btn-gold btn-lg">
-                            <i class="bi bi-save me-2"></i>حفظ القضية وتوليد الكود
-                        </button>
-                    </div>
-                    
-                    <div id="caseCodeResult" class="mt-4" style="display: none;"></div>
+                    <button type="submit" class="btn btn-gold w-100 mb-4">حفظ القضية وتوليد الكود</button>
+                    <div id="caseCodeResult" style="display: none;"></div>
                 </form>
             </div>
 
-            <!-- إدارة الجلسات -->
             <div class="tab-pane fade" id="manageSessions">
                 <div class="row">
                     <div class="col-md-5">
                         <div class="form-section">
-                            <h5>إضافة جلسة جديدة</h5>
-                            <div class="mb-3 mt-3">
-                                <label class="form-label">اختر القضية</label>
-                                <select class="form-select" id="sessionCaseSelect">
-                                    <option value="">جاري تحميل القضايا...</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">تاريخ الجلسة *</label>
-                                <input type="datetime-local" class="form-control" id="sessionDate" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">مكان الجلسة</label>
-                                <input type="text" class="form-control" id="sessionLocation" placeholder="قاعة رقم...">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">القرار/المستجدات</label>
-                                <textarea class="form-control" id="sessionDecision" rows="3"></textarea>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="syncToGoogle">
-                                <label class="form-check-label" for="syncToGoogle">
-                                    مزامنة مع تقويم Google
-                                </label>
-                            </div>
+                            <h5>إضافة جلسة</h5>
+                            <div class="mb-3"><label>اختر القضية</label><select class="form-select" id="sessionCaseSelect"></select></div>
+                            <div class="mb-3"><label>تاريخ الجلسة</label><input type="datetime-local" class="form-control" id="sessionDate" required></div>
+                            <div class="mb-3"><label>المكان</label><input type="text" class="form-control" id="sessionLocation"></div>
+                            <div class="mb-3"><label>القرار/المستجدات</label><textarea class="form-control" id="sessionDecision"></textarea></div>
                             <button class="btn btn-gold w-100" onclick="addSession()">حفظ الجلسة</button>
                         </div>
                     </div>
                     <div class="col-md-7">
                         <div class="form-section">
-                            <h5>الجلسات القادمة</h5>
-                            <div id="upcomingSessions" class="mt-3"></div>
-                            
-                            <h5 class="mt-4">الجلسات السابقة</h5>
-                            <div id="pastSessions" class="mt-3"></div>
+                            <h5>الجلسات المسجلة</h5>
+                            <div id="sessionList"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- بحث واستعلام -->
             <div class="tab-pane fade" id="searchCases">
                 <div class="form-section">
-                    <div class="row align-items-end">
-                        <div class="col-md-8">
-                            <label class="form-label">ابحث برقم الهاتف أو اسم العميل أو رقم القضية</label>
-                            <input type="text" class="form-control" id="searchInput" placeholder="أدخل كلمة البحث...">
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-gold w-100" onclick="searchCases()">بحث</button>
-                        </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchInput" placeholder="ابحث باسم العميل أو رقم القضية...">
+                        <button class="btn btn-gold" onclick="searchCases()">بحث</button>
                     </div>
                 </div>
-                <div id="searchResults" class="mt-4"></div>
-            </div>
-
-            <!-- مزامنة التقويم -->
-            <div class="tab-pane fade" id="calendarSync">
-                <div class="form-section">
-                    <h5><i class="bi bi-calendar-check me-2"></i>مزامنة مع Google Calendar</h5>
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="alert alert-info">
-                                <h6><i class="bi bi-info-circle me-2"></i>معلومات المزامنة</h6>
-                                <p class="mb-2">الحساب: <strong>mahmoud.legal@gmail.com</strong></p>
-                                <p class="mb-0">سيتم مزامنة جميع الجلسات القادمة تلقائياً مع تقويم Google</p>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label">فترة التذكير قبل الجلسة</label>
-                                <select class="form-select" id="reminderTime">
-                                    <option value="15">15 دقيقة</option>
-                                    <option value="30">30 دقيقة</option>
-                                    <option value="60" selected>1 ساعة</option>
-                                    <option value="1440">1 يوم</option>
-                                    <option value="2880">2 يوم</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="alert alert-warning">
-                                <h6><i class="bi bi-shield-check me-2"></i>تفويض Google Calendar</h6>
-                                <p>يجب تفويض النظام للوصول إلى حساب Google Calendar الخاص بك</p>
-                                <button class="btn btn-outline-gold w-100" onclick="authorizeGoogleCalendar()">
-                                    <i class="bi bi-google me-2"></i>تفويض حساب Google
-                                </button>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <button class="btn btn-gold w-100" onclick="syncAllUpcomingSessions()">
-                                    <i class="bi bi-arrow-repeat me-2"></i>مزامنة جميع الجلسات
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4" id="calendarStatus"></div>
-                </div>
+                <div id="searchResults" class="mt-3"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // تهيئة Supabase
-    const SUPABASE_URL = "https://iyhfafodhptcdwrjywek.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQzMjA4NTcsImV4cCI6MjAxOTg5Njg1N30.6Rj7Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8";
-    
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    // متغيرات Google Calendar API
-    let gapiInited = false;
-    let gisInited = false;
-    let tokenClient;
-    
-    // تهيئة التاريخ الحالي
-    function updateCurrentDate() {
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('currentDate').textContent = now.toLocaleDateString('ar-SA', options);
-    }
-    
-    // التحقق من الدخول
+    // 1. إعدادات Supabase (تأكد من وضع روابطك الصحيحة)
+    const SB_URL = "https://iyhfafodhptcdwrjywek.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQzMjA4NTcsImV4cCI6MjAxOTg5Njg1N30.6Rj7Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8Z1Z8";
+    const db = supabase.createClient(SB_URL, SB_KEY);
+
+    // 2. نظام الدخول
     function login() {
-        const password = document.getElementById('password').value;
-        const correctPassword = "Mahmoud 237";
-        
-        if (password === correctPassword) {
+        const pass = document.getElementById('password').value;
+        if (pass === "mahmoud237") {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
-            updateCurrentDate();
-            loadCasesForSessions();
-            loadUpcomingSessions();
-            initGoogleCalendar();
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'مرحباً!',
-                text: 'تم الدخول بنجاح',
-                timer: 1500,
-                showConfirmButton: false
-            });
+            updateUI();
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'خطأ',
-                text: 'كلمة المرور غير صحيحة'
-            });
+            Swal.fire('خطأ', 'كلمة المرور غير صحيحة', 'error');
         }
     }
-    
-    // الخروج
-    function logout() {
-        document.getElementById('loginPage').style.display = 'block';
-        document.getElementById('mainContent').style.display = 'none';
-        document.getElementById('password').value = '';
-        
-        Swal.fire({
-            icon: 'info',
-            title: 'تم الخروج',
-            text: 'تم الخروج من النظام بنجاح',
-            timer: 1500,
-            showConfirmButton: false
-        });
+
+    function updateUI() {
+        const now = new Date();
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('ar-SA', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+        loadCasesForSelect();
+        loadAllSessions();
     }
-    
-    // توليد كود القضية
-    function generateCaseCode(caseData) {
-        const year = caseData.caseYear;
-        const typeCode = getCaseTypeCode(caseData.caseType);
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        return `CASE-${year}-${typeCode}-${randomNum}`;
-    }
-    
-    function getCaseTypeCode(type) {
-        const codes = {
-            'مدني': 'CV',
-            'تجاري': 'CO',
-            'عمالي': 'LB',
-            'اداري': 'AD',
-            'أسرة': 'FM',
-            'جنح': 'MS',
-            'جنايات': 'CR'
-        };
-        return codes[type] || 'OT';
-    }
-    
-    // حفظ القضية في Supabase
-    document.getElementById('caseForm').addEventListener('submit', async function(e) {
+
+    // 3. إدارة القضايا
+    document.getElementById('caseForm').onsubmit = async (e) => {
         e.preventDefault();
+        const code = `CASE-${document.getElementById('caseYear').value}-${Math.floor(1000 + Math.random() * 9000)}`;
         
         const caseData = {
             client_name: document.getElementById('clientName').value,
@@ -489,477 +179,71 @@
             court_name: document.getElementById('courtName').value,
             circle: document.getElementById('circle').value,
             opponent_name: document.getElementById('opponentName').value,
-            opponent_role: document.getElementById('opponentRole').value,
             case_subject: document.getElementById('caseSubject').value,
-            notes: document.getElementById('notes').value,
-            created_at: new Date().toISOString(),
+            case_code: code,
             lawyer_email: 'mahmoud.legal@gmail.com'
         };
-        
-        // توليد كود القضية
-        caseData.case_code = generateCaseCode(caseData);
-        
-        try {
-            // حفظ القضية في Supabase
-            const { data, error } = await supabase
-                .from('cases')
-                .insert([caseData]);
-            
-            if (error) throw error;
-            
-            // عرض الكود
-            document.getElementById('caseCodeResult').innerHTML = `
-                <div class="case-code-display">
-                    <h5>تم حفظ القضية بنجاح!</h5>
-                    <p class="mb-2">كود القضية:</p>
-                    <h3 class="mb-3">${caseData.case_code}</h3>
-                    <small>احفظ هذا الكود للمراجعة والمتابعة</small>
-                </div>
-            `;
-            document.getElementById('caseCodeResult').style.display = 'block';
-            
-            // إعادة تعيين النموذج
+
+        const { error } = await db.from('cases').insert([caseData]);
+        if (error) {
+            Swal.fire('خطأ', 'فشل في حفظ البيانات في Supabase', 'error');
+        } else {
+            const resDiv = document.getElementById('caseCodeResult');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = `<div class="case-code-display">تم الحفظ بنجاح كود القضية: <br> <strong>${code}</strong></div>`;
             document.getElementById('caseForm').reset();
-            
-            // تحديث قائمة القضايا للجلسات
-            loadCasesForSessions();
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'تم الحفظ',
-                text: `تم حفظ القضية بالكود: ${caseData.case_code}`,
-                timer: 2000,
-                showConfirmButton: false
-            });
-            
-        } catch (error) {
-            console.error('Error saving case:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'خطأ',
-                text: 'حدث خطأ أثناء حفظ القضية'
-            });
+            loadCasesForSelect();
+            Swal.fire('تم!', 'تم تسجيل القضية بنجاح', 'success');
         }
-    });
-    
-    // تحميل القضايا للجلسات
-    async function loadCasesForSessions() {
-        try {
-            const { data: cases, error } = await supabase
-                .from('cases')
-                .select('id, case_number, case_year, client_name, case_code')
-                .order('created_at', { ascending: false });
-            
-            if (error) throw error;
-            
-            const select = document.getElementById('sessionCaseSelect');
-            select.innerHTML = '<option value="">اختر القضية</option>';
-            
-            cases.forEach(caseItem => {
-                const option = document.createElement('option');
-                option.value = caseItem.id;
-                option.textContent = `${caseItem.case_code} - ${caseItem.client_name} (${caseItem.case_number}/${caseItem.case_year})`;
-                select.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error loading cases:', error);
-        }
+    };
+
+    // 4. إدارة الجلسات
+    async function loadCasesForSelect() {
+        const { data } = await db.from('cases').select('id, client_name, case_number');
+        const select = document.getElementById('sessionCaseSelect');
+        select.innerHTML = data?.map(c => `<option value="${c.id}">${c.client_name} - ${c.case_number}</option>`).join('') || '';
     }
-    
-    // إضافة جلسة جديدة
+
     async function addSession() {
-        const caseId = document.getElementById('sessionCaseSelect').value;
-        const sessionDate = document.getElementById('sessionDate').value;
-        const location = document.getElementById('sessionLocation').value;
-        const decision = document.getElementById('sessionDecision').value;
-        const syncToGoogle = document.getElementById('syncToGoogle').checked;
-        
-        if (!caseId || !sessionDate) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'بيانات ناقصة',
-                text: 'الرجاء اختيار القضية وتاريخ الجلسة'
-            });
-            return;
-        }
-        
-        try {
-            // الحصول على بيانات القضية
-            const { data: caseData, error: caseError } = await supabase
-                .from('cases')
-                .select('*')
-                .eq('id', caseId)
-                .single();
-            
-            if (caseError) throw caseError;
-            
-            // حفظ الجلسة في Supabase
-            const sessionData = {
-                case_id: caseId,
-                session_date: sessionDate,
-                location: location,
-                decision: decision,
-                created_at: new Date().toISOString(),
-                sync_status: syncToGoogle ? 'pending' : 'not_synced'
-            };
-            
-            const { data: session, error: sessionError } = await supabase
-                .from('sessions')
-                .insert([sessionData])
-                .select()
-                .single();
-            
-            if (sessionError) throw sessionError;
-            
-            // مزامنة مع Google Calendar إذا تم الاختيار
-            if (syncToGoogle && gapiInited) {
-                await syncSessionToGoogle(session, caseData);
-            }
-            
-            // إعادة تعيين النموذج
-            document.getElementById('sessionDate').value = '';
-            document.getElementById('sessionLocation').value = '';
-            document.getElementById('sessionDecision').value = '';
-            document.getElementById('syncToGoogle').checked = false;
-            
-            // تحديث قائمة الجلسات
-            loadUpcomingSessions();
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'تم الحفظ',
-                text: 'تم حفظ الجلسة بنجاح',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            
-        } catch (error) {
-            console.error('Error adding session:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'خطأ',
-                text: 'حدث خطأ أثناء حفظ الجلسة'
-            });
-        }
-    }
-    
-    // تحميل الجلسات القادمة
-    async function loadUpcomingSessions() {
-        try {
-            const now = new Date().toISOString();
-            
-            const { data: upcoming, error: upcomingError } = await supabase
-                .from('sessions')
-                .select(`
-                    *,
-                    cases (
-                        case_code,
-                        client_name,
-                        case_number,
-                        case_year,
-                        court_name
-                    )
-                `)
-                .gte('session_date', now)
-                .order('session_date', { ascending: true });
-            
-            const { data: past, error: pastError } = await supabase
-                .from('sessions')
-                .select(`
-                    *,
-                    cases (
-                        case_code,
-                        client_name,
-                        case_number,
-                        case_year,
-                        court_name
-                    )
-                `)
-                .lt('session_date', now)
-                .order('session_date', { ascending: false });
-            
-            if (upcomingError || pastError) throw upcomingError || pastError;
-            
-            // عرض الجلسات القادمة
-            const upcomingContainer = document.getElementById('upcomingSessions');
-            if (upcoming.length === 0) {
-                upcomingContainer.innerHTML = '<div class="alert alert-info">لا توجد جلسات قادمة</div>';
-            } else {
-                upcomingContainer.innerHTML = upcoming.map(session => `
-                    <div class="session-card">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h6>${session.cases.case_code}</h6>
-                                <p class="mb-1"><strong>العميل:</strong> ${session.cases.client_name}</p>
-                                <p class="mb-1"><strong>المحكمة:</strong> ${session.cases.court_name}</p>
-                                <p class="mb-1"><strong>التاريخ:</strong> ${new Date(session.session_date).toLocaleString('ar-SA')}</p>
-                                ${session.location ? `<p class="mb-1"><strong>المكان:</strong> ${session.location}</p>` : ''}
-                                ${session.decision ? `<p class="mb-0"><strong>ملاحظات:</strong> ${session.decision}</p>` : ''}
-                            </div>
-                            <span class="badge ${session.sync_status === 'synced' ? 'bg-success' : 'bg-warning'}">
-                                ${session.sync_status === 'synced' ? 'مزامن' : 'لم تتم المزامنة'}
-                            </span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            // عرض الجلسات السابقة
-            const pastContainer = document.getElementById('pastSessions');
-            if (past.length === 0) {
-                pastContainer.innerHTML = '<div class="alert alert-info">لا توجد جلسات سابقة</div>';
-            } else {
-                pastContainer.innerHTML = past.map(session => `
-                    <div class="session-card">
-                        <h6>${session.cases.case_code}</h6>
-                        <p class="mb-1"><strong>العميل:</strong> ${session.cases.client_name}</p>
-                        <p class="mb-1"><strong>التاريخ:</strong> ${new Date(session.session_date).toLocaleString('ar-SA')}</p>
-                        ${session.decision ? `<p class="mb-0"><strong>القرار:</strong> ${session.decision}</p>` : ''}
-                    </div>
-                `).join('');
-            }
-            
-        } catch (error) {
-            console.error('Error loading sessions:', error);
-        }
-    }
-    
-    // البحث عن القضايا
-    async function searchCases() {
-        const searchTerm = document.getElementById('searchInput').value.trim();
-        
-        if (!searchTerm) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'بحث فارغ',
-                text: 'الرجاء إدخال كلمة للبحث'
-            });
-            return;
-        }
-        
-        try {
-            const { data: cases, error } = await supabase
-                .from('cases')
-                .select('*')
-                .or(`client_name.ilike.%${searchTerm}%,client_phone.ilike.%${searchTerm}%,case_number.ilike.%${searchTerm}%,case_code.ilike.%${searchTerm}%`)
-                .order('created_at', { ascending: false });
-            
-            if (error) throw error;
-            
-            const resultsContainer = document.getElementById('searchResults');
-            
-            if (cases.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div class="alert alert-warning">
-                        <i class="bi bi-search me-2"></i>
-                        لم يتم العثور على نتائج للبحث: "${searchTerm}"
-                    </div>
-                `;
-            } else {
-                resultsContainer.innerHTML = `
-                    <h5 class="mb-3">نتائج البحث (${cases.length})</h5>
-                    <div class="row">
-                        ${cases.map(caseItem => `
-                            <div class="col-md-6 mb-3">
-                                <div class="form-section">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h6>${caseItem.case_code}</h6>
-                                        <span class="case-status status-${getStatusClass(caseItem.case_status)}">
-                                            ${caseItem.case_status}
-                                        </span>
-                                    </div>
-                                    <p><strong>العميل:</strong> ${caseItem.client_name}</p>
-                                    <p><strong>رقم الهاتف:</strong> ${caseItem.client_phone}</p>
-                                    <p><strong>رقم القضية:</strong> ${caseItem.case_number}/${caseItem.case_year}</p>
-                                    <p><strong>نوع القضية:</strong> ${caseItem.case_type}</p>
-                                    <p><strong>الخصم:</strong> ${caseItem.opponent_name} (${caseItem.opponent_role})</p>
-                                    <p><strong>المحكمة:</strong> ${caseItem.court_name} - ${caseItem.circle}</p>
-                                    <p><strong>الموضوع:</strong> ${caseItem.case_subject}</p>
-                                    <p><strong>تاريخ الإضافة:</strong> ${new Date(caseItem.created_at).toLocaleDateString('ar-SA')}</p>
-                                    ${caseItem.notes ? `<p><strong>ملاحظات:</strong> ${caseItem.notes}</p>` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
-            
-        } catch (error) {
-            console.error('Error searching cases:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'خطأ',
-                text: 'حدث خطأ أثناء البحث'
-            });
-        }
-    }
-    
-    function getStatusClass(status) {
-        const classes = {
-            'جارية': 'active',
-            'منتهية': 'closed',
-            'قيد الاستئناف': 'appeal',
-            'معلقة': 'pending',
-            'محكوم فيها': 'closed'
+        const sessionData = {
+            case_id: document.getElementById('sessionCaseSelect').value,
+            session_date: document.getElementById('sessionDate').value,
+            location: document.getElementById('sessionLocation').value,
+            decision: document.getElementById('sessionDecision').value
         };
-        return classes[status] || 'pending';
+
+        const { error } = await db.from('sessions').insert([sessionData]);
+        if (error) {
+            Swal.fire('خطأ', 'لم يتم حفظ الجلسة', 'error');
+        } else {
+            Swal.fire('نجاح', 'تم تسجيل الجلسة بنجاح', 'success');
+            loadAllSessions();
+        }
     }
-    
-    // ==================== Google Calendar Integration ====================
-    
-    // تهيئة Google Calendar
-    function initGoogleCalendar() {
-        gapi.load('client', async () => {
-            await gapi.client.init({
-                apiKey: 'AIzaSyBz-9Z3BZ3Z3Z3Z3Z3Z3Z3Z3Z3Z3Z3Z3Z3',
-                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
-            });
-            gapiInited = true;
-            console.log('Google API initialized');
-        });
+
+    async function loadAllSessions() {
+        const { data } = await db.from('sessions').select('*, cases(client_name)').order('session_date', {ascending: true});
+        document.getElementById('sessionList').innerHTML = data?.map(s => `
+            <div class="session-card">
+                <strong>العميل: ${s.cases?.client_name || 'غير معروف'}</strong><br>
+                التاريخ: ${new Date(s.session_date).toLocaleString('ar-SA')}<br>
+                المكان: ${s.location || 'غير محدد'}<br>
+                القرار: ${s.decision || 'لا يوجد'}
+            </div>
+        `).join('') || 'لا توجد جلسات';
     }
-    
-    // تفويض Google Calendar
-    function authorizeGoogleCalendar() {
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
-            scope: 'https://www.googleapis.com/auth/calendar.events',
-            callback: (response) => {
-                if (response.error) {
-                    console.error('Authorization error:', response.error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'خطأ في التفويض',
-                        text: response.error
-                    });
-                } else {
-                    document.getElementById('calendarStatus').innerHTML = `
-                        <div class="alert alert-success">
-                            <i class="bi bi-check-circle me-2"></i>
-                            تم تفويض النظام بنجاح للوصول إلى Google Calendar
-                        </div>
-                    `;
-                    syncAllUpcomingSessions();
-                }
-            },
-        });
+
+    async function searchCases() {
+        const term = document.getElementById('searchInput').value;
+        const { data } = await db.from('cases').select('*').or(`client_name.ilike.%${term}%,case_number.ilike.%${term}%,case_code.ilike.%${term}%`);
         
-        tokenClient.requestAccessToken();
+        document.getElementById('searchResults').innerHTML = data?.map(c => `
+            <div class="form-section">
+                <h6>${c.case_code} - ${c.client_name}</h6>
+                <p>المحكمة: ${c.court_name} | الحالة: ${c.case_status}</p>
+            </div>
+        `).join('') || 'لا توجد نتائج';
     }
-    
-    // مزامنة جلسة مع Google Calendar
-    async function syncSessionToGoogle(session, caseData) {
-        try {
-            const event = {
-                'summary': `جلسة قضية: ${caseData.case_code}`,
-                'location': session.location || caseData.court_name,
-                'description': `القضية: ${caseData.case_subject}\\nالعميل: ${caseData.client_name}\\nالخصم: ${caseData.opponent_name}\\nملاحظات: ${session.decision || 'لا توجد ملاحظات'}`,
-                'start': {
-                    'dateTime': session.session_date,
-                    'timeZone': 'Africa/Cairo'
-                },
-                'end': {
-                    'dateTime': new Date(new Date(session.session_date).getTime() + 60 * 60 * 1000).toISOString(),
-                    'timeZone': 'Africa/Cairo'
-                },
-                'reminders': {
-                    'useDefault': false,
-                    'overrides': [
-                        {'method': 'popup', 'minutes': parseInt(document.getElementById('reminderTime').value)}
-                    ]
-                }
-            };
-            
-            const request = gapi.client.calendar.events.insert({
-                'calendarId': 'primary',
-                'resource': event
-            });
-            
-            const response = await request;
-            
-            // تحديث حالة المزامنة في قاعدة البيانات
-            await supabase
-                .from('sessions')
-                .update({ 
-                    sync_status: 'synced',
-                    google_event_id: response.result.id 
-                })
-                .eq('id', session.id);
-            
-            console.log('Event created:', response.result.htmlLink);
-            
-        } catch (error) {
-            console.error('Error syncing to Google Calendar:', error);
-            await supabase
-                .from('sessions')
-                .update({ sync_status: 'failed' })
-                .eq('id', session.id);
-        }
-    }
-    
-    // مزامنة جميع الجلسات القادمة
-    async function syncAllUpcomingSessions() {
-        try {
-            const now = new Date().toISOString();
-            
-            const { data: pendingSessions, error } = await supabase
-                .from('sessions')
-                .select(`
-                    *,
-                    cases (*)
-                `)
-                .gte('session_date', now)
-                .eq('sync_status', 'pending');
-            
-            if (error) throw error;
-            
-            if (pendingSessions.length === 0) {
-                document.getElementById('calendarStatus').innerHTML = `
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        لا توجد جلسات قادمة تحتاج للمزامنة
-                    </div>
-                `;
-                return;
-            }
-            
-            document.getElementById('calendarStatus').innerHTML = `
-                <div class="alert alert-info">
-                    <i class="bi bi-arrow-repeat me-2"></i>
-                    جاري مزامنة ${pendingSessions.length} جلسة مع Google Calendar...
-                </div>
-            `;
-            
-            for (const session of pendingSessions) {
-                await syncSessionToGoogle(session, session.cases);
-            }
-            
-            // تحديث قائمة الجلسات
-            loadUpcomingSessions();
-            
-            document.getElementById('calendarStatus').innerHTML = `
-                <div class="alert alert-success">
-                    <i class="bi bi-check-circle me-2"></i>
-                    تمت مزامنة جميع الجلسات بنجاح مع Google Calendar
-                </div>
-            `;
-            
-        } catch (error) {
-            console.error('Error syncing all sessions:', error);
-            document.getElementById('calendarStatus').innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="bi bi-x-circle me-2"></i>
-                    حدث خطأ أثناء مزامنة الجلسات
-                </div>
-            `;
-        }
-    }
-    
-    // تهيئة الصفحة
-    document.addEventListener('DOMContentLoaded', function() {
-        updateCurrentDate();
-        setInterval(updateCurrentDate, 60000); // تحديث التاريخ كل دقيقة
-    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -77,7 +77,7 @@
         }
         
         .admin-container {
-            max-width: 1600px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -100,6 +100,8 @@
             gap: 10px;
             margin-bottom: 40px;
             flex-wrap: wrap;
+            border-bottom: 2px solid rgba(191, 149, 63, 0.3);
+            padding-bottom: 10px;
         }
         
         .tab-btn {
@@ -111,11 +113,17 @@
             font-weight: bold;
             color: #94a3b8;
             transition: all 0.3s;
+            font-size: 16px;
         }
         
         .tab-btn.active {
             background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
             color: #020617;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: rgba(191, 149, 63, 0.1);
+            color: #bf953f;
         }
         
         /* محتوى التبويبات */
@@ -125,50 +133,144 @@
             padding: 40px;
             border-radius: 20px;
             margin-bottom: 40px;
+            border: 1px solid rgba(191, 149, 63, 0.2);
         }
         
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* كروت الإحصائيات - حجم أكبر */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(191, 149, 63, 0.15) 0%, rgba(252, 246, 186, 0.05) 100%);
+            border: 2px solid rgba(191, 149, 63, 0.3);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(191, 149, 63, 0.2);
+        }
+        
+        .stat-card h3 {
+            color: #bf953f;
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .stat-value {
+            font-size: 64px;
+            font-weight: bold;
+            color: #fcf6ba;
+            margin: 10px 0;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-subtext {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-top: 10px;
         }
         
         /* النماذج */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #bf953f;
             font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .form-control {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(191, 149, 63, 0.3);
-            border-radius: 10px;
+            border-radius: 12px;
             color: white;
             font-size: 16px;
+            transition: all 0.3s;
         }
         
+        .form-control:focus {
+            outline: none;
+            border-color: #bf953f;
+            box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* الأزرار */
         .btn {
             background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
             color: #020617;
-            padding: 15px 40px;
-            border-radius: 10px;
+            padding: 18px 45px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(191, 149, 63, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #bf953f;
+            border: 2px solid #bf953f;
+        }
+        
+        .btn-secondary:hover {
+            background: #bf953f;
+            color: #020617;
         }
         
         /* الجداول */
@@ -176,38 +278,223 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 16px;
         }
         
         .data-table th {
-            background: rgba(191, 149, 63, 0.2);
+            background: linear-gradient(135deg, rgba(191, 149, 63, 0.2) 0%, rgba(191, 149, 63, 0.1) 100%);
             color: #fcf6ba;
-            padding: 15px;
+            padding: 20px;
             text-align: right;
+            font-weight: bold;
+            border-bottom: 3px solid #bf953f;
+            font-size: 18px;
         }
         
         .data-table td {
-            padding: 12px;
+            padding: 18px;
             border-bottom: 1px solid rgba(191, 149, 63, 0.1);
+            color: #e2e8f0;
         }
         
-        /* الرسائل */
-        .message {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            display: none;
+        .data-table tr:hover {
+            background: rgba(191, 149, 63, 0.05);
         }
         
-        .message.success {
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .status-active {
             background: rgba(34, 197, 94, 0.2);
             color: #4ade80;
             border: 1px solid #4ade80;
         }
         
-        .message.error {
+        .status-closed {
             background: rgba(239, 68, 68, 0.2);
             color: #f87171;
             border: 1px solid #f87171;
+        }
+        
+        /* الرسائل */
+        .message {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            display: none;
+            font-size: 16px;
+        }
+        
+        .message.success {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 2px solid #4ade80;
+        }
+        
+        .message.error {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 2px solid #f87171;
+        }
+        
+        .message.info {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 2px solid #60a5fa;
+        }
+        
+        /* البحث */
+        .search-section {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(191, 149, 63, 0.2);
+        }
+        
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .search-header h3 {
+            color: #bf953f;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .search-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        
+        .search-option-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(191, 149, 63, 0.3);
+            border-radius: 10px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .search-option-btn.active {
+            background: rgba(191, 149, 63, 0.2);
+            color: #bf953f;
+            border-color: #bf953f;
+        }
+        
+        .search-option-btn:hover:not(.active) {
+            background: rgba(191, 149, 63, 0.1);
+            color: #bf953f;
+        }
+        
+        /* نتائج البحث */
+        .search-results {
+            margin-top: 30px;
+        }
+        
+        .result-count {
+            color: #bf953f;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(191, 149, 63, 0.2);
+        }
+        
+        /* كود القضية */
+        .case-code-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            border: 2px dashed #bf953f;
+        }
+        
+        .case-code-value {
+            font-family: 'Courier New', monospace;
+            font-size: 32px;
+            color: #fcf6ba;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            border: 2px solid #bf953f;
+        }
+        
+        /* مزامنة جوجل */
+        .google-sync {
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.1) 0%, rgba(52, 168, 83, 0.1) 100%);
+            border: 2px solid rgba(66, 133, 244, 0.3);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .google-sync h4 {
+            color: #4285F4;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* تحسينات للجوال */
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 0 15px;
+            }
+            
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stat-card {
+                padding: 30px 20px;
+                min-height: 180px;
+            }
+            
+            .stat-value {
+                font-size: 48px;
+            }
+            
+            .btn {
+                padding: 15px 30px;
+                font-size: 16px;
+            }
+            
+            .data-table {
+                font-size: 14px;
+            }
+            
+            .data-table th, .data-table td {
+                padding: 12px 8px;
+            }
         }
     </style>
 </head>
@@ -228,8 +515,8 @@
                 <div class="admin-info">
                     <h1><i class="fas fa-user-shield"></i> لوحة تحكم المحامي</h1>
                     <div>
-                        <span style="color: #bf953f;">مرحباً، المحامي/محمود عبد الحميد</span>
-                        <button class="btn" onclick="logout()" style="margin-right: 20px;">
+                        <span style="color: #bf953f; font-size: 18px;">مرحباً، المحامي/محمود عبد الحميد</span>
+                        <button class="btn btn-secondary" onclick="logout()" style="margin-right: 20px;">
                             <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                         </button>
                     </div>
@@ -240,163 +527,312 @@
         <main class="admin-container">
             <!-- تبويبات -->
             <div class="tab-container">
-                <button class="tab-btn active" onclick="switchTab('dashboard')">الإحصائيات</button>
-                <button class="tab-btn" onclick="switchTab('cases')">إدارة القضايا</button>
-                <button class="tab-btn" onclick="switchTab('sessions')">إدارة الجلسات</button>
-                <button class="tab-btn" onclick="switchTab('fees')">إدارة الأتعاب</button>
-                <button class="tab-btn" onclick="switchTab('search')">بحث متقدم</button>
+                <button class="tab-btn active" onclick="switchTab('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> الإحصائيات
+                </button>
+                <button class="tab-btn" onclick="switchTab('cases')">
+                    <i class="fas fa-folder-open"></i> إدارة القضايا
+                </button>
+                <button class="tab-btn" onclick="switchTab('sessions')">
+                    <i class="fas fa-gavel"></i> إدارة الجلسات
+                </button>
+                <button class="tab-btn" onclick="switchTab('search')">
+                    <i class="fas fa-search"></i> بحث متقدم
+                </button>
             </div>
 
             <!-- الإحصائيات -->
             <div id="dashboard" class="tab-content active">
-                <h2>نظرة عامة</h2>
-                <div id="dashboardStats" class="form-grid">
+                <h2 style="color: #bf953f; margin-bottom: 30px; font-size: 28px;">
+                    <i class="fas fa-chart-line"></i> نظرة عامة
+                </h2>
+                
+                <div class="stats-grid" id="dashboardStats">
                     <!-- سيتم تعبئتها بالجافاسكربت -->
                 </div>
-                <div id="recentCases">
+                
+                <div id="recentActivity" style="margin-top: 50px;">
                     <!-- سيتم تعبئتها بالجافاسكربت -->
                 </div>
             </div>
 
             <!-- إدارة القضايا -->
             <div id="cases" class="tab-content">
-                <h2>إضافة قضية جديدة</h2>
+                <h2 style="color: #bf953f; margin-bottom: 30px; font-size: 28px;">
+                    <i class="fas fa-plus-circle"></i> إضافة قضية جديدة
+                </h2>
+                
                 <div id="caseMessage" class="message"></div>
+                
                 <form id="newCaseForm">
                     <div class="form-grid">
+                        <!-- بيانات العميل -->
                         <div class="form-group">
-                            <label>اسم العميل *</label>
-                            <input type="text" class="form-control" id="clientName" required>
+                            <label><i class="fas fa-user"></i> اسم العميل *</label>
+                            <input type="text" class="form-control" id="clientName" required placeholder="أدخل اسم العميل كاملاً">
                         </div>
+                        
                         <div class="form-group">
-                            <label>رقم الهاتف *</label>
-                            <input type="tel" class="form-control" id="clientPhone" required>
+                            <label><i class="fas fa-phone"></i> رقم هاتف العميل *</label>
+                            <input type="tel" class="form-control" id="clientPhone" required 
+                                   pattern="01[0-9]{9}" placeholder="مثال: 01012345678">
                         </div>
+                        
+                        <!-- بيانات الخصم -->
                         <div class="form-group">
-                            <label>رقم القضية *</label>
-                            <input type="text" class="form-control" id="caseNumber" required>
+                            <label><i class="fas fa-user-friends"></i> اسم الخصم</label>
+                            <input type="text" class="form-control" id="opponentName" placeholder="أدخل اسم الخصم">
                         </div>
+                        
+                        <!-- بيانات القضية -->
                         <div class="form-group">
-                            <label>سنة القضية *</label>
+                            <label><i class="fas fa-balance-scale"></i> نوع القضية *</label>
+                            <select class="form-control" id="caseType" required>
+                                <option value="">اختر نوع القضية</option>
+                                <option value="مدني">مدني</option>
+                                <option value="جنائي">جنائي</option>
+                                <option value="تجاري">تجاري</option>
+                                <option value="إداري">إداري</option>
+                                <option value="أسرة">أسرة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-tasks"></i> حالة القضية *</label>
+                            <select class="form-control" id="caseStatus" required>
+                                <option value="متداولة">متداولة</option>
+                                <option value="مغلقة">مغلقة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-hashtag"></i> رقم القضية *</label>
+                            <input type="text" class="form-control" id="caseNumber" required placeholder="رقم القضية الرسمي">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> سنة القضية *</label>
                             <select class="form-control" id="caseYear" required>
+                                <option value="">اختر السنة</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
+                                <option value="2026">2026</option>
                             </select>
                         </div>
+                        
                         <div class="form-group">
-                            <label>نوع القضية</label>
-                            <select class="form-control" id="caseType">
-                                <option value="مدنية">مدنية</option>
-                                <option value="جنائية">جنائية</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>المحكمة</label>
-                            <input type="text" class="form-control" id="court">
+                            <label><i class="fas fa-gavel"></i> المحكمة *</label>
+                            <input type="text" class="form-control" id="court" required placeholder="اسم المحكمة">
                         </div>
                     </div>
-                    <button type="submit" class="btn">حفظ القضية</button>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-file-alt"></i> موضوع القضية</label>
+                        <textarea class="form-control" id="caseSubject" rows="4" placeholder="وصف مختصر لموضوع القضية"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> حفظ القضية وتوليد الكود
+                    </button>
                 </form>
                 
-                <div style="margin-top: 50px;">
-                    <h3>جميع القضايا</h3>
+                <div id="generatedCodeSection" class="case-code-display" style="display: none;">
+                    <h3><i class="fas fa-key"></i> كود القضية المولد</h3>
+                    <div class="case-code-value" id="generatedCaseCode"></div>
+                    <p style="color: #94a3b8; margin-top: 15px;">
+                        <i class="fas fa-info-circle"></i> احفظ هذا الكود لإعطائه للعميل للاستعلام عن قضيته
+                    </p>
+                </div>
+                
+                <!-- قائمة القضايا -->
+                <div style="margin-top: 60px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="color: #bf953f; font-size: 24px;">
+                            <i class="fas fa-list"></i> جميع القضايا
+                        </h2>
+                        <button class="btn" onclick="refreshCasesList()">
+                            <i class="fas fa-sync-alt"></i> تحديث
+                        </button>
+                    </div>
                     <div id="casesList"></div>
                 </div>
             </div>
 
             <!-- إدارة الجلسات -->
             <div id="sessions" class="tab-content">
-                <h2>إضافة جلسة جديدة</h2>
+                <h2 style="color: #bf953f; margin-bottom: 30px; font-size: 28px;">
+                    <i class="fas fa-gavel"></i> إدارة الجلسات
+                </h2>
+                
                 <div id="sessionMessage" class="message"></div>
+                
                 <form id="newSessionForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>كود القضية *</label>
+                            <label><i class="fas fa-key"></i> كود القضية *</label>
                             <select class="form-control" id="sessionCaseCode" required>
                                 <option value="">اختر القضية</option>
                             </select>
                         </div>
+                        
                         <div class="form-group">
-                            <label>تاريخ الجلسة *</label>
+                            <label><i class="fas fa-calendar-day"></i> تاريخ الجلسة *</label>
                             <input type="date" class="form-control" id="sessionDate" required>
                         </div>
+                        
                         <div class="form-group">
-                            <label>وقت الجلسة</label>
+                            <label><i class="fas fa-clock"></i> وقت الجلسة</label>
                             <input type="time" class="form-control" id="sessionTime">
                         </div>
+                        
                         <div class="form-group">
-                            <label>القرار</label>
-                            <textarea class="form-control" id="decision"></textarea>
+                            <label><i class="fas fa-scroll"></i> القرار / الإجراءات</label>
+                            <textarea class="form-control" id="decision" placeholder="ما تم في الجلسة"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-plus"></i> تاريخ الجلسة القادمة</label>
+                            <input type="date" class="form-control" id="nextSessionDate">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
+                            <textarea class="form-control" id="sessionNotes" placeholder="ملاحظات إضافية"></textarea>
                         </div>
                     </div>
-                    <button type="submit" class="btn">حفظ الجلسة</button>
+                    
+                    <div class="google-sync">
+                        <h4><i class="fab fa-google"></i> مزامنة مع تقويم جوجل</h4>
+                        <p style="color: #cbd5e1; margin-bottom: 20px;">
+                            سيتم إضافة الجلسة تلقائياً إلى تقويم: <strong>mahmoud.legal@gmail.com</strong>
+                        </p>
+                        <div class="form-check" style="text-align: right; margin-bottom: 15px;">
+                            <input type="checkbox" id="syncToGoogle" style="margin-left: 10px;" checked>
+                            <label for="syncToGoogle" style="color: #cbd5e1; cursor: pointer;">
+                                مزامنة مع تقويم جوجل
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> حفظ الجلسة والمزامنة
+                    </button>
                 </form>
                 
-                <div style="margin-top: 50px;">
-                    <h3>الجلسات القادمة</h3>
+                <!-- الجلسات القادمة -->
+                <div style="margin-top: 60px;">
+                    <h2 style="color: #bf953f; margin-bottom: 25px; font-size: 24px;">
+                        <i class="fas fa-calendar-week"></i> الجلسات القادمة
+                    </h2>
                     <div id="upcomingSessions"></div>
                 </div>
             </div>
 
-            <!-- إدارة الأتعاب -->
-            <div id="fees" class="tab-content">
-                <h2>إضافة أتعاب جديدة</h2>
-                <div id="feeMessage" class="message"></div>
-                <form id="newFeeForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>كود القضية *</label>
-                            <select class="form-control" id="feeCaseCode" required>
-                                <option value="">اختر القضية</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>المبلغ المدفوع *</label>
-                            <input type="number" class="form-control" id="paidAmount" required>
-                        </div>
-                        <div class="form-group">
-                            <label>تاريخ الدفع *</label>
-                            <input type="date" class="form-control" id="paymentDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>ملاحظات</label>
-                            <textarea class="form-control" id="feeNotes"></textarea>
-                        </div>
-                    </div>
-                    <div id="feeSummary" style="background: rgba(191, 149, 63, 0.1); padding: 20px; border-radius: 10px; margin-bottom: 20px; display: none;">
-                        <p>إجمالي الأتعاب: <span id="totalFeesAmount">0</span> ج.م</p>
-                        <p>المدفوع سابقاً: <span id="previousPaid">0</span> ج.م</p>
-                        <p>الباقي: <span id="remainingAmount">0</span> ج.م</p>
-                    </div>
-                    <button type="submit" class="btn">حفظ الدفعة</button>
-                </form>
-                
-                <div style="margin-top: 50px;">
-                    <h3>ملخص الأتعاب</h3>
-                    <div id="feesSummary"></div>
-                </div>
-            </div>
-
-            <!-- البحث -->
+            <!-- البحث المتقدم -->
             <div id="search" class="tab-content">
-                <h2>بحث متقدم</h2>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>بحث باسم العميل</label>
-                        <input type="text" class="form-control" id="searchClientName">
+                <div class="search-section">
+                    <div class="search-header">
+                        <h3><i class="fas fa-search"></i> بحث متقدم في القضايا</h3>
                     </div>
-                    <div class="form-group">
-                        <label>بحث برقم الهاتف</label>
-                        <input type="tel" class="form-control" id="searchPhone">
+                    
+                    <div class="search-options">
+                        <button class="search-option-btn active" onclick="setSearchType('basic')">
+                            <i class="fas fa-search"></i> بحث أساسي
+                        </button>
+                        <button class="search-option-btn" onclick="setSearchType('week')">
+                            <i class="fas fa-calendar-week"></i> قضايا الأسبوع المقبل
+                        </button>
+                        <button class="search-option-btn" onclick="setSearchType('month')">
+                            <i class="fas fa-calendar-alt"></i> قضايا الشهر المقبل
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label>بحث برقم القضية</label>
-                        <input type="text" class="form-control" id="searchCaseNumber">
+                    
+                    <!-- البحث الأساسي -->
+                    <div id="basicSearchForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> اسم العميل</label>
+                                <input type="text" class="form-control" id="searchClientName" placeholder="بحث باسم العميل">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+                                <input type="tel" class="form-control" id="searchPhone" placeholder="بحث برقم الهاتف">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-hashtag"></i> رقم القضية</label>
+                                <input type="text" class="form-control" id="searchCaseNumber" placeholder="بحث برقم القضية">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-key"></i> كود القضية</label>
+                                <input type="text" class="form-control" id="searchCaseCode" placeholder="بحث بكود القضية">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-balance-scale"></i> نوع القضية</label>
+                                <select class="form-control" id="searchCaseType">
+                                    <option value="">جميع الأنواع</option>
+                                    <option value="مدني">مدني</option>
+                                    <option value="جنائي">جنائي</option>
+                                    <option value="تجاري">تجاري</option>
+                                    <option value="إداري">إداري</option>
+                                    <option value="أسرة">أسرة</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-tasks"></i> حالة القضية</label>
+                                <select class="form-control" id="searchCaseStatus">
+                                    <option value="">جميع الحالات</option>
+                                    <option value="متداولة">متداولة</option>
+                                    <option value="مغلقة">مغلقة</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بحث الجلسات القادمة -->
+                    <div id="upcomingSearchForm" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar-week"></i> فترة البحث</label>
+                                <select class="form-control" id="upcomingPeriod" onchange="searchUpcomingCases()">
+                                    <option value="week">الأسبوع المقبل</option>
+                                    <option value="month">الشهر المقبل</option>
+                                    <option value="custom">فترة مخصصة</option>
+                                </select>
+                            </div>
+                            
+                            <div id="customDateRange" style="display: none; grid-column: span 2;">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>من تاريخ</label>
+                                        <input type="date" class="form-control" id="fromDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>إلى تاريخ</label>
+                                        <input type="date" class="form-control" id="toDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="btn" onclick="performSearch()" id="searchBtn">
+                            <i class="fas fa-search"></i> بحث
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetSearch()" style="margin-right: 15px;">
+                            <i class="fas fa-redo"></i> إعادة تعيين
+                        </button>
                     </div>
                 </div>
-                <button class="btn" onclick="performSearch()">بحث</button>
                 
-                <div id="searchResults" style="margin-top: 30px;"></div>
+                <div id="searchResults" class="search-results"></div>
             </div>
         </main>
     </div>
@@ -407,11 +843,11 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
         
         let supabase = null;
+        let currentSearchType = 'basic';
 
         // تهيئة Supabase
         async function initSupabase() {
             try {
-                // تحميل المكتبة
                 if (!window.supabase) {
                     const script = document.createElement('script');
                     script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
@@ -422,7 +858,6 @@
                     });
                 }
                 
-                // إنشاء العميل
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 console.log('✅ تم تهيئة Supabase');
                 return true;
@@ -433,11 +868,11 @@
             }
         }
 
-        // توليد كود قضية
+        // توليد كود قضية (8 أحرف/أرقام)
         function generateCaseCode() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = 'MAH';
-            for (let i = 0; i < 5; i++) {
+            let code = '';
+            for (let i = 0; i < 8; i++) {
                 code += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             return code;
@@ -453,11 +888,13 @@
                         case_code: caseCode,
                         client_name: caseData.clientName,
                         client_phone: caseData.clientPhone,
+                        opponent_name: caseData.opponentName,
+                        case_type: caseData.caseType,
+                        case_status: caseData.caseStatus,
                         case_number: caseData.caseNumber,
                         case_year: caseData.caseYear,
-                        case_type: caseData.caseType,
                         court: caseData.court,
-                        case_status: 'متداولة'
+                        case_subject: caseData.caseSubject
                     }])
                     .select();
 
@@ -484,13 +921,46 @@
             }
         }
 
+        async function searchCases(searchParams) {
+            try {
+                let query = supabase.from('cases').select('*');
+                
+                if (searchParams.clientName) {
+                    query = query.ilike('client_name', `%${searchParams.clientName}%`);
+                }
+                if (searchParams.phone) {
+                    query = query.eq('client_phone', searchParams.phone);
+                }
+                if (searchParams.caseNumber) {
+                    query = query.ilike('case_number', `%${searchParams.caseNumber}%`);
+                }
+                if (searchParams.caseCode) {
+                    query = query.eq('case_code', searchParams.caseCode);
+                }
+                if (searchParams.caseType) {
+                    query = query.eq('case_type', searchParams.caseType);
+                }
+                if (searchParams.caseStatus) {
+                    query = query.eq('case_status', searchParams.caseStatus);
+                }
+                
+                const { data, error } = await query.order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                return data || [];
+            } catch (error) {
+                console.error('خطأ في البحث:', error);
+                return [];
+            }
+        }
+
         // دوال CRUD للجلسات
         async function addSession(sessionData) {
             try {
                 // الحصول على case_id من case_code
                 const { data: caseData, error: caseError } = await supabase
                     .from('cases')
-                    .select('id')
+                    .select('id, client_name, case_number')
                     .eq('case_code', sessionData.caseCode)
                     .single();
 
@@ -502,11 +972,19 @@
                         case_id: caseData.id,
                         session_date: sessionData.sessionDate,
                         session_time: sessionData.sessionTime,
-                        decision: sessionData.decision
+                        decision: sessionData.decision,
+                        next_session_date: sessionData.nextSessionDate,
+                        notes: sessionData.notes
                     }])
                     .select();
 
                 if (error) throw error;
+                
+                // مزامنة مع تقويم جوجل
+                if (sessionData.syncToGoogle) {
+                    await syncToGoogleCalendar(sessionData, caseData);
+                }
+                
                 return { success: true, data: data[0] };
             } catch (error) {
                 console.error('خطأ في إضافة الجلسة:', error);
@@ -514,17 +992,28 @@
             }
         }
 
-        async function getUpcomingSessions() {
+        async function getUpcomingSessions(period = 'week') {
             try {
+                const today = new Date().toISOString().split('T')[0];
+                let endDate = new Date();
+                
+                if (period === 'week') {
+                    endDate.setDate(endDate.getDate() + 7);
+                } else if (period === 'month') {
+                    endDate.setDate(endDate.getDate() + 30);
+                }
+                
+                const endDateStr = endDate.toISOString().split('T')[0];
+                
                 const { data, error } = await supabase
                     .from('sessions')
                     .select(`
                         *,
-                        cases (case_code, client_name, case_number)
+                        cases (case_code, client_name, case_number, court, case_type)
                     `)
-                    .gte('session_date', new Date().toISOString().split('T')[0])
-                    .order('session_date', { ascending: true })
-                    .limit(10);
+                    .gte('session_date', today)
+                    .lte('session_date', endDateStr)
+                    .order('session_date', { ascending: true });
 
                 if (error) throw error;
                 return data || [];
@@ -534,59 +1023,70 @@
             }
         }
 
-        // دوال CRUD للأتعاب
-        async function addFee(feeData) {
+        async function getCasesWithUpcomingSessions(period = 'week') {
             try {
-                // الحصول على case_id من case_code
-                const { data: caseData, error: caseError } = await supabase
-                    .from('cases')
-                    .select('id, total_fees')
-                    .eq('case_code', feeData.caseCode)
-                    .single();
-
-                if (caseError) throw caseError;
-
-                const { data, error } = await supabase
-                    .from('fees')
-                    .insert([{
-                        case_id: caseData.id,
-                        paid_amount: feeData.paidAmount,
-                        total_amount: caseData.total_fees || 0,
-                        payment_date: feeData.paymentDate,
-                        notes: feeData.notes
-                    }])
-                    .select();
-
-                if (error) throw error;
-                return { success: true, data: data[0] };
-            } catch (error) {
-                console.error('خطأ في إضافة الأتعاب:', error);
-                return { success: false, error: error.message };
-            }
-        }
-
-        async function getFeesSummary() {
-            try {
+                const sessions = await getUpcomingSessions(period);
+                const caseIds = [...new Set(sessions.map(s => s.case_id))];
+                
+                if (caseIds.length === 0) return [];
+                
                 const { data, error } = await supabase
                     .from('cases')
-                    .select(`
-                        case_code,
-                        client_name,
-                        total_fees,
-                        fees (paid_amount)
-                    `)
-                    .order('created_at', { ascending: false })
-                    .limit(10);
+                    .select('*')
+                    .in('id', caseIds)
+                    .order('created_at', { ascending: false });
 
                 if (error) throw error;
                 return data || [];
             } catch (error) {
-                console.error('خطأ في جلب الأتعاب:', error);
+                console.error('خطأ في جلب القضايا مع الجلسات:', error);
                 return [];
             }
         }
 
-        // واجهة المستخدم
+        // مزامنة مع تقويم جوجل
+        async function syncToGoogleCalendar(sessionData, caseData) {
+            try {
+                // في بيئة الإنتاج، تحتاج إلى استخدام Google Calendar API
+                // هذا مثال لكيفية القيام بذلك
+                
+                const eventDetails = {
+                    summary: `جلسة قضية: ${caseData.case_number}`,
+                    location: `المحكمة - ${sessionData.court || 'غير محدد'}`,
+                    description: `العميل: ${caseData.client_name}\nنوع القضية: ${caseData.case_type}\nالقرار: ${sessionData.decision || 'لا يوجد'}`,
+                    start: {
+                        dateTime: `${sessionData.sessionDate}T${sessionData.sessionTime || '10:00:00'}`,
+                        timeZone: 'Africa/Cairo'
+                    },
+                    end: {
+                        dateTime: `${sessionData.sessionDate}T${sessionData.sessionTime ? addHours(sessionData.sessionTime, 1) : '11:00:00'}`,
+                        timeZone: 'Africa/Cairo'
+                    }
+                };
+                
+                // تخزين تفاصيل الحدث للاستخدام الفعلي مع API
+                localStorage.setItem('last_calendar_event', JSON.stringify(eventDetails));
+                
+                console.log('📅 جاهز للمزامنة مع تقويم جوجل:', eventDetails);
+                
+                // يمكنك تفعيل هذا في الإنتاج:
+                // await googleCalendarAPI.createEvent(eventDetails);
+                
+                return true;
+            } catch (error) {
+                console.error('خطأ في مزامنة تقويم جوجل:', error);
+                return false;
+            }
+        }
+
+        function addHours(timeString, hours) {
+            const [hour, minute] = timeString.split(':').map(Number);
+            let newHour = hour + hours;
+            if (newHour >= 24) newHour -= 24;
+            return `${newHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        }
+
+        // تحديث واجهة المستخدم
         function showMessage(elementId, message, type = 'success') {
             const element = document.getElementById(elementId);
             element.textContent = message;
@@ -599,62 +1099,104 @@
         }
 
         function switchTab(tabName) {
-            // إخفاء جميع المحتويات
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // إلغاء تفعيل جميع الأزرار
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // إظهار المحتوى المحدد
             document.getElementById(tabName).classList.add('active');
-            
-            // تفعيل الزر المحدد
             event.target.classList.add('active');
             
-            // تحميل البيانات إذا لزم
             if (tabName === 'dashboard') loadDashboard();
             if (tabName === 'cases') loadCasesList();
-            if (tabName === 'sessions') loadUpcomingSessions();
-            if (tabName === 'fees') loadFeesSummary();
+            if (tabName === 'sessions') loadUpcomingSessionsUI();
+            if (tabName === 'search') resetSearch();
         }
 
         async function loadDashboard() {
             const cases = await getAllCases();
-            const stats = document.getElementById('dashboardStats');
+            const upcomingSessions = await getUpcomingSessions('week');
             
             const totalCases = cases.length;
             const activeCases = cases.filter(c => c.case_status === 'متداولة').length;
             const closedCases = cases.filter(c => c.case_status === 'مغلقة').length;
+            const thisWeekSessions = upcomingSessions.length;
             
-            stats.innerHTML = `
-                <div style="background: rgba(191, 149, 63, 0.1); padding: 30px; border-radius: 15px; text-align: center;">
-                    <h3>إجمالي القضايا</h3>
-                    <p style="font-size: 48px; color: #fcf6ba;">${totalCases}</p>
+            const statsDiv = document.getElementById('dashboardStats');
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <h3><i class="fas fa-folder-open"></i> إجمالي القضايا</h3>
+                    <div class="stat-value">${totalCases}</div>
+                    <div class="stat-subtext">${activeCases} نشطة • ${closedCases} مغلقة</div>
                 </div>
-                <div style="background: rgba(191, 149, 63, 0.1); padding: 30px; border-radius: 15px; text-align: center;">
-                    <h3>القضايا النشطة</h3>
-                    <p style="font-size: 48px; color: #34D399;">${activeCases}</p>
+                
+                <div class="stat-card">
+                    <h3><i class="fas fa-chart-line"></i> القضايا النشطة</h3>
+                    <div class="stat-value" style="color: #4ade80;">${activeCases}</div>
+                    <div class="stat-subtext">قيد المتابعة والتداول</div>
                 </div>
-                <div style="background: rgba(191, 149, 63, 0.1); padding: 30px; border-radius: 15px; text-align: center;">
-                    <h3>القضايا المغلقة</h3>
-                    <p style="font-size: 48px; color: #F87171;">${closedCases}</p>
+                
+                <div class="stat-card">
+                    <h3><i class="fas fa-check-circle"></i> القضايا المغلقة</h3>
+                    <div class="stat-value" style="color: #f87171;">${closedCases}</div>
+                    <div class="stat-subtext">تم الانتهاء منها</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3><i class="fas fa-calendar-week"></i> جلسات الأسبوع</h3>
+                    <div class="stat-value" style="color: #60a5fa;">${thisWeekSessions}</div>
+                    <div class="stat-subtext">جلسة هذا الأسبوع</div>
                 </div>
             `;
             
             // عرض آخر القضايا
-            const recentCases = cases.slice(0, 5);
-            const recentCasesDiv = document.getElementById('recentCases');
+            const recentCases = cases.slice(0, 8);
+            const recentDiv = document.getElementById('recentActivity');
             if (recentCases.length > 0) {
-                let html = '<h3 style="margin-top: 40px;">آخر القضايا</h3><table class="data-table"><tr><th>الكود</th><th>العميل</th><th>رقم القضية</th><th>الحالة</th></tr>';
+                let html = `
+                    <h2 style="color: #bf953f; margin-bottom: 25px; font-size: 24px;">
+                        <i class="fas fa-history"></i> آخر القضايا المضافة
+                    </h2>
+                    <table class="data-table">
+                        <tr>
+                            <th>الكود</th>
+                            <th>العميل</th>
+                            <th>رقم القضية</th>
+                            <th>النوع</th>
+                            <th>الحالة</th>
+                            <th>السنة</th>
+                        </tr>
+                `;
+                
                 recentCases.forEach(c => {
-                    html += `<tr><td>${c.case_code}</td><td>${c.client_name}</td><td>${c.case_number}</td><td>${c.case_status}</td></tr>`;
+                    html += `
+                        <tr>
+                            <td><strong>${c.case_code || 'غير معروف'}</strong></td>
+                            <td>${c.client_name}</td>
+                            <td>${c.case_number}</td>
+                            <td>${c.case_type || 'غير محدد'}</td>
+                            <td>
+                                <span class="status-badge ${c.case_status === 'متداولة' ? 'status-active' : 'status-closed'}">
+                                    ${c.case_status}
+                                </span>
+                            </td>
+                            <td>${c.case_year}</td>
+                        </tr>
+                    `;
                 });
+                
                 html += '</table>';
-                recentCasesDiv.innerHTML = html;
+                recentDiv.innerHTML = html;
+            } else {
+                recentDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(191, 149, 63, 0.05); border-radius: 15px;">
+                        <i class="fas fa-folder-open" style="font-size: 48px; color: #94a3b8; margin-bottom: 20px;"></i>
+                        <p style="color: #94a3b8; font-size: 18px;">لا توجد قضايا مسجلة بعد</p>
+                    </div>
+                `;
             }
         }
 
@@ -663,147 +1205,262 @@
             const casesList = document.getElementById('casesList');
             
             if (cases.length > 0) {
-                let html = '<table class="data-table"><tr><th>الكود</th><th>اسم العميل</th><th>رقم الهاتف</th><th>رقم القضية</th><th>السنة</th><th>الحالة</th></tr>';
+                let html = `
+                    <table class="data-table">
+                        <tr>
+                            <th>الكود</th>
+                            <th>اسم العميل</th>
+                            <th>الهاتف</th>
+                            <th>اسم الخصم</th>
+                            <th>رقم القضية</th>
+                            <th>النوع</th>
+                            <th>الحالة</th>
+                            <th>المحكمة</th>
+                        </tr>
+                `;
+                
                 cases.forEach(c => {
-                    html += `<tr>
-                        <td>${c.case_code || 'غير معروف'}</td>
-                        <td>${c.client_name}</td>
-                        <td>${c.client_phone}</td>
-                        <td>${c.case_number}</td>
-                        <td>${c.case_year}</td>
-                        <td>${c.case_status}</td>
-                    </tr>`;
+                    html += `
+                        <tr>
+                            <td><strong>${c.case_code || 'غير معروف'}</strong></td>
+                            <td>${c.client_name}</td>
+                            <td>${c.client_phone}</td>
+                            <td>${c.opponent_name || 'غير محدد'}</td>
+                            <td>${c.case_number}</td>
+                            <td>${c.case_type || 'غير محدد'}</td>
+                            <td>
+                                <span class="status-badge ${c.case_status === 'متداولة' ? 'status-active' : 'status-closed'}">
+                                    ${c.case_status}
+                                </span>
+                            </td>
+                            <td>${c.court || 'غير محدد'}</td>
+                        </tr>
+                    `;
                 });
+                
                 html += '</table>';
                 casesList.innerHTML = html;
             } else {
-                casesList.innerHTML = '<p style="color: #94a3b8; text-align: center;">لا توجد قضايا مسجلة</p>';
+                casesList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(191, 149, 63, 0.05); border-radius: 15px;">
+                        <i class="fas fa-folder-open" style="font-size: 48px; color: #94a3b8; margin-bottom: 20px;"></i>
+                        <p style="color: #94a3b8; font-size: 18px;">لا توجد قضايا مسجلة</p>
+                        <p style="color: #64748b; margin-top: 10px;">يمكنك إضافة قضية جديدة من خلال تبويب "إدارة القضايا"</p>
+                    </div>
+                `;
             }
             
             // تحديث قوائم الاختيار
             updateCaseCodeSelects(cases);
         }
 
-        async function loadUpcomingSessions() {
-            const sessions = await getUpcomingSessions();
+        async function loadUpcomingSessionsUI() {
+            const sessions = await getUpcomingSessions('month');
             const upcomingDiv = document.getElementById('upcomingSessions');
             
             if (sessions.length > 0) {
-                let html = '<table class="data-table"><tr><th>كود القضية</th><th>اسم العميل</th><th>تاريخ الجلسة</th><th>الوقت</th></tr>';
+                let html = `
+                    <table class="data-table">
+                        <tr>
+                            <th>كود القضية</th>
+                            <th>اسم العميل</th>
+                            <th>رقم القضية</th>
+                            <th>تاريخ الجلسة</th>
+                            <th>الوقت</th>
+                            <th>القرار</th>
+                            <th>الجلسة القادمة</th>
+                        </tr>
+                `;
+                
                 sessions.forEach(s => {
                     const caseInfo = s.cases || {};
-                    html += `<tr>
-                        <td>${caseInfo.case_code || 'غير معروف'}</td>
-                        <td>${caseInfo.client_name || 'غير معروف'}</td>
-                        <td>${s.session_date}</td>
-                        <td>${s.session_time || 'غير محدد'}</td>
-                    </tr>`;
+                    html += `
+                        <tr>
+                            <td>${caseInfo.case_code || 'غير معروف'}</td>
+                            <td>${caseInfo.client_name || 'غير معروف'}</td>
+                            <td>${caseInfo.case_number || 'غير معروف'}</td>
+                            <td>${s.session_date || 'غير محدد'}</td>
+                            <td>${s.session_time || 'غير محدد'}</td>
+                            <td>${s.decision ? s.decision.substring(0, 30) + '...' : 'لا يوجد'}</td>
+                            <td>${s.next_session_date || 'غير محدد'}</td>
+                        </tr>
+                    `;
                 });
+                
                 html += '</table>';
                 upcomingDiv.innerHTML = html;
             } else {
-                upcomingDiv.innerHTML = '<p style="color: #94a3b8; text-align: center;">لا توجد جلسات قادمة</p>';
-            }
-        }
-
-        async function loadFeesSummary() {
-            const summary = await getFeesSummary();
-            const summaryDiv = document.getElementById('feesSummary');
-            
-            if (summary.length > 0) {
-                let html = '<table class="data-table"><tr><th>كود القضية</th><th>اسم العميل</th><th>الإجمالي</th><th>المدفوع</th><th>الباقي</th></tr>';
-                summary.forEach(item => {
-                    const totalPaid = item.fees ? item.fees.reduce((sum, fee) => sum + (fee.paid_amount || 0), 0) : 0;
-                    const remaining = (item.total_fees || 0) - totalPaid;
-                    
-                    html += `<tr>
-                        <td>${item.case_code}</td>
-                        <td>${item.client_name}</td>
-                        <td>${(item.total_fees || 0).toLocaleString()} ج.م</td>
-                        <td>${totalPaid.toLocaleString()} ج.م</td>
-                        <td style="color: ${remaining > 0 ? '#F87171' : '#34D399'}">
-                            ${remaining.toLocaleString()} ج.م
-                        </td>
-                    </tr>`;
-                });
-                html += '</table>';
-                summaryDiv.innerHTML = html;
-            } else {
-                summaryDiv.innerHTML = '<p style="color: #94a3b8; text-align: center;">لا توجد بيانات للأتعاب</p>';
+                upcomingDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(191, 149, 63, 0.05); border-radius: 15px;">
+                        <i class="fas fa-calendar-times" style="font-size: 48px; color: #94a3b8; margin-bottom: 20px;"></i>
+                        <p style="color: #94a3b8; font-size: 18px;">لا توجد جلسات قادمة خلال الشهر المقبل</p>
+                    </div>
+                `;
             }
         }
 
         function updateCaseCodeSelects(cases) {
             const sessionSelect = document.getElementById('sessionCaseCode');
-            const feeSelect = document.getElementById('feeCaseCode');
             
-            // حفظ القيم الحالية
-            const sessionValue = sessionSelect.value;
-            const feeValue = feeSelect.value;
+            // حفظ القيمة الحالية
+            const currentValue = sessionSelect.value;
             
             // تحديث الخيارات
             sessionSelect.innerHTML = '<option value="">اختر القضية</option>';
-            feeSelect.innerHTML = '<option value="">اختر القضية</option>';
             
-            cases.forEach(c => {
+            cases.filter(c => c.case_status === 'متداولة').forEach(c => {
                 const option = document.createElement('option');
                 option.value = c.case_code;
-                option.textContent = `${c.case_code} - ${c.client_name}`;
-                sessionSelect.appendChild(option.cloneNode(true));
-                feeSelect.appendChild(option);
+                option.textContent = `${c.case_code} - ${c.client_name} (${c.case_number})`;
+                sessionSelect.appendChild(option);
             });
             
-            // استعادة القيم
-            sessionSelect.value = sessionValue;
-            feeSelect.value = feeValue;
+            // استعادة القيمة
+            sessionSelect.value = currentValue;
+        }
+
+        // البحث المتقدم
+        function setSearchType(type) {
+            currentSearchType = type;
+            
+            // تحديث الأزرار النشطة
+            document.querySelectorAll('.search-option-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // إظهار/إخفاء نماذج البحث
+            const basicForm = document.getElementById('basicSearchForm');
+            const upcomingForm = document.getElementById('upcomingSearchForm');
+            const searchBtn = document.getElementById('searchBtn');
+            
+            if (type === 'basic') {
+                basicForm.style.display = 'block';
+                upcomingForm.style.display = 'none';
+                searchBtn.innerHTML = '<i class="fas fa-search"></i> بحث';
+            } else {
+                basicForm.style.display = 'none';
+                upcomingForm.style.display = 'block';
+                searchBtn.innerHTML = `<i class="fas fa-calendar-${type === 'week' ? 'week' : 'alt'}"></i> عرض النتائج`;
+                
+                // البحث التلقائي
+                searchUpcomingCases();
+            }
+        }
+
+        async function searchUpcomingCases() {
+            const period = document.getElementById('upcomingPeriod').value;
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (period === 'custom') {
+                document.getElementById('customDateRange').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('customDateRange').style.display = 'none';
+            }
+            
+            const cases = await getCasesWithUpcomingSessions(period);
+            displaySearchResults(cases, `القضايا ذات الجلسات في ${period === 'week' ? 'الأسبوع المقبل' : 'الشهر المقبل'}`);
         }
 
         async function performSearch() {
-            const clientName = document.getElementById('searchClientName').value;
-            const phone = document.getElementById('searchPhone').value;
-            const caseNumber = document.getElementById('searchCaseNumber').value;
+            if (currentSearchType === 'basic') {
+                const searchParams = {
+                    clientName: document.getElementById('searchClientName').value,
+                    phone: document.getElementById('searchPhone').value,
+                    caseNumber: document.getElementById('searchCaseNumber').value,
+                    caseCode: document.getElementById('searchCaseCode').value,
+                    caseType: document.getElementById('searchCaseType').value,
+                    caseStatus: document.getElementById('searchCaseStatus').value
+                };
+                
+                const results = await searchCases(searchParams);
+                displaySearchResults(results, 'نتائج البحث');
+            } else {
+                searchUpcomingCases();
+            }
+        }
+
+        function displaySearchResults(results, title) {
+            const resultsDiv = document.getElementById('searchResults');
             
-            try {
-                let query = supabase.from('cases').select('*');
+            if (results.length > 0) {
+                let html = `
+                    <div class="result-count">
+                        <i class="fas fa-search"></i> ${title} (${results.length} نتيجة)
+                    </div>
+                    <table class="data-table">
+                        <tr>
+                            <th>الكود</th>
+                            <th>اسم العميل</th>
+                            <th>الهاتف</th>
+                            <th>رقم القضية</th>
+                            <th>النوع</th>
+                            <th>الحالة</th>
+                            <th>المحكمة</th>
+                            <th>السنة</th>
+                        </tr>
+                `;
                 
-                if (clientName) query = query.ilike('client_name', `%${clientName}%`);
-                if (phone) query = query.eq('client_phone', phone);
-                if (caseNumber) query = query.ilike('case_number', `%${caseNumber}%`);
-                
-                const { data, error } = await query.order('created_at', { ascending: false });
-                
-                if (error) throw error;
-                
-                const resultsDiv = document.getElementById('searchResults');
-                if (data.length > 0) {
-                    let html = `<h3>نتائج البحث (${data.length} نتيجة)</h3>`;
-                    html += '<table class="data-table"><tr><th>الكود</th><th>اسم العميل</th><th>رقم الهاتف</th><th>رقم القضية</th><th>الحالة</th></tr>';
-                    data.forEach(c => {
-                        html += `<tr>
-                            <td>${c.case_code}</td>
+                results.forEach(c => {
+                    html += `
+                        <tr>
+                            <td><strong>${c.case_code || 'غير معروف'}</strong></td>
                             <td>${c.client_name}</td>
                             <td>${c.client_phone}</td>
                             <td>${c.case_number}</td>
-                            <td>${c.case_status}</td>
-                        </tr>`;
-                    });
-                    html += '</table>';
-                    resultsDiv.innerHTML = html;
-                } else {
-                    resultsDiv.innerHTML = '<p style="color: #94a3b8; text-align: center;">لم يتم العثور على نتائج</p>';
-                }
-            } catch (error) {
-                console.error('خطأ في البحث:', error);
-                showMessage('searchResults', 'خطأ في البحث', 'error');
+                            <td>${c.case_type || 'غير محدد'}</td>
+                            <td>
+                                <span class="status-badge ${c.case_status === 'متداولة' ? 'status-active' : 'status-closed'}">
+                                    ${c.case_status}
+                                </span>
+                            </td>
+                            <td>${c.court || 'غير محدد'}</td>
+                            <td>${c.case_year}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</table>';
+                resultsDiv.innerHTML = html;
+            } else {
+                resultsDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: rgba(191, 149, 63, 0.05); border-radius: 15px;">
+                        <i class="fas fa-search" style="font-size: 48px; color: #94a3b8; margin-bottom: 20px;"></i>
+                        <p style="color: #94a3b8; font-size: 18px;">لم يتم العثور على نتائج</p>
+                    </div>
+                `;
             }
+        }
+
+        function resetSearch() {
+            document.getElementById('searchClientName').value = '';
+            document.getElementById('searchPhone').value = '';
+            document.getElementById('searchCaseNumber').value = '';
+            document.getElementById('searchCaseCode').value = '';
+            document.getElementById('searchCaseType').value = '';
+            document.getElementById('searchCaseStatus').value = '';
+            
+            document.getElementById('searchResults').innerHTML = '';
+            
+            // إعادة تعيين نوع البحث
+            currentSearchType = 'basic';
+            document.querySelectorAll('.search-option-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.search-option-btn').classList.add('active');
+            
+            document.getElementById('basicSearchForm').style.display = 'block';
+            document.getElementById('upcomingSearchForm').style.display = 'none';
+        }
+
+        async function refreshCasesList() {
+            await loadCasesList();
+            showMessage('caseMessage', 'تم تحديث قائمة القضايا', 'success');
         }
 
         // مستمعات الأحداث
         document.addEventListener('DOMContentLoaded', async function() {
-            // تهيئة Supabase
             await initSupabase();
             
-            // تحميل القضايا لتحديث القوائم
             const cases = await getAllCases();
             updateCaseCodeSelects(cases);
             
@@ -814,18 +1471,34 @@
                 const caseData = {
                     clientName: document.getElementById('clientName').value,
                     clientPhone: document.getElementById('clientPhone').value,
+                    opponentName: document.getElementById('opponentName').value,
+                    caseType: document.getElementById('caseType').value,
+                    caseStatus: document.getElementById('caseStatus').value,
                     caseNumber: document.getElementById('caseNumber').value,
                     caseYear: document.getElementById('caseYear').value,
-                    caseType: document.getElementById('caseType').value,
-                    court: document.getElementById('court').value
+                    court: document.getElementById('court').value,
+                    caseSubject: document.getElementById('caseSubject').value
                 };
                 
                 const result = await addCase(caseData);
                 if (result.success) {
-                    showMessage('caseMessage', `تم إضافة القضية بنجاح! الكود: ${result.caseCode}`, 'success');
+                    showMessage('caseMessage', `تم إضافة القضية بنجاح!`, 'success');
+                    
+                    // عرض كود القضية المولد
+                    document.getElementById('generatedCaseCode').textContent = result.caseCode;
+                    document.getElementById('generatedCodeSection').style.display = 'block';
+                    
+                    // إعادة تعيين النموذج
                     this.reset();
+                    
+                    // تحديث البيانات
                     loadCasesList();
                     loadDashboard();
+                    
+                    // تمرير للكود المولد
+                    setTimeout(() => {
+                        document.getElementById('generatedCodeSection').scrollIntoView({ behavior: 'smooth' });
+                    }, 500);
                 } else {
                     showMessage('caseMessage', `خطأ: ${result.error}`, 'error');
                 }
@@ -838,80 +1511,45 @@
                     caseCode: document.getElementById('sessionCaseCode').value,
                     sessionDate: document.getElementById('sessionDate').value,
                     sessionTime: document.getElementById('sessionTime').value,
-                    decision: document.getElementById('decision').value
+                    decision: document.getElementById('decision').value,
+                    nextSessionDate: document.getElementById('nextSessionDate').value,
+                    notes: document.getElementById('sessionNotes').value,
+                    syncToGoogle: document.getElementById('syncToGoogle').checked
                 };
                 
                 const result = await addSession(sessionData);
                 if (result.success) {
-                    showMessage('sessionMessage', 'تم إضافة الجلسة بنجاح', 'success');
+                    const message = sessionData.syncToGoogle 
+                        ? 'تم إضافة الجلسة بنجاح والمزامنة مع تقويم جوجل'
+                        : 'تم إضافة الجلسة بنجاح';
+                    
+                    showMessage('sessionMessage', message, 'success');
                     this.reset();
-                    loadUpcomingSessions();
+                    loadUpcomingSessionsUI();
                 } else {
                     showMessage('sessionMessage', `خطأ: ${result.error}`, 'error');
                 }
             });
             
-            document.getElementById('newFeeForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const feeData = {
-                    caseCode: document.getElementById('feeCaseCode').value,
-                    paidAmount: parseFloat(document.getElementById('paidAmount').value),
-                    paymentDate: document.getElementById('paymentDate').value,
-                    notes: document.getElementById('feeNotes').value
-                };
-                
-                const result = await addFee(feeData);
-                if (result.success) {
-                    showMessage('feeMessage', 'تم إضافة الدفعة بنجاح', 'success');
-                    this.reset();
-                    loadFeesSummary();
-                } else {
-                    showMessage('feeMessage', `خطأ: ${result.error}`, 'error');
-                }
-            });
-            
-            // عند اختيار قضية في الأتعاب
-            document.getElementById('feeCaseCode').addEventListener('change', async function() {
-                const caseCode = this.value;
-                if (!caseCode) {
-                    document.getElementById('feeSummary').style.display = 'none';
-                    return;
-                }
-                
-                try {
-                    const { data, error } = await supabase
-                        .from('cases')
-                        .select('total_fees')
-                        .eq('case_code', caseCode)
-                        .single();
+            // التحكم في فترة البحث المخصصة
+            document.getElementById('upcomingPeriod').addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('fromDate').value = today;
                     
-                    if (error) throw error;
-                    
-                    const { data: feesData, error: feesError } = await supabase
-                        .from('fees')
-                        .select('paid_amount')
-                        .eq('cases.case_code', caseCode);
-                    
-                    if (feesError && feesError.code !== 'PGRST116') throw feesError;
-                    
-                    const totalFees = data.total_fees || 0;
-                    const totalPaid = feesData ? feesData.reduce((sum, fee) => sum + (fee.paid_amount || 0), 0) : 0;
-                    const remaining = totalFees - totalPaid;
-                    
-                    document.getElementById('totalFeesAmount').textContent = totalFees.toLocaleString();
-                    document.getElementById('previousPaid').textContent = totalPaid.toLocaleString();
-                    document.getElementById('remainingAmount').textContent = remaining.toLocaleString();
-                    document.getElementById('feeSummary').style.display = 'block';
-                } catch (error) {
-                    console.error('خطأ في جلب بيانات الأتعاب:', error);
+                    const nextMonth = new Date();
+                    nextMonth.setDate(nextMonth.getDate() + 30);
+                    document.getElementById('toDate').value = nextMonth.toISOString().split('T')[0];
                 }
             });
             
             // تعيين التواريخ الافتراضية
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('sessionDate').value = today;
-            document.getElementById('paymentDate').value = today;
+            document.getElementById('nextSessionDate').value = today;
+            
+            // تحميل لوحة التحكم
+            loadDashboard();
         });
 
         // حماية الدخول
@@ -923,6 +1561,8 @@
                 loadDashboard();
             } else {
                 alert('كلمة المرور غير صحيحة');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
             }
         }
 

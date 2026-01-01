@@ -185,13 +185,12 @@ async function saveSession(){
 // دالة البحث العام (قضايا)
 async function searchCases(){
     const t = searchInput.value;
-    if(!t.trim()) return Swal.fire("تنبيه","أدخل كلمة للبحث","warning");
+    if(!t) return Swal.fire("تنبيه","أدخل كلمة للبحث","warning");
     
     Swal.fire({title: 'جاري البحث...', didOpen: () => Swal.showLoading()});
     
-    // البحث في القضايا مع جلب جلساتها
-    const { data, error } = await db
-        .from('cases')
+    // تصحيح استعلام البحث
+    const { data, error } = await db.from('cases')
         .select(`
             *,
             sessions (*)
@@ -200,8 +199,8 @@ async function searchCases(){
     
     Swal.close();
     if(error) {
-        console.error(error);
-        return Swal.fire("خطأ", "فشل البحث", "error");
+        console.error("Search error:", error);
+        return Swal.fire("خطأ", "فشل البحث: " + error.message, "error");
     }
     renderSearchResults(data, "cases");
 }
@@ -219,41 +218,39 @@ async function searchByPhone(){
     }
 }
 
-// دالة فلترة الجلسات (الأسبوع والشهر)
+// دالة فلترة الجلسات (الأسبوع والشهر) - تم إصلاح الاستعلام
 async function filterSessions(range){
     Swal.fire({title: 'جاري الجلب...', didOpen: () => Swal.showLoading()});
     
-    const start = new Date().toISOString().split('T')[0];
-    const end = new Date();
+    const today = new Date();
+    const startDate = today.toISOString().split('T')[0];
     
+    const endDate = new Date();
     if(range === 'week') {
-        end.setDate(end.getDate() + 7);
+        endDate.setDate(today.getDate() + 7);
     } else {
-        end.setMonth(end.getMonth() + 1);
+        endDate.setMonth(today.getMonth() + 1);
     }
+    const endDateStr = endDate.toISOString().split('T')[0];
     
-    const endDate = end.toISOString().split('T')[0];
-    
-    // استعلام الجلسات مع بيانات القضية المرتبطة
-    const { data, error } = await db
-        .from('sessions')
+    // تصحيح الاستعلام لجلب الجلسات مع بيانات القضية
+    const { data, error } = await db.from('sessions')
         .select(`
             *,
             cases (*)
         `)
-        .gte('session_date', start)
-        .lte('session_date', endDate)
+        .gte('session_date', startDate)
+        .lte('session_date', endDateStr)
         .order('session_date', { ascending: true });
     
     Swal.close();
     if(error) {
-        console.error(error);
-        return Swal.fire("خطأ", "فشل جلب الجلسات", "error");
+        console.error("Filter sessions error:", error);
+        return Swal.fire("خطأ", "فشل جلب الجلسات: " + error.message, "error");
     }
     renderSearchResults(data, "sessions");
 }
 
-// دالة عرض نتائج البحث (تم تحسينها)
 function renderSearchResults(data, type) {
     if(!data || data.length === 0) { 
         searchResults.innerHTML = '<div class="alert alert-info">لا توجد نتائج</div>'; 
@@ -294,7 +291,7 @@ function renderSearchResults(data, type) {
             <div class="form-section mb-2">
                 <div class="d-flex justify-content-between">
                     <b class="case-code">${item.case_code || 'غير محدد'}</b>
-                    <span class="badge bg-gold text-dark">${item.court_name || 'غير محدد'}</span>
+                    <span class="badge" style="background-color: var(--gold); color: white;">${item.court_name || 'غير محدد'}</span>
                 </div>
                 <div class="mt-2">
                     <strong>العميل:</strong> ${item.client_name || 'غير معروف'} 
@@ -312,38 +309,37 @@ function renderSearchResults(data, type) {
     searchResults.innerHTML = html;
 }
 
-// دالة تحميل الجلسات القادمة
+// دالة تحميل الجلسات القادمة - تم إصلاحها
 async function loadUpcoming(range, btn){
     if(btn) { 
         document.querySelectorAll('#sessions .btn-group .btn').forEach(b=>b.classList.remove('active')); 
         btn.classList.add('active'); 
     }
     
-    const start = new Date().toISOString().split('T')[0];
-    const end = new Date();
+    const today = new Date();
+    const startDate = today.toISOString().split('T')[0];
     
+    const endDate = new Date();
     if(range === 'week') {
-        end.setDate(end.getDate() + 7);
+        endDate.setDate(today.getDate() + 7);
     } else {
-        end.setMonth(end.getMonth() + 1);
+        endDate.setMonth(today.getMonth() + 1);
     }
-    
-    const endDate = end.toISOString().split('T')[0];
+    const endDateStr = endDate.toISOString().split('T')[0];
 
-    // استعلام الجلسات القادمة مع بيانات القضية
-    const { data, error } = await db
-        .from('sessions')
+    // تصحيح الاستعلام
+    const { data, error } = await db.from('sessions')
         .select(`
             *,
             cases (*)
         `)
-        .gte('session_date', start)
-        .lte('session_date', endDate)
+        .gte('session_date', startDate)
+        .lte('session_date', endDateStr)
         .order('session_date', { ascending: true });
     
     if(error) { 
-        console.error(error);
-        upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل</div>"; 
+        console.error("Load upcoming error:", error);
+        upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل: " + error.message + "</div>"; 
         return; 
     }
     

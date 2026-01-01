@@ -185,76 +185,188 @@ async function saveSession(){
 // دالة البحث العام (قضايا)
 async function searchCases(){
     const t = searchInput.value;
+    if(!t.trim()) return Swal.fire("تنبيه","أدخل كلمة للبحث","warning");
+    
     Swal.fire({title: 'جاري البحث...', didOpen: () => Swal.showLoading()});
-    const { data, error } = await db.from('cases').select('*, sessions(*)').or(`case_number.ilike.%${t}%,client_name.ilike.%${t}%,client_phone.ilike.%${t}%`);
+    
+    // البحث في القضايا مع جلب جلساتها
+    const { data, error } = await db
+        .from('cases')
+        .select(`
+            *,
+            sessions (*)
+        `)
+        .or(`case_number.ilike.%${t}%,client_name.ilike.%${t}%,client_phone.ilike.%${t}%`);
+    
     Swal.close();
-    if(error) return Swal.fire("خطأ", "فشل البحث", "error");
-    renderResults(data, "cases");
+    if(error) {
+        console.error(error);
+        return Swal.fire("خطأ", "فشل البحث", "error");
+    }
+    renderSearchResults(data, "cases");
 }
 
 async function searchByPhone(){
-    const { value: phone } = await Swal.fire({ title: 'البحث برقم الهاتف', input: 'text', showCancelButton: true });
-    if (phone) { searchInput.value = phone; searchCases(); }
+    const { value: phone } = await Swal.fire({ 
+        title: 'البحث برقم الهاتف', 
+        input: 'text', 
+        inputPlaceholder: 'أدخل رقم الهاتف',
+        showCancelButton: true 
+    });
+    if (phone) { 
+        searchInput.value = phone; 
+        searchCases(); 
+    }
 }
 
-// دالة فلترة الجلسات (الأسبوع والشهر) - تم إصلاح الاستعلام هنا
+// دالة فلترة الجلسات (الأسبوع والشهر)
 async function filterSessions(range){
     Swal.fire({title: 'جاري الجلب...', didOpen: () => Swal.showLoading()});
+    
     const start = new Date().toISOString().split('T')[0];
     const end = new Date();
-    if(range === 'week') end.setDate(end.getDate() + 7); else end.setMonth(end.getMonth() + 1);
     
-    const { data, error } = await db.from('sessions').select('*, cases(*)').gte('session_date', start).lte('session_date', end.toISOString().split('T')[0]).order('session_date', { ascending: true });
+    if(range === 'week') {
+        end.setDate(end.getDate() + 7);
+    } else {
+        end.setMonth(end.getMonth() + 1);
+    }
+    
+    const endDate = end.toISOString().split('T')[0];
+    
+    // استعلام الجلسات مع بيانات القضية المرتبطة
+    const { data, error } = await db
+        .from('sessions')
+        .select(`
+            *,
+            cases (*)
+        `)
+        .gte('session_date', start)
+        .lte('session_date', endDate)
+        .order('session_date', { ascending: true });
+    
     Swal.close();
-    if(error) return Swal.fire("خطأ", "فشل الجلب", "error");
-    renderResults(data, "sessions");
+    if(error) {
+        console.error(error);
+        return Swal.fire("خطأ", "فشل جلب الجلسات", "error");
+    }
+    renderSearchResults(data, "sessions");
 }
 
-function renderResults(data, type) {
-    if(!data || data.length === 0) { searchResults.innerHTML = '<div class="alert alert-info">لا توجد نتائج</div>'; return; }
+// دالة عرض نتائج البحث (تم تحسينها)
+function renderSearchResults(data, type) {
+    if(!data || data.length === 0) { 
+        searchResults.innerHTML = '<div class="alert alert-info">لا توجد نتائج</div>'; 
+        return; 
+    }
     
     let html = `<h6>نتائج البحث (${data.length}):</h6>`;
-    data.forEach(item => {
-        if(type === "sessions") {
-            // عرض بيانات الجلسة مع بيانات القضية المرتبطة بها
+    
+    if(type === "sessions") {
+        // عرض بيانات الجلسات مع بيانات القضية
+        data.forEach(item => {
+            const caseData = item.cases || {};
             html += `
             <div class="session-card">
-                <div class="d-flex justify-content-between"><strong class="text-primary">${item.session_date}</strong><span>${item.cases?.court_name || ''}</span></div>
-                <div><strong>العميل:</strong> ${item.cases?.client_name || 'غير معروف'} <span class="text-danger">ضد</span> <strong>الخصم:</strong> ${item.cases?.opponent_name || 'غير معروف'}</div>
-                <div><strong>القضية:</strong> ${item.cases?.case_number}/${item.cases?.case_year}</div>
+                <div class="d-flex justify-content-between">
+                    <strong class="text-primary">${item.session_date || 'غير محدد'}</strong>
+                    <span>${caseData.court_name || 'غير محدد'}</span>
+                </div>
+                <div>
+                    <strong>العميل:</strong> ${caseData.client_name || 'غير معروف'} 
+                    <span class="text-danger"> ضد </span> 
+                    <strong>الخصم:</strong> ${caseData.opponent_name || 'غير معروف'}
+                </div>
+                <div>
+                    <strong>القضية:</strong> ${caseData.case_number || 'غير محدد'}/${caseData.case_year || 'غير محدد'}
+                </div>
                 ${item.decision ? `<div class="mt-2 p-2 bg-light small"><b>القرار:</b> ${item.decision}</div>` : ''}
             </div>`;
-        } else {
-            // عرض بيانات القضية مع قائمة بكافة جلساتها
-            const sessionsList = item.sessions?.map(s => `<li>${s.session_date}: ${s.decision || 'لا يوجد قرار'}</li>`).join('') || 'لا توجد جلسات مسجلة';
+        });
+    } else {
+        // عرض بيانات القضايا مع جلساتها
+        data.forEach(item => {
+            const sessionsList = item.sessions && item.sessions.length > 0 
+                ? item.sessions.map(s => `<li>${s.session_date || 'غير محدد'}: ${s.decision || 'لا يوجد قرار'}</li>`).join('') 
+                : '<li>لا توجد جلسات مسجلة</li>';
+            
             html += `
             <div class="form-section mb-2">
-                <div class="d-flex justify-content-between"><b class="case-code">${item.case_code}</b><span class="badge bg-gold text-dark">${item.court_name}</span></div>
-                <div class="mt-2">
-                    <strong>العميل:</strong> ${item.client_name} <span class="text-danger">ضد</span> <strong>الخصم:</strong> ${item.opponent_name}<br>
-                    <strong>القضية:</strong> ${item.case_number}/${item.case_year}
+                <div class="d-flex justify-content-between">
+                    <b class="case-code">${item.case_code || 'غير محدد'}</b>
+                    <span class="badge bg-gold text-dark">${item.court_name || 'غير محدد'}</span>
                 </div>
-                <div class="mt-2 small border-top pt-1"><strong>تاريخ الجلسات:</strong><ul class="mb-0">${sessionsList}</ul></div>
+                <div class="mt-2">
+                    <strong>العميل:</strong> ${item.client_name || 'غير معروف'} 
+                    <span class="text-danger"> ضد </span> 
+                    <strong>الخصم:</strong> ${item.opponent_name || 'غير معروف'}<br>
+                    <strong>القضية:</strong> ${item.case_number || 'غير محدد'}/${item.case_year || 'غير محدد'}
+                </div>
+                <div class="mt-2 small border-top pt-1">
+                    <strong>تاريخ الجلسات:</strong>
+                    <ul class="mb-0">${sessionsList}</ul>
+                </div>
             </div>`;
-        }
-    });
+        });
+    }
     searchResults.innerHTML = html;
 }
 
+// دالة تحميل الجلسات القادمة
 async function loadUpcoming(range, btn){
-    if(btn) { document.querySelectorAll('#sessions .btn-group .btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+    if(btn) { 
+        document.querySelectorAll('#sessions .btn-group .btn').forEach(b=>b.classList.remove('active')); 
+        btn.classList.add('active'); 
+    }
+    
     const start = new Date().toISOString().split('T')[0];
     const end = new Date();
-    if(range === 'week') end.setDate(end.getDate() + 7); else end.setMonth(end.getMonth() + 1);
-
-    const { data, error } = await db.from('sessions').select('*, cases(*)').gte('session_date', start).lte('session_date', end.toISOString().split('T')[0]).order('session_date', { ascending: true });
-    if(error) { upcomingSessions.innerHTML = "خطأ في التحميل"; return; }
     
-    upcomingSessions.innerHTML = data.map(s => `
+    if(range === 'week') {
+        end.setDate(end.getDate() + 7);
+    } else {
+        end.setMonth(end.getMonth() + 1);
+    }
+    
+    const endDate = end.toISOString().split('T')[0];
+
+    // استعلام الجلسات القادمة مع بيانات القضية
+    const { data, error } = await db
+        .from('sessions')
+        .select(`
+            *,
+            cases (*)
+        `)
+        .gte('session_date', start)
+        .lte('session_date', endDate)
+        .order('session_date', { ascending: true });
+    
+    if(error) { 
+        console.error(error);
+        upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل</div>"; 
+        return; 
+    }
+    
+    if(data.length === 0) {
+        upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات قادمة</p>";
+        return;
+    }
+    
+    upcomingSessions.innerHTML = data.map(s => {
+        const caseData = s.cases || {};
+        return `
         <div class="session-card">
-            <div class="d-flex justify-content-between"><b>${s.session_date}</b><small>${s.cases?.court_name || ''}</small></div>
-            <div>${s.cases?.client_name || 'غير معروف'} - قضية ${s.cases?.case_number}/${s.cases?.case_year}</div>
-        </div>`).join('') || "<p class='text-center text-muted'>لا توجد جلسات</p>";
+            <div class="d-flex justify-content-between">
+                <b>${s.session_date || 'غير محدد'}</b>
+                <small>${caseData.court_name || 'غير محدد'}</small>
+            </div>
+            <div>
+                ${caseData.client_name || 'غير معروف'} - 
+                قضية ${caseData.case_number || 'غير محدد'}/${caseData.case_year || 'غير محدد'}
+            </div>
+            ${caseData.opponent_name ? `<div><small>ضد: ${caseData.opponent_name}</small></div>` : ''}
+        </div>`;
+    }).join('');
 }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

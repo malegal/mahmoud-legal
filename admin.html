@@ -22,6 +22,7 @@ body{background:var(--bg);font-family:Segoe UI}
 .nav-tabs .nav-link.active {background-color: var(--gold); color: white; border-color: var(--gold);}
 .nav-tabs .nav-link {color: var(--black);}
 .auto-fill-badge { font-size: 0.7rem; background: #e9ecef; padding: 2px 8px; border-radius: 10px; color: #666; }
+.detail-label { font-weight: bold; color: #555; font-size: 0.9rem; }
 </style>
 </head>
 
@@ -137,12 +138,12 @@ body{background:var(--bg);font-family:Segoe UI}
     <h5>البحث المتقدم والتقارير</h5>
     <hr>
     <div class="row g-2 mb-3">
-        <div class="col-md-8"><input id="searchInput" class="form-control" placeholder="ابحث برقم القضية، السنة، الاسم، أو الهاتف"></div>
+        <div class="col-md-8"><input id="searchInput" class="form-control" placeholder="ابحث برقم القضية، السنة، العميل، أو الكود"></div>
         <div class="col-md-4"><button class="btn btn-gold w-100" onclick="searchCases()">بحث عام</button></div>
     </div>
     
     <div class="p-3 border rounded bg-light">
-        <h6>تقرير الجلسات خلال فترة:</h6>
+        <h6>تقرير القضايا والجلسات خلال فترة:</h6>
         <div class="row g-2">
             <div class="col-md-5"><label class="small">من تاريخ</label><input type="date" id="date_from" class="form-control"></div>
             <div class="col-md-5"><label class="small">إلى تاريخ</label><input type="date" id="date_to" class="form-control"></div>
@@ -169,7 +170,6 @@ function login(){
         loginPage.style.display="none"; mainContent.style.display="block";
         today.innerText=new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         
-        // ضبط تواريخ افتراضية لخانة البحث (اليوم)
         const todayStr = new Date().toISOString().split('T')[0];
         document.getElementById('s_filter_from').value = todayStr;
         document.getElementById('s_filter_to').value = todayStr;
@@ -224,87 +224,91 @@ caseForm.onsubmit=async e=>{
 
 async function saveSession(){
     if(!currentCaseId) return Swal.fire("تنبيه","يرجى إدخال رقم قضية وسنة صحيحة أولاً","warning");
-    
     const sDate = document.getElementById('s_date').value;
     if(!sDate) return Swal.fire("تنبيه","يرجى اختيار تاريخ الجلسة","warning");
-
-    const sData = {
-        case_id: currentCaseId,
-        session_date: sDate,
-        decision: document.getElementById('s_decision').value
-    };
-
+    const sData = { case_id: currentCaseId, session_date: sDate, decision: document.getElementById('s_decision').value };
     Swal.fire({title: 'جاري الحفظ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
-    
     const { error } = await db.from('sessions').insert([sData]);
-    if(error) {
-        Swal.fire("خطأ", `فشل حفظ الجلسة: ${error.message}`, "error");
-    } else {
-        Swal.fire("تم", "تم حفظ الجلسة بنجاح", "success");
+    if(error) Swal.fire("خطأ", `فشل الحفظ: ${error.message}`, "error");
+    else {
+        Swal.fire("تم", "تم حفظ الجلسة", "success");
         ['s_case_number','s_case_year','s_court','s_client','s_opponent','s_date','s_decision'].forEach(id=>document.getElementById(id).value="");
         currentCaseId = null;
         loadUpcomingByRange();
     }
 }
 
+// دالة البحث العام لعرض كافة التفاصيل
 async function searchCases(){
     const t = document.getElementById('searchInput').value;
     if(!t) return Swal.fire("تنبيه","أدخل كلمة للبحث","info");
     Swal.fire({title: 'جاري البحث...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
-    const { data, error } = await db.from('cases').select('*')
-        .or(`case_number.ilike.%${t}%,case_year.ilike.%${t}%,client_name.ilike.%${t}%,client_phone.ilike.%${t}%,case_code.ilike.%${t}%`);
+    
+    // جلب القضايا ومعها الجلسات المرتبطة
+    const { data, error } = await db.from('cases').select('*, sessions(*)').or(`case_number.ilike.%${t}%,case_year.ilike.%${t}%,client_name.ilike.%${t}%,case_code.ilike.%${t}%`);
+    
     Swal.close();
     if(error) return Swal.fire("خطأ","فشل البحث","error");
     if(!data || data.length === 0) { searchResults.innerHTML = '<div class="alert alert-info">لا توجد نتائج</div>'; return; }
-    searchResults.innerHTML = `<h6>نتائج البحث (${data.length}):</h6>` + data.map(c=>`
-        <div class="form-section mb-2">
-            <div class="d-flex justify-content-between"><b class="case-code">${c.case_code}</b><span class="badge bg-gold text-dark">${c.case_status || ''}</span></div>
-            <div class="mt-2"><strong>العميل:</strong> ${c.client_name} (${c.client_phone})<br><strong>القضية:</strong> ${c.case_number}/${c.case_year} – ${c.court_name}</div>
-        </div>`).join('');
+    
+    searchResults.innerHTML = `<h6>نتائج البحث (${data.length}):</h6>` + data.map(c => renderCaseDetail(c)).join('');
 }
 
+// دالة جلب بيانات القضايا خلال فترة الجلسات
 async function filterByDateRange() {
     const from = document.getElementById('date_from').value;
     const to = document.getElementById('date_to').value;
     if(!from || !to) return Swal.fire("تنبيه","يرجى اختيار الفترة كاملة","warning");
-    Swal.fire({title: 'جاري جلب التقرير...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
-    const { data, error } = await db.from('sessions').select('*, cases(client_name, opponent_name, case_number, case_year, court_name)').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
+    Swal.fire({title: 'جاري جلب البيانات...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+    
+    // جلب الجلسات في الفترة المحددة مع بيانات القضايا المرتبطة بها
+    const { data, error } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
+    
     Swal.close();
     if(error) return Swal.fire("خطأ","فشل جلب البيانات","error");
     if(!data || data.length === 0) { searchResults.innerHTML = '<div class="alert alert-info">لا توجد جلسات في هذه الفترة</div>'; return; }
-    searchResults.innerHTML = `<h6>تقرير الجلسات من ${from} إلى ${to} (${data.length}):</h6>` + data.map(s=>`
-        <div class="session-card">
-            <div class="d-flex justify-content-between"><strong>${s.session_date}</strong><span class="text-muted small">${s.cases?.court_name || ''}</span></div>
-            <div>${s.cases?.client_name || 'غير معروف'} <span class="text-danger">ضد</span> ${s.cases?.opponent_name || 'غير معروف'} (قضية ${s.cases?.case_number}/${s.cases?.case_year})</div>
-            ${s.decision ? `<div class="mt-1 p-1 bg-light small"><b>القرار:</b> ${s.decision}</div>` : ''}
-        </div>`).join('');
+    
+    // تجميع الجلسات حسب القضية لعرضها بشكل منظم
+    searchResults.innerHTML = `<h6>قضايا وجلسات الفترة من ${from} إلى ${to}:</h6>` + data.map(s => renderCaseDetail(s.cases, s)).join('');
+}
+
+// دالة مشتركة لتنسيق عرض القضية بالتفاصيل المطلوبة
+function renderCaseDetail(c, singleSession = null) {
+    if(!c) return '';
+    const sessionsHtml = singleSession 
+        ? `<div class="mt-2 p-2 bg-light border-start border-gold"><b>جلسة تاريخ:</b> ${singleSession.session_date} <br> <b>القرار:</b> ${singleSession.decision || 'لا يوجد'}</div>`
+        : (c.sessions && c.sessions.length > 0 ? c.sessions.map(s => `<div class="mt-1 small border-bottom pb-1">📅 ${s.session_date}: ${s.decision || 'انتظار القرار'}</div>`).join('') : '<div class="small text-muted">لا توجد جلسات مسجلة</div>');
+
+    return `
+        <div class="form-section mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="case-code">${c.case_code}</span>
+                <span class="badge bg-gold text-dark">${c.case_status || 'متداولة'}</span>
+            </div>
+            <div class="row small">
+                <div class="col-md-6 mb-1"><span class="detail-label">القضية:</span> ${c.case_number} / ${c.case_year}</div>
+                <div class="col-md-6 mb-1"><span class="detail-label">المحكمة:</span> ${c.court_name}</div>
+                <div class="col-md-6 mb-1"><span class="detail-label">العميل:</span> ${c.client_name} (${c.client_role})</div>
+                <div class="col-md-6 mb-1"><span class="detail-label">الخصم:</span> ${c.opponent_name || '---'}</div>
+                <div class="col-12 mb-1"><span class="detail-label">الموضوع:</span> ${c.case_subject || '---'}</div>
+            </div>
+            <hr class="my-2">
+            <h6>سجل الجلسات والقرارات:</h6>
+            ${sessionsHtml}
+        </div>`;
 }
 
 async function loadUpcomingByRange(){
     const from = document.getElementById('s_filter_from').value;
     const to = document.getElementById('s_filter_to').value;
-    
-    if(!from || !to) return Swal.fire("تنبيه","يرجى تحديد فترة البحث","warning");
-
-    const { data, error } = await db.from('sessions').select(`
-        id, 
-        session_date, 
-        case_id,
-        decision,
-        cases (client_name, case_number, case_year, court_name)
-    `).gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
-
-    if(error) { upcomingSessions.innerHTML = "خطأ في التحميل"; return; }
-    if(!data || data.length === 0) { upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات في هذه الفترة</p>"; return; }
-    
+    if(!from || !to) return;
+    const { data, error } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
+    if(error || !data || data.length === 0) { upcomingSessions.innerHTML = "<p class='text-center text-muted small'>لا توجد جلسات</p>"; return; }
     upcomingSessions.innerHTML = data.map(s=>`
         <div class="session-card">
             <div class="d-flex justify-content-between"><b>${s.session_date}</b><small>${s.cases?.court_name || ''}</small></div>
-            <div class="mt-1">
-                <strong>العميل:</strong> ${s.cases?.client_name || 'غير معروف'}<br>
-                <strong>رقم القضية:</strong> ${s.cases?.case_number}/${s.cases?.case_year} (معرف: ${s.case_id})
-            </div>
-            ${s.decision ? `<div class="mt-1 p-2 bg-light border-start border-gold small"><b>القرار:</b> ${s.decision}</div>` : ''}
+            <div class="small mt-1"><b>العميل:</b> ${s.cases?.client_name || ''} | <b>قضية:</b> ${s.cases?.case_number}/${s.cases?.case_year}</div>
+            ${s.decision ? `<div class="mt-1 p-1 bg-light x-small"><b>القرار:</b> ${s.decision}</div>` : ''}
         </div>`).join('');
 }
 </script>

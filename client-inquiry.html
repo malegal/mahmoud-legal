@@ -18,6 +18,7 @@
             background: #020617;
             color: #f8fafc;
             min-height: 100vh;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
         }
         
         .container {
@@ -31,6 +32,9 @@
             background: rgba(0, 0, 0, 0.95);
             border-bottom: 2px solid #bf953f;
             padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .navbar {
@@ -49,28 +53,8 @@
             font-weight: bold;
         }
         
-        .logo img {
-            height: 60px;
-            width: auto;
-        }
-        
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .btn {
-            padding: 10px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid #bf953f;
-            color: #bf953f;
+        .logo i {
+            font-size: 32px;
         }
         
         /* محتوى الصفحة */
@@ -90,18 +74,24 @@
             width: 100%;
             max-width: 600px;
             text-align: center;
+            box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
         }
         
         .inquiry-box h1 {
             font-size: 36px;
             color: #bf953f;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
         
         .inquiry-box p {
             color: #cbd5e1;
             margin-bottom: 40px;
             font-size: 18px;
+            line-height: 1.6;
         }
         
         .form-group {
@@ -115,16 +105,27 @@
             color: #bf953f;
             font-weight: bold;
             font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
         }
         
         .form-control {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(191, 149, 63, 0.3);
-            border-radius: 10px;
+            border-radius: 12px;
             color: white;
             font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #bf953f;
+            box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
         }
         
         .btn-inquiry {
@@ -132,11 +133,20 @@
             color: #020617;
             padding: 18px 50px;
             font-size: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
-            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
             margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        .btn-inquiry:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(191, 149, 63, 0.3);
         }
         
         /* نتائج الاستعلام */
@@ -146,8 +156,9 @@
             margin-top: 40px;
             padding: 30px;
             background: rgba(191, 149, 63, 0.1);
-            border-radius: 15px;
+            border-radius: 20px;
             border-right: 4px solid #bf953f;
+            animation: fadeIn 0.5s ease;
         }
         
         .info-grid {
@@ -159,27 +170,42 @@
         
         .info-item {
             background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(191, 149, 63, 0.2);
         }
         
         .info-label {
             color: #94a3b8;
             font-size: 14px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .info-value {
             color: #fcf6ba;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
         }
         
         .session-item {
             background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-right: 3px solid #bf953f;
+        }
+        
+        .session-date {
+            color: #bf953f;
+            font-weight: bold;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
         }
         
         /* الفوتر */
@@ -194,6 +220,20 @@
             color: #94a3b8;
         }
         
+        .whatsapp-link {
+            color: #bf953f;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .whatsapp-link:hover {
+            color: #fcf6ba;
+        }
+        
         /* الرسائل */
         .message {
             padding: 15px;
@@ -205,7 +245,86 @@
         .message.error {
             background: rgba(239, 68, 68, 0.2);
             color: #f87171;
-            border: 1px solid #f87171;
+            border: 2px solid #f87171;
+        }
+        
+        /* تعليمات */
+        .instructions {
+            background: rgba(191, 149, 63, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 40px;
+            text-align: right;
+            border-right: 4px solid #bf953f;
+        }
+        
+        .instructions h3 {
+            color: #bf953f;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .instructions li {
+            padding: 10px 0;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #bf953f;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        /* تفاصيل الطباعة */
+        .print-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid #bf953f;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .print-btn:hover {
+            background: #bf953f;
+            color: #020617;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .inquiry-box {
+                padding: 30px;
+            }
+            
+            .inquiry-box h1 {
+                font-size: 28px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -219,7 +338,7 @@
                     <span>مؤسسة محمود عبد الحميد للمحاماة</span>
                 </a>
                 <div class="nav-buttons">
-                    <a href="index.html" class="btn btn-secondary">
+                    <a href="index.html" class="btn-inquiry" style="padding: 10px 25px; font-size: 16px;">
                         <i class="fas fa-home"></i> الرئيسية
                     </a>
                 </div>
@@ -232,7 +351,7 @@
         <div class="inquiry-container">
             <div class="inquiry-box">
                 <h1><i class="fas fa-search"></i> استعلام عن القضية</h1>
-                <p>أدخل بياناتك للاطلاع على آخر تطورات قضيتك</p>
+                <p>أدخل بياناتك للاطلاع على آخر تطورات قضيتك بكل خصوصية وأمان</p>
                 
                 <form id="inquiryForm">
                     <div class="form-group">
@@ -240,8 +359,11 @@
                             <i class="fas fa-phone"></i> رقم هاتف العميل
                         </label>
                         <input type="tel" id="phone" class="form-control" 
-                               placeholder="أدخل رقم الهاتف المسجل" required
-                               pattern="[0-9]{11}">
+                               placeholder="أدخل رقم الهاتف المسجل (مثال: 01012345678)" required
+                               pattern="01[0-9]{9}">
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
+                            يجب أن يتكون من 11 رقمًا ويبدأ بـ 01
+                        </small>
                     </div>
                     
                     <div class="form-group">
@@ -249,7 +371,11 @@
                             <i class="fas fa-file-contract"></i> رقم كود القضية
                         </label>
                         <input type="text" id="caseCode" class="form-control" 
-                               placeholder="أدخل كود القضية" required>
+                               placeholder="أدخل الكود المكون من 8 أحرف إنجليزية كبيرة وأرقام" required
+                               pattern="[A-Z0-9]{8}" style="text-transform: uppercase;">
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
+                            مثال: ABC123XY
+                        </small>
                     </div>
                     
                     <button type="submit" class="btn-inquiry">
@@ -260,54 +386,71 @@
                 </form>
                 
                 <div id="inquiryResult" class="result-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="color: #bf953f; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-file-contract"></i> تفاصيل القضية
+                        </h2>
+                        <button class="print-btn" onclick="printCaseDetails()">
+                            <i class="fas fa-print"></i> طباعة
+                        </button>
+                    </div>
+                    
                     <div class="info-grid">
                         <div class="info-item">
-                            <div class="info-label">اسم العميل</div>
+                            <div class="info-label"><i class="fas fa-user"></i> اسم العميل</div>
                             <div class="info-value" id="resultClientName">-</div>
                         </div>
                         
                         <div class="info-item">
-                            <div class="info-label">رقم القضية</div>
+                            <div class="info-label"><i class="fas fa-user-friends"></i> اسم الخصم</div>
+                            <div class="info-value" id="resultOpponentName">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-hashtag"></i> رقم القضية</div>
                             <div class="info-value" id="resultCaseNumber">-</div>
                         </div>
                         
                         <div class="info-item">
-                            <div class="info-label">سنة القضية</div>
+                            <div class="info-label"><i class="fas fa-calendar"></i> سنة القضية</div>
                             <div class="info-value" id="resultCaseYear">-</div>
                         </div>
                         
                         <div class="info-item">
-                            <div class="info-label">المحكمة</div>
+                            <div class="info-label"><i class="fas fa-gavel"></i> اسم المحكمة</div>
                             <div class="info-value" id="resultCourt">-</div>
                         </div>
                         
                         <div class="info-item">
-                            <div class="info-label">حالة القضية</div>
-                            <div class="info-value" id="resultCaseStatus">-</div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-label">اسم الخصم</div>
-                            <div class="info-value" id="resultOpponentName">-</div>
+                            <div class="info-label"><i class="fas fa-balance-scale"></i> نوع القضية</div>
+                            <div class="info-value" id="resultCaseType">-</div>
                         </div>
                     </div>
                     
-                    <h4 style="color: #bf953f; margin: 25px 0 15px 0;">
+                    <h3 style="color: #bf953f; margin: 30px 0 20px 0; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-gavel"></i> آخر جلسة
-                    </h4>
+                    </h3>
                     
                     <div id="lastSessionInfo">
                         <!-- سيتم تعبئتها بالجافاسكربت -->
                     </div>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background: rgba(0, 0, 0, 0.3); border-radius: 10px;">
+                        <p style="color: #94a3b8; font-size: 14px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-info-circle"></i>
+                            ملاحظة: هذه المعلومات خاصة بك فقط. يرجى عدم مشاركة كود القضية مع أي شخص.
+                        </p>
+                    </div>
                 </div>
                 
-                <div style="margin-top: 40px; padding: 25px; background: rgba(191, 149, 63, 0.1); border-radius: 10px; text-align: right;">
-                    <h3 style="color: #bf953f; margin-bottom: 15px;">ملاحظات هامة</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 8px 0; color: #cbd5e1;">• تأكد من إدخال رقم الهاتف المسجل</li>
-                        <li style="padding: 8px 0; color: #cbd5e1;">• الكود مكون من 8 أحرف وأرقام</li>
-                        <li style="padding: 8px 0; color: #cbd5e1;">• إذا نسيت الكود، اتصل بالمكتب</li>
-                        <li style="padding: 8px 0; color: #cbd5e1;">• البيانات محمية بسرية تامة</li>
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> ملاحظات هامة</h3>
+                    <ul>
+                        <li>تأكد من إدخال رقم الهاتف المسجل في ملف القضية</li>
+                        <li>الكود مكون من 8 أحرف إنجليزية كبيرة وأرقام</li>
+                        <li>إذا نسيت الكود، يرجى التواصل مع المكتب على الواتساب</li>
+                        <li>جميع البيانات محمية بسرية تامة وفقاً للقوانين</li>
+                        <li>يظهر فقط بيانات آخر جلسة بدون تفاصيل القرار</li>
                     </ul>
                 </div>
             </div>
@@ -318,7 +461,7 @@
     <footer class="footer">
         <div class="container">
             <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
-            <p>للاستفسار: <a href="https://wa.me/201101076000" target="_blank" style="color: #bf953f; text-decoration: none;">
+            <p>للاستفسار: <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-link">
                 <i class="fab fa-whatsapp"></i> 01101076000
             </a></p>
         </div>
@@ -334,7 +477,6 @@
         // تهيئة Supabase
         async function initSupabase() {
             try {
-                // تحميل المكتبة
                 if (!window.supabase) {
                     const script = document.createElement('script');
                     script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
@@ -345,13 +487,12 @@
                     });
                 }
                 
-                // إنشاء العميل
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 console.log('✅ تم تهيئة Supabase لصفحة الاستعلام');
                 return true;
             } catch (error) {
                 console.error('❌ خطأ في تهيئة Supabase:', error);
-                showError('خطأ في الاتصال بالنظام');
+                showError('خطأ في الاتصال بالنظام. يرجى المحاولة لاحقاً.');
                 return false;
             }
         }
@@ -363,12 +504,12 @@
                     .from('cases')
                     .select('*')
                     .eq('client_phone', phone)
-                    .eq('case_code', caseCode)
+                    .eq('case_code', caseCode.toUpperCase())
                     .single();
 
                 if (error) {
                     if (error.code === 'PGRST116') {
-                        return { success: false, message: 'لم يتم العثور على القضية' };
+                        return { success: false, message: '❌ لم يتم العثور على القضية. يرجى التحقق من البيانات.' };
                     }
                     throw error;
                 }
@@ -376,7 +517,7 @@
                 return { success: true, data };
             } catch (error) {
                 console.error('خطأ في البحث:', error);
-                return { success: false, message: 'حدث خطأ في البحث' };
+                return { success: false, message: '⚠️ حدث خطأ في البحث. يرجى المحاولة مرة أخرى.' };
             }
         }
 
@@ -390,7 +531,7 @@
                         session_time,
                         cases!inner(case_code)
                     `)
-                    .eq('cases.case_code', caseCode)
+                    .eq('cases.case_code', caseCode.toUpperCase())
                     .order('session_date', { ascending: false })
                     .limit(1);
 
@@ -411,10 +552,12 @@
                 await supabase
                     .from('inquiry_logs')
                     .insert([{
-                        case_code: caseCode,
+                        case_code: caseCode.toUpperCase(),
                         client_phone: phone,
                         inquiry_time: new Date().toISOString()
                     }]);
+                
+                console.log('📝 تم تسجيل استعلام العميل:', caseCode, phone);
             } catch (error) {
                 console.error('خطأ في تسجيل الاستعلام:', error);
             }
@@ -431,12 +574,93 @@
             }, 5000);
         }
 
+        // طباعة تفاصيل القضية
+        function printCaseDetails() {
+            const printContent = document.getElementById('inquiryResult').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = `
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>استعلام عن القضية - مؤسسة محمود عبد الحميد</title>
+                    <style>
+                        body {
+                            font-family: 'Tajawal', sans-serif;
+                            padding: 20px;
+                            color: #000;
+                        }
+                        .print-header {
+                            text-align: center;
+                            margin-bottom: 30px;
+                            border-bottom: 2px solid #bf953f;
+                            padding-bottom: 15px;
+                        }
+                        .print-header h2 {
+                            color: #bf953f;
+                        }
+                        .info-grid {
+                            display: grid;
+                            grid-template-columns: repeat(2, 1fr);
+                            gap: 15px;
+                            margin-bottom: 20px;
+                        }
+                        .info-item {
+                            border: 1px solid #ddd;
+                            padding: 10px;
+                            border-radius: 5px;
+                        }
+                        .info-label {
+                            color: #666;
+                            font-size: 12px;
+                        }
+                        .info-value {
+                            font-weight: bold;
+                            font-size: 14px;
+                        }
+                        .footer {
+                            margin-top: 50px;
+                            text-align: center;
+                            color: #666;
+                            font-size: 12px;
+                            border-top: 1px solid #ddd;
+                            padding-top: 15px;
+                        }
+                        @media print {
+                            body { padding: 0; }
+                            .print-btn { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="print-header">
+                        <h2>استعلام عن القضية - مؤسسة محمود عبد الحميد للمحاماة</h2>
+                        <p>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')} ${new Date().toLocaleTimeString('ar-EG')}</p>
+                    </div>
+                    ${printContent}
+                    <div class="footer">
+                        <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
+                        <p>للاستفسار: 01101076000</p>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            window.print();
+            
+            // استعادة المحتوى الأصلي
+            setTimeout(() => {
+                document.body.innerHTML = originalContent;
+                window.location.reload();
+            }, 100);
+        }
+
         // مستمعات الأحداث
         document.addEventListener('DOMContentLoaded', async function() {
-            // تهيئة Supabase
             await initSupabase();
             
-            // إعداد النموذج
             document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -445,12 +669,12 @@
                 
                 // التحقق من المدخلات
                 if (!phone.match(/^01[0-9]{9}$/)) {
-                    showError('يرجى إدخال رقم هاتف صحيح (11 رقم، يبدأ بـ 01)');
+                    showError('⚠️ يرجى إدخال رقم هاتف مصري صحيح (11 رقم، يبدأ بـ 01)');
                     return;
                 }
                 
-                if (!caseCode) {
-                    showError('يرجى إدخال كود القضية');
+                if (!caseCode.match(/^[A-Z0-9]{8}$/)) {
+                    showError('⚠️ يرجى إدخال كود قضية صحيح (8 أحرف إنجليزية كبيرة وأرقام)');
                     return;
                 }
                 
@@ -461,51 +685,51 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    // البحث عن القضية
                     const result = await searchCase(phone, caseCode);
                     
                     if (result.success) {
-                        // تسجيل الاستعلام
                         await logInquiry(caseCode, phone);
                         
-                        // جلب آخر جلسة
                         const lastSession = await getLastSession(caseCode);
                         
                         // عرض البيانات
                         document.getElementById('resultClientName').textContent = result.data.client_name || '-';
+                        document.getElementById('resultOpponentName').textContent = result.data.opponent_name || '-';
                         document.getElementById('resultCaseNumber').textContent = result.data.case_number || '-';
                         document.getElementById('resultCaseYear').textContent = result.data.case_year || '-';
                         document.getElementById('resultCourt').textContent = result.data.court || '-';
-                        document.getElementById('resultCaseStatus').textContent = result.data.case_status || '-';
-                        document.getElementById('resultOpponentName').textContent = result.data.opponent_name || '-';
+                        document.getElementById('resultCaseType').textContent = result.data.case_type || '-';
                         
                         // عرض آخر جلسة
                         const sessionContainer = document.getElementById('lastSessionInfo');
                         if (lastSession) {
                             sessionContainer.innerHTML = `
                                 <div class="session-item">
-                                    <div style="color: #bf953f; font-weight: bold; margin-bottom: 5px;">
+                                    <div class="session-date">
+                                        <i class="fas fa-calendar-day"></i>
                                         تاريخ الجلسة: ${lastSession.session_date || 'غير محدد'}
                                     </div>
-                                    <div style="color: #cbd5e1;">
-                                        الوقت: ${lastSession.session_time || 'غير محدد'}
+                                    <div style="color: #cbd5e1; margin-bottom: 5px;">
+                                        <i class="fas fa-clock"></i> الوقت: ${lastSession.session_time || 'غير محدد'}
+                                    </div>
+                                    <div style="color: #94a3b8; font-size: 14px;">
+                                        <i class="fas fa-info-circle"></i> لمزيد من التفاصيل، يرجى التواصل مع المكتب
                                     </div>
                                 </div>
                             `;
                         } else {
                             sessionContainer.innerHTML = `
                                 <div class="session-item">
-                                    <div style="color: #94a3b8; text-align: center;">
-                                        لا توجد جلسات مسجلة
+                                    <div style="color: #94a3b8; text-align: center; padding: 20px;">
+                                        <i class="fas fa-calendar-times"></i>
+                                        لا توجد جلسات مسجلة لهذه القضية
                                     </div>
                                 </div>
                             `;
                         }
                         
-                        // إظهار النتائج
                         document.getElementById('inquiryResult').style.display = 'block';
                         
-                        // التمرير للنتائج
                         window.scrollTo({
                             top: document.getElementById('inquiryResult').offsetTop - 100,
                             behavior: 'smooth'
@@ -515,14 +739,13 @@
                     }
                 } catch (error) {
                     console.error('خطأ غير متوقع:', error);
-                    showError('حدث خطأ في النظام');
+                    showError('⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.');
                 } finally {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                 }
             });
             
-            // التركيز على أول حقل
             document.getElementById('phone').focus();
         });
     </script>

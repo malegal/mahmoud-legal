@@ -25,12 +25,13 @@ body{background:var(--bg);font-family:Segoe UI}
 .case-code{font-family:monospace;font-size:1.2rem;color:var(--gold);font-weight:bold}
 .nav-tabs .nav-link.active {background-color: var(--gold); color: white; border-color: var(--gold);}
 .nav-tabs .nav-link {color: var(--black);}
+/* إضافة تنسيق بسيط لشارة التعبئة */
+.auto-fill-badge { font-size: 0.7rem; background: #e9ecef; padding: 2px 8px; border-radius: 10px; color: #666; margin-right: 10px; }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginPage" class="container mt-5" style="max-width:400px">
 <div class="form-section text-center">
 <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: var(--gold);"></i>
@@ -40,7 +41,6 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 </div>
 
-<!-- MAIN -->
 <div id="mainContent" style="display:none">
 
 <div class="header text-center">
@@ -58,7 +58,6 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <div class="tab-content">
 
-<!-- القضايا -->
 <div class="tab-pane fade show active" id="cases">
 <form id="caseForm" class="form-section">
 <h5>تسجيل قضية جديدة</h5>
@@ -135,16 +134,15 @@ body{background:var(--bg);font-family:Segoe UI}
 </form>
 </div>
 
-<!-- الجلسات -->
 <div class="tab-pane fade" id="sessions">
 <div class="form-section">
 
-<h5>تسجيل جلسة</h5>
+<h5>تسجيل جلسة <span class="auto-fill-badge">إدخال رقم القضية والسنة يجلب البيانات تلقائياً</span></h5>
 <hr>
 <div class="row g-3">
 
-<div class="col-md-3"><label>رقم القضية</label><input id="s_case_number" class="form-control"></div>
-<div class="col-md-3"><label>سنة القضية</label><input id="s_case_year" class="form-control"></div>
+<div class="col-md-3"><label>رقم القضية</label><input id="s_case_number" class="form-control" onchange="autoFillCase()"></div>
+<div class="col-md-3"><label>سنة القضية</label><input id="s_case_year" class="form-control" onchange="autoFillCase()"></div>
 <div class="col-md-6">
     <label>المحكمة</label>
     <select id="s_court" class="form-select">
@@ -179,7 +177,6 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 </div>
 
-<!-- البحث -->
 <div class="tab-pane fade" id="search">
 <div class="form-section">
     <h5>البحث المتقدم</h5>
@@ -222,6 +219,21 @@ function login(){
         loadUpcoming('week');
     } else {
         Swal.fire("خطأ","كلمة المرور غير صحيحة","error");
+    }
+}
+
+// ميزة جلب البيانات تلقائياً (المضافة)
+async function autoFillCase() {
+    const num = document.getElementById('s_case_number').value;
+    const year = document.getElementById('s_case_year').value;
+    if(num && year) {
+        const { data, error } = await db.from('cases').select('*').eq('case_number', num).eq('case_year', year).single();
+        if(data) {
+            document.getElementById('s_court').value = data.court_name;
+            document.getElementById('s_client').value = data.client_name;
+            document.getElementById('s_opponent').value = data.opponent_name;
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم جلب بيانات القضية', showConfirmButton: false, timer: 1500 });
+        }
     }
 }
 
@@ -368,7 +380,6 @@ async function filterSessions(range){
             </div>`).join('');
     }
     
-    // Switch to search tab to show results
     const triggerEl = document.querySelector('#mainTabs button[data-bs-target="#search"]');
     bootstrap.Tab.getInstance(triggerEl).show();
 }

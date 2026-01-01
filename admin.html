@@ -27,7 +27,6 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginPage" class="container mt-5" style="max-width:400px">
 <div class="form-section text-center">
 <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: var(--gold);"></i>
@@ -37,7 +36,6 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 </div>
 
-<!-- MAIN -->
 <div id="mainContent" style="display:none">
 
 <div class="header text-center">
@@ -55,7 +53,6 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <div class="tab-content">
 
-<!-- القضايا -->
 <div class="tab-pane fade show active" id="cases">
 <form id="caseForm" class="form-section">
 <h5>تسجيل قضية جديدة</h5>
@@ -105,7 +102,6 @@ body{background:var(--bg);font-family:Segoe UI}
 </form>
 </div>
 
-<!-- الجلسات -->
 <div class="tab-pane fade" id="sessions">
 <div class="form-section">
 <h5>تسجيل جلسة <span class="auto-fill-badge">إدخال رقم القضية والسنة يجلب البيانات تلقائياً</span></h5>
@@ -115,10 +111,10 @@ body{background:var(--bg);font-family:Segoe UI}
 <div class="col-md-3"><label>سنة القضية</label><input id="s_case_year" class="form-control" onchange="autoFillCase()"></div>
 <div class="col-md-6">
     <label>المحكمة</label>
-    <input id="s_court" class="form-control" placeholder="تعبئة تلقائية...">
+    <input id="s_court" class="form-control" placeholder="تعبئة تلقائية..." readonly>
 </div>
-<div class="col-md-6"><label>اسم العميل</label><input id="s_client" class="form-control" placeholder="تعبئة تلقائية..."></div>
-<div class="col-md-6"><label>اسم الخصم</label><input id="s_opponent" class="form-control" placeholder="تعبئة تلقائية..."></div>
+<div class="col-md-6"><label>اسم العميل</label><input id="s_client" class="form-control" placeholder="تعبئة تلقائية..." readonly></div>
+<div class="col-md-6"><label>اسم الخصم</label><input id="s_opponent" class="form-control" placeholder="تعبئة تلقائية..." readonly></div>
 <div class="col-md-6"><label>تاريخ الجلسة</label><input type="date" id="s_date" class="form-control"></div>
 <div class="col-md-12"><label>القرار</label><textarea id="s_decision" class="form-control"></textarea></div>
 </div>
@@ -126,16 +122,16 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 
 <div class="form-section">
-<h5>جلسات قادمة</h5>
-<div class="btn-group w-100 mb-3">
-    <button type="button" class="btn btn-outline-secondary active" onclick="loadUpcoming('week', this)">الأسبوع الحالي</button>
-    <button type="button" class="btn btn-outline-secondary" onclick="loadUpcoming('month', this)">الشهر الحالي</button>
+<h5>عرض الجلسات حسب الفترة</h5>
+<div class="row g-2 mb-3">
+    <div class="col-md-5"><label class="small">من تاريخ</label><input type="date" id="s_filter_from" class="form-control"></div>
+    <div class="col-md-5"><label class="small">إلى تاريخ</label><input type="date" id="s_filter_to" class="form-control"></div>
+    <div class="col-md-2 d-flex align-items-end"><button class="btn btn-dark w-100" onclick="loadUpcomingByRange()"><i class="bi bi-search"></i></button></div>
 </div>
 <div id="upcomingSessions"></div>
 </div>
 </div>
 
-<!-- البحث -->
 <div class="tab-pane fade" id="search">
 <div class="form-section">
     <h5>البحث المتقدم والتقارير</h5>
@@ -166,25 +162,34 @@ const SB_URL="https://iyhfafodhptcdwrjywek.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
 const db=supabase.createClient(SB_URL,SB_KEY);
 
+let currentCaseId = null;
+
 function login(){
     if(document.getElementById('password').value==="mahmoud237"){
         loginPage.style.display="none"; mainContent.style.display="block";
         today.innerText=new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        loadUpcoming('week');
+        
+        // ضبط تواريخ افتراضية لخانة البحث (اليوم)
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('s_filter_from').value = todayStr;
+        document.getElementById('s_filter_to').value = todayStr;
+        loadUpcomingByRange();
     } else Swal.fire("خطأ","كلمة المرور غير صحيحة","error");
 }
 
-// ميزة جلب البيانات تلقائياً
 async function autoFillCase() {
     const num = document.getElementById('s_case_number').value;
     const year = document.getElementById('s_case_year').value;
     if(num && year) {
         const { data, error } = await db.from('cases').select('*').eq('case_number', num).eq('case_year', year).single();
         if(data) {
+            currentCaseId = data.id;
             document.getElementById('s_court').value = data.court_name;
             document.getElementById('s_client').value = data.client_name;
             document.getElementById('s_opponent').value = data.opponent_name;
             Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم جلب بيانات القضية', showConfirmButton: false, timer: 1500 });
+        } else {
+            currentCaseId = null;
         }
     }
 }
@@ -218,26 +223,27 @@ caseForm.onsubmit=async e=>{
 };
 
 async function saveSession(){
+    if(!currentCaseId) return Swal.fire("تنبيه","يرجى إدخال رقم قضية وسنة صحيحة أولاً","warning");
+    
+    const sDate = document.getElementById('s_date').value;
+    if(!sDate) return Swal.fire("تنبيه","يرجى اختيار تاريخ الجلسة","warning");
+
     const sData = {
-        case_number: document.getElementById('s_case_number').value,
-        case_year: document.getElementById('s_case_year').value,
-        court_name: document.getElementById('s_court').value,
-        client_name: document.getElementById('s_client').value,
-        opponent_name: document.getElementById('s_opponent').value,
-        session_date: document.getElementById('s_date').value,
+        case_id: currentCaseId,
+        session_date: sDate,
         decision: document.getElementById('s_decision').value
     };
-    if(!sData.session_date) return Swal.fire("تنبيه","يرجى اختيار تاريخ الجلسة","warning");
+
     Swal.fire({title: 'جاري الحفظ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
     
     const { error } = await db.from('sessions').insert([sData]);
     if(error) {
-        console.error(error);
         Swal.fire("خطأ", `فشل حفظ الجلسة: ${error.message}`, "error");
     } else {
         Swal.fire("تم", "تم حفظ الجلسة بنجاح", "success");
         ['s_case_number','s_case_year','s_court','s_client','s_opponent','s_date','s_decision'].forEach(id=>document.getElementById(id).value="");
-        loadUpcoming('week');
+        currentCaseId = null;
+        loadUpcomingByRange();
     }
 }
 
@@ -262,31 +268,43 @@ async function filterByDateRange() {
     const to = document.getElementById('date_to').value;
     if(!from || !to) return Swal.fire("تنبيه","يرجى اختيار الفترة كاملة","warning");
     Swal.fire({title: 'جاري جلب التقرير...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
-    const { data, error } = await db.from('sessions').select('*').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
+    const { data, error } = await db.from('sessions').select('*, cases(client_name, opponent_name, case_number, case_year, court_name)').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
     Swal.close();
     if(error) return Swal.fire("خطأ","فشل جلب البيانات","error");
     if(!data || data.length === 0) { searchResults.innerHTML = '<div class="alert alert-info">لا توجد جلسات في هذه الفترة</div>'; return; }
     searchResults.innerHTML = `<h6>تقرير الجلسات من ${from} إلى ${to} (${data.length}):</h6>` + data.map(s=>`
         <div class="session-card">
-            <div class="d-flex justify-content-between"><strong>${s.session_date}</strong><span class="text-muted small">${s.court_name}</span></div>
-            <div>${s.client_name} <span class="text-danger">ضد</span> ${s.opponent_name} (قضية ${s.case_number}/${s.case_year})</div>
+            <div class="d-flex justify-content-between"><strong>${s.session_date}</strong><span class="text-muted small">${s.cases?.court_name || ''}</span></div>
+            <div>${s.cases?.client_name || 'غير معروف'} <span class="text-danger">ضد</span> ${s.cases?.opponent_name || 'غير معروف'} (قضية ${s.cases?.case_number}/${s.cases?.case_year})</div>
             ${s.decision ? `<div class="mt-1 p-1 bg-light small"><b>القرار:</b> ${s.decision}</div>` : ''}
         </div>`).join('');
 }
 
-async function loadUpcoming(range, btn){
-    if(btn) { document.querySelectorAll('#sessions .btn-group .btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
-    const now = new Date().toISOString().split('T')[0];
-    let endDate = new Date();
-    if(range === 'week') endDate.setDate(new Date().getDate() + 7); else endDate.setMonth(new Date().getMonth() + 1);
-    const endStr = endDate.toISOString().split('T')[0];
-    const { data, error } = await db.from('sessions').select('*').gte('session_date', now).lte('endStr').order('session_date', { ascending: true });
+async function loadUpcomingByRange(){
+    const from = document.getElementById('s_filter_from').value;
+    const to = document.getElementById('s_filter_to').value;
+    
+    if(!from || !to) return Swal.fire("تنبيه","يرجى تحديد فترة البحث","warning");
+
+    const { data, error } = await db.from('sessions').select(`
+        id, 
+        session_date, 
+        case_id,
+        decision,
+        cases (client_name, case_number, case_year, court_name)
+    `).gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
+
     if(error) { upcomingSessions.innerHTML = "خطأ في التحميل"; return; }
-    if(!data || data.length === 0) { upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات قادمة</p>"; return; }
+    if(!data || data.length === 0) { upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات في هذه الفترة</p>"; return; }
+    
     upcomingSessions.innerHTML = data.map(s=>`
         <div class="session-card">
-            <div class="d-flex justify-content-between"><b>${s.session_date}</b><small>${s.court_name}</small></div>
-            ${s.client_name} – ${s.case_number}/${s.case_year}
+            <div class="d-flex justify-content-between"><b>${s.session_date}</b><small>${s.cases?.court_name || ''}</small></div>
+            <div class="mt-1">
+                <strong>العميل:</strong> ${s.cases?.client_name || 'غير معروف'}<br>
+                <strong>رقم القضية:</strong> ${s.cases?.case_number}/${s.cases?.case_year} (معرف: ${s.case_id})
+            </div>
+            ${s.decision ? `<div class="mt-1 p-2 bg-light border-start border-gold small"><b>القرار:</b> ${s.decision}</div>` : ''}
         </div>`).join('');
 }
 </script>

@@ -67,10 +67,25 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <div class="col-md-4"><label>اسم العميل</label><input id="client_name" class="form-control" required></div>
 <div class="col-md-4"><label>هاتف العميل</label><input id="client_phone" class="form-control" required></div>
-<div class="col-md-4"><label>اسم الخصم</label><input id="opponent_name" class="form-control"></div>
+<div class="col-md-4">
+    <label>صفة العميل</label>
+    <select id="client_role" class="form-select" required>
+        <option value="">اختر الصفة...</option>
+        <option>مدعي</option>
+        <option>مدعى عليه</option>
+        <option>مجني عليه</option>
+        <option>متهم</option>
+        <option>طاعن</option>
+        <option>مطعون ضده</option>
+        <option>مستأنف</option>
+        <option>مستأنف ضده</option>
+    </select>
+</div>
 
-<div class="col-md-3"><label>رقم القضية</label><input id="case_number" class="form-control" required></div>
-<div class="col-md-3"><label>سنة القضية</label><input id="case_year" class="form-control" required></div>
+<div class="col-md-4"><label>اسم الخصم</label><input id="opponent_name" class="form-control"></div>
+<div class="col-md-4"><label>رقم القضية</label><input id="case_number" class="form-control" required></div>
+<div class="col-md-4"><label>سنة القضية</label><input id="case_year" class="form-control" required></div>
+
 <div class="col-md-6">
     <label>المحكمة</label>
     <select id="court_name" class="form-select" required>
@@ -84,8 +99,9 @@ body{background:var(--bg);font-family:Segoe UI}
     </select>
 </div>
 
-<div class="col-md-4"><label>الدائرة</label><input id="circle" class="form-control"></div>
-<div class="col-md-4">
+<div class="col-md-6"><label>الدائرة</label><input id="circle" class="form-control"></div>
+
+<div class="col-md-6">
     <label>نوع القضية</label>
     <select id="case_type" class="form-select">
         <option value="">اختر النوع...</option>
@@ -97,7 +113,7 @@ body{background:var(--bg);font-family:Segoe UI}
         <option>إداري</option>
     </select>
 </div>
-<div class="col-md-4">
+<div class="col-md-6">
     <label>حالة القضية</label>
     <select id="case_status" class="form-select">
         <option value="">اختر الحالة...</option>
@@ -217,6 +233,7 @@ caseForm.onsubmit=async e=>{
     const caseData = {
         client_name: document.getElementById('client_name').value,
         client_phone: document.getElementById('client_phone').value,
+        client_role: document.getElementById('client_role').value,
         opponent_name: document.getElementById('opponent_name').value,
         case_number: document.getElementById('case_number').value,
         case_year: document.getElementById('case_year').value,
@@ -294,7 +311,7 @@ async function searchCases(){
                 <span class="badge bg-gold text-dark">${c.case_status || 'غير محدد'}</span>
             </div>
             <div class="mt-2">
-                <strong>العميل:</strong> ${c.client_name} (${c.client_phone})<br>
+                <strong>العميل:</strong> ${c.client_name} (${c.client_phone}) - <span class="text-primary">${c.client_role || ''}</span><br>
                 <strong>الخصم:</strong> ${c.opponent_name || '---'}<br>
                 <strong>القضية:</strong> ${c.case_number} لسنة ${c.case_year} – ${c.court_name}<br>
                 <strong>النوع:</strong> ${c.case_type || '---'} | <strong>الدائرة:</strong> ${c.circle || '---'}

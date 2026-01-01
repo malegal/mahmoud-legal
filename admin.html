@@ -18,11 +18,13 @@
 }
 body{background:var(--bg);font-family:Segoe UI}
 .header{background:linear-gradient(135deg,#000,#333);color:var(--gold);padding:20px;border-bottom:4px solid var(--gold)}
-.form-section{background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border-right:5px solid var(--gold)}
-.btn-gold{background:var(--gold);border:none;font-weight:600}
+.form-section{background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;border-right:5px solid var(--gold);box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+.btn-gold{background:var(--gold);border:none;font-weight:600;color:#fff}
 .btn-gold:hover{background:#b8962e;color:#fff}
-.session-card{background:#fff;border-right:4px solid var(--gold);padding:15px;margin-bottom:10px}
-.case-code{font-family:monospace;font-size:1.2rem;color:var(--gold)}
+.session-card{background:#fff;border-right:4px solid var(--gold);padding:15px;margin-bottom:10px;border-radius:4px;box-shadow: 0 1px 3px rgba(0,0,0,0.05);}
+.case-code{font-family:monospace;font-size:1.2rem;color:var(--gold);font-weight:bold}
+.nav-tabs .nav-link.active {background-color: var(--gold); color: white; border-color: var(--gold);}
+.nav-tabs .nav-link {color: var(--black);}
 </style>
 </head>
 
@@ -31,7 +33,8 @@ body{background:var(--bg);font-family:Segoe UI}
 <!-- LOGIN -->
 <div id="loginPage" class="container mt-5" style="max-width:400px">
 <div class="form-section text-center">
-<h4>دخول النظام</h4>
+<i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: var(--gold);"></i>
+<h4 class="mt-3">دخول النظام</h4>
 <input type="password" id="password" class="form-control my-3" placeholder="كلمة المرور">
 <button class="btn btn-gold w-100" onclick="login()">دخول</button>
 </div>
@@ -47,10 +50,10 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <div class="container mt-4">
 
-<ul class="nav nav-tabs mb-3">
+<ul class="nav nav-tabs mb-3" id="mainTabs">
 <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cases">القضايا</button></li>
 <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sessions">الجلسات</button></li>
-<li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#search">بحث</button></li>
+<li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#search">بحث وتقارير</button></li>
 </ul>
 
 <div class="tab-content">
@@ -58,6 +61,8 @@ body{background:var(--bg);font-family:Segoe UI}
 <!-- القضايا -->
 <div class="tab-pane fade show active" id="cases">
 <form id="caseForm" class="form-section">
+<h5>تسجيل قضية جديدة</h5>
+<hr>
 <div class="row g-3">
 
 <div class="col-md-4"><label>اسم العميل</label><input id="client_name" class="form-control" required></div>
@@ -66,18 +71,50 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <div class="col-md-3"><label>رقم القضية</label><input id="case_number" class="form-control" required></div>
 <div class="col-md-3"><label>سنة القضية</label><input id="case_year" class="form-control" required></div>
-<div class="col-md-6"><label>المحكمة</label><input id="court_name" class="form-control" required></div>
+<div class="col-md-6">
+    <label>المحكمة</label>
+    <select id="court_name" class="form-select" required>
+        <option value="">اختر المحكمة...</option>
+        <option>محكمة الأسرة</option>
+        <option>المحكمة الجزئية</option>
+        <option>المحكمة الابتدائية</option>
+        <option>محكمة الاستئناف</option>
+        <option>محكمة النقض</option>
+        <option>مجلس الدولة</option>
+    </select>
+</div>
 
 <div class="col-md-4"><label>الدائرة</label><input id="circle" class="form-control"></div>
-<div class="col-md-4"><label>نوع القضية</label><input id="case_type" class="form-control"></div>
-<div class="col-md-4"><label>حالة القضية</label><input id="case_status" class="form-control"></div>
+<div class="col-md-4">
+    <label>نوع القضية</label>
+    <select id="case_type" class="form-select">
+        <option value="">اختر النوع...</option>
+        <option>مدني</option>
+        <option>جنائي</option>
+        <option>أسرة</option>
+        <option>عمالي</option>
+        <option>تجاري</option>
+        <option>إداري</option>
+    </select>
+</div>
+<div class="col-md-4">
+    <label>حالة القضية</label>
+    <select id="case_status" class="form-select">
+        <option value="">اختر الحالة...</option>
+        <option>متداولة</option>
+        <option>محجوزة للحكم</option>
+        <option>منتهية</option>
+        <option>مشطوبة</option>
+        <option>موقوفة</option>
+    </select>
+</div>
 
-<div class="col-md-12"><label>موضوع القضية</label><textarea id="case_subject" class="form-control"></textarea></div>
-<div class="col-md-12"><label>ملاحظات</label><textarea id="notes" class="form-control"></textarea></div>
+<div class="col-md-12"><label>موضوع القضية</label><textarea id="case_subject" class="form-control" rows="2"></textarea></div>
+<div class="col-md-12"><label>ملاحظات</label><textarea id="notes" class="form-control" rows="2"></textarea></div>
 
 </div>
 
-<button class="btn btn-gold w-100 mt-3">حفظ القضية</button>
+<button type="submit" class="btn btn-gold w-100 mt-3">حفظ القضية</button>
 <div id="caseCodeResult" class="mt-3 text-center"></div>
 </form>
 </div>
@@ -87,11 +124,23 @@ body{background:var(--bg);font-family:Segoe UI}
 <div class="form-section">
 
 <h5>تسجيل جلسة</h5>
+<hr>
 <div class="row g-3">
 
 <div class="col-md-3"><label>رقم القضية</label><input id="s_case_number" class="form-control"></div>
 <div class="col-md-3"><label>سنة القضية</label><input id="s_case_year" class="form-control"></div>
-<div class="col-md-6"><label>المحكمة</label><input id="s_court" class="form-control"></div>
+<div class="col-md-6">
+    <label>المحكمة</label>
+    <select id="s_court" class="form-select">
+        <option value="">اختر المحكمة...</option>
+        <option>محكمة الأسرة</option>
+        <option>المحكمة الجزئية</option>
+        <option>المحكمة الابتدائية</option>
+        <option>محكمة الاستئناف</option>
+        <option>محكمة النقض</option>
+        <option>مجلس الدولة</option>
+    </select>
+</div>
 
 <div class="col-md-6"><label>اسم العميل</label><input id="s_client" class="form-control"></div>
 <div class="col-md-6"><label>اسم الخصم</label><input id="s_opponent" class="form-control"></div>
@@ -105,7 +154,11 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 
 <div class="form-section">
-<h5>جلسات الأسبوع / الشهر</h5>
+<h5>جلسات قادمة</h5>
+<div class="btn-group w-100 mb-3" role="group">
+    <button type="button" class="btn btn-outline-secondary active" onclick="loadUpcoming('week', this)">الأسبوع الحالي</button>
+    <button type="button" class="btn btn-outline-secondary" onclick="loadUpcoming('month', this)">الشهر الحالي</button>
+</div>
 <div id="upcomingSessions"></div>
 </div>
 </div>
@@ -113,8 +166,25 @@ body{background:var(--bg);font-family:Segoe UI}
 <!-- البحث -->
 <div class="tab-pane fade" id="search">
 <div class="form-section">
-<input id="searchInput" class="form-control" placeholder="ابحث برقم القضية أو السنة أو الاسم أو الهاتف">
-<button class="btn btn-gold w-100 mt-2" onclick="searchCases()">بحث</button>
+    <h5>البحث المتقدم</h5>
+    <hr>
+    <div class="row g-2">
+        <div class="col-md-8">
+            <input id="searchInput" class="form-control" placeholder="ابحث برقم القضية، السنة، الاسم، أو الهاتف">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-gold w-100" onclick="searchCases()">بحث</button>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <h6>فلاتر سريعة للجلسات:</h6>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-dark" onclick="filterSessions('week')">جلسات الأسبوع</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="filterSessions('month')">جلسات الشهر</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="searchByPhone()">بحث برقم الهاتف</button>
+        </div>
+    </div>
 </div>
 <div id="searchResults"></div>
 </div>
@@ -129,77 +199,198 @@ const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const db=supabase.createClient(SB_URL,SB_KEY);
 
 function login(){
-if(document.getElementById('password').value==="mahmoud237"){
-loginPage.style.display="none";
-mainContent.style.display="block";
-today.innerText=new Date().toLocaleDateString('ar-EG');
-loadUpcoming();
-}else Swal.fire("خطأ","كلمة المرور غير صحيحة","error");
+    if(document.getElementById('password').value==="mahmoud237"){
+        loginPage.style.display="none";
+        mainContent.style.display="block";
+        today.innerText=new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        loadUpcoming('week');
+    } else {
+        Swal.fire("خطأ","كلمة المرور غير صحيحة","error");
+    }
 }
 
 caseForm.onsubmit=async e=>{
-e.preventDefault();
-const code=`MA-${Date.now().toString().slice(-6)}`;
-const {error}=await db.from('cases').insert([{
-client_name:client_name.value,
-client_phone:client_phone.value,
-opponent_name:opponent_name.value,
-case_number:case_number.value,
-case_year:case_year.value,
-court_name:court_name.value,
-circle:circle.value,
-case_type:case_type.value,
-case_status:case_status.value,
-case_subject:case_subject.value,
-notes:notes.value,
-case_code:code
-}]);
-if(error) Swal.fire("خطأ","فشل الحفظ","error");
-else{
-caseCodeResult.innerHTML=`<div class="case-code">كود القضية: ${code}</div>`;
-caseForm.reset();
-}
+    e.preventDefault();
+    Swal.fire({title: 'جاري الحفظ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+    
+    const code=`MA-${Date.now().toString().slice(-6)}`;
+    const caseData = {
+        client_name: document.getElementById('client_name').value,
+        client_phone: document.getElementById('client_phone').value,
+        opponent_name: document.getElementById('opponent_name').value,
+        case_number: document.getElementById('case_number').value,
+        case_year: document.getElementById('case_year').value,
+        court_name: document.getElementById('court_name').value,
+        circle: document.getElementById('circle').value,
+        case_type: document.getElementById('case_type').value,
+        case_status: document.getElementById('case_status').value,
+        case_subject: document.getElementById('case_subject').value,
+        notes: document.getElementById('notes').value,
+        case_code: code
+    };
+
+    const { error } = await db.from('cases').insert([caseData]);
+    
+    if(error) {
+        console.error("Supabase Error:", error);
+        Swal.fire("خطأ", `فشل الحفظ: ${error.message || 'تأكد من إعدادات الجدول'}`, "error");
+    } else {
+        Swal.fire("تم الحفظ", `تم تسجيل القضية بنجاح بكود: ${code}`, "success");
+        caseCodeResult.innerHTML=`<div class="case-code">آخر كود مسجل: ${code}</div>`;
+        caseForm.reset();
+    }
 };
 
 async function saveSession(){
-const {error}=await db.from('sessions').insert([{
-case_number:s_case_number.value,
-case_year:s_case_year.value,
-court_name:s_court.value,
-client_name:s_client.value,
-opponent_name:s_opponent.value,
-session_date:s_date.value,
-decision:s_decision.value
-}]);
-if(error) Swal.fire("خطأ","فشل حفظ الجلسة","error");
-else{Swal.fire("تم","تم حفظ الجلسة","success");loadUpcoming();}
+    const sData = {
+        case_number: document.getElementById('s_case_number').value,
+        case_year: document.getElementById('s_case_year').value,
+        court_name: document.getElementById('s_court').value,
+        client_name: document.getElementById('s_client').value,
+        opponent_name: document.getElementById('s_opponent').value,
+        session_date: document.getElementById('s_date').value,
+        decision: document.getElementById('s_decision').value
+    };
+
+    if(!sData.session_date) return Swal.fire("تنبيه","يرجى اختيار تاريخ الجلسة","warning");
+
+    Swal.fire({title: 'جاري الحفظ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+
+    const { error } = await db.from('sessions').insert([sData]);
+    
+    if(error) {
+        console.error("Supabase Error:", error);
+        Swal.fire("خطأ", `فشل حفظ الجلسة: ${error.message}`, "error");
+    } else {
+        Swal.fire("تم", "تم حفظ الجلسة بنجاح", "success");
+        // Clear session inputs
+        ['s_case_number','s_case_year','s_court','s_client','s_opponent','s_date','s_decision'].forEach(id=>document.getElementById(id).value="");
+        loadUpcoming('week');
+    }
 }
 
 async function searchCases(){
-const t=searchInput.value;
-const {data}=await db.from('cases').select('*')
-.or(`case_number.ilike.%${t}%,case_year.ilike.%${t}%,client_name.ilike.%${t}%,client_phone.ilike.%${t}%`);
-searchResults.innerHTML=data?.map(c=>`
-<div class="form-section">
-<b>${c.case_code}</b> - ${c.client_name}<br>
-قضية ${c.case_number}/${c.case_year} – ${c.court_name}
-</div>`).join('')||"لا نتائج";
+    const t = document.getElementById('searchInput').value;
+    if(!t) return Swal.fire("تنبيه","أدخل كلمة للبحث","info");
+    
+    Swal.fire({title: 'جاري البحث...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+    
+    const { data, error } = await db.from('cases').select('*')
+        .or(`case_number.ilike.%${t}%,case_year.ilike.%${t}%,client_name.ilike.%${t}%,client_phone.ilike.%${t}%,case_code.ilike.%${t}%`);
+    
+    Swal.close();
+    
+    if(error) return Swal.fire("خطأ","فشل البحث","error");
+
+    if(!data || data.length === 0) {
+        searchResults.innerHTML = '<div class="alert alert-info">لا توجد نتائج مطابقة</div>';
+        return;
+    }
+
+    searchResults.innerHTML = `<h6>نتائج البحث (${data.length}):</h6>` + data.map(c=>`
+        <div class="form-section mb-2">
+            <div class="d-flex justify-content-between">
+                <b class="case-code">${c.case_code}</b>
+                <span class="badge bg-gold text-dark">${c.case_status || 'غير محدد'}</span>
+            </div>
+            <div class="mt-2">
+                <strong>العميل:</strong> ${c.client_name} (${c.client_phone})<br>
+                <strong>الخصم:</strong> ${c.opponent_name || '---'}<br>
+                <strong>القضية:</strong> ${c.case_number} لسنة ${c.case_year} – ${c.court_name}<br>
+                <strong>النوع:</strong> ${c.case_type || '---'} | <strong>الدائرة:</strong> ${c.circle || '---'}
+            </div>
+        </div>`).join('');
 }
 
-async function loadUpcoming(){
-const {data}=await db.from('sessions').select('*');
-const now=new Date();
-const week=new Date();week.setDate(now.getDate()+7);
-const month=new Date();month.setMonth(now.getMonth()+1);
+async function searchByPhone(){
+    const { value: phone } = await Swal.fire({
+        title: 'البحث برقم الهاتف',
+        input: 'text',
+        inputLabel: 'أدخل رقم هاتف العميل',
+        showCancelButton: true
+    });
+    
+    if (phone) {
+        document.getElementById('searchInput').value = phone;
+        searchCases();
+    }
+}
 
-upcomingSessions.innerHTML=data?.filter(s=>{
-const d=new Date(s.session_date);
-return d<=month;
-}).map(s=>`
-<div class="session-card">
-${s.client_name} – ${s.case_number}/${s.case_year}<br>
-${s.session_date}
-</div>`).join('');
+async function filterSessions(range){
+    Swal.fire({title: 'جاري التحميل...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+    
+    const now = new Date();
+    let endDate = new Date();
+    if(range === 'week') endDate.setDate(now.getDate() + 7);
+    else endDate.setMonth(now.getMonth() + 1);
+    
+    const { data, error } = await db.from('sessions')
+        .select('*')
+        .gte('session_date', now.toISOString().split('T')[0])
+        .lte('session_date', endDate.toISOString().split('T')[0])
+        .order('session_date', { ascending: true });
+    
+    Swal.close();
+    
+    if(error) return Swal.fire("خطأ","فشل جلب الجلسات","error");
+    
+    if(!data || data.length === 0) {
+        searchResults.innerHTML = `<div class="alert alert-info">لا توجد جلسات في هذا ${range === 'week' ? 'الأسبوع' : 'الشهر'}</div>`;
+    } else {
+        searchResults.innerHTML = `<h6>جلسات ${range === 'week' ? 'الأسبوع' : 'الشهر'} (${data.length}):</h6>` + data.map(s=>`
+            <div class="session-card">
+                <div class="d-flex justify-content-between">
+                    <strong>${s.session_date}</strong>
+                    <span class="text-muted">${s.court_name}</span>
+                </div>
+                <div class="mt-1">
+                    ${s.client_name} <span class="text-danger">ضد</span> ${s.opponent_name}<br>
+                    قضية رقم ${s.case_number}/${s.case_year}
+                </div>
+                ${s.decision ? `<div class="mt-1 p-1 bg-light small"><b>القرار:</b> ${s.decision}</div>` : ''}
+            </div>`).join('');
+    }
+    
+    // Switch to search tab to show results
+    const triggerEl = document.querySelector('#mainTabs button[data-bs-target="#search"]');
+    bootstrap.Tab.getInstance(triggerEl).show();
+}
+
+async function loadUpcoming(range, btn){
+    if(btn) {
+        document.querySelectorAll('#sessions .btn-group .btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    const now = new Date();
+    let endDate = new Date();
+    if(range === 'week') endDate.setDate(now.getDate() + 7);
+    else endDate.setMonth(now.getMonth() + 1);
+    
+    const { data, error } = await db.from('sessions')
+        .select('*')
+        .gte('session_date', now.toISOString().split('T')[0])
+        .lte('session_date', endDate.toISOString().split('T')[0])
+        .order('session_date', { ascending: true });
+    
+    if(error) {
+        upcomingSessions.innerHTML = "خطأ في تحميل البيانات";
+        return;
+    }
+
+    if(!data || data.length === 0) {
+        upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات قادمة</p>";
+        return;
+    }
+
+    upcomingSessions.innerHTML = data.map(s=>`
+        <div class="session-card">
+            <div class="d-flex justify-content-between">
+                <b>${s.session_date}</b>
+                <small>${s.court_name}</small>
+            </div>
+            ${s.client_name} – ${s.case_number}/${s.case_year}
+        </div>`).join('');
 }
 </script>
 

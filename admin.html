@@ -371,6 +371,12 @@ async function selectCaseForSession(caseId) {
         document.getElementById('caseSearchResults').style.display = 'none';
         document.getElementById('s_search').value = data.case_code;
         document.getElementById('calendarBtn').disabled = false;
+        
+        // تعيين التاريخ الافتراضي للجلسة (بعد 7 أيام من اليوم)
+        const nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        const localDateTime = nextWeek.toISOString().slice(0, 16);
+        document.getElementById('s_date').value = localDateTime;
     }
 }
 
@@ -422,14 +428,22 @@ async function saveSession(){
     }
 }
 
-// إضافة إلى تقويم Google
+// إضافة إلى تقويم Google - النسخة المصححة
 function addToGoogleCalendar() {
     if (!selectedCaseForCalendar || !s_date.value) {
         return Swal.fire("تنبيه", "املأ بيانات الجلسة أولاً", "warning");
     }
 
-    const date = new Date(s_date.value);
-    const endDate = new Date(date.getTime() + 60 * 60 * 1000); // ساعة واحدة
+    // تحويل تاريخ الجلسة من الحقل مباشرة
+    const sessionDateTime = new Date(s_date.value);
+    
+    // التحقق من صحة التاريخ
+    if (isNaN(sessionDateTime.getTime())) {
+        return Swal.fire("خطأ", "تاريخ الجلسة غير صالح", "error");
+    }
+    
+    // إضافة ساعة واحدة للمدة
+    const endDateTime = new Date(sessionDateTime.getTime() + 60 * 60 * 1000);
     
     const title = `جلسة قضية: ${selectedCaseForCalendar.client_name} ضد ${selectedCaseForCalendar.opponent_name}`;
     const description = `
@@ -439,12 +453,31 @@ function addToGoogleCalendar() {
 كود القضية: ${selectedCaseForCalendar.case_code}
     `.trim();
 
-    const startStr = date.toISOString().replace(/-|:|\.\d+/g, '');
-    const endStr = endDate.toISOString().replace(/-|:|\.\d+/g, '');
+    // تحويل التواريخ إلى التنسيق المطلوب لـ Google Calendar (YYYYMMDDTHHMMSSZ)
+    const formatDateForGoogle = (date) => {
+        return date.toISOString()
+            .replace(/-/g, '')
+            .replace(/:/g, '')
+            .replace(/\..+/, '') + 'Z';
+    };
 
+    const startStr = formatDateForGoogle(sessionDateTime);
+    const endStr = formatDateForGoogle(endDateTime);
+
+    // إنشاء رابط تقويم Google مع التواريخ الصحيحة
     const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(description)}&dates=${startStr}/${endStr}`;
     
+    // فتح الرابط في نافذة جديدة
     window.open(calendarUrl, '_blank');
+    
+    // إشعار للمستخدم
+    Swal.fire({
+        title: "تم إنشاء رابط التقويم",
+        text: "سيتم فتح نافذة جديدة لإضافة الجلسة إلى تقويم Google",
+        icon: "info",
+        timer: 3000,
+        showConfirmButton: false
+    });
 }
 
 // البحث بالتاريخ
@@ -1009,9 +1042,9 @@ function setReminder(sessionId) {
 // تهيئة التاريخ الافتراضي في حقل الجلسة
 document.addEventListener('DOMContentLoaded', function() {
     const now = new Date();
-    const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 16);
+    const nextWeek = new Date();
+    nextWeek.setDate(now.getDate() + 7);
+    const localDateTime = nextWeek.toISOString().slice(0, 16);
     document.getElementById('s_date').value = localDateTime;
 });
 

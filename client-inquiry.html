@@ -248,6 +248,12 @@
             border: 2px solid #f87171;
         }
         
+        .message.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 2px solid #4ade80;
+        }
+        
         /* تعليمات */
         .instructions {
             background: rgba(191, 149, 63, 0.1);
@@ -333,14 +339,14 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="index.html" class="logo">
+                <a href="#" class="logo">
                     <i class="fas fa-balance-scale"></i>
                     <span>مؤسسة محمود عبد الحميد للمحاماة</span>
                 </a>
                 <div class="nav-buttons">
-                    <a href="index.html" class="btn-inquiry" style="padding: 10px 25px; font-size: 16px;">
-                        <i class="fas fa-home"></i> الرئيسية
-                    </a>
+                    <button class="btn-inquiry" onclick="window.open('index.html', '_blank')" style="padding: 10px 25px; font-size: 16px;">
+                        <i class="fas fa-user-tie"></i> لوحة المحامي
+                    </button>
                 </div>
             </nav>
         </div>
@@ -359,22 +365,20 @@
                             <i class="fas fa-phone"></i> رقم هاتف العميل
                         </label>
                         <input type="tel" id="phone" class="form-control" 
-                               placeholder="أدخل رقم الهاتف المسجل (مثال: 01012345678)" required
-                               pattern="01[0-9]{9}">
+                               placeholder="أدخل رقم الهاتف المسجل (مثال: 01115821523)" required>
                         <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
-                            يجب أن يتكون من 11 رقمًا ويبدأ بـ 01
+                            رقم الهاتف المسجل في ملف القضية
                         </small>
                     </div>
                     
                     <div class="form-group">
                         <label for="caseCode">
-                            <i class="fas fa-file-contract"></i> رقم كود القضية
+                            <i class="fas fa-file-contract"></i> كود القضية
                         </label>
                         <input type="text" id="caseCode" class="form-control" 
-                               placeholder="أدخل الكود المكون من 8 أحرف إنجليزية كبيرة وأرقام" required
-                               pattern="[A-Z0-9]{8}" style="text-transform: uppercase;">
+                               placeholder="أدخل الكود المكون من 8 أحرف وأرقام (مثال: MA-123456)" required>
                         <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
-                            مثال: ABC123XY
+                            كود القضية الذي استلمته من المحامي
                         </small>
                     </div>
                     
@@ -383,6 +387,7 @@
                     </button>
                     
                     <div id="errorMessage" class="message error"></div>
+                    <div id="successMessage" class="message success"></div>
                 </form>
                 
                 <div id="inquiryResult" class="result-box">
@@ -396,6 +401,11 @@
                     </div>
                     
                     <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-hashtag"></i> كود القضية</div>
+                            <div class="info-value" id="resultCaseCode">-</div>
+                        </div>
+                        
                         <div class="info-item">
                             <div class="info-label"><i class="fas fa-user"></i> اسم العميل</div>
                             <div class="info-value" id="resultClientName">-</div>
@@ -417,18 +427,13 @@
                         </div>
                         
                         <div class="info-item">
-                            <div class="info-label"><i class="fas fa-gavel"></i> اسم المحكمة</div>
+                            <div class="info-label"><i class="fas fa-gavel"></i> المحكمة</div>
                             <div class="info-value" id="resultCourt">-</div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-balance-scale"></i> نوع القضية</div>
-                            <div class="info-value" id="resultCaseType">-</div>
                         </div>
                     </div>
                     
                     <h3 style="color: #bf953f; margin: 30px 0 20px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-gavel"></i> آخر جلسة
+                        <i class="fas fa-gavel"></i> آخر جلسة مسجلة
                     </h3>
                     
                     <div id="lastSessionInfo">
@@ -447,7 +452,7 @@
                     <h3><i class="fas fa-info-circle"></i> ملاحظات هامة</h3>
                     <ul>
                         <li>تأكد من إدخال رقم الهاتف المسجل في ملف القضية</li>
-                        <li>الكود مكون من 8 أحرف إنجليزية كبيرة وأرقام</li>
+                        <li>الكود يبدأ بـ MA- متبوعاً بـ 6 أرقام (مثال: MA-123456)</li>
                         <li>إذا نسيت الكود، يرجى التواصل مع المكتب على الواتساب</li>
                         <li>جميع البيانات محمية بسرية تامة وفقاً للقوانين</li>
                         <li>يظهر فقط بيانات آخر جلسة بدون تفاصيل القرار</li>
@@ -472,106 +477,170 @@
         const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
         
-        let supabase = null;
-
-        // تهيئة Supabase
+        // دالة تهيئة Supabase
         async function initSupabase() {
-            try {
-                if (!window.supabase) {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-                    await new Promise((resolve, reject) => {
-                        script.onload = resolve;
-                        script.onerror = reject;
-                        document.head.appendChild(script);
-                    });
-                }
-                
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✅ تم تهيئة Supabase لصفحة الاستعلام');
-                return true;
-            } catch (error) {
-                console.error('❌ خطأ في تهيئة Supabase:', error);
-                showError('خطأ في الاتصال بالنظام. يرجى المحاولة لاحقاً.');
-                return false;
+            if (!window.supabase) {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+                script.onload = () => {
+                    window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('✅ تم تهيئة Supabase بنجاح');
+                };
+                document.head.appendChild(script);
+            } else {
+                window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         }
 
         // البحث عن القضية
         async function searchCase(phone, caseCode) {
             try {
-                const { data, error } = await supabase
+                // الانتظار حتى يتم تحميل Supabase
+                if (!window.supabaseClient) {
+                    await initSupabase();
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+                
+                console.log('🔍 جاري البحث عن:', { phone, caseCode });
+                
+                // البحث في جدول cases
+                const { data: caseData, error: caseError } = await window.supabaseClient
                     .from('cases')
                     .select('*')
                     .eq('client_phone', phone)
                     .eq('case_code', caseCode.toUpperCase())
                     .single();
 
-                if (error) {
-                    if (error.code === 'PGRST116') {
-                        return { success: false, message: '❌ لم يتم العثور على القضية. يرجى التحقق من البيانات.' };
-                    }
-                    throw error;
+                if (caseError) {
+                    console.error('❌ خطأ في البحث عن القضية:', caseError);
+                    return { 
+                        success: false, 
+                        message: '❌ لم يتم العثور على القضية. يرجى التحقق من رقم الهاتف وكود القضية.' 
+                    };
                 }
                 
-                return { success: true, data };
-            } catch (error) {
-                console.error('خطأ في البحث:', error);
-                return { success: false, message: '⚠️ حدث خطأ في البحث. يرجى المحاولة مرة أخرى.' };
-            }
-        }
-
-        // جلب آخر جلسة
-        async function getLastSession(caseCode) {
-            try {
-                const { data, error } = await supabase
+                if (!caseData) {
+                    return { 
+                        success: false, 
+                        message: '❌ لا توجد قضية مطابقة للبيانات المدخلة.' 
+                    };
+                }
+                
+                console.log('✅ تم العثور على القضية:', caseData);
+                
+                // جلب آخر جلسة لهذه القضية
+                const { data: lastSession, error: sessionError } = await window.supabaseClient
                     .from('sessions')
-                    .select(`
-                        session_date,
-                        session_time,
-                        cases!inner(case_code)
-                    `)
-                    .eq('cases.case_code', caseCode.toUpperCase())
+                    .select('*')
+                    .eq('case_id', caseData.id)
                     .order('session_date', { ascending: false })
                     .limit(1);
-
-                if (error && error.code !== 'PGRST116') {
-                    throw error;
+                
+                if (sessionError) {
+                    console.error('❌ خطأ في جلب الجلسات:', sessionError);
                 }
                 
-                return data && data.length > 0 ? data[0] : null;
-            } catch (error) {
-                console.error('خطأ في جلب الجلسات:', error);
-                return null;
-            }
-        }
-
-        // تسجيل الاستعلام
-        async function logInquiry(caseCode, phone) {
-            try {
-                await supabase
-                    .from('inquiry_logs')
-                    .insert([{
-                        case_code: caseCode.toUpperCase(),
-                        client_phone: phone,
-                        inquiry_time: new Date().toISOString()
-                    }]);
+                return { 
+                    success: true, 
+                    data: caseData,
+                    lastSession: lastSession && lastSession.length > 0 ? lastSession[0] : null
+                };
                 
-                console.log('📝 تم تسجيل استعلام العميل:', caseCode, phone);
             } catch (error) {
-                console.error('خطأ في تسجيل الاستعلام:', error);
+                console.error('❌ خطأ غير متوقع:', error);
+                return { 
+                    success: false, 
+                    message: '⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.' 
+                };
             }
         }
 
         // عرض الأخطاء
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            successDiv.style.display = 'none';
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
             
             setTimeout(() => {
                 errorDiv.style.display = 'none';
             }, 5000);
+        }
+
+        // عرض رسائل النجاح
+        function showSuccess(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            errorDiv.style.display = 'none';
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // عرض نتائج البحث
+        function displayResults(caseData, lastSession) {
+            // تعبئة بيانات القضية
+            document.getElementById('resultCaseCode').textContent = caseData.case_code || '-';
+            document.getElementById('resultClientName').textContent = caseData.client_name || '-';
+            document.getElementById('resultOpponentName').textContent = caseData.opponent_name || '-';
+            document.getElementById('resultCaseNumber').textContent = caseData.case_number || '-';
+            document.getElementById('resultCaseYear').textContent = caseData.case_year || '-';
+            document.getElementById('resultCourt').textContent = caseData.court_name || '-';
+            
+            // عرض آخر جلسة
+            const sessionContainer = document.getElementById('lastSessionInfo');
+            if (lastSession) {
+                const sessionDate = new Date(lastSession.session_date);
+                const formattedDate = sessionDate.toLocaleDateString('ar-EG', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                sessionContainer.innerHTML = `
+                    <div class="session-item">
+                        <div class="session-date">
+                            <i class="fas fa-calendar-day"></i>
+                            تاريخ آخر جلسة: ${formattedDate}
+                        </div>
+                        <div style="color: #cbd5e1; margin-bottom: 5px;">
+                            <i class="fas fa-info-circle"></i> الحالة: ${lastSession.decision || 'تمت الجلسة'}
+                        </div>
+                        <div style="color: #94a3b8; font-size: 14px;">
+                            <i class="fas fa-clock"></i> تم تسجيل الجلسة في النظام
+                        </div>
+                    </div>
+                `;
+            } else {
+                sessionContainer.innerHTML = `
+                    <div class="session-item">
+                        <div style="color: #94a3b8; text-align: center; padding: 20px;">
+                            <i class="fas fa-calendar-times"></i>
+                            لا توجد جلسات مسجلة لهذه القضية بعد
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // إظهار نتائج البحث
+            document.getElementById('inquiryResult').style.display = 'block';
+            
+            // التمرير إلى النتائج
+            setTimeout(() => {
+                document.getElementById('inquiryResult').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 100);
+            
+            showSuccess('✅ تم العثور على القضية بنجاح');
         }
 
         // طباعة تفاصيل القضية
@@ -659,22 +728,24 @@
 
         // مستمعات الأحداث
         document.addEventListener('DOMContentLoaded', async function() {
+            // تهيئة Supabase
             await initSupabase();
             
+            // إضافة مستمع لاستمارة البحث
             document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
                 const phone = document.getElementById('phone').value.trim();
-                const caseCode = document.getElementById('caseCode').value.trim().toUpperCase();
+                const caseCode = document.getElementById('caseCode').value.trim();
                 
                 // التحقق من المدخلات
-                if (!phone.match(/^01[0-9]{9}$/)) {
-                    showError('⚠️ يرجى إدخال رقم هاتف مصري صحيح (11 رقم، يبدأ بـ 01)');
+                if (!phone) {
+                    showError('⚠️ يرجى إدخال رقم الهاتف');
                     return;
                 }
                 
-                if (!caseCode.match(/^[A-Z0-9]{8}$/)) {
-                    showError('⚠️ يرجى إدخال كود قضية صحيح (8 أحرف إنجليزية كبيرة وأرقام)');
+                if (!caseCode) {
+                    showError('⚠️ يرجى إدخال كود القضية');
                     return;
                 }
                 
@@ -685,60 +756,16 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    const result = await searchCase(phone, caseCode);
+                    const result = await searchCase(phone, caseCode.toUpperCase());
                     
                     if (result.success) {
-                        await logInquiry(caseCode, phone);
-                        
-                        const lastSession = await getLastSession(caseCode);
-                        
-                        // عرض البيانات
-                        document.getElementById('resultClientName').textContent = result.data.client_name || '-';
-                        document.getElementById('resultOpponentName').textContent = result.data.opponent_name || '-';
-                        document.getElementById('resultCaseNumber').textContent = result.data.case_number || '-';
-                        document.getElementById('resultCaseYear').textContent = result.data.case_year || '-';
-                        document.getElementById('resultCourt').textContent = result.data.court || '-';
-                        document.getElementById('resultCaseType').textContent = result.data.case_type || '-';
-                        
-                        // عرض آخر جلسة
-                        const sessionContainer = document.getElementById('lastSessionInfo');
-                        if (lastSession) {
-                            sessionContainer.innerHTML = `
-                                <div class="session-item">
-                                    <div class="session-date">
-                                        <i class="fas fa-calendar-day"></i>
-                                        تاريخ الجلسة: ${lastSession.session_date || 'غير محدد'}
-                                    </div>
-                                    <div style="color: #cbd5e1; margin-bottom: 5px;">
-                                        <i class="fas fa-clock"></i> الوقت: ${lastSession.session_time || 'غير محدد'}
-                                    </div>
-                                    <div style="color: #94a3b8; font-size: 14px;">
-                                        <i class="fas fa-info-circle"></i> لمزيد من التفاصيل، يرجى التواصل مع المكتب
-                                    </div>
-                                </div>
-                            `;
-                        } else {
-                            sessionContainer.innerHTML = `
-                                <div class="session-item">
-                                    <div style="color: #94a3b8; text-align: center; padding: 20px;">
-                                        <i class="fas fa-calendar-times"></i>
-                                        لا توجد جلسات مسجلة لهذه القضية
-                                    </div>
-                                </div>
-                            `;
-                        }
-                        
-                        document.getElementById('inquiryResult').style.display = 'block';
-                        
-                        window.scrollTo({
-                            top: document.getElementById('inquiryResult').offsetTop - 100,
-                            behavior: 'smooth'
-                        });
+                        displayResults(result.data, result.lastSession);
                     } else {
                         showError(result.message);
+                        document.getElementById('inquiryResult').style.display = 'none';
                     }
                 } catch (error) {
-                    console.error('خطأ غير متوقع:', error);
+                    console.error('❌ خطأ غير متوقع:', error);
                     showError('⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.');
                 } finally {
                     submitBtn.innerHTML = originalText;
@@ -746,7 +773,12 @@
                 }
             });
             
+            // التركيز على حقل الهاتف عند التحميل
             document.getElementById('phone').focus();
+            
+            // إضافة أمثلة للاختبار
+            document.getElementById('phone').value = '01115821523';
+            document.getElementById('caseCode').value = 'MA-916174';
         });
     </script>
 </body>

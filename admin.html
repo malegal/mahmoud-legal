@@ -30,7 +30,6 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginPage" class="container mt-5" style="max-width:400px">
 <div class="form-section text-center">
 <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: var(--gold);"></i>
@@ -40,7 +39,6 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 </div>
 
-<!-- MAIN -->
 <div id="mainContent" style="display:none">
 
 <div class="header text-center">
@@ -58,7 +56,6 @@ body{background:var(--bg);font-family:Segoe UI}
 
 <div class="tab-content">
 
-<!-- القضايا -->
 <div class="tab-pane fade show active" id="cases">
 <form id="caseForm" class="form-section">
 <h5>تسجيل قضية جديدة</h5>
@@ -108,7 +105,6 @@ body{background:var(--bg);font-family:Segoe UI}
 </form>
 </div>
 
-<!-- الجلسات -->
 <div class="tab-pane fade" id="sessions">
 <div class="form-section">
 <h5>تسجيل جلسة</h5>
@@ -146,7 +142,6 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 </div>
 
-<!-- البحث -->
 <div class="tab-pane fade" id="search">
 <div class="form-section">
     <h5>البحث المتقدم والتقارير</h5>
@@ -173,32 +168,34 @@ body{background:var(--bg);font-family:Segoe UI}
 </div>
 
 <script>
+// الإعدادات (نفس الإعدادات السابقة)
 const SB_URL="https://iyhfafodhptcdwrjywek.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
 const db=supabase.createClient(SB_URL,SB_KEY);
 
 function login(){
     if(document.getElementById('password').value==="mahmoud237"){
-        loginPage.style.display="none"; mainContent.style.display="block";
-        today.innerText=new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('loginPage').style.display="none"; 
+        document.getElementById('mainContent').style.display="block";
+        document.getElementById('today').innerText=new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         loadUpcoming('week');
     } else Swal.fire("خطأ","كلمة المرور غير صحيحة","error");
 }
 
-// البحث عن قضية لربطها بجلسة
 async function findCaseForSession() {
     const val = document.getElementById('s_search_input').value;
+    const resultsContainer = document.getElementById('caseSelectorResults');
     if(!val) return;
     
     const { data, error } = await db.from('cases').select('*')
         .or(`client_phone.eq.${val},case_number.eq.${val}`);
     
     if(error || !data || data.length === 0) {
-        caseSelectorResults.innerHTML = '<div class="text-danger small">لم يتم العثور على قضايا. تأكد من الرقم.</div>';
+        resultsContainer.innerHTML = '<div class="text-danger small">لم يتم العثور على قضايا. تأكد من الرقم.</div>';
         return;
     }
 
-    caseSelectorResults.innerHTML = '<p class="small text-muted">اختر القضية الصحيحة:</p>' + data.map(c => `
+    resultsContainer.innerHTML = '<p class="small text-muted">اختر القضية الصحيحة:</p>' + data.map(c => `
         <div class="case-selector-item" onclick="selectCaseForSession('${c.id}', '${c.case_number}', '${c.case_year}', '${c.court_name}', '${c.client_name}', '${c.opponent_name}')">
             <strong>${c.client_name}</strong> - قضية ${c.case_number}/${c.case_year} (${c.court_name})
         </div>
@@ -213,12 +210,12 @@ function selectCaseForSession(id, num, year, court, client, opponent) {
     document.getElementById('s_client').value = client;
     document.getElementById('s_opponent').value = opponent;
     
-    caseSelectorResults.innerHTML = "";
+    document.getElementById('caseSelectorResults').innerHTML = "";
     document.getElementById('sessionFormFields').style.display = "flex";
     Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'تم اختيار القضية', showConfirmButton: false, timer: 1500 });
 }
 
-caseForm.onsubmit=async e=>{
+document.getElementById('caseForm').onsubmit=async e=>{
     e.preventDefault();
     Swal.fire({title: 'جاري الحفظ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
     const code=`MA-${Date.now().toString().slice(-6)}`;
@@ -241,8 +238,8 @@ caseForm.onsubmit=async e=>{
     if(error) Swal.fire("خطأ", `فشل الحفظ: ${error.message}`, "error");
     else {
         Swal.fire("تم الحفظ", `تم تسجيل القضية بنجاح بكود: ${code}`, "success");
-        caseCodeResult.innerHTML=`<div class="case-code">آخر كود مسجل: ${code}</div>`;
-        caseForm.reset();
+        document.getElementById('caseCodeResult').innerHTML=`<div class="case-code">آخر كود مسجل: ${code}</div>`;
+        document.getElementById('caseForm').reset();
     }
 };
 
@@ -273,6 +270,7 @@ async function saveSession(){
 
 async function searchCases(){
     const t = document.getElementById('searchInput').value;
+    const searchResults = document.getElementById('searchResults');
     if(!t) return Swal.fire("تنبيه","أدخل كلمة للبحث","info");
     Swal.fire({title: 'جاري البحث...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
     
@@ -313,6 +311,7 @@ async function searchCases(){
 async function filterByDateRange() {
     const from = document.getElementById('date_from').value;
     const to = document.getElementById('date_to').value;
+    const searchResults = document.getElementById('searchResults');
     if(!from || !to) return Swal.fire("تنبيه","يرجى اختيار الفترة كاملة","warning");
     Swal.fire({title: 'جاري جلب التقرير...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
     const { data, error } = await db.from('sessions').select('*').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: true });
@@ -328,13 +327,14 @@ async function filterByDateRange() {
 }
 
 async function loadUpcoming(range, btn){
+    const upcomingSessions = document.getElementById('upcomingSessions');
     if(btn) { document.querySelectorAll('#sessions .btn-group .btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
     const now = new Date();
     const startStr = now.toISOString().split('T')[0];
     let endDate = new Date();
     if(range === 'week') endDate.setDate(now.getDate() + 7); else endDate.setMonth(now.getMonth() + 1);
     const endStr = endDate.toISOString().split('T')[0];
-    const { data, error } = await db.from('sessions').select('*').gte('session_date', startStr).lte(endStr).order('session_date', { ascending: true });
+    const { data, error } = await db.from('sessions').select('*').gte('session_date', startStr).lte('session_date', endStr).order('session_date', { ascending: true });
     if(error) { upcomingSessions.innerHTML = "خطأ في التحميل"; return; }
     if(!data || data.length === 0) { upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات</p>"; return; }
     upcomingSessions.innerHTML = data.map(s=>`

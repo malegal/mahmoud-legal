@@ -154,7 +154,6 @@
             margin-top: 10px; 
         }
         
-        /* شريط تنقل ذهبي */
         .header-glass {
             background: rgba(0, 0, 0, 0.95) !important;
             backdrop-filter: blur(20px);
@@ -162,7 +161,6 @@
             box-shadow: 0 5px 30px rgba(191, 149, 63, 0.3);
         }
         
-        /* تأثيرات خاصة للصور الخلفية */
         .bg-section {
             background-attachment: fixed;
             background-position: center;
@@ -186,7 +184,6 @@
             z-index: 2;
         }
         
-        /* تحسينات للصور */
         .enhanced-image {
             transition: transform 0.5s ease, filter 0.3s ease;
             filter: brightness(0.9) contrast(1.1);
@@ -197,9 +194,7 @@
             filter: brightness(1) contrast(1.2);
         }
         
-        /* ========== تحسينات التوافق مع الجوال ========== */
         @media (max-width: 768px) {
-            /* تحسين الهيدر للجوال */
             .header-glass nav {
                 padding: 10px 15px !important;
             }
@@ -207,15 +202,6 @@
             .logo img {
                 width: 80px !important;
                 height: 80px !important;
-            }
-            
-            .logo-text h1 {
-                font-size: 20px !important;
-                line-height: 1.2;
-            }
-            
-            .logo-text h2 {
-                font-size: 12px !important;
             }
             
             .nav-buttons {
@@ -233,7 +219,6 @@
                 font-size: 14px !important;
             }
             
-            /* تحسين القسم الرئيسي */
             #hero h1 span {
                 font-size: 3.5rem !important;
             }
@@ -251,7 +236,6 @@
                 width: 100%;
             }
             
-            /* تحسين الأقسام الأخرى */
             .section-spacing {
                 padding-top: 4rem !important;
                 padding-bottom: 4rem !important;
@@ -266,18 +250,15 @@
                 font-size: 14px !important;
             }
             
-            /* إصلاح تأثيرات الخلفية */
             .bg-section {
                 background-attachment: scroll !important;
                 background-position: center !important;
             }
             
-            /* تحسين شبكات المحتوى */
             .grid-cols-3, .grid-cols-2 {
                 grid-template-columns: 1fr !important;
             }
             
-            /* تحسين النماذج */
             .card-glass {
                 padding: 20px !important;
             }
@@ -287,7 +268,6 @@
                 gap: 10px !important;
             }
             
-            /* تحسين المدونة */
             .blog-post-image {
                 height: 180px !important;
             }
@@ -297,16 +277,7 @@
             }
         }
         
-        /* تحسينات للشاشات الصغيرة جداً */
         @media (max-width: 480px) {
-            .logo-text h1 {
-                font-size: 18px !important;
-            }
-            
-            .logo-text h2 {
-                font-size: 10px !important;
-            }
-            
             #hero h1 span {
                 font-size: 2.8rem !important;
             }
@@ -321,22 +292,12 @@
             }
         }
         
-        /* تحسينات للكمبيوتر */
         @media (min-width: 1024px) {
-            .logo-text h1 {
-                font-size: 20px !important; /* تم التصغير */
-            }
-            
-            .logo-text h2 {
-                font-size: 14px !important; /* تم التصغير */
-            }
-            
             .nav-buttons {
                 gap: 15px;
             }
         }
         
-        /* تأثيرات دخول للمحتوى */
         .fade-in-up {
             opacity: 0;
             transform: translateY(30px);
@@ -348,7 +309,6 @@
             transform: translateY(0);
         }
         
-        /* تحسينات للنماذج */
         input, textarea, select {
             font-family: 'Tajawal', sans-serif;
             background: rgba(255, 255, 255, 0.05);
@@ -359,7 +319,6 @@
             border-color: var(--gold-solid);
         }
         
-        /* تحسينات عامة للشريط */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -377,7 +336,6 @@
             background: linear-gradient(135deg, #aa771c 0%, #bf953f 100%);
         }
         
-        /* إطار ذهبي للكروت */
         .gold-border {
             position: relative;
             overflow: hidden;
@@ -401,13 +359,11 @@
             pointer-events: none;
         }
         
-        /* تباعد محسّن */
         .section-spacing {
             padding-top: 6rem;
             padding-bottom: 6rem;
         }
         
-        /* تحسينات المدونة */
         .blog-post-card {
             height: 100%;
             display: flex;
@@ -443,7 +399,6 @@
             transition: all 0.3s ease;
         }
         
-        /* زر تابع قضيتك الجديد */
         .track-case-btn {
             background: transparent;
             border: 2px solid var(--gold-solid);
@@ -458,7 +413,6 @@
             border-color: transparent;
         }
         
-        /* تحسين اللمس على الجوال */
         @media (hover: none) {
             .gold-btn:hover, .track-case-btn:hover, .card-glass:hover {
                 transform: none !important;
@@ -469,7 +423,6 @@
             }
         }
         
-        /* تحسين القراءة على الجوال */
         @media (max-width: 768px) {
             body {
                 font-size: 16px;
@@ -489,18 +442,15 @@
 </head>
 <body>
 
-    <!-- زر الواتساب العائم -->
     <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- الهيدر مع إضافة زر "تابع قضيتك" -->
     <header class="fixed w-full z-[100] header-glass">
         <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-28 h-28 object-contain">
                 <div class="flex flex-col leading-tight">
-                    <!-- تم تصغير اسم محمود عبد الحميد هنا -->
                     <h1 class="font-bold gold-text serif-font whitespace-nowrap" style="font-size: 12px !important; line-height: 1.2;">محمود عبد الحميد</h1>
                     <p class="text-gray-300 font-bold" style="font-size: 12px !important; line-height: 1.2; margin-top: 2px;">المحامي بالنقض والدستورية العليا</p>
                 </div>
@@ -511,7 +461,6 @@
                 <a href="#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
                 <a href="#blog" class="text-white hover:gold-text transition">المدونة</a>
                 <div class="nav-buttons">
-                    <!-- تم إضافة زر "تابع قضيتك" هنا -->
                     <a href="client-inquiry.html" class="track-case-btn px-4 py-2.5 rounded-lg text-xs flex items-center gap-2">
                         <i class="fas fa-search"></i> تابع قضيتك</a>
                     <a href="#booking" onclick="switchTabAndScroll('consult')"
@@ -528,7 +477,6 @@
         </nav>
     </header>
 
-    <!-- القائمة المتنقلة مع إضافة زر "تابع قضيتك" -->
     <div id="mobile-menu" class="fixed inset-0 z-[110] p-10 lg:hidden">
         <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
             <i class="fas fa-times"></i>
@@ -539,7 +487,6 @@
             <a href="#vision" onclick="closeMenu()" class="gold-text">الرؤية والأهداف</a>
             <a href="#blog" onclick="closeMenu()" class="gold-text">المدونة</a>
             <div class="flex flex-col gap-4 mt-4">
-                <!-- زر "تابع قضيتك" في القائمة المتنقلة -->
                 <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg text-center">
                     <i class="fas fa-search mr-2"></i> تابع قضيتك
                 </a>
@@ -554,13 +501,11 @@
         </div>
     </div>
 
-    <!-- قسم الهيرو -->
     <section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-28 relative overflow-hidden bg-section"
          style="background-image: url('images/hero-bg.jpg');">
         <div class="section-overlay"></div>
         
         <div class="section-content relative z-10 max-w-5xl mx-auto">
-            <!-- تم تعديل المسافة فوق السطر الإنجليزي -->
             <span class="block gold-text text-xs sm:text-sm font-black tracking-[0.4em] md:tracking-[0.5em] mb-4 md:mb-6 uppercase" style="margin-top: 20px;">
                 Professional Legal Counsel
             </span>
@@ -576,7 +521,6 @@
                 المحامي بالنقض والدستورية العليا
             </p>
             
-            <!-- تم تصغير المسافة بين الخبرة والهاتف -->
             <span class="experience-badge mb-6 md:mb-8 inline-block">
                 خبرة أكثر من ٢٠ عاماً في المحاماة
             </span>
@@ -613,7 +557,6 @@
         </div>
     </section>
 
-    <!-- قسم عن المؤسسة -->
     <section id="about" class="section-spacing relative bg-section"
          style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/about-bg.jpg');">
         <div class="section-content max-w-7xl mx-auto px-6">
@@ -659,7 +602,6 @@
         </div>
     </section>
 
-    <!-- قسم التخصصات -->
     <section id="specialties" class="section-spacing relative bg-section"
          style="background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('images/specialties-bg.jpg');">
         
@@ -702,7 +644,6 @@
         </div>
     </section>
 
-    <!-- قسم الرؤية والأهداف -->
     <section id="vision" class="py-16 relative bg-section"
          style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/vision-bg.jpg');">
         
@@ -761,7 +702,6 @@
         </div>
     </section>
 
-    <!-- قسم الإنجازات -->
     <section id="achievements" class="section-spacing relative bg-section"
          style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/achievements-bg.jpg');">
         
@@ -794,7 +734,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check gold-text ml-3 mt-1"></i>
-                            <span>إنجاز تسجيلات عقارية معقدة في最短 وقت ممكن</span>
+                            <span>إنجاز تسجيلات عقارية معقدة في أسرع وقت ممكن</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check gold-text ml-3 mt-1"></i>
@@ -833,39 +773,9 @@
                     </ul>
                 </div>
             </div>
-            
-            <div class="mt-12 fade-in-up">
-                <div class="black-border-card card-glass p-8 rounded-2xl gold-border">
-                    <h3 class="text-2xl font-bold gold-text mb-6 text-center">قيمنا في العمل</h3>
-                    <div class="grid md:grid-cols-3 gap-6 text-center">
-                        <div class="space-y-3">
-                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold-solid to-transparent flex items-center justify-center mx-auto">
-                                <i class="fas fa-shield-alt text-2xl gold-text"></i>
-                            </div>
-                            <h4 class="font-bold gold-text">النزاهة</h4>
-                            <p class="text-white/80 text-sm">الالتزام بأعلى معايير الأمانة والشفافية</p>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold-solid to-transparent flex items-center justify-center mx-auto">
-                                <i class="fas fa-graduation-cap text-2xl gold-text"></i>
-                            </div>
-                            <h4 class="font-bold gold-text">التخصص</h4>
-                            <p class="text-white/80 text-sm">عمق الخبرة في مجالات القانون المختلفة</p>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gold-solid to-transparent flex items-center justify-center mx-auto">
-                                <i class="fas fa-bullseye text-2xl gold-text"></i>
-                            </div>
-                            <h4 class="font-bold gold-text">الدقة</h4>
-                            <p class="text-white/80 text-sm">الاهتمام بأدق التفاصيل في كل قضية</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- قسم آراء العملاء -->
     <section id="testimonials" class="section-spacing relative bg-section"
          style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/testimonials-bg.jpg');">
         
@@ -873,7 +783,6 @@
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-black serif-font gold-text mb-6 section-title">آراء عملائنا</h2>
                 <div class="w-32 h-1 bg-gradient-to-r from-transparent via-gold-solid to-transparent mx-auto"></div>
-                <p class="text-xl text-white/80 mt-4">ثقة عملائنا هي شهادتنا الحقيقية</p>
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -885,10 +794,9 @@
                             <p class="text-sm text-gray-400">قضية عقارية معقدة</p>
                         </div>
                     </div>
-                    <p class="text-white/90 leading-relaxed mb-4">"بعد سنوات من التردد على المحاكم، وجدت في الأستاذ محمود الخبير الذي استطاع إنهاء قضيتي العقارية المعقدة في وقت قياسي. الاحترافية والدقة في العمل كانت استثنائية."</p>
+                    <p class="text-white/90 leading-relaxed mb-4">"بعد سنوات من التردد على المحاكم، وجدت في الأستاذ محمود الخبير الذي استطاع إنهاء قضيتي العقارية المعقدة في وقت قياسي."</p>
                     <div class="flex justify-between items-center mt-4">
                         <div class="text-gold-solid">★★★★★</div>
-                        <span class="text-sm text-gray-400">يناير 2024</span>
                     </div>
                 </div>
 
@@ -900,10 +808,9 @@
                             <p class="text-sm text-gray-400">قضية تعويضات</p>
                         </div>
                     </div>
-                    <p class="text-white/90 leading-relaxed mb-4">"تعاملت مع أكثر من محامٍ في قضية تعويضاتي، ولكن الأستاذ محمود كان الأكثر فهماً وإلماماً بالتفاصيل. حصلت على تعويض يفوق توقعاتي بفضل مجهوده."</p>
+                    <p class="text-white/90 leading-relaxed mb-4">"تعاملت مع أكثر من محامٍ، ولكن الأستاذ محمود كان الأكثر فهماً وإلماماً بالتفاصيل. حصلت على تعويض يفوق توقعاتي."</p>
                     <div class="flex justify-between items-center mt-4">
                         <div class="text-gold-solid">★★★★★</div>
-                        <span class="text-sm text-gray-400">ديسمبر 2023</span>
                     </div>
                 </div>
 
@@ -915,25 +822,15 @@
                             <p class="text-sm text-gray-400">تأسيس شركة</p>
                         </div>
                     </div>
-                    <p class="text-white/90 leading-relaxed mb-4">"استعنت بمؤسسة الأستاذ محمود لتأسيس شركتي وكانت التجربة ممتازة. الدقة في إعداد العقود والمستندات والسرعة في الإنجاز جعلتني أشعر بالثقة والأمان."</p>
+                    <p class="text-white/90 leading-relaxed mb-4">"استعنت بمؤسسة الأستاذ محمود لتأسيس شركتي وكانت التجربة ممتازة. الدقة في إعداد العقود جعلتني أشعر بالثقة والأمان."</p>
                     <div class="flex justify-between items-center mt-4">
                         <div class="text-gold-solid">★★★★★</div>
-                        <span class="text-sm text-gray-400">نوفمبر 2023</span>
                     </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-12">
-                <div class="inline-flex items-center gap-4 bg-black/30 px-6 py-3 rounded-full">
-                    <i class="fas fa-star gold-text"></i>
-                    <span class="text-white font-bold">تصنيف 4.9/5 بناءً على 120+ تقييم</span>
-                    <i class="fas fa-star gold-text"></i>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- قسم المدونة -->
     <section id="blog" class="section-spacing relative bg-section"
          style="background-image: linear-gradient(rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.9)), url('images/blog-bg.jpg');">
         
@@ -941,11 +838,9 @@
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-black serif-font gold-text mb-6 section-title">المدونة القانونية</h2>
                 <div class="w-32 h-1 bg-gradient-to-r from-transparent via-gold-solid to-transparent mx-auto"></div>
-                <p class="text-xl text-white/80 mt-4 max-w-3xl mx-auto">أحدث المقالات والأبحاث القانونية لتطوير معرفتك القانونية</p>
             </div>
 
             <div id="blog-posts" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- المقالات ستظهر هنا تلقائياً -->
                 <div class="text-center py-12 col-span-3">
                     <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold-solid"></div>
                     <p class="text-white/60 mt-4">جاري تحميل المقالات القانونية...</p>
@@ -955,12 +850,10 @@
             <div id="no-posts-message" class="hidden text-center py-12 col-span-3">
                 <i class="fas fa-newspaper text-5xl gold-text mb-4"></i>
                 <h3 class="text-2xl font-bold gold-text mb-2">لا توجد مقالات حالياً</h3>
-                <p class="text-white/70">سيتم نشر مقالات قانونية قريباً</p>
             </div>
         </div>
     </section>
 
-    <!-- قسم الحجز -->
     <section id="booking" class="py-16 bg-black/50">
         <div class="max-w-4xl mx-auto px-6">
             <div class="bg-white/5 p-2 rounded-2xl mb-12 flex">
@@ -968,178 +861,89 @@
                 <button onclick="switchTab('visit')" id="btn-visit" class="tab-btn flex-1 py-4 rounded-xl font-bold text-white transition-all duration-300">حجز موعد مقابلة</button>
             </div>
 
-            <!-- نموذج الاستشارة -->
             <div id="consult-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border">
                 <h3 class="text-2xl font-bold gold-text mb-6">نموذج الاستشارة السريعة</h3>
                 <form id="consultFormAction" class="space-y-6">
-                    <input type="text" id="consultName" placeholder="الاسم بالكامل" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid text-white" required>
-                    <input type="tel" id="consultPhone" placeholder="رقم الواتساب" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid text-white" required>
-                    <textarea id="consultMessage" placeholder="اشرح استشارتك باختصار.." rows="5" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid text-white" required></textarea>
+                    <input type="text" id="consultName" placeholder="الاسم بالكامل" class="w-full p-4 rounded-xl outline-none text-white" required>
+                    <input type="tel" id="consultPhone" placeholder="رقم الواتساب" class="w-full p-4 rounded-xl outline-none text-white" required>
+                    <textarea id="consultMessage" placeholder="اشرح استشارتك باختصار.." rows="5" class="w-full p-4 rounded-xl outline-none text-white" required></textarea>
                     <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال عبر واتساب</button>
                 </form>
             </div>
 
-            <!-- نموذج حجز الموعد -->
             <div id="visit-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border hidden">
                 <h3 class="text-2xl font-bold gold-text mb-6">حجز موعد في المكتب</h3>
                 <form id="visitFormAction" class="space-y-6">
-                    <input type="text" id="visitName" placeholder="الاسم بالكامل" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid text-white" required>
-                    <input type="tel" id="visitPhone" placeholder="رقم الهاتف" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid text-white" required>
-                    
-                    <div>
-                        <label class="block text-white/80 mb-2 text-sm font-bold">اختر تاريخ المقابلة</label>
-                        <input type="date" id="visitDate" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid text-white date-placeholder" required>
-                        <p class="text-gray-400 text-xs mt-1">حدد التاريخ الذي ترغب في الحضور فيه</p>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-white/80 mb-2 text-sm font-bold">سبب المقابلة</label>
-                        <textarea id="visitReason" placeholder="اذكر سبب المقابلة (مثال: استشارة في قضية عقارية، مراجعة عقد، قضية تعويضات...)" rows="3" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid text-white" required></textarea>
-                    </div>
-                    
-                    <div class="info-note">
-                        <p class="text-white/90 text-sm flex items-center gap-2">
-                            <i class="fas fa-info-circle gold-text"></i>
-                            سوف يتم تأكيد الموعد برسالة على الواتساب خلال 24 ساعة
-                        </p>
-                    </div>
-                    
-                    <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال طلب الحجز عبر واتساب</button>
+                    <input type="text" id="visitName" placeholder="الاسم بالكامل" class="w-full p-4 rounded-xl outline-none text-white" required>
+                    <input type="tel" id="visitPhone" placeholder="رقم الهاتف" class="w-full p-4 rounded-xl outline-none text-white" required>
+                    <input type="date" id="visitDate" class="w-full p-4 rounded-xl outline-none text-white date-placeholder" required>
+                    <textarea id="visitReason" placeholder="سبب المقابلة" rows="3" class="w-full p-4 rounded-xl outline-none text-white" required></textarea>
+                    <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال طلب الحجز</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- الفوتر -->
     <footer class="pt-8 pb-12 border-t border-white/5 text-center bg-black/50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-4">
-                <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-32 h-32 object-contain mx-auto mb-3 enhanced-image">
-                
-                <h2 class="text-2xl md:text-3xl font-black gold-text serif-font">مؤسسة</h2>
-                <h2 class="text-2xl md:text-3xl font-black gold-text serif-font">محمود عبد الحميد</h2>
-                <p class="text-base md:text-lg text-white/90 font-bold mt-1">المحامي بالنقض والدستورية العليا</p>
-                
-                <p class="text-sm text-gray-400 mt-2"><i class="fas fa-map-marker-alt gold-text ml-1"></i> أسوان - أمام مجمع المحاكم</p>
-            </div>
-
-            <div class="flex justify-center gap-8 text-white/60 mb-8 text-2xl">
+            <img src="logo.png" alt="شعار المؤسسة" class="w-32 h-32 object-contain mx-auto mb-3 enhanced-image">
+            <h2 class="text-2xl font-black gold-text serif-font">مؤسسة محمود عبد الحميد</h2>
+            <p class="text-white/90 font-bold mt-1">المحامي بالنقض والدستورية العليا</p>
+            <div class="flex justify-center gap-8 text-white/60 my-8 text-2xl">
                 <a href="https://wa.me/201101076000" target="_blank" class="hover:gold-text"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://www.facebook.com/malegal" target="_blank" class="hover:gold-text"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="hover:gold-text"><i class="fab fa-linkedin-in"></i></a>
                 <a href="mailto:ma.legal.eg@outlook.com" class="hover:gold-text"><i class="fas fa-envelope"></i></a>
             </div>
-            <p class="text-white/40 text-xs uppercase tracking-widest">جميع الحقوق محفوظة © ٢٠٢٥</p>
+            <p class="text-white/40 text-xs uppercase tracking-widest">جميع الحقوق محفوظة © ٢٠٢٦</p>
         </div>
     </footer>
 
-    <!-- Modal لعرض المقال الكامل -->
     <div id="post-modal" class="fixed inset-0 bg-black/80 z-[200] hidden items-center justify-center p-4">
         <div class="bg-[#020617] rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-10 relative border border-gold-solid/20">
-            <button onclick="closeModal()" class="absolute top-4 left-4 text-3xl gold-text">
-                <i class="fas fa-times"></i>
-            </button>
-            <img id="modal-image" class="w-full h-64 object-cover rounded-2xl mb-8 enhanced-image" src="" alt="" onerror="this.src='./blog/images/welcome.jpg'">
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-3xl gold-text"><i class="fas fa-times"></i></button>
+            <img id="modal-image" class="w-full h-64 object-cover rounded-2xl mb-8" src="" alt="">
             <h2 id="modal-title" class="text-4xl font-black gold-text mb-6 text-right"></h2>
-            <div id="modal-content" class="text-white/90 text-lg leading-relaxed prose prose-invert max-w-none text-right"></div>
+            <div id="modal-content" class="text-white/90 text-lg leading-relaxed text-right"></div>
         </div>
     </div>
 
-    <!-- السكريبت الرئيسي مع نظام المدونة المضمون -->
     <script>
-        // ==================== تهيئة عامة ====================
         document.addEventListener('DOMContentLoaded', function() {
             initializeSite();
-            loadBlogPosts(); // تحميل المقالات مباشرة
-            
-            // التحقق مما إذا كان هناك نوع تبويب محدد في الرابط
-            const urlParams = new URLSearchParams(window.location.search);
-            const tabType = urlParams.get('tab');
-            if (tabType === 'consult' || tabType === 'visit') {
-                // الانتقال إلى قسم الحجز ثم تبديل التبويب
-                setTimeout(() => {
-                    document.getElementById('booking').scrollIntoView({behavior: 'smooth'});
-                    setTimeout(() => {
-                        switchTab(tabType);
-                    }, 300);
-                }, 100);
-            }
+            loadBlogPosts();
         });
         
-        // ==================== إدارة القائمة المتنقلة ====================
         function initializeSite() {
             const mobileMenu = document.getElementById('mobile-menu');
             const menuToggle = document.getElementById('menu-toggle');
             const menuClose = document.getElementById('menu-close');
             
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function() {
-                    mobileMenu.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                });
-            }
+            if (menuToggle) menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
             
-            if (menuClose) {
-                menuClose.addEventListener('click', closeMenu);
-            }
+            if (menuClose) menuClose.addEventListener('click', closeMenu);
             
-            // إغلاق القائمة عند النقر على رابط
-            const menuLinks = document.querySelectorAll('#mobile-menu a');
-            menuLinks.forEach(link => {
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
                 link.addEventListener('click', closeMenu);
             });
             
-            // إغلاق القائمة عند النقر خارجها
-            mobileMenu.addEventListener('click', function(e) {
-                if (e.target === mobileMenu) {
-                    closeMenu();
-                }
-            });
-            
-            // إعداد الحد الأدنى للتاريخ
             setupDateInputs();
-            
-            // إعداد النماذج
             setupForms();
-            
-            // إعداد تأثيرات الدخول
             setupIntersectionObserver();
         }
         
         function closeMenu() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenu.classList.remove('active');
+            document.getElementById('mobile-menu').classList.remove('active');
             document.body.style.overflow = '';
         }
         
-        // ==================== وظيفة جديدة: تبديل التبويب والتمرير ====================
         function switchTabAndScroll(tabType) {
-            // التمرير السلس إلى قسم الحجز
             document.getElementById('booking').scrollIntoView({behavior: 'smooth'});
-            
-            // تبديل التبويب بعد تأخير قصير للسماح بالتمرير
-            setTimeout(() => {
-                switchTab(tabType);
-            }, 500);
+            setTimeout(() => { switchTab(tabType); }, 500);
         }
         
-        // ==================== تحسينات للصور ====================
-        function setupIntersectionObserver() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-            
-            // مراقبة العناصر
-            document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
-        }
-        
-        // ==================== تبديل التبويبات ====================
         function switchTab(type) {
             const consultForm = document.getElementById('consult-form');
             const visitForm = document.getElementById('visit-form');
@@ -1158,436 +962,85 @@
                 btnConsult.classList.remove('active');
             }
         }
-        
-        // ==================== إعداد النماذج ====================
+
         function setupDateInputs() {
             const today = new Date().toISOString().split('T')[0];
-            const dateInputs = document.querySelectorAll('input[type="date"]');
-            
-            dateInputs.forEach(input => {
-                input.min = today;
-                input.placeholder = "اختر التاريخ";
-            });
+            document.querySelectorAll('input[type="date"]').forEach(input => { input.min = today; });
         }
-        
+
         function setupForms() {
-            // نموذج الاستشارة
             document.getElementById('consultFormAction')?.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
                 const name = document.getElementById('consultName').value;
-                const phone = document.getElementById('consultPhone').value;
-                const message = document.getElementById('consultMessage').value;
-                
-                const whatsappMsg = `*طلب استشارة قانونية*%0A%0A*الاسم:* ${name}%0A*الهاتف:* ${phone}%0A%0A*تفاصيل الاستشارة:*%0A${message}%0A%0A---%0A*المصدر:* موقع مؤسسة محمود عبد الحميد للمحاماة`;
-                
-                window.open(`https://wa.me/201101076000?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-                
-                // إعادة تعيين النموذج
-                this.reset();
-                
-                // رسالة نجاح
-                setTimeout(() => {
-                    alert('تم إرسال طلب الاستشارة بنجاح! سيتم الرد عليك خلال 24 ساعة.');
-                }, 500);
+                const msg = `طلب استشارة من: ${name}%0A${document.getElementById('consultMessage').value}`;
+                window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
             });
-            
-            // نموذج حجز الموعد
+
             document.getElementById('visitFormAction')?.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
                 const name = document.getElementById('visitName').value;
-                const phone = document.getElementById('visitPhone').value;
                 const date = document.getElementById('visitDate').value;
-                const reason = document.getElementById('visitReason').value;
-                
-                // تنسيق التاريخ
-                const dateObj = new Date(date);
-                const formattedDate = dateObj.toLocaleDateString('ar-EG', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                const whatsappMsg = `*طلب حجز موعد مقابلة*%0A%0A*الاسم:* ${name}%0A*الهاتف:* ${phone}%0A*التاريخ المقترح:* ${formattedDate}%0A%0A*سبب المقابلة:*%0A${reason}%0A%0A---%0A*المصدر:* موقع مؤسسة محمود عبد الحميد للمحاماة`;
-                
-                window.open(`https://wa.me/201101076000?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-                
-                // إعادة تعيين النموذج
-                this.reset();
-                
-                // رسالة نجاح
-                setTimeout(() => {
-                    alert('تم إرسال طلب الحجز بنجاح! سيتم تأكيد الموعد عبر الواتساب خلال 24 ساعة.');
-                }, 500);
+                const msg = `طلب حجز موعد من: ${name}%0Aالتاريخ: ${date}`;
+                window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
             });
         }
-        
-        // ==================== نظام المدونة المضمون ====================
+
+        function setupIntersectionObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+        }
+
         async function loadBlogPosts() {
-            console.log('🚀 بدء تحميل المدونة...');
             const container = document.getElementById('blog-posts');
-            const noPostsMessage = document.getElementById('no-posts-message');
-            
-            // عرض حالة التحميل
-            container.innerHTML = `
-                <div class="col-span-3 text-center py-12">
-                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold-solid"></div>
-                    <p class="text-white/60 mt-4">جاري تحميل المقالات القانونية...</p>
-                </div>
-            `;
-            
-            // المحاولة الأولى: تحميل من blog-config.json
-            try {
-                console.log('📥 محاولة تحميل blog-config.json...');
-                const response = await fetch('./blog-config.json');
-                
-                if (response.ok) {
-                    const articles = await response.json();
-                    console.log('✅ تم تحميل المقالات:', articles);
-                    
-                    if (articles && articles.length > 0) {
-                        displayArticles(articles);
-                        return;
-                    } else {
-                        console.log('⚠️ قائمة المقالات فارغة');
-                        throw new Error('قائمة المقالات فارغة');
-                    }
-                } else {
-                    console.log('⚠️ خطأ في الاستجابة:', response.status);
-                    throw new Error(`خطأ ${response.status}`);
-                }
-            } catch (error) {
-                console.log('❌ فشل تحميل blog-config.json:', error.message);
-                
-                // المحاولة الثانية: تحميل المقالات مباشرة من الملفات المحلية
-                try {
-                    console.log('🔄 محاولة تحميل المقالات مباشرة...');
-                    
-                    // قائمة المقالات الافتراضية مع المسارات الصحيحة
-                    const defaultArticles = [
-                        {
-                            id: 'welcome',
-                            title: 'مرحباً بكم في المدونة القانونية',
-                            date: '2024-03-20',
-                            description: 'المقال الافتتاحي للتعريف بخدماتنا القانونية',
-                            image: './blog/images/welcome.jpg',
-                            file: './blog/welcome.md'
-                        },
-                        {
-                            id: 'trademark',
-                            title: 'حماية العلامات التجارية',
-                            date: '2024-03-21',
-                            description: 'دليل شامل لحماية العلامات التجارية في مصر',
-                            image: './blog/images/trademark.jpg',
-                            file: './blog/trademark.md'
-                        }
-                    ];
-                    
-                    displayArticles(defaultArticles);
-                    return;
-                    
-                } catch (mdError) {
-                    console.log('❌ فشل تحميل المقالات مباشرة:', mdError.message);
-                }
-                
-                // إذا فشلت جميع المحاولات، عرض المقالات الافتراضية
-                console.log('📄 عرض المقالات الافتراضية...');
-                const defaultArticles = [
-                    {
-                        id: 'welcome',
-                        title: 'مرحباً بكم في المدونة القانونية',
-                        date: '2024-03-20',
-                        description: 'المقال الافتتاحي للتعريف بخدماتنا القانونية',
-                        image: './blog/images/welcome.jpg',
-                        file: './blog/welcome.md'
-                    },
-                    {
-                        id: 'trademark',
-                        title: 'حماية العلامات التجارية',
-                        date: '2024-03-21',
-                        description: 'دليل شامل لحماية العلامات التجارية في مصر',
-                        image: './blog/images/trademark.jpg',
-                        file: './blog/trademark.md'
-                    }
-                ];
-                
-                displayArticles(defaultArticles);
-            }
+            const defaultArticles = [
+                { id: 'welcome', title: 'مرحباً بكم في المدونة', date: '2024-03-20', description: 'تعريف بالخدمات القانونية', image: './blog/images/welcome.jpg', file: './blog/welcome.md' },
+                { id: 'trademark', title: 'حماية العلامات التجارية', date: '2024-03-21', description: 'دليل حماية العلامات التجارية', image: './blog/images/trademark.jpg', file: './blog/trademark.md' }
+            ];
+            displayArticles(defaultArticles);
         }
-        
-        // دالة لتحليل محتوى Markdown
-        function parseMarkdownContent(content) {
-            console.log('🔍 تحليل محتوى Markdown...');
-            
-            // البحث عن العنوان والوصف
-            const titleMatch = content.match(/title:\s*(.+)/i);
-            const dateMatch = content.match(/date:\s*(.+)/i);
-            const descMatch = content.match(/description:\s*(.+)/i);
-            const imageMatch = content.match(/image:\s*(.+)/i);
-            
-            const title = titleMatch ? titleMatch[1].trim() : 'مقال قانوني';
-            const date = dateMatch ? dateMatch[1].trim() : '2024-03-20';
-            const description = descMatch ? descMatch[1].trim() : 'مقال قانوني متخصص';
-            const image = imageMatch ? imageMatch[1].trim() : './blog/images/welcome.jpg';
-            
-            return {
-                id: 'welcome',
-                title: title,
-                date: date,
-                description: description,
-                image: image,
-                file: 'blog/welcome.md'
-            };
-        }
-        
-        // دالة لعرض المقالات
+
         function displayArticles(articles) {
             const container = document.getElementById('blog-posts');
-            const noPostsMessage = document.getElementById('no-posts-message');
-            
-            console.log('🎨 عرض', articles.length, 'مقالة');
-            
-            if (!articles || articles.length === 0) {
-                container.classList.add('hidden');
-                noPostsMessage.classList.remove('hidden');
-                return;
-            }
-            
             container.innerHTML = '';
-            
-            articles.forEach((article, index) => {
+            articles.forEach(article => {
                 const card = document.createElement('div');
-                card.className = 'blog-post-card black-border-card card-glass rounded-2xl overflow-hidden fade-in-up gold-border';
-                card.style.transitionDelay = `${index * 0.1}s`;
-                
-                // تنسيق التاريخ
-                let formattedDate = 'تاريخ غير معروف';
-                try {
-                    if (article.date) {
-                        const dateObj = new Date(article.date);
-                        formattedDate = dateObj.toLocaleDateString('ar-EG', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
-                    }
-                } catch (e) {
-                    formattedDate = article.date || '2024-03-20';
-                }
-                
+                card.className = 'blog-post-card card-glass rounded-2xl overflow-hidden fade-in-up gold-border';
                 card.innerHTML = `
-                    <div class="blog-post-image-container">
-                        <img src="${article.image || './blog/images/welcome.jpg'}" 
-                             alt="${article.title || 'مقال قانوني'}" 
-                             class="blog-post-image w-full h-64 object-cover"
-                             loading="lazy"
-                             onerror="this.src='./blog/images/welcome.jpg'">
-                    </div>
-                    <div class="blog-post-content p-6">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3 class="text-xl font-bold gold-text flex-1">${article.title || 'مقال جديد'}</h3>
-                            <span class="bg-gold-solid/20 text-gold-solid text-xs px-3 py-1 rounded-full">${formattedDate}</span>
-                        </div>
-                        <p class="blog-post-excerpt text-white/80 text-sm leading-relaxed mb-4">${article.description || 'مقال قانوني متخصص'}</p>
-                        <div class="mt-auto pt-4 border-t border-white/10">
-                            <button onclick="showBlogPost('${article.id}', '${article.file || './blog/welcome.md'}')" 
-                                    class="read-more-btn text-gold-solid hover:text-gold-600 font-bold text-sm">
-                                قراءة المزيد <i class="fas fa-arrow-left mr-1"></i>
-                            </button>
-                        </div>
+                    <img src="${article.image}" class="blog-post-image w-full h-64 object-cover" onerror="this.src='./blog/images/welcome.jpg'">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold gold-text mb-2">${article.title}</h3>
+                        <p class="text-white/80 text-sm mb-4">${article.description}</p>
+                        <button onclick="showBlogPost('${article.id}', '${article.file}')" class="read-more-btn text-gold-solid">اقرأ المزيد</button>
                     </div>
                 `;
-                
                 container.appendChild(card);
             });
-            
-            // حفظ المقالات للعرض في المودال
-            window.blogPosts = articles;
-            
-            // تفعيل تأثيرات الدخول
-            setTimeout(() => {
-                document.querySelectorAll('.fade-in-up').forEach(el => {
-                    el.classList.add('visible');
-                });
-            }, 100);
-            
-            console.log('✅ تم عرض المقالات بنجاح');
         }
-        
-        // ==================== عرض مقال المدونة ====================
-        async function showBlogPost(articleId, filePath) {
-            console.log('📖 عرض المقال:', articleId, filePath);
-            
+
+        async function showBlogPost(id, file) {
+            const modal = document.getElementById('post-modal');
+            const title = document.getElementById('modal-title');
+            const content = document.getElementById('modal-content');
             try {
-                // استخدام المسار النسبي بدلاً من المطلق
-                const fileUrl = filePath.startsWith('http') ? filePath : filePath;
-                console.log('📂 محاولة تحميل من:', fileUrl);
-                
-                const response = await fetch(fileUrl);
-                
-                if (response.ok) {
-                    const content = await response.text();
-                    const modal = document.getElementById('post-modal');
-                    const modalImage = document.getElementById('modal-image');
-                    const modalTitle = document.getElementById('modal-title');
-                    const modalContent = document.getElementById('modal-content');
-                    
-                    // تحليل المحتوى
-                    const articleData = parseMarkdownContent(content);
-                    
-                    // عرض الصورة - استخدام مسار نسبي
-                    const imagePath = articleData.image || './blog/images/welcome.jpg';
-                    modalImage.src = imagePath;
-                    
-                    modalTitle.textContent = articleData.title;
-                    
-                    // تحويل Markdown إلى HTML إذا كانت المكتبة متاحة
-                    if (typeof window.marked !== 'undefined') {
-                        // إزالة البيانات الوصفية من المحتوى
-                        const contentWithoutMetadata = content.replace(/---[\s\S]*?---/, '');
-                        modalContent.innerHTML = window.marked.parse(contentWithoutMetadata);
-                    } else {
-                        // إذا لم تكن مكتبة marked متاحة، عرض النص الخام
-                        modalContent.innerHTML = `<div class="whitespace-pre-wrap">${content}</div>`;
-                    }
-                    
-                    modal.classList.remove('hidden');
-                    modal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                    
-                } else {
-                    // إذا فشل تحميل المقال
-                    showArticleModal(
-                        'مقال غير متوفر',
-                        '<p>هذا المقال غير متوفر حالياً. يرجى المحاولة لاحقاً.</p>'
-                    );
-                }
-                
-            } catch (error) {
-                console.error('خطأ في تحميل المقال:', error);
-                showArticleModal(
-                    'خطأ في التحميل',
-                    `<p>حدث خطأ في تحميل المقال. التفاصيل: ${error.message}</p>
-                     <p class="mt-4">ملف المقال: ${filePath}</p>`
-                );
-            }
+                const res = await fetch(file);
+                const text = await res.text();
+                title.textContent = id === 'welcome' ? 'مرحباً بكم' : 'مقال قانوني';
+                content.innerHTML = typeof marked !== 'undefined' ? marked.parse(text) : text;
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } catch (e) { alert('عذراً، المقال غير متوفر حالياً'); }
         }
-        
-        function showArticleModal(title, content) {
-            const modal = document.getElementById('post-modal');
-            const modalImage = document.getElementById('modal-image');
-            const modalTitle = document.getElementById('modal-title');
-            const modalContent = document.getElementById('modal-content');
-            
-            modalImage.src = './blog/images/welcome.jpg';
-            modalTitle.textContent = title;
-            modalContent.innerHTML = content;
-            
-            modal.classList.remove('hidden');
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        // ==================== إدارة المودال ====================
+
         function closeModal() {
-            const modal = document.getElementById('post-modal');
-            modal.classList.add('hidden');
-            modal.style.display = 'none';
+            document.getElementById('post-modal').classList.add('hidden');
+            document.getElementById('post-modal').style.display = 'none';
             document.body.style.overflow = '';
         }
-        
-        // إغلاق المودال عند النقر خارج المحتوى
-        document.getElementById('post-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-        
-        // إغلاق المودال بمفتاح ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-        
-        // ==================== تحسينات للجوال ====================
-        function checkMobile() {
-            if (window.innerWidth <= 768) {
-                // تعطيل تأثير parallax على الجوال
-                document.querySelectorAll('.bg-section').forEach(section => {
-                    section.style.backgroundAttachment = 'scroll';
-                });
-                
-                // تحسين حجم النصوص للجوال
-                document.querySelectorAll('h1').forEach(h1 => {
-                    if (h1.textContent.includes('محمود عبد الحميد')) {
-                        h1.style.fontSize = '3rem';
-                    }
-                });
-            }
-        }
-        
-        window.addEventListener('resize', checkMobile);
-        checkMobile();
-        
-        // ==================== تأثيرات ScrollReveal ====================
-        if (typeof ScrollReveal !== 'undefined') {
-            const sr = ScrollReveal({
-                duration: 1000,
-                distance: '30px',
-                easing: 'ease-out',
-                reset: false,
-                mobile: true
-            });
-            
-            sr.reveal('.section-title', {
-                origin: 'top',
-                distance: '50px'
-            });
-            
-            sr.reveal('.fade-in-up', {
-                interval: 100
-            });
-        }
-        
-        // ==================== تحميل فوري للمدونة ====================
-        window.addEventListener('load', function() {
-            console.log('✅ تم تحميل الصفحة بالكامل');
-            
-            // اختبار اتصال الملفات
-            setTimeout(() => {
-                fetch('./blog-config.json')
-                    .then(r => {
-                        console.log('🔗 حالة blog-config.json:', r.status);
-                        if (r.ok) {
-                            console.log('✅ الملف متوفر ويعمل');
-                        }
-                    })
-                    .catch(err => {
-                        console.log('❌ خطأ في الاتصال:', err.message);
-                    });
-            }, 1000);
-        });
-        
-        // ==================== معالجة أخطاء الصور ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            // معالجة أخطاء تحميل الصور
-            document.querySelectorAll('img').forEach(img => {
-                img.addEventListener('error', function() {
-                    console.warn('❌ فشل تحميل الصورة:', this.src);
-                    
-                    // تحديد الصورة البديلة حسب نوع الصورة
-                    if (this.classList.contains('blog-post-image') || 
-                        this.id === 'modal-image') {
-                        this.src = './blog/images/welcome.jpg';
-                    } else if (this.src.includes('logo')) {
-                        this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⚖️</text></svg>';
-                    }
-                });
-            });
-        });
     </script>
 </body>
 </html>

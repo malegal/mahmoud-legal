@@ -112,7 +112,10 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-gold w-100 mt-3">حفظ القضية</button>
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" class="btn btn-gold flex-grow-1">حفظ القضية</button>
+                        <button type="button" class="btn btn-outline-secondary w-25" onclick="clearForm()">جديد</button>
+                    </div>
                     <div id="caseCodeResult" class="mt-3 text-center"></div>
                 </form>
             </div>
@@ -207,6 +210,88 @@
             <div class="modal-footer">
                 <button class="btn btn-gold" onclick="printCasePDF()"><i class="bi bi-printer"></i> طباعة PDF</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal لتعديل القضية -->
+<div class="modal fade" id="editCaseModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تعديل القضية</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCaseForm">
+                    <div class="row g-3">
+                        <div class="col-md-4"><label>اسم العميل</label><input id="edit_client_name" class="form-control" required></div>
+                        <div class="col-md-4"><label>هاتف العميل</label><input id="edit_client_phone" class="form-control" required></div>
+                        <div class="col-md-4">
+                            <label>صفة العميل</label>
+                            <select id="edit_client_role" class="form-select" required>
+                                <option value="">اختر الصفة...</option>
+                                <option>مدعي</option><option>مدعى عليه</option><option>مجني عليه</option><option>متهم</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><label>اسم الخصم</label><input id="edit_opponent_name" class="form-control"></div>
+                        <div class="col-md-4"><label>رقم القضية</label><input id="edit_case_number" class="form-control" required></div>
+                        <div class="col-md-4"><label>سنة القضية</label><input id="edit_case_year" class="form-control" required></div>
+                        <div class="col-md-6">
+                            <label>المحكمة</label>
+                            <select id="edit_court_name" class="form-select" required>
+                                <option value="">اختر المحكمة...</option>
+                                <option>محكمة الأسرة</option><option>المحكمة الجزئية</option><option>المحكمة الابتدائية</option>
+                                <option>محكمة الاستئناف</option><option>محكمة النقض</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"><label>الدائرة</label><input id="edit_circle" class="form-control"></div>
+                        <div class="col-md-12"><label>موضوع القضية</label><textarea id="edit_case_subject" class="form-control" rows="2"></textarea></div>
+                        <div class="col-md-6">
+                            <label>حالة القضية</label>
+                            <select id="edit_case_status" class="form-select">
+                                <option value="open">مفتوحة</option>
+                                <option value="pending">قيد النظر</option>
+                                <option value="closed">منتهية</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="updateCase()">تحديث</button>
+                <button class="btn btn-danger" onclick="confirmDeleteCase()">حذف القضية</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal لتعديل الجلسة -->
+<div class="modal fade" id="editSessionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تعديل الجلسة</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editSessionForm">
+                    <div class="mb-3">
+                        <label>تاريخ الجلسة</label>
+                        <input type="datetime-local" id="edit_session_date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>القرار</label>
+                        <textarea id="edit_decision" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="updateSession()">تحديث الجلسة</button>
+                <button class="btn btn-danger" onclick="confirmDeleteSession()">حذف الجلسة</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
             </div>
         </div>
     </div>
@@ -322,6 +407,13 @@ function login(){
     }
 }
 
+// دالة مسح النموذج
+function clearForm() {
+    caseForm.reset();
+    document.getElementById('caseCodeResult').innerHTML = '';
+    currentCaseId = null;
+}
+
 // البحث عن قضايا لتسجيل الجلسة
 async function searchCasesForSession(query) {
     if (!query || query.length < 2) {
@@ -428,7 +520,7 @@ async function saveSession(){
     }
 }
 
-// إضافة إلى تقويم Google - النسخة المصححة
+// إضافة إلى تقويم Google
 function addToGoogleCalendar() {
     if (!selectedCaseForCalendar || !s_date.value) {
         return Swal.fire("تنبيه", "املأ بيانات الجلسة أولاً", "warning");
@@ -630,13 +722,20 @@ function renderSearchResults(data, type) {
             });
             
             html += `
-            <div class="case-card" onclick="openCaseDetails('${caseData.id}')">
+            <div class="case-card">
                 <div class="d-flex justify-content-between align-items-start">
-                    <div>
+                    <div onclick="openCaseDetails('${caseData.id}')" style="cursor:pointer; flex-grow:1;">
                         <strong class="text-primary">${formattedDate}</strong>
                         <div class="text-muted small">${caseData.court_name}</div>
                     </div>
-                    <span class="case-status status-pending">جلسة</span>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-warning" onclick="loadSessionForEdit('${item.id}')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="deleteSession('${item.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="mt-2">
                     <div><strong>العميل:</strong> ${caseData.client_name}</div>
@@ -661,13 +760,20 @@ function renderSearchResults(data, type) {
             }[item.case_status] || 'غير محدد';
             
             html += `
-            <div class="case-card" onclick="openCaseDetails('${item.id}')">
+            <div class="case-card">
                 <div class="d-flex justify-content-between align-items-start">
-                    <div>
+                    <div onclick="openCaseDetails('${item.id}')" style="cursor:pointer; flex-grow:1;">
                         <b class="case-code">${item.case_code}</b>
                         <div class="text-muted small">${item.court_name}</div>
                     </div>
-                    <span class="case-status ${statusClass}">${statusText}</span>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-warning" onclick="loadCaseForEdit('${item.id}')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="confirmDeleteCaseFromSearch('${item.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="mt-2">
                     <div><strong>العميل:</strong> ${item.client_name} (${item.client_phone})</div>
@@ -779,6 +885,14 @@ async function openCaseDetails(caseId) {
                 <div class="session-card mb-2">
                     <div class="d-flex justify-content-between">
                         <strong>${formattedDate}</strong>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-warning" onclick="loadSessionForEdit('${session.id}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-outline-danger" onclick="deleteSessionFromDetails('${session.id}', '${caseData.id}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
                     </div>
                     ${session.decision ? `<div class="mt-1"><strong>القرار:</strong> ${session.decision}</div>` : ''}
                 </div>
@@ -790,6 +904,14 @@ async function openCaseDetails(caseId) {
     
     detailsHTML += `
                 </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-warning" onclick="loadCaseForEdit('${caseData.id}')">
+                    <i class="bi bi-pencil"></i> تعديل القضية
+                </button>
+                <button class="btn btn-danger" onclick="confirmDeleteCaseFromDetails('${caseData.id}')">
+                    <i class="bi bi-trash"></i> حذف القضية
+                </button>
             </div>
         </div>
     `;
@@ -804,6 +926,263 @@ async function openCaseDetails(caseId) {
     
     const caseModal = new bootstrap.Modal(document.getElementById('caseModal'));
     caseModal.show();
+}
+
+// تحميل القضية للتعديل
+async function loadCaseForEdit(caseId) {
+    const { data, error } = await db
+        .from('cases')
+        .select('*')
+        .eq('id', caseId)
+        .single();
+
+    if (error || !data) {
+        return Swal.fire("خطأ", "لم يتم العثور على القضية", "error");
+    }
+
+    // تعبئة الحقول
+    document.getElementById('edit_client_name').value = data.client_name;
+    document.getElementById('edit_client_phone').value = data.client_phone;
+    document.getElementById('edit_client_role').value = data.client_role;
+    document.getElementById('edit_opponent_name').value = data.opponent_name;
+    document.getElementById('edit_case_number').value = data.case_number;
+    document.getElementById('edit_case_year').value = data.case_year;
+    document.getElementById('edit_court_name').value = data.court_name;
+    document.getElementById('edit_circle').value = data.circle || '';
+    document.getElementById('edit_case_subject').value = data.case_subject || '';
+    document.getElementById('edit_case_status').value = data.case_status;
+
+    // حفظ ID القضية للاستخدام لاحقاً
+    window.editingCaseId = caseId;
+
+    // عرض المودال
+    const editModal = new bootstrap.Modal(document.getElementById('editCaseModal'));
+    editModal.show();
+}
+
+// تحديث القضية
+async function updateCase() {
+    if (!window.editingCaseId) return;
+
+    const updatedData = {
+        client_name: document.getElementById('edit_client_name').value,
+        client_phone: document.getElementById('edit_client_phone').value,
+        client_role: document.getElementById('edit_client_role').value,
+        opponent_name: document.getElementById('edit_opponent_name').value,
+        case_number: document.getElementById('edit_case_number').value,
+        case_year: document.getElementById('edit_case_year').value,
+        court_name: document.getElementById('edit_court_name').value,
+        circle: document.getElementById('edit_circle').value,
+        case_subject: document.getElementById('edit_case_subject').value,
+        case_status: document.getElementById('edit_case_status').value,
+        updated_at: new Date().toISOString()
+    };
+
+    const { error } = await db
+        .from('cases')
+        .update(updatedData)
+        .eq('id', window.editingCaseId);
+
+    if (error) {
+        Swal.fire("خطأ", error.message, "error");
+    } else {
+        Swal.fire("تم", "تم تحديث القضية بنجاح", "success");
+        bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
+        
+        // إعادة تحميل البيانات إذا كان في نتائج البحث
+        if (searchInput.value) {
+            searchCases();
+        }
+    }
+}
+
+// تأكيد حذف القضية
+function confirmDeleteCase() {
+    if (!window.editingCaseId) return;
+
+    Swal.fire({
+        title: 'هل أنت متأكد؟',
+        text: "سيتم حذف القضية وجميع جلساتها!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await deleteCase(window.editingCaseId);
+        }
+    });
+}
+
+// حذف القضية
+async function deleteCase(caseId) {
+    // حذف الجلسات أولاً
+    await db.from('sessions').delete().eq('case_id', caseId);
+    
+    // حذف القضية
+    const { error } = await db.from('cases').delete().eq('id', caseId);
+    
+    if (error) {
+        Swal.fire("خطأ", error.message, "error");
+    } else {
+        Swal.fire("تم", "تم حذف القضية بنجاح", "success");
+        bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
+        
+        // إعادة تحميل البيانات
+        if (searchInput.value) {
+            searchCases();
+        }
+    }
+}
+
+// تأكيد حذف القضية من تفاصيل القضية
+function confirmDeleteCaseFromDetails(caseId) {
+    Swal.fire({
+        title: 'هل أنت متأكد؟',
+        text: "سيتم حذف القضية وجميع جلساتها!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await deleteCase(caseId);
+            bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide();
+        }
+    });
+}
+
+// تأكيد حذف القضية من نتائج البحث
+function confirmDeleteCaseFromSearch(caseId) {
+    Swal.fire({
+        title: 'هل أنت متأكد؟',
+        text: "سيتم حذف القضية وجميع جلساتها!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await deleteCase(caseId);
+            searchCases();
+        }
+    });
+}
+
+// تحميل الجلسة للتعديل
+async function loadSessionForEdit(sessionId) {
+    const { data, error } = await db
+        .from('sessions')
+        .select('*')
+        .eq('id', sessionId)
+        .single();
+
+    if (error || !data) {
+        return Swal.fire("خطأ", "لم يتم العثور على الجلسة", "error");
+    }
+
+    // تعبئة الحقول
+    const sessionDate = new Date(data.session_date);
+    const localDateTime = sessionDate.toISOString().slice(0, 16);
+    document.getElementById('edit_session_date').value = localDateTime;
+    document.getElementById('edit_decision').value = data.decision || '';
+
+    // حفظ ID الجلسة للاستخدام لاحقاً
+    window.editingSessionId = sessionId;
+
+    // عرض المودال
+    const editModal = new bootstrap.Modal(document.getElementById('editSessionModal'));
+    editModal.show();
+}
+
+// تحديث الجلسة
+async function updateSession() {
+    if (!window.editingSessionId) return;
+
+    const updatedData = {
+        session_date: document.getElementById('edit_session_date').value,
+        decision: document.getElementById('edit_decision').value,
+        updated_at: new Date().toISOString()
+    };
+
+    const { error } = await db
+        .from('sessions')
+        .update(updatedData)
+        .eq('id', window.editingSessionId);
+
+    if (error) {
+        Swal.fire("خطأ", error.message, "error");
+    } else {
+        Swal.fire("تم", "تم تحديث الجلسة بنجاح", "success");
+        bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
+        
+        // إعادة تحميل الجلسات القادمة
+        loadUpcoming('week');
+    }
+}
+
+// تأكيد حذف الجلسة
+function confirmDeleteSession() {
+    if (!window.editingSessionId) return;
+
+    Swal.fire({
+        title: 'هل أنت متأكد؟',
+        text: "سيتم حذف الجلسة!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await deleteSession(window.editingSessionId);
+        }
+    });
+}
+
+// حذف الجلسة
+async function deleteSession(sessionId) {
+    const { error } = await db
+        .from('sessions')
+        .delete()
+        .eq('id', sessionId);
+
+    if (error) {
+        Swal.fire("خطأ", error.message, "error");
+    } else {
+        Swal.fire("تم", "تم حذف الجلسة بنجاح", "success");
+        bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
+        
+        // إعادة تحميل الجلسات القادمة
+        loadUpcoming('week');
+    }
+}
+
+// حذف الجلسة من تفاصيل القضية
+function deleteSessionFromDetails(sessionId, caseId) {
+    Swal.fire({
+        title: 'هل أنت متأكد؟',
+        text: "سيتم حذف الجلسة!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            await deleteSession(sessionId);
+            // إعادة فتح تفاصيل القضية لتحديث البيانات
+            openCaseDetails(caseId);
+        }
+    });
 }
 
 // طباعة PDF
@@ -971,10 +1350,17 @@ async function loadUpcoming(range, btn){
         });
         
         return `
-        <div class="session-card" onclick="openCaseDetails('${caseData.id}')">
+        <div class="session-card">
             <div class="d-flex justify-content-between">
                 <b>${formattedDate}</b>
-                <small>${caseData.court_name || 'غير محدد'}</small>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-warning" onclick="loadSessionForEdit('${s.id}')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="deleteSession('${s.id}')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
             </div>
             <div>
                 ${caseData.client_name || 'غير معروف'} - 

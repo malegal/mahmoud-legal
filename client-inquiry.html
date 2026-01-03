@@ -13,11 +13,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Tajawal', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        html {
-            font-size: 16px;
         }
         
         body {
@@ -29,13 +24,12 @@
         }
         
         .container {
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 15px;
+            padding: 0 20px;
         }
         
-        /* الهيدر - مصغر ومتوافق مع الهاتف */
+        /* الهيدر المحسن */
         .header {
             background: rgba(0, 0, 0, 0.95);
             border-bottom: 2px solid #bf953f;
@@ -43,8 +37,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
         }
         
         .navbar {
@@ -57,34 +49,30 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
             color: #bf953f;
             flex: 1;
-            min-width: 0;
+            min-width: 250px;
         }
         
         .logo-img {
             width: 50px;
             height: 50px;
             object-fit: cover;
-            flex-shrink: 0;
+            border-radius: 5px;
         }
         
         .logo-text {
             text-align: right;
             line-height: 1.2;
-            overflow: hidden;
         }
         
         .logo-text h1 {
             font-family: 'Amiri', serif;
-            font-size: 18px;
+            font-size: 20px;
             color: #fcf6ba;
             margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         
         .logo-text h2 {
@@ -93,57 +81,57 @@
             color: #bf953f;
             margin: 0;
             font-weight: normal;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         
-        /* زر الصفحة الرئيسية في الهيدر - مناسب للهاتف */
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
         .nav-btn {
             background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
             color: #020617;
-            padding: 6px 15px;
-            font-size: 13px;
+            padding: 8px 20px;
+            font-size: 14px;
             border-radius: 8px;
             border: none;
             cursor: pointer;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-weight: bold;
             text-decoration: none;
             white-space: nowrap;
-            flex-shrink: 0;
         }
         
-        .nav-btn:hover, .nav-btn:active {
+        .nav-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
         }
         
-        /* محتوى الصفحة - متوافق مع الهاتف */
+        /* محتوى الصفحة */
         .inquiry-container {
-            min-height: calc(100vh - 80px);
+            min-height: calc(100vh - 150px);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px 15px;
+            padding: 40px 15px;
         }
         
         .inquiry-box {
             background: rgba(0, 0, 0, 0.85);
             border: 1px solid rgba(191, 149, 63, 0.2);
-            padding: 25px 20px;
-            border-radius: 15px;
+            padding: 30px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 500px;
+            max-width: 800px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.1);
+            box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
         }
         
         .inquiry-box h1 {
-            font-size: 24px;
+            font-size: 28px;
             color: #bf953f;
             margin-bottom: 15px;
             display: flex;
@@ -155,13 +143,13 @@
         
         .inquiry-box p {
             color: #cbd5e1;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: right;
         }
         
@@ -187,6 +175,7 @@
             font-size: 16px;
             transition: all 0.3s;
             -webkit-appearance: none;
+            -moz-appearance: none;
             appearance: none;
         }
         
@@ -194,11 +183,6 @@
             outline: none;
             border-color: #bf953f;
             box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
-        }
-        
-        /* تحسين أداء لوحة المفاتيح على الهاتف */
-        input, textarea, select {
-            font-size: 16px !important; /* منع التكبير التلقائي على iOS */
         }
         
         .btn-inquiry {
@@ -212,50 +196,36 @@
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 10px;
+            margin-top: 10px;
             font-weight: bold;
             width: 100%;
             justify-content: center;
-            touch-action: manipulation;
         }
         
-        .btn-inquiry:hover, .btn-inquiry:active {
+        .btn-inquiry:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(191, 149, 63, 0.3);
         }
         
-        /* نتائج الاستعلام - متوافقة مع الهاتف */
+        /* نتائج الاستعلام */
         .result-box {
             display: none;
             text-align: right;
             margin-top: 30px;
-            padding: 20px 15px;
+            padding: 20px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            border: 2px solid #bf953f;
-            box-shadow: 0 0 15px rgba(191, 149, 63, 0.2);
+            border: 3px solid #bf953f;
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
             animation: fadeIn 0.5s ease;
-            position: relative;
-        }
-        
-        .result-box:before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 17px;
-            background: linear-gradient(45deg, transparent, rgba(191, 149, 63, 0.1), transparent);
-            z-index: -1;
         }
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .info-item {
@@ -263,13 +233,12 @@
             padding: 15px;
             border-radius: 10px;
             border: 1px solid rgba(191, 149, 63, 0.2);
-            word-break: break-word;
         }
         
         .info-label {
             color: #94a3b8;
-            font-size: 12px;
-            margin-bottom: 6px;
+            font-size: 13px;
+            margin-bottom: 5px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -279,14 +248,14 @@
             color: #fcf6ba;
             font-size: 16px;
             font-weight: bold;
-            line-height: 1.4;
+            word-break: break-word;
         }
         
         .session-item {
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border-right: 3px solid #bf953f;
         }
         
@@ -298,13 +267,12 @@
             align-items: center;
             gap: 8px;
             font-size: 16px;
-            flex-wrap: wrap;
         }
         
-        /* قسم الاتصال - متوافق مع الهاتف */
+        /* قسم الاتصال */
         .contact-section {
             margin-top: 25px;
-            padding: 20px 15px;
+            padding: 20px;
             background: rgba(191, 149, 63, 0.1);
             border-radius: 12px;
             border: 1px solid rgba(191, 149, 63, 0.3);
@@ -323,7 +291,7 @@
         
         .contact-info {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
@@ -332,24 +300,23 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
+            padding: 12px;
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
+            border-radius: 8px;
             border: 1px solid rgba(191, 149, 63, 0.2);
             text-decoration: none;
             cursor: pointer;
             transition: all 0.3s;
-            touch-action: manipulation;
         }
         
-        .contact-item:hover, .contact-item:active {
+        .contact-item:hover {
             transform: translateY(-3px);
             background: rgba(191, 149, 63, 0.15);
             box-shadow: 0 5px 15px rgba(191, 149, 63, 0.2);
         }
         
         .contact-item i {
-            font-size: 22px;
+            font-size: 20px;
             color: #bf953f;
             margin-bottom: 8px;
         }
@@ -357,7 +324,7 @@
         .contact-item span {
             color: #cbd5e1;
             font-size: 13px;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .contact-link {
@@ -365,16 +332,9 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 15px;
-            line-height: 1.4;
-            word-break: break-word;
-            text-align: center;
         }
         
-        .contact-item:hover .contact-link, .contact-item:active .contact-link {
-            color: #bf953f;
-        }
-        
-        /* الفوتر - متوافق مع الهاتف */
+        /* الفوتر */
         .footer {
             background: rgba(0, 0, 0, 0.9);
             padding: 25px 0;
@@ -385,8 +345,6 @@
         .footer p {
             color: #94a3b8;
             font-size: 14px;
-            line-height: 1.5;
-            padding: 0 10px;
         }
         
         .whatsapp-link {
@@ -397,18 +355,17 @@
             gap: 6px;
             margin-top: 8px;
             font-weight: bold;
-            font-size: 14px;
         }
         
-        .whatsapp-link:hover, .whatsapp-link:active {
+        .whatsapp-link:hover {
             color: #fcf6ba;
         }
         
-        /* الرسائل - متوافقة مع الهاتف */
+        /* الرسائل */
         .message {
             padding: 12px;
             border-radius: 8px;
-            margin: 8px 0;
+            margin: 10px 0;
             display: none;
             font-size: 14px;
         }
@@ -425,12 +382,12 @@
             border: 2px solid #4ade80;
         }
         
-        /* تعليمات - متوافقة مع الهاتف */
+        /* تعليمات */
         .instructions {
             background: rgba(191, 149, 63, 0.1);
-            padding: 20px 15px;
+            padding: 20px;
             border-radius: 12px;
-            margin-top: 25px;
+            margin-top: 30px;
             text-align: right;
             border-right: 3px solid #bf953f;
         }
@@ -458,7 +415,6 @@
             gap: 8px;
             justify-content: flex-end;
             font-size: 14px;
-            line-height: 1.5;
         }
         
         .instructions li:before {
@@ -466,15 +422,14 @@
             color: #bf953f;
             font-size: 20px;
             font-weight: bold;
-            flex-shrink: 0;
         }
         
-        /* تفاصيل الطباعة - مناسب للهاتف */
+        /* أزرار */
         .print-btn {
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 2px solid #bf953f;
-            padding: 8px 18px;
+            padding: 8px 20px;
             border-radius: 8px;
             cursor: pointer;
             display: inline-flex;
@@ -483,12 +438,28 @@
             margin-top: 15px;
             transition: all 0.3s;
             font-size: 14px;
-            touch-action: manipulation;
         }
         
-        .print-btn:hover, .print-btn:active {
+        .print-btn:hover {
             background: #bf953f;
             color: #020617;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .result-header h2 {
+            color: #bf953f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
         }
         
         @keyframes fadeIn {
@@ -496,18 +467,25 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* استعلامات وسائط إضافية للهواتف الصغيرة */
-        @media (max-width: 480px) {
-            html {
-                font-size: 14px;
-            }
-            
-            .container {
-                padding: 0 10px;
+        /* تحسينات للهواتف الصغيرة */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
             }
             
             .logo {
-                gap: 8px;
+                justify-content: center;
+                min-width: auto;
+            }
+            
+            .logo-text h1 {
+                font-size: 18px;
+            }
+            
+            .logo-text h2 {
+                font-size: 13px;
             }
             
             .logo-img {
@@ -515,32 +493,64 @@
                 height: 45px;
             }
             
-            .logo-text h1 {
+            .inquiry-box {
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
+            .inquiry-box h1 {
+                font-size: 24px;
+            }
+            
+            .inquiry-box p {
+                font-size: 15px;
+            }
+            
+            .btn-inquiry {
+                padding: 14px 30px;
                 font-size: 16px;
             }
             
-            .logo-text h2 {
-                font-size: 12px;
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
             
-            .nav-btn {
-                padding: 5px 12px;
-                font-size: 12px;
+            .contact-info {
+                grid-template-columns: 1fr;
             }
             
-            .inquiry-container {
-                padding: 15px 10px;
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .result-header h2 {
+                font-size: 18px;
+            }
+            
+            .instructions {
+                padding: 15px;
+            }
+            
+            .instructions li {
+                font-size: 13px;
+            }
+        }
+        
+        /* تحسينات إضافية للشاشات الصغيرة جداً */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
             }
             
             .inquiry-box {
-                padding: 20px 15px;
-                border-radius: 12px;
+                padding: 15px;
             }
             
             .inquiry-box h1 {
                 font-size: 20px;
-                flex-direction: column;
-                gap: 5px;
             }
             
             .inquiry-box p {
@@ -550,17 +560,16 @@
             
             .form-control {
                 padding: 12px;
-                font-size: 16px;
+                font-size: 14px;
+            }
+            
+            .form-group label {
+                font-size: 14px;
             }
             
             .btn-inquiry {
-                padding: 14px 20px;
-                font-size: 16px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
+                padding: 12px;
+                font-size: 15px;
             }
             
             .info-item {
@@ -568,94 +577,127 @@
             }
             
             .info-value {
-                font-size: 14px;
+                font-size: 15px;
             }
             
-            .contact-info {
-                gap: 12px;
+            .contact-section {
+                padding: 15px;
+            }
+            
+            .contact-section h3 {
+                font-size: 16px;
             }
             
             .contact-item {
-                padding: 12px;
-            }
-            
-            .contact-item i {
-                font-size: 20px;
+                padding: 10px;
             }
             
             .contact-link {
                 font-size: 14px;
             }
             
-            .instructions {
-                padding: 15px 12px;
+            .footer {
+                padding: 20px 0;
+            }
+            
+            .footer p {
+                font-size: 12px;
             }
             
             .instructions h3 {
                 font-size: 16px;
             }
-            
-            .instructions li {
-                font-size: 13px;
-            }
         }
         
-        /* تحسينات للشاشات الأفقية على الهواتف */
-        @media (max-width: 850px) and (orientation: landscape) {
-            .inquiry-container {
-                padding: 10px;
-                min-height: auto;
-                align-items: flex-start;
-            }
-            
+        /* تحسينات للشاشات الكبيرة */
+        @media (min-width: 1200px) {
             .inquiry-box {
-                padding: 15px;
-                margin: 10px 0;
+                max-width: 900px;
             }
             
             .info-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
         
-        /* تحسينات للأجهزة التي تدعم hover */
-        @media (hover: hover) and (pointer: fine) {
-            .btn-inquiry:hover, .contact-item:hover, .print-btn:hover, .nav-btn:hover {
-                transform: translateY(-3px);
+        /* تحسينات للطباعة */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .header, .nav-btn, .btn-inquiry, .contact-section, .footer, .print-btn, .instructions {
+                display: none !important;
+            }
+            
+            .inquiry-box {
+                background: white;
+                border: none;
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            
+            .result-box {
+                display: block !important;
+                border: 1px solid #ccc;
+                box-shadow: none;
+                background: white;
+                color: black;
+            }
+            
+            .info-item, .session-item {
+                background: #f9f9f9;
+                border: 1px solid #ddd;
+            }
+            
+            .info-value, .session-date {
+                color: black;
             }
         }
         
-        /* تحسينات للأجهزة التي لا تدعم hover (الهواتف) */
-        @media (hover: none) and (pointer: coarse) {
-            .btn-inquiry:active, .contact-item:active, .print-btn:active, .nav-btn:active {
-                transform: translateY(-1px);
-                opacity: 0.9;
-            }
+        /* إصلاحات للـ IOS */
+        input, button, textarea {
+            -webkit-tap-highlight-color: transparent;
         }
         
         /* منع التكبير التلقائي على iOS */
         @supports (-webkit-touch-callout: none) {
-            input, textarea, select {
+            input, textarea {
                 font-size: 16px !important;
             }
         }
         
-        /* تحسين مظهر العناصر على المتصفحات المختلفة */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* تحسينات للتفاعل */
+        .loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.7;
         }
         
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
+        .loading:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #bf953f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: #bf953f;
-            border-radius: 4px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: #fcf6ba;
+        /* تحسينات للظهور */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
         }
     </style>
 </head>
@@ -665,7 +707,7 @@
         <div class="container">
             <nav class="navbar">
                 <a href="#" class="logo">
-                    <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img">
+                    <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'">
                     <div class="logo-text">
                         <h1>محمود عبد الحميد</h1>
                         <h2>المحامي بالنقض و الدستورية العليا</h2>
@@ -673,7 +715,7 @@
                 </a>
                 <div class="nav-buttons">
                     <a href="index.html" target="_blank" class="nav-btn">
-                        <i class="fas fa-home"></i> الرئيسية
+                        <i class="fas fa-home"></i> الصفحة الرئيسية
                     </a>
                 </div>
             </nav>
@@ -693,9 +735,11 @@
                             <i class="fas fa-phone"></i> رقم هاتف العميل
                         </label>
                         <input type="tel" id="phone" class="form-control" 
-                               placeholder="أدخل رقم الهاتف المسجل" required
-                               inputmode="numeric">
-                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
+                               placeholder="أدخل رقم الهاتف المسجل (مثال: 01115821523)" 
+                               inputmode="numeric"
+                               pattern="[0-9]*"
+                               required>
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
                             رقم الهاتف المسجل في ملف القضية
                         </small>
                     </div>
@@ -705,8 +749,10 @@
                             <i class="fas fa-file-contract"></i> كود القضية
                         </label>
                         <input type="text" id="caseCode" class="form-control" 
-                               placeholder="أدخل كود القضية" required>
-                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px;">
+                               placeholder="أدخل الكود المكون من 8 أحرف وأرقام (مثال: MA-123456)" 
+                               autocapitalize="characters"
+                               required>
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
                             كود القضية الذي استلمته من المحامي
                         </small>
                     </div>
@@ -720,10 +766,8 @@
                 </form>
                 
                 <div id="inquiryResult" class="result-box">
-                    <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
-                        <h2 style="color: #bf953f; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 18px;">
-                            <i class="fas fa-file-contract"></i> تفاصيل القضية
-                        </h2>
+                    <div class="result-header">
+                        <h2><i class="fas fa-file-contract"></i> تفاصيل القضية</h2>
                         <button class="print-btn" onclick="printCaseDetails()">
                             <i class="fas fa-print"></i> طباعة
                         </button>
@@ -761,7 +805,7 @@
                         </div>
                     </div>
                     
-                    <h3 style="color: #bf953f; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 8px; font-size: 18px;">
+                    <h3 style="color: #bf953f; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 18px;">
                         <i class="fas fa-gavel"></i> آخر جلسة مسجلة
                     </h3>
                     
@@ -800,7 +844,7 @@
                     </div>
                     
                     <div style="margin-top: 20px; padding: 15px; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
-                        <p style="color: #94a3b8; font-size: 13px; display: flex; align-items: center; gap: 8px; line-height: 1.5;">
+                        <p style="color: #94a3b8; font-size: 13px; display: flex; align-items: center; gap: 8px;">
                             <i class="fas fa-info-circle"></i>
                             ملاحظة: هذه المعلومات خاصة بك فقط. يرجى عدم مشاركة كود القضية مع أي شخص.
                         </p>
@@ -839,19 +883,26 @@
         // متغيرات عامة
         let currentCaseCode = '';
         let currentCaseData = null;
+        let supabaseClient = null;
 
         // دالة تهيئة Supabase
         async function initSupabase() {
             if (!window.supabase) {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-                script.onload = () => {
-                    window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    console.log('✅ تم تهيئة Supabase بنجاح');
-                };
-                document.head.appendChild(script);
+                // تحميل مكتبة Supabase
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+                    script.onload = () => {
+                        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                        console.log('✅ تم تهيئة Supabase بنجاح');
+                        resolve();
+                    };
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
             } else {
-                window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                return Promise.resolve();
             }
         }
 
@@ -859,15 +910,14 @@
         async function searchCase(phone, caseCode) {
             try {
                 // الانتظار حتى يتم تحميل Supabase
-                if (!window.supabaseClient) {
+                if (!supabaseClient) {
                     await initSupabase();
-                    await new Promise(resolve => setTimeout(resolve, 1000));
                 }
                 
                 console.log('🔍 جاري البحث عن:', { phone, caseCode });
                 
                 // البحث في جدول cases
-                const { data: caseData, error: caseError } = await window.supabaseClient
+                const { data: caseData, error: caseError } = await supabaseClient
                     .from('cases')
                     .select('*')
                     .eq('client_phone', phone)
@@ -892,7 +942,7 @@
                 console.log('✅ تم العثور على القضية:', caseData);
                 
                 // جلب آخر جلسة لهذه القضية
-                const { data: lastSession, error: sessionError } = await window.supabaseClient
+                const { data: lastSession, error: sessionError } = await supabaseClient
                     .from('sessions')
                     .select('*')
                     .eq('case_id', caseData.id)
@@ -977,7 +1027,7 @@
                             <i class="fas fa-calendar-day"></i>
                             تاريخ آخر جلسة: ${formattedDate}
                         </div>
-                        <div style="color: #cbd5e1; margin-bottom: 5px; font-size: 14px;">
+                        <div style="color: #cbd5e1; margin-bottom: 5px;">
                             <i class="fas fa-info-circle"></i> الحالة: ${lastSession.decision || 'تمت الجلسة'}
                         </div>
                         <div style="color: #94a3b8; font-size: 13px;">
@@ -988,7 +1038,7 @@
             } else {
                 sessionContainer.innerHTML = `
                     <div class="session-item">
-                        <div style="color: #94a3b8; text-align: center; padding: 15px; font-size: 14px;">
+                        <div style="color: #94a3b8; text-align: center; padding: 15px;">
                             <i class="fas fa-calendar-times"></i>
                             لا توجد جلسات مسجلة لهذه القضية بعد
                         </div>
@@ -997,11 +1047,13 @@
             }
             
             // إظهار نتائج البحث
-            document.getElementById('inquiryResult').style.display = 'block';
+            const resultBox = document.getElementById('inquiryResult');
+            resultBox.style.display = 'block';
+            resultBox.classList.add('fade-in');
             
             // التمرير إلى النتائج
             setTimeout(() => {
-                document.getElementById('inquiryResult').scrollIntoView({ 
+                resultBox.scrollIntoView({ 
                     behavior: 'smooth',
                     block: 'start'
                 });
@@ -1010,7 +1062,7 @@
             showSuccess('✅ تم العثور على القضية بنجاح');
         }
 
-        // فتح الواتساب للتواصل - متوافق مع الهاتف
+        // فتح الواتساب للتواصل
         function openWhatsApp(event) {
             event.preventDefault();
             
@@ -1019,21 +1071,14 @@
                 return;
             }
             
-            const phoneNumber = '201101076000'; // رقم الواتساب
+            const phoneNumber = '201101076000';
             const message = `السلام عليكم، أود الاستفسار عن قضيتي التي تحمل الكود: ${currentCaseCode}`;
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             
-            // فتح في نافذة جديدة على الهاتف
-            const newWindow = window.open(whatsappUrl, '_blank');
-            if (newWindow) {
-                newWindow.focus();
-            } else {
-                // إذا تم منع النافذة المنبثقة، توجيه المستخدم
-                window.location.href = whatsappUrl;
-            }
+            window.open(whatsappUrl, '_blank');
         }
 
-        // فتح الإيميل للتواصل - متوافق مع الهاتف
+        // فتح الإيميل للتواصل
         function openEmail(event) {
             event.preventDefault();
             
@@ -1050,7 +1095,7 @@
             window.location.href = mailtoUrl;
         }
 
-        // حجز موعد مقابلة - مناسب للهاتف
+        // حجز موعد مقابلة
         function bookAppointment(event) {
             event.preventDefault();
             
@@ -1059,33 +1104,30 @@
                 return;
             }
             
-            // تحديد العرض بناءً على حجم الشاشة
-            const isMobile = window.innerWidth <= 768;
-            
             // عرض نافذة اختيار التاريخ والوقت
             Swal.fire({
                 title: 'حجز موعد مقابلة',
                 html: `
                     <div style="text-align: right; direction: rtl;">
-                        <p style="color: #bf953f; margin-bottom: 15px; font-size: ${isMobile ? '14px' : '16px'}">
+                        <p style="color: #bf953f; margin-bottom: 15px; font-size: 14px;">
                             <i class="fas fa-info-circle"></i>
                             كود قضيتك: <strong>${currentCaseCode}</strong>
                         </p>
                         
                         <div class="form-group">
-                            <label for="appointmentDate" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: ${isMobile ? '14px' : '16px'}">
+                            <label for="appointmentDate" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: 14px;">
                                 <i class="fas fa-calendar-alt"></i> التاريخ
                             </label>
                             <input type="date" id="appointmentDate" class="form-control" 
-                                   style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: ${isMobile ? '14px' : '16px'}">
+                                   style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: 14px;">
                         </div>
                         
                         <div class="form-group" style="margin-top: 15px;">
-                            <label for="appointmentTime" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: ${isMobile ? '14px' : '16px'}">
+                            <label for="appointmentTime" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: 14px;">
                                 <i class="fas fa-clock"></i> الوقت
                             </label>
                             <select id="appointmentTime" class="form-control" 
-                                    style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: ${isMobile ? '14px' : '16px'}">
+                                    style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: 14px;">
                                 <option value="09:00">09:00 صباحاً</option>
                                 <option value="10:00">10:00 صباحاً</option>
                                 <option value="11:00">11:00 صباحاً</option>
@@ -1098,11 +1140,11 @@
                         </div>
                         
                         <div class="form-group" style="margin-top: 15px;">
-                            <label for="appointmentNotes" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: ${isMobile ? '14px' : '16px'}">
+                            <label for="appointmentNotes" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: 14px;">
                                 <i class="fas fa-edit"></i> ملاحظات إضافية (اختياري)
                             </label>
                             <textarea id="appointmentNotes" class="form-control" rows="3"
-                                      style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: ${isMobile ? '14px' : '16px'}"
+                                      style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: 14px;"
                                       placeholder="أي ملاحظات إضافية ترغب في إضافتها..."></textarea>
                         </div>
                     </div>
@@ -1112,7 +1154,7 @@
                 cancelButtonText: 'إلغاء',
                 confirmButtonColor: '#bf953f',
                 cancelButtonColor: '#d33',
-                width: isMobile ? '90%' : 500,
+                width: window.innerWidth < 600 ? '90%' : '500px',
                 customClass: {
                     popup: 'sweet-popup',
                     title: 'sweet-title'
@@ -1159,55 +1201,29 @@
                     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                     
                     // فتح الواتساب
-                    const newWindow = window.open(whatsappUrl, '_blank');
-                    if (newWindow) {
-                        newWindow.focus();
-                    }
+                    window.open(whatsappUrl, '_blank');
                     
                     // رسالة تأكيد للمستخدم
                     Swal.fire({
                         title: 'تم إرسال طلب الموعد',
                         html: `
                             <div style="text-align: center;">
-                                <i class="fas fa-check-circle" style="color: #4ade80; font-size: 40px; margin-bottom: 15px;"></i>
-                                <p style="color: #cbd5e1; font-size: ${isMobile ? '14px' : '16px'}">
+                                <i class="fas fa-check-circle" style="color: #4ade80; font-size: 40px; margin-bottom: 20px;"></i>
+                                <p style="color: #cbd5e1; font-size: 14px;">
                                     تم إرسال طلب حجز الموعد بنجاح<br>
                                     سيتواصل معك المكتب لتأكيد الموعد
                                 </p>
                             </div>
                         `,
                         confirmButtonText: 'حسناً',
-                        confirmButtonColor: '#bf953f',
-                        width: isMobile ? '85%' : 400
+                        confirmButtonColor: '#bf953f'
                     });
                 }
             });
         }
 
-        // طباعة تفاصيل القضية - مناسب للهاتف
+        // طباعة تفاصيل القضية
         function printCaseDetails() {
-            if (window.innerWidth <= 768) {
-                Swal.fire({
-                    title: 'تنبيه',
-                    text: 'يُفضل استخدام جهاز كمبيوتر للطباعة للحصول على أفضل نتيجة.',
-                    icon: 'warning',
-                    confirmButtonText: 'متابعة',
-                    cancelButtonText: 'إلغاء',
-                    showCancelButton: true,
-                    confirmButtonColor: '#bf953f',
-                    cancelButtonColor: '#d33',
-                    width: '85%'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        proceedWithPrint();
-                    }
-                });
-            } else {
-                proceedWithPrint();
-            }
-        }
-
-        function proceedWithPrint() {
             const printContent = document.getElementById('inquiryResult').innerHTML;
             const originalContent = document.body.innerHTML;
             
@@ -1219,64 +1235,57 @@
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>استعلام عن القضية - مؤسسة محمود عبد الحميد</title>
                     <style>
-                        body {
-                            font-family: 'Amiri', 'Tajawal', sans-serif;
-                            padding: 20px;
-                            color: #000;
-                            font-size: 14px;
-                        }
-                        .print-header {
-                            text-align: center;
-                            margin-bottom: 20px;
-                            border-bottom: 2px solid #bf953f;
-                            padding-bottom: 10px;
-                        }
-                        .print-header h2 {
-                            color: #bf953f;
-                            font-family: 'Amiri', serif;
-                            font-size: 20px;
-                        }
-                        .info-grid {
-                            display: grid;
-                            grid-template-columns: repeat(2, 1fr);
-                            gap: 10px;
-                            margin-bottom: 15px;
-                        }
-                        .info-item {
-                            border: 1px solid #ddd;
-                            padding: 8px;
-                            border-radius: 5px;
-                        }
-                        .info-label {
-                            color: #666;
-                            font-size: 11px;
-                        }
-                        .info-value {
-                            font-weight: bold;
-                            font-size: 12px;
-                        }
-                        .footer {
-                            margin-top: 30px;
-                            text-align: center;
-                            color: #666;
-                            font-size: 11px;
-                            border-top: 1px solid #ddd;
-                            padding-top: 10px;
-                        }
-                        .contact-section {
-                            margin-top: 20px;
-                            padding: 15px;
-                            background: #f9f9f9;
-                            border-radius: 8px;
-                            border: 1px solid #ddd;
-                        }
                         @media print {
-                            body { padding: 10px; }
-                            .print-btn { display: none; }
-                        }
-                        @media print and (max-width: 480px) {
-                            body { font-size: 12px; }
-                            .info-grid { grid-template-columns: 1fr; }
+                            body {
+                                font-family: 'Amiri', 'Tajawal', sans-serif;
+                                padding: 20px;
+                                color: #000;
+                                background: white;
+                            }
+                            .print-header {
+                                text-align: center;
+                                margin-bottom: 30px;
+                                border-bottom: 2px solid #bf953f;
+                                padding-bottom: 15px;
+                            }
+                            .print-header h2 {
+                                color: #bf953f;
+                                font-family: 'Amiri', serif;
+                            }
+                            .info-grid {
+                                display: grid;
+                                grid-template-columns: repeat(2, 1fr);
+                                gap: 15px;
+                                margin-bottom: 20px;
+                            }
+                            .info-item {
+                                border: 1px solid #ddd;
+                                padding: 10px;
+                                border-radius: 5px;
+                                break-inside: avoid;
+                            }
+                            .info-label {
+                                color: #666;
+                                font-size: 12px;
+                            }
+                            .info-value {
+                                font-weight: bold;
+                                font-size: 14px;
+                            }
+                            .footer {
+                                margin-top: 50px;
+                                text-align: center;
+                                color: #666;
+                                font-size: 12px;
+                                border-top: 1px solid #ddd;
+                                padding-top: 15px;
+                            }
+                            .contact-section, .print-btn, .nav-btn, button, a {
+                                display: none !important;
+                            }
+                            @page {
+                                margin: 1cm;
+                            }
                         }
                     </style>
                 </head>
@@ -1294,16 +1303,18 @@
                 </html>
             `;
             
-            window.print();
-            
-            // استعادة المحتوى الأصلي
             setTimeout(() => {
-                document.body.innerHTML = originalContent;
-                window.location.reload();
-            }, 100);
+                window.print();
+                
+                // استعادة المحتوى الأصلي
+                setTimeout(() => {
+                    document.body.innerHTML = originalContent;
+                    window.location.reload();
+                }, 100);
+            }, 500);
         }
 
-        // مستمعات الأحداث - متوافقة مع الهاتف
+        // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', async function() {
             // تهيئة Supabase
             await initSupabase();
@@ -1326,14 +1337,12 @@
                     return;
                 }
                 
-                // إغلاق لوحة المفاتيح على الهاتف إذا كانت مفتوحة
-                document.activeElement.blur();
-                
                 // عرض رسالة تحميل
                 const submitBtn = e.target.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري البحث...';
                 submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
                 
                 try {
                     const result = await searchCase(phone, caseCode.toUpperCase());
@@ -1350,44 +1359,26 @@
                 } finally {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
+                    submitBtn.classList.remove('loading');
                 }
             });
             
-            // إضافة أمثلة للاختبار
-            document.getElementById('phone').value = '01115821523';
-            document.getElementById('caseCode').value = 'MA-916174';
+            // التركيز على حقل الهاتف عند التحميل
+            document.getElementById('phone').focus();
             
-            // تحسين أداء لوحة المفاتيح على الهاتف
-            const inputs = document.querySelectorAll('input, textarea, select');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    // تأخير بسيط للسماح للوحة المفاتيح بالظهور
-                    setTimeout(() => {
-                        this.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'center' 
-                        });
-                    }, 300);
+            // إضافة أمثلة للاختبار (للتطوير فقط)
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                document.getElementById('phone').value = '01115821523';
+                document.getElementById('caseCode').value = 'MA-916174';
+            }
+            
+            // تحسين تجربة المستخدم على الهواتف
+            if ('ontouchstart' in window) {
+                document.querySelectorAll('input, button, a').forEach(element => {
+                    element.style.minHeight = '44px';
                 });
-            });
+            }
         });
-        
-        // منع التكبير عند النقر المزدوج على الهاتف
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-        
-        // تحسين أداء التمرير على الهاتف
-        document.addEventListener('touchmove', function(e) {
-            if (e.scale !== 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
     </script>
 </body>
 </html>

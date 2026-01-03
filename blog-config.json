@@ -3,18 +3,16 @@
     "id": "welcome",
     "title": "مرحباً بكم في المدونة القانونية",
     "date": "2024-03-20",
-    "description": "المقال الافتتاحي للتعريف بخدماتنا القانونية المتخصصة",
-    "image": "/blog/images/welcome.jpg",
-    "file": "blog/welcome.md",
-    "tags": ["ترحيب", "مقدمة"]
+    "description": "المقال الافتتاحي للتعريف بخدماتنا القانونية",
+    "image": "./blog/images/welcome.jpg",
+    "file": "./blog/welcome.md"
   },
   {
-    "id": "trademark-protection",
-    "title": "العقود التجارية و تطورها",
-    "date": "2025-12-26",
-    "description": "تطور العقود التجارية العادية إلى عقود ذكية وعقود الركارديان",
-    "image": "/blog/images/Contract.md.jpg",
-    "file": "blog/Contract.md",
-    "tags": ["العقود التجارية", "العقود الذكية"]
+    "id": "trademark",
+    "title": "حماية العلامات التجارية",
+    "date": "2024-03-21",
+    "description": "دليل شامل لحماية العلامات التجارية في مصر",
+    "image": "./blog/images/trademark.jpg",
+    "file": "./blog/trademark.md"
   }
 ]

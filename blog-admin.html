@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة إدارة المدونة | مؤسسة محمود عبد الحميد</title>
+    <title>لوحة إدارة المدونة | نظام الملفات</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -46,231 +46,65 @@
             border-radius: 1.5rem; 
         }
         
-        input, textarea, select {
+        .editor-container {
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .editor-toolbar {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .editor-content {
+            min-height: 300px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .file-item {
             transition: all 0.3s ease;
-        }
-        
-        input:focus, textarea:focus, select:focus {
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 0 2px rgba(191, 149, 63, 0.2);
-        }
-        
-        .article-preview-card {
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            background: linear-gradient(var(--primary-dark), var(--primary-dark)) padding-box,
-                        linear-gradient(135deg, #bf953f, #fcf6ba, #b38728) border-box;
-        }
-        
-        .article-preview-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.2);
-        }
-        
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            background: var(--gold-gradient);
-            color: #1a1a1a;
-            border-radius: 50%;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        
-        /* أنماط إضافية */
-        .backup-card {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(66, 133, 244, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .backup-card:hover {
-            border-color: rgba(66, 133, 244, 0.7);
-            transform: translateY(-3px);
-        }
-        
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: rgba(2, 6, 23, 0.95);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .login-box {
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--gold-solid);
-            border-radius: 1.5rem;
-            padding: 3rem;
-            width: 90%;
-            max-width: 400px;
-        }
-        
-        .password-input {
-            letter-spacing: 0.2em;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-        
-        .error-message {
-            animation: shake 0.5s;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        .admin-menu {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-        }
-        
-        .admin-menu-btn {
-            background: var(--gold-gradient);
-            color: #1a1a1a;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
         }
         
-        .admin-menu-content {
-            position: absolute;
-            top: 60px;
-            left: 0;
-            background: rgba(0, 0, 0, 0.95);
-            border: 1px solid var(--gold-solid);
-            border-radius: 1rem;
-            padding: 1rem;
-            min-width: 200px;
-            display: none;
-        }
-        
-        .admin-menu:hover .admin-menu-content {
-            display: block;
-        }
-        
-        /* أنماط إضافية للنظام الجديد */
-        .article-item {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .article-item:hover {
+        .file-item:hover {
+            background: rgba(191, 149, 63, 0.1);
             transform: translateX(-5px);
-            border-color: rgba(191, 149, 63, 0.5) !important;
         }
         
-        .article-checkbox {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--gold-solid);
+        .upload-area {
+            border: 2px dashed rgba(191, 149, 63, 0.3);
+            transition: all 0.3s ease;
         }
         
-        .article-checkbox:checked {
-            background-color: var(--gold-solid);
-        }
-        
-        .bulk-actions-panel {
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .upload-area:hover {
+            border-color: var(--gold-solid);
+            background: rgba(191, 149, 63, 0.05);
         }
         
         .modal-backdrop {
             backdrop-filter: blur(10px);
-        }
-        
-        .edit-form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .edit-form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-        
-        .edit-form-group input,
-        .edit-form-group textarea,
-        .edit-form-group select {
-            width: 100%;
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .edit-form-group input:focus,
-        .edit-form-group textarea:focus,
-        .edit-form-group select:focus {
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 0 2px rgba(191, 149, 63, 0.2);
-            outline: none;
-        }
-        
-        /* إشعارات */
-        .notification {
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="min-h-screen">
 
     <!-- نافذة تسجيل الدخول -->
-    <div id="loginOverlay" class="login-overlay">
-        <div class="login-box">
+    <div id="loginOverlay" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
+        <div class="bg-black/90 border-2 border-gold-solid rounded-3xl p-8 max-w-md w-full">
             <div class="text-center mb-8">
                 <i class="fas fa-lock text-4xl gold-text mb-4"></i>
                 <h2 class="text-2xl font-bold gold-text mb-2">لوحة إدارة المدونة</h2>
-                <p class="text-white/70">يجب إدخال كلمة المرور للوصول</p>
+                <p class="text-white/70">أدخل كلمة المرور للوصول</p>
             </div>
             
             <div class="space-y-4">
-                <div>
-                    <input type="password" 
-                           id="passwordInput"
-                           class="password-input w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           placeholder="أدخل كلمة المرور"
-                           maxlength="20">
-                </div>
+                <input type="password" 
+                       id="passwordInput"
+                       class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none text-center text-xl"
+                       placeholder="••••••••"
+                       maxlength="20"
+                       onkeypress="if(event.key=='Enter') checkPassword()">
                 
                 <div id="errorMessage" class="text-red-400 text-center hidden">
                     <i class="fas fa-exclamation-triangle ml-2"></i>
@@ -282,520 +116,291 @@
                     <i class="fas fa-sign-in-alt ml-2"></i>
                     دخول
                 </button>
-                
-                <div class="text-center mt-6 pt-6 border-t border-white/10">
-                    <p class="text-white/50 text-sm">
-                        <i class="fas fa-info-circle ml-2"></i>
-                        للوصول إلى لوحة الإدارة، أدخل كلمة المرور المخصصة
-                    </p>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- قائمة الإدارة العلوية -->
-    <div id="adminMenu" class="admin-menu hidden">
-        <div class="admin-menu-btn">
-            <i class="fas fa-cog"></i>
-        </div>
-        <div class="admin-menu-content">
-            <div class="space-y-2">
-                <button onclick="createBackup()" class="w-full text-right py-2 px-4 hover:bg-white/10 rounded-lg text-white transition">
-                    <i class="fas fa-save ml-2"></i> إنشاء نسخة احتياطية
-                </button>
-                <button onclick="restoreBackup()" class="w-full text-right py-2 px-4 hover:bg-white/10 rounded-lg text-white transition">
-                    <i class="fas fa-history ml-2"></i> استعادة نسخة
-                </button>
-                <button onclick="exportArticles()" class="w-full text-right py-2 px-4 hover:bg-white/10 rounded-lg text-white transition">
-                    <i class="fas fa-download ml-2"></i> تصدير المقالات
-                </button>
-                <button onclick="changePassword()" class="w-full text-right py-2 px-4 hover:bg-white/10 rounded-lg text-white transition">
-                    <i class="fas fa-key ml-2"></i> تغيير كلمة المرور
-                </button>
-                <button onclick="logout()" class="w-full text-right py-2 px-4 hover:bg-red-900/30 rounded-lg text-red-300 transition">
-                    <i class="fas fa-sign-out-alt ml-2"></i> تسجيل الخروج
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- المحتوى الرئيسي (مخفي حتى الدخول) -->
+    <!-- المحتوى الرئيسي -->
     <div id="mainContent" class="hidden">
-        
         <!-- شريط التنقل -->
         <nav class="bg-black/95 border-b border-gold-solid/20 py-4 px-6">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <a href="index.html" class="text-2xl gold-text font-bold">
+                    <a href="index.html" class="text-xl gold-text font-bold">
                         <i class="fas fa-arrow-right ml-2"></i>
                         العودة للموقع
                     </a>
                 </div>
-                <div>
+                <div class="text-center">
                     <h1 class="text-2xl font-bold gold-text">
-                        <i class="fas fa-cogs ml-2"></i>
-                        لوحة إدارة المدونة
+                        <i class="fas fa-newspaper ml-2"></i>
+                        نظام إدارة المقالات
                     </h1>
-                    <p class="text-white/60 text-sm mt-1">محمود عبد الحميد - المحامي بالنقض والدستورية العليا</p>
+                    <p class="text-white/60 text-sm mt-1">نظام الملفات - حفظ مباشر في .md</p>
+                </div>
+                <div>
+                    <button onclick="logout()" 
+                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                        <i class="fas fa-sign-out-alt ml-2"></i>
+                        خروج
+                    </button>
                 </div>
             </div>
         </nav>
 
         <div class="max-w-7xl mx-auto px-4 py-8">
-            
-            <!-- قسم النسخ الاحتياطي -->
-            <div class="card-glass p-6 mb-8">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold gold-text">
-                        <i class="fas fa-database ml-2"></i>
-                        نظام النسخ الاحتياطي
-                    </h2>
-                    <div class="flex gap-3">
-                        <button onclick="createBackup()" class="gold-btn px-6 py-2 rounded-lg font-bold">
-                            <i class="fas fa-plus ml-2"></i> نسخة جديدة
-                        </button>
-                        <button onclick="showBackupManager()" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition">
-                            <i class="fas fa-history ml-2"></i> استعراض النسخ
-                        </button>
+            <!-- الإحصائيات -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="card-glass p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white/60 text-sm">مقالات</p>
+                            <p id="articlesCount" class="text-2xl font-bold gold-text">0</p>
+                        </div>
+                        <i class="fas fa-file-alt text-2xl text-gold-solid/50"></i>
                     </div>
                 </div>
                 
-                <div id="backupStats" class="grid md:grid-cols-3 gap-4">
-                    <div class="bg-black/50 p-4 rounded-xl border border-green-600/30">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-white/60">آخر نسخة احتياطية</p>
-                                <p id="lastBackupDate" class="text-lg font-bold text-green-400">-</p>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+                <div class="card-glass p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white/60 text-sm">ملفات MD</p>
+                            <p id="mdFilesCount" class="text-2xl font-bold text-blue-400">0</p>
                         </div>
-                    </div>
-                    <div class="bg-black/50 p-4 rounded-xl border border-blue-600/30">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-white/60">عدد النسخ المحفوظة</p>
-                                <p id="backupCount" class="text-lg font-bold text-blue-400">0</p>
-                            </div>
-                            <i class="fas fa-database text-blue-400 text-2xl"></i>
-                        </div>
-                    </div>
-                    <div class="bg-black/50 p-4 rounded-xl border border-purple-600/30">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-white/60">حجم التخزين</p>
-                                <p id="backupSize" class="text-lg font-bold text-purple-400">0 KB</p>
-                            </div>
-                            <i class="fas fa-hdd text-purple-400 text-2xl"></i>
-                        </div>
+                        <i class="fab fa-markdown text-2xl text-blue-400/50"></i>
                     </div>
                 </div>
                 
-                <!-- مدير النسخ الاحتياطي -->
-                <div id="backupManager" class="mt-6 hidden">
-                    <h3 class="text-lg font-bold text-white mb-4">النسخ الاحتياطية المحفوظة:</h3>
-                    <div id="backupList" class="space-y-3 max-h-60 overflow-y-auto p-2">
-                        <!-- سيتم ملؤها بالنسخ الاحتياطية -->
+                <div class="card-glass p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white/60 text-sm">صور</p>
+                            <p id="imagesCount" class="text-2xl font-bold text-green-400">0</p>
+                        </div>
+                        <i class="fas fa-images text-2xl text-green-400/50"></i>
+                    </div>
+                </div>
+                
+                <div class="card-glass p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white/60 text-sm">آخر تحديث</p>
+                            <p id="lastUpdate" class="text-lg font-bold text-white">-</p>
+                        </div>
+                        <i class="fas fa-clock text-2xl text-purple-400/50"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- قسم التعليمات -->
-            <div class="card-glass p-6 mb-8">
-                <h2 class="text-2xl font-bold gold-text mb-4">
-                    <i class="fas fa-graduation-cap ml-2"></i>
-                    دليل الاستخدام السريع
-                </h2>
-                
-                <div class="grid md:grid-cols-3 gap-6 mb-6">
-                    <div class="bg-black/50 p-4 rounded-xl border border-gold-solid/20">
-                        <h3 class="font-bold text-lg gold-text mb-2">
-                            <span class="step-number">1</span>
-                            رفع المقال
-                        </h3>
-                        <p class="text-white/70 text-sm">ارفع ملف Word/PDF على Google Drive</p>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- القائمة الجانبية -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- زر إنشاء مقال -->
+                    <div class="card-glass p-6">
+                        <button onclick="openCreateArticleModal()" 
+                                class="gold-btn w-full py-4 rounded-xl text-lg font-bold">
+                            <i class="fas fa-plus-circle ml-2"></i>
+                            إنشاء مقال جديد
+                        </button>
                     </div>
-                    <div class="bg-black/50 p-4 rounded-xl border border-gold-solid/20">
-                        <h3 class="font-bold text-lg gold-text mb-2">
-                            <span class="step-number">2</span>
-                            الحصول على الرابط
-                        </h3>
-                        <p class="text-white/70 text-sm">انقر بزر الماوس الأيمن → "الحصول على رابط قابل للمشاركة"</p>
-                    </div>
-                    <div class="bg-black/50 p-4 rounded-xl border border-gold-solid/20">
-                        <h3 class="font-bold text-lg gold-text mb-2">
-                            <span class="step-number">3</span>
-                            إضافة للموقع
-                        </h3>
-                        <p class="text-white/70 text-sm">انسخ الرابط في النموذج وأضف المقال</p>
-                    </div>
-                </div>
-            </div>
 
-            <div class="grid lg:grid-cols-2 gap-8">
-                
-                <!-- النموذج الرئيسي -->
-                <div class="card-glass p-8">
-                    <h2 class="text-2xl font-bold gold-text mb-6">
-                        <i class="fas fa-plus-circle ml-2"></i>
-                        إضافة مقال جديد
-                    </h2>
-                    
-                    <form id="articleForm" class="space-y-6">
+                    <!-- قائمة المقالات -->
+                    <div class="card-glass p-6">
+                        <h2 class="text-xl font-bold gold-text mb-4">
+                            <i class="fas fa-list ml-2"></i>
+                            المقالات الحالية
+                        </h2>
                         
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">عنوان المقال</label>
-                            <input type="text" id="articleTitle" 
-                                   class="w-full p-4 rounded-xl text-white outline-none"
-                                   placeholder="أدخل عنوان المقال بالكامل"
-                                   required>
+                        <div class="space-y-2 max-h-96 overflow-y-auto" id="articlesList">
+                            <!-- سيتم ملؤها بالمقالات -->
+                        </div>
+                    </div>
+
+                    <!-- إدارة الصور -->
+                    <div class="card-glass p-6">
+                        <h2 class="text-xl font-bold gold-text mb-4">
+                            <i class="fas fa-images ml-2"></i>
+                            إدارة الصور
+                        </h2>
+                        
+                        <div class="upload-area rounded-xl p-6 text-center mb-4 cursor-pointer"
+                             onclick="document.getElementById('imageUpload').click()"
+                             id="dropArea">
+                            <i class="fas fa-cloud-upload-alt text-3xl gold-text mb-2"></i>
+                            <p class="text-white/70">اسحب وأفلت الصور هنا</p>
+                            <p class="text-white/50 text-sm">أو انقر للاختيار</p>
                         </div>
                         
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">تاريخ النشر</label>
-                            <input type="date" id="articleDate" 
-                                   class="w-full p-4 rounded-xl text-white outline-none"
-                                   value="2024-12-01"
-                                   required>
-                        </div>
+                        <input type="file" 
+                               id="imageUpload" 
+                               accept="image/*" 
+                               multiple 
+                               class="hidden" 
+                               onchange="handleImageUpload(event)">
                         
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">وصف مختصر</label>
-                            <textarea id="articleDescription" 
-                                      class="w-full p-4 rounded-xl text-white outline-none"
-                                      rows="3"
-                                      placeholder="اكتب وصفاً مختصراً للمقال (سيظهر في صفحة المدونة)"
-                                      required></textarea>
+                        <div class="space-y-2 max-h-64 overflow-y-auto" id="imagesList">
+                            <!-- سيتم ملؤها بالصور -->
                         </div>
-                        
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">نوع المقال</label>
-                            <select id="articleType" class="w-full p-4 rounded-xl text-white outline-none">
-                                <option value="google-drive">Google Drive (Word/PDF)</option>
-                                <option value="url">رابط خارجي</option>
-                                <option value="local">ملف محلي في الموقع</option>
-                            </select>
-                        </div>
-                        
-                        <div id="contentUrlGroup">
-                            <label class="block text-white/80 mb-2 font-bold">رابط الملف على Google Drive</label>
-                            <input type="text" id="contentUrl" 
-                                   class="w-full p-4 rounded-xl text-white outline-none"
-                                   placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
-                            <div class="flex justify-between mt-2">
-                                <button type="button" onclick="convertDriveLink()" 
-                                        class="text-sm text-blue-400 hover:text-blue-300">
-                                    <i class="fas fa-exchange-alt ml-1"></i> تحويل الرابط
-                                </button>
-                                <button type="button" onclick="testLink()" 
-                                        class="text-sm text-green-400 hover:text-green-300">
-                                    <i class="fas fa-check ml-1"></i> اختبار الرابط
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">رابط الصورة الرئيسية</label>
-                            <input type="text" id="imageUrl" 
-                                   class="w-full p-4 rounded-xl text-white outline-none"
-                                   placeholder="https://drive.google.com/... أو مسار محلي"
-                                   required>
-                            <p class="text-white/50 text-sm mt-2">
-                                <i class="fas fa-info-circle ml-1"></i>
-                                يمكن استخدام صورة من Google Drive أو رفعها في مجلد images/
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">الكلمات المفتاحية</label>
-                            <input type="text" id="articleTags" 
-                                   class="w-full p-4 rounded-xl text-white outline-none"
-                                   placeholder="قانون, عقود, تجاري (مفصولة بفواصل)">
-                        </div>
-                        
-                        <div class="flex gap-4 pt-4">
-                            <button type="button" onclick="generateArticle()" 
-                                    class="gold-btn flex-1 py-4 rounded-xl text-lg font-bold">
-                                <i class="fas fa-magic ml-2"></i>
-                                إنشاء المقال
-                            </button>
-                            <button type="button" onclick="resetForm()" 
-                                    class="bg-white/10 hover:bg-white/20 text-white flex-1 py-4 rounded-xl text-lg font-bold transition">
-                                <i class="fas fa-redo ml-2"></i>
-                                إعادة تعيين
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                
-                <!-- معاينة الناتج -->
-                <div class="card-glass p-8">
-                    <h2 class="text-2xl font-bold gold-text mb-6">
-                        <i class="fas fa-eye ml-2"></i>
-                        معاينة الناتج
-                    </h2>
-                    
-                    <div id="previewSection" class="hidden">
-                        
-                        <!-- معاينة البطاقة -->
-                        <div class="mb-8">
-                            <h3 class="text-lg font-bold text-white mb-4">معاينة بطاقة المقال:</h3>
-                            <div id="articlePreviewCard" class="article-preview-card p-6 rounded-2xl">
-                                <div class="flex justify-between items-start mb-3">
-                                    <span class="text-sm text-gray-400" id="previewDate">2024-12-01</span>
-                                    <span class="text-xs bg-gold-solid/20 text-gold-solid px-2 py-1 rounded" id="previewType">Google Drive</span>
-                                </div>
-                                <h4 class="text-xl font-bold gold-text mb-3" id="previewTitle">عنوان المقال</h4>
-                                <p class="text-white/70 text-sm mb-4" id="previewDescription">وصف المقال...</p>
-                                <button class="gold-btn w-full py-2 rounded-lg text-sm">
-                                    <i class="fas fa-book-open ml-2"></i> اقرأ المقال
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- JSON الناتج -->
-                        <div>
-                            <h3 class="text-lg font-bold text-white mb-4">كود JSON للنسخ:</h3>
-                            <div class="bg-black/50 rounded-xl p-4 border border-gold-solid/20">
-                                <pre id="jsonOutput" class="text-white/80 text-sm overflow-x-auto whitespace-pre-wrap"></pre>
-                            </div>
-                            
-                            <div class="flex gap-3 mt-6">
-                                <button onclick="copyJSON()" 
-                                        class="gold-btn flex-1 py-3 rounded-xl font-bold">
-                                    <i class="far fa-copy ml-2"></i>
-                                    نسخ JSON
-                                </button>
-                                <button onclick="downloadJSON()" 
-                                        class="bg-blue-600 hover:bg-blue-700 text-white flex-1 py-3 rounded-xl font-bold transition">
-                                    <i class="fas fa-download ml-2"></i>
-                                    تحميل كملف
-                                </button>
-                                <button onclick="saveToArticles()" 
-                                        class="bg-green-600 hover:bg-green-700 text-white flex-1 py-3 rounded-xl font-bold transition">
+
+                <!-- المحرر الرئيسي -->
+                <div class="lg:col-span-2">
+                    <div id="editorContainer" class="card-glass p-6 hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold gold-text" id="editorTitle">
+                                <i class="fas fa-edit ml-2"></i>
+                                محرر المقال
+                            </h2>
+                            <div class="flex gap-2">
+                                <button onclick="saveArticle()" 
+                                        class="gold-btn px-4 py-2 rounded-lg font-bold">
                                     <i class="fas fa-save ml-2"></i>
-                                    حفظ مباشرة
+                                    حفظ
+                                </button>
+                                <button onclick="closeEditor()" 
+                                        class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition">
+                                    <i class="fas fa-times ml-2"></i>
+                                    إلغاء
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- معلومات المقال -->
+                        <div class="mb-6">
+                            <input type="text" 
+                                   id="articleTitleInput"
+                                   class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none text-xl mb-4"
+                                   placeholder="عنوان المقال">
                             
-                            <div class="mt-6 p-4 bg-green-900/30 border border-green-600/30 rounded-xl hidden" id="successMessage">
-                                <div class="flex items-center">
-                                    <i class="fas fa-check-circle text-green-400 text-xl ml-3"></i>
-                                    <div>
-                                        <p class="font-bold text-green-300">تم النسخ بنجاح!</p>
-                                        <p class="text-green-200 text-sm mt-1">انسخ المحتوى إلى ملف blog-data/articles.json</p>
-                                    </div>
-                                </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="date" 
+                                       id="articleDateInput"
+                                       class="p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none">
+                                
+                                <input type="text" 
+                                       id="articleSlugInput"
+                                       class="p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none"
+                                       placeholder="الرابط (slug)">
+                            </div>
+                        </div>
+
+                        <!-- أدوات المحرر -->
+                        <div class="editor-toolbar p-3 rounded-xl mb-4 flex flex-wrap gap-2">
+                            <button onclick="formatText('bold')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button onclick="formatText('italic')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button onclick="formatText('h1')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-heading"></i> 1
+                            </button>
+                            <button onclick="formatText('h2')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-heading"></i> 2
+                            </button>
+                            <button onclick="formatText('link')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button onclick="formatText('image')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button onclick="formatText('code')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-code"></i>
+                            </button>
+                            <button onclick="formatText('list')" 
+                                    class="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button onclick="insertImageFromGallery()" 
+                                    class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                                <i class="fas fa-image ml-2"></i> معرض الصور
+                            </button>
+                        </div>
+
+                        <!-- محتوى المقال -->
+                        <textarea id="articleContent" 
+                                  class="editor-content w-full p-4 rounded-xl bg-black/50 text-white border border-white/10 outline-none font-mono"
+                                  rows="20"
+                                  placeholder="اكتب محتوى المقال هنا بصيغة Markdown..."></textarea>
+
+                        <!-- معاينة -->
+                        <div class="mt-6">
+                            <h3 class="text-lg font-bold text-white mb-3">معاينة:</h3>
+                            <div id="previewContent" 
+                                 class="p-4 rounded-xl bg-black/30 border border-white/10 min-h-40">
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- التعليمات -->
-                    <div id="instructions" class="text-center py-12">
-                        <i class="fas fa-newspaper text-5xl gold-text mb-4"></i>
-                        <h3 class="text-xl font-bold gold-text mb-2">لا توجد معاينة حالياً</h3>
-                        <p class="text-white/60">املأ النموذج على اليسار وانقر على "إنشاء المقال"</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- قسم المقالات الحالية -->
-            <div class="card-glass p-8 mt-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold gold-text">
-                        <i class="fas fa-list-alt ml-2"></i>
-                        المقالات الحالية في النظام
-                    </h2>
-                    <div class="flex gap-2">
-                        <button onclick="loadCurrentArticles()" class="text-white hover:text-gold-solid transition px-3 py-1">
-                            <i class="fas fa-sync-alt ml-2"></i> تحديث
-                        </button>
-                        <button onclick="toggleSelectMode()" id="selectModeBtn" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition">
-                            <i class="fas fa-check-double ml-2"></i> وضع التحديد
+
+                    <!-- الشاشة الافتراضية -->
+                    <div id="defaultView" class="card-glass p-12 text-center">
+                        <i class="fas fa-newspaper text-6xl gold-text mb-6"></i>
+                        <h2 class="text-2xl font-bold gold-text mb-4">مرحباً في نظام إدارة المقالات</h2>
+                        <p class="text-white/70 mb-8">اختر مقالاً للتعديل أو أنشئ مقالاً جديداً</p>
+                        <button onclick="openCreateArticleModal()" 
+                                class="gold-btn px-8 py-3 rounded-xl text-lg font-bold">
+                            <i class="fas fa-plus-circle ml-2"></i>
+                            بدء مقال جديد
                         </button>
                     </div>
                 </div>
-                
-                <div id="currentArticles" class="space-y-4">
-                    <div class="text-center py-8">
-                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold-solid"></div>
-                        <p class="text-white/60 mt-4">جاري تحميل المقالات...</p>
-                    </div>
-                </div>
-                
-                <!-- أزرار الإدارة الجماعية (تظهر فقط في وضع التحديد) -->
-                <div id="bulkActions" class="mt-6 p-4 bg-black/50 rounded-xl border border-gold-solid/30 hidden">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span id="selectedCount" class="text-gold-solid font-bold">0</span>
-                            <span class="text-white/70 mr-2">مقال محدد</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="deleteSelectedArticles()" 
-                                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
-                                <i class="fas fa-trash ml-2"></i> حذف المحدد
-                            </button>
-                            <button onclick="toggleSelectMode()" 
-                                    class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition">
-                                إلغاء
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
-            
-            <!-- معلومات تقنية -->
-            <div class="card-glass p-6 mt-8">
-                <h3 class="text-lg font-bold gold-text mb-4">
-                    <i class="fas fa-info-circle ml-2"></i>
-                    معلومات تقنية
-                </h3>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-black/50 p-4 rounded-xl">
-                        <h4 class="font-bold text-white mb-2">مسار ملف المقالات:</h4>
-                        <code class="text-gold-solid bg-black/70 px-3 py-1 rounded">/blog-data/articles.json</code>
-                        <button onclick="openArticlesFile()" class="text-sm text-blue-400 hover:text-blue-300 mt-2 block">
-                            <i class="fas fa-external-link-alt ml-1"></i> فتح الملف
-                        </button>
-                    </div>
-                    <div class="bg-black/50 p-4 rounded-xl">
-                        <h4 class="font-bold text-white mb-2">إحصائيات النظام:</h4>
-                        <div class="space-y-2 text-sm">
-                            <p class="text-white/70">الوصول الأخير: <span id="lastAccess" class="text-gold-solid">-</span></p>
-                            <p class="text-white/70">جلسة العمل: <span id="sessionTime" class="text-gold-solid">0 دقيقة</span></p>
-                            <p class="text-white/70">النسخ الاحتياطية: <span id="liveBackupCount" class="text-gold-solid">0</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
         </div>
     </div>
 
-    <!-- نافذة تعديل المقال -->
-    <div id="editModal" class="fixed inset-0 bg-black/80 z-[200] hidden items-center justify-center p-4">
-        <div class="bg-[#020617] rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-10 relative border border-gold-solid/20">
-            <button onclick="closeEditModal()" class="absolute top-4 left-4 text-3xl gold-text">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- نافذة معرض الصور -->
+    <div id="imageGalleryModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+        <div class="bg-black/90 border-2 border-gold-solid rounded-3xl p-6 max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold gold-text">
+                    <i class="fas fa-images ml-2"></i>
+                    معرض الصور
+                </h2>
+                <button onclick="closeImageGallery()" 
+                        class="text-2xl gold-text hover:rotate-90 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             
-            <h2 class="text-3xl font-bold gold-text mb-6 text-center">
-                <i class="fas fa-edit ml-2"></i>
-                تعديل المقال
-            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-y-auto flex-1 p-2" id="galleryImages">
+                <!-- سيتم ملؤها بالصور -->
+            </div>
             
-            <form id="editArticleForm" class="space-y-6">
-                <input type="hidden" id="editArticleId">
-                <input type="hidden" id="editArticleIndex">
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">عنوان المقال</label>
-                    <input type="text" id="editArticleTitle" 
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           required>
-                </div>
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">تاريخ النشر</label>
-                    <input type="date" id="editArticleDate" 
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           required>
-                </div>
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">وصف مختصر</label>
-                    <textarea id="editArticleDescription" 
-                              class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                              rows="3"
-                              required></textarea>
-                </div>
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">نوع المقال</label>
-                    <select id="editArticleType" class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none">
-                        <option value="google-drive">Google Drive (Word/PDF)</option>
-                        <option value="url">رابط خارجي</option>
-                        <option value="local">ملف محلي في الموقع</option>
-                    </select>
-                </div>
-                
-                <div id="editContentUrlGroup">
-                    <label class="block text-white/80 mb-2 font-bold">رابط المحتوى</label>
-                    <input type="text" id="editContentUrl" 
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none">
-                </div>
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">رابط الصورة الرئيسية</label>
-                    <input type="text" id="editImageUrl" 
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           required>
-                </div>
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">الكلمات المفتاحية</label>
-                    <input type="text" id="editArticleTags" 
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           placeholder="قانون, عقود, تجاري (مفصولة بفواصل)">
-                </div>
-                
-                <div class="flex gap-4 pt-6">
-                    <button type="submit" 
-                            class="gold-btn flex-1 py-4 rounded-xl text-lg font-bold">
-                        <i class="fas fa-save ml-2"></i>
-                        حفظ التعديلات
-                    </button>
-                    <button type="button" onclick="closeEditModal()" 
-                            class="bg-white/10 hover:bg-white/20 text-white flex-1 py-4 rounded-xl text-lg font-bold transition">
-                        <i class="fas fa-times ml-2"></i>
-                        إلغاء
-                    </button>
-                </div>
-            </form>
-            
-            <div class="mt-8 pt-6 border-t border-white/10">
-                <h3 class="text-lg font-bold text-white mb-4">إجراءات متقدمة:</h3>
-                <div class="flex gap-3">
-                    <button onclick="duplicateArticle()" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex-1">
-                        <i class="fas fa-copy ml-2"></i> نسخ المقال
-                    </button>
-                    <button onclick="previewEditedArticle()" 
-                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition flex-1">
-                        <i class="fas fa-eye ml-2"></i> معاينة
-                    </button>
-                </div>
+            <div class="mt-6 pt-6 border-t border-white/10">
+                <button onclick="closeImageGallery()" 
+                        class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition">
+                    إغلاق
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // ========== متغيرات النظام ==========
+        // ========== تهيئة النظام ==========
         const MASTER_PASSWORD = 'mahmoud237';
-        let isAuthenticated = false;
-        let sessionStartTime = null;
-        let sessionTimer = null;
-        let currentArticlesData = [];
-        let selectMode = false;
-        let selectedArticles = new Set();
-        
-        // ========== تهيئة الصفحة ==========
+        let currentArticle = null;
+        let articlesData = [];
+        let imagesList = [];
+
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('articleDate').value = new Date().toISOString().split('T')[0];
             checkPreviousSession();
+            document.getElementById('passwordInput').focus();
             
-            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') checkPassword();
-            });
+            // إعداد سحب وإفلات الصور
+            setupDragAndDrop();
             
-            // تهيئة نموذج التعديل
-            document.getElementById('editArticleForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveEditedArticle();
-            });
+            // تحديث المعاينة عند الكتابة
+            document.getElementById('articleContent').addEventListener('input', updatePreview);
         });
-        
+
         // ========== نظام المصادقة ==========
         function checkPreviousSession() {
             const lastSession = localStorage.getItem('admin_last_session');
@@ -812,11 +417,10 @@
                 }
             }
         }
-        
+
         function checkPassword() {
-            const passwordInput = document.getElementById('passwordInput');
+            const password = document.getElementById('passwordInput').value.trim();
             const errorMessage = document.getElementById('errorMessage');
-            const password = passwordInput.value.trim();
             
             if (password === MASTER_PASSWORD) {
                 localStorage.setItem('admin_last_session', new Date().toISOString());
@@ -824,618 +428,594 @@
                 grantAccess();
             } else {
                 errorMessage.classList.remove('hidden');
-                passwordInput.classList.add('error-message');
-                passwordInput.value = '';
-                
-                setTimeout(() => {
-                    errorMessage.classList.add('hidden');
-                    passwordInput.classList.remove('error-message');
-                }, 2000);
+                setTimeout(() => errorMessage.classList.add('hidden'), 3000);
+                document.getElementById('passwordInput').value = '';
             }
         }
-        
+
         function grantAccess() {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('adminMenu').classList.remove('hidden');
-            
-            sessionStartTime = new Date();
-            startSessionTimer();
-            
-            loadCurrentArticles();
-            loadBackupStats();
-            
-            document.getElementById('lastAccess').textContent = new Date().toLocaleTimeString('ar-EG');
-            showNotification('مرحباً بك في لوحة الإدارة', 'success');
+            loadArticles();
+            loadImages();
+            updateStats();
         }
-        
-        function startSessionTimer() {
-            clearInterval(sessionTimer);
-            sessionTimer = setInterval(() => {
-                const now = new Date();
-                const diffMinutes = Math.floor((now - sessionStartTime) / (1000 * 60));
-                document.getElementById('sessionTime').textContent = diffMinutes + ' دقيقة';
-            }, 60000);
-        }
-        
+
         function logout() {
-            if (confirm('هل تريد تسجيل الخروج من لوحة الإدارة؟')) {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
                 localStorage.removeItem('admin_temp_password');
-                clearInterval(sessionTimer);
-                window.location.href = 'index.html';
+                window.location.href = 'blog-admin.html';
             }
         }
-        
-        function changePassword() {
-            const currentPassword = prompt('أدخل كلمة المرور الحالية:');
-            if (currentPassword !== MASTER_PASSWORD) {
-                alert('كلمة المرور الحالية غير صحيحة');
-                return;
-            }
-            
-            const newPassword = prompt('أدخل كلمة المرور الجديدة:');
-            const confirmPassword = prompt('أكد كلمة المرور الجديدة:');
-            
-            if (newPassword && newPassword === confirmPassword) {
-                alert('لاحظ: يجب تغيير كلمة المرور في الكود المصدري للملف\n\nافتح ملف blog-admin.html وابحث عن MASTER_PASSWORD وغيرها يدوياً');
-            } else {
-                alert('كلمات المرور غير متطابقة');
-            }
-        }
-        
-        // ========== نظام النسخ الاحتياطي ==========
-        function createBackup() {
-            fetch('blog-data/articles.json')
-                .then(response => response.json())
-                .then(data => {
-                    const backup = {
-                        id: 'backup-' + Date.now(),
-                        timestamp: new Date().toISOString(),
-                        date: new Date().toLocaleDateString('ar-EG'),
-                        time: new Date().toLocaleTimeString('ar-EG'),
-                        articles: data.articles || [],
-                        count: data.articles ? data.articles.length : 0
-                    };
-                    
-                    const backups = JSON.parse(localStorage.getItem('article_backups') || '[]');
-                    backups.unshift(backup);
-                    
-                    if (backups.length > 20) {
-                        backups.pop();
-                    }
-                    
-                    localStorage.setItem('article_backups', JSON.stringify(backups));
-                    showNotification(`تم إنشاء نسخة احتياطية (${backup.count} مقال)`, 'success');
-                    loadBackupStats();
-                    updateBackupList();
-                })
-                .catch(error => {
-                    showNotification('خطأ في إنشاء النسخة: ' + error.message, 'error');
-                });
-        }
-        
-        function loadBackupStats() {
-            const backups = JSON.parse(localStorage.getItem('article_backups') || '[]');
-            
-            if (backups.length > 0) {
-                const latestBackup = backups[0];
-                document.getElementById('lastBackupDate').textContent = latestBackup.date + ' ' + latestBackup.time;
-                document.getElementById('backupCount').textContent = backups.length;
-                
-                const size = JSON.stringify(backups).length / 1024;
-                document.getElementById('backupSize').textContent = size.toFixed(2) + ' KB';
-                document.getElementById('liveBackupCount').textContent = backups.length;
-            } else {
-                document.getElementById('lastBackupDate').textContent = 'لا توجد';
-                document.getElementById('backupCount').textContent = '0';
-                document.getElementById('backupSize').textContent = '0 KB';
-            }
-        }
-        
-        function showBackupManager() {
-            const manager = document.getElementById('backupManager');
-            manager.classList.toggle('hidden');
-            
-            if (!manager.classList.contains('hidden')) {
-                updateBackupList();
-            }
-        }
-        
-        function updateBackupList() {
-            const backups = JSON.parse(localStorage.getItem('article_backups') || '[]');
-            const backupList = document.getElementById('backupList');
-            
-            if (backups.length === 0) {
-                backupList.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-database text-3xl text-gray-500 mb-4"></i>
-                        <p class="text-white/60">لا توجد نسخ احتياطية</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            backupList.innerHTML = backups.map((backup, index) => `
-                <div class="backup-card p-4 rounded-xl">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="font-bold text-white">نسخة احتياطية #${backups.length - index}</h4>
-                            <p class="text-sm text-white/60">
-                                ${backup.date} - ${backup.time}
-                            </p>
-                            <p class="text-xs text-green-400 mt-1">
-                                ${backup.count} مقال
-                            </p>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="restoreBackup('${backup.id}')" 
-                                    class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
-                                <i class="fas fa-undo ml-1"></i>
-                            </button>
-                            <button onclick="downloadBackup('${backup.id}')" 
-                                    class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
-                                <i class="fas fa-download ml-1"></i>
-                            </button>
-                            <button onclick="deleteBackup('${backup.id}')" 
-                                    class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
-                                <i class="fas fa-trash ml-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function restoreBackup(backupId) {
-            const backups = JSON.parse(localStorage.getItem('article_backups') || '[]');
-            const backup = backups.find(b => b.id === backupId);
-            
-            if (backup && confirm(`استعادة النسخة من ${backup.date}؟`)) {
-                const restoredData = {
-                    lastUpdate: new Date().toISOString(),
-                    articles: backup.articles
-                };
-                
-                saveArticlesToFile(restoredData);
-                showNotification(`تم استعادة ${backup.count} مقال`, 'success');
-                loadCurrentArticles();
-            }
-        }
-        
-        function downloadBackup(backupId) {
-            const backups = JSON.parse(localStorage.getItem('article_backups') || '[]');
-            const backup = backups.find(b => b.id === backupId);
-            
-            if (backup) {
-                const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                
-                a.href = url;
-                a.download = `backup-${backup.date.replace(/\//g, '-')}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showNotification('تم تنزيل النسخة', 'success');
-            }
-        }
-        
-        function deleteBackup(backupId) {
-            if (confirm('هل أنت متأكد من حذف هذه النسخة الاحتياطية؟')) {
-                let backups = JSON.parse(localStorage.getItem('article_backups') || '[]');
-                backups = backups.filter(b => b.id !== backupId);
-                localStorage.setItem('article_backups', JSON.stringify(backups));
-                
-                updateBackupList();
-                loadBackupStats();
-                showNotification('تم حذف النسخة', 'success');
-            }
-        }
-        
-        function exportArticles() {
-            fetch('blog-data/articles.json')
-                .then(response => response.json())
-                .then(data => {
-                    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    
-                    a.href = url;
-                    a.download = `articles-export-${new Date().toISOString().split('T')[0]}.json`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    showNotification('تم تصدير المقالات', 'success');
-                })
-                .catch(error => {
-                    showNotification('خطأ في التصدير: ' + error.message, 'error');
-                });
-        }
-        
+
         // ========== إدارة المقالات ==========
-        async function loadCurrentArticles() {
+        async function loadArticles() {
             try {
-                const response = await fetch('blog-data/articles.json');
-                if (!response.ok) throw new Error('تعذر تحميل الملف');
+                // تحميل الفهرس
+                const response = await fetch('blog/data/articles.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    articlesData = data.articles || [];
+                    displayArticlesList();
+                }
                 
-                const data = await response.json();
-                currentArticlesData = data.articles || [];
-                displayCurrentArticles(currentArticlesData);
+                // حساب عدد ملفات MD
+                const mdResponse = await fetch('blog/articles/');
+                if (mdResponse.ok) {
+                    const text = await mdResponse.text();
+                    const parser = new DOMParser();
+                    const html = parser.parseFromString(text, 'text/html');
+                    const links = html.querySelectorAll('a[href$=".md"]');
+                    document.getElementById('mdFilesCount').textContent = links.length;
+                }
                 
             } catch (error) {
                 console.error('Error loading articles:', error);
-                document.getElementById('currentArticles').innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-exclamation-triangle text-3xl gold-text mb-4"></i>
-                        <p class="text-white/60">تعذر تحميل المقالات</p>
-                        <p class="text-white/40 text-sm mt-2">${error.message}</p>
-                    </div>
-                `;
             }
         }
-        
-        function displayCurrentArticles(articles) {
-            const container = document.getElementById('currentArticles');
+
+        function displayArticlesList() {
+            const container = document.getElementById('articlesList');
             
-            if (!articles || articles.length === 0) {
+            if (articlesData.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-8">
-                        <i class="fas fa-newspaper text-3xl gold-text mb-4"></i>
-                        <h3 class="text-xl font-bold gold-text mb-2">لا توجد مقالات حالياً</h3>
-                        <p class="text-white/60">ابدأ بإضافة مقال جديد</p>
+                    <div class="text-center py-4 text-white/50">
+                        <i class="fas fa-newspaper text-2xl mb-2"></i>
+                        <p>لا توجد مقالات بعد</p>
                     </div>
                 `;
                 return;
             }
-            
-            container.innerHTML = articles.map((article, index) => `
-                <div class="article-item bg-black/50 p-4 rounded-xl border border-white/10 hover:border-gold-solid/30 transition ${selectedArticles.has(index) ? 'border-gold-solid bg-gold-solid/10' : ''}"
-                     data-index="${index}"
-                     onclick="handleArticleClick(${index}, event)">
-                    
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-start gap-3">
-                            ${selectMode ? `
-                                <input type="checkbox" 
-                                       class="article-checkbox mt-1"
-                                       ${selectedArticles.has(index) ? 'checked' : ''}
-                                       onclick="event.stopPropagation(); toggleSelectArticle(${index})">
-                            ` : ''}
-                            
-                            <div>
-                                <h4 class="font-bold text-lg text-white">${article.title}</h4>
-                                <div class="flex items-center gap-4 mt-2">
-                                    <span class="text-sm text-gray-400">
-                                        <i class="fas fa-calendar ml-1"></i> ${article.date}
-                                    </span>
-                                    <span class="text-sm px-2 py-1 rounded ${
-                                        article.type === 'google-drive' ? 'bg-blue-900/30 text-blue-300' :
-                                        article.type === 'url' ? 'bg-yellow-900/30 text-yellow-300' :
-                                        'bg-green-900/30 text-green-300'
-                                    }">
-                                        ${article.type === 'google-drive' ? 'Google Drive' :
-                                          article.type === 'url' ? 'رابط خارجي' : 'محلي'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex gap-2">
-                            ${!selectMode ? `
-                                <button onclick="editArticle(${index})" 
-                                        class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm transition">
-                                    <i class="fas fa-edit ml-1"></i>
-                                </button>
-                                <button onclick="duplicateArticleFromList(${index})" 
-                                        class="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm transition">
-                                    <i class="fas fa-copy ml-1"></i>
-                                </button>
-                                <button onclick="deleteSingleArticle(${index})" 
-                                        class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm transition">
-                                    <i class="fas fa-trash ml-1"></i>
-                                </button>
-                            ` : ''}
+
+            container.innerHTML = articlesData.map(article => `
+                <div class="file-item p-3 rounded-lg border border-white/10 hover:border-gold-solid/30 flex justify-between items-center"
+                     onclick="openArticle('${article.id}')">
+                    <div class="flex items-center gap-3">
+                        <i class="fab fa-markdown text-blue-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">${article.title}</h4>
+                            <p class="text-white/50 text-sm">${article.date}</p>
                         </div>
                     </div>
-                    
-                    <p class="text-white/70 text-sm mt-3">${article.description}</p>
-                    
-                    ${article.tags && article.tags.length > 0 ? `
-                        <div class="flex flex-wrap gap-1 mt-3">
-                            ${article.tags.map(tag => `
-                                <span class="text-xs bg-gold-solid/10 text-gold-solid px-2 py-1 rounded">${tag}</span>
-                            `).join('')}
-                        </div>
-                    ` : ''}
+                    <div class="flex gap-2">
+                        <button onclick="editArticle('${article.id}')" 
+                                class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteArticle('${article.id}', event)" 
+                                class="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             `).join('');
+
+            document.getElementById('articlesCount').textContent = articlesData.length;
         }
-        
-        // ========== وضع التحديد ==========
-        function toggleSelectMode() {
-            selectMode = !selectMode;
-            selectedArticles.clear();
+
+        async function openArticle(articleId) {
+            try {
+                const article = articlesData.find(a => a.id === articleId);
+                if (!article) throw new Error('المقال غير موجود');
+
+                // تحميل محتوى ملف MD
+                const response = await fetch(`blog/articles/${articleId}.md`);
+                if (!response.ok) throw new Error('تعذر تحميل الملف');
+
+                const content = await response.text();
+                
+                // فتح المحرر
+                document.getElementById('defaultView').classList.add('hidden');
+                document.getElementById('editorContainer').classList.remove('hidden');
+                document.getElementById('editorTitle').innerHTML = `<i class="fas fa-edit ml-2"></i> تحرير: ${article.title}`;
+                
+                // تعبئة البيانات
+                document.getElementById('articleTitleInput').value = article.title;
+                document.getElementById('articleDateInput').value = article.date;
+                document.getElementById('articleSlugInput').value = articleId;
+                document.getElementById('articleContent').value = content;
+                
+                currentArticle = { ...article, id: articleId };
+                
+                updatePreview();
+                
+            } catch (error) {
+                showNotification('خطأ: ' + error.message, 'error');
+            }
+        }
+
+        function openCreateArticleModal() {
+            document.getElementById('defaultView').classList.add('hidden');
+            document.getElementById('editorContainer').classList.remove('hidden');
+            document.getElementById('editorTitle').innerHTML = '<i class="fas fa-plus-circle ml-2"></i> مقال جديد';
             
-            const btn = document.getElementById('selectModeBtn');
-            const bulkActions = document.getElementById('bulkActions');
-            const selectedCount = document.getElementById('selectedCount');
+            // إعادة تعيين الحقول
+            document.getElementById('articleTitleInput').value = '';
+            document.getElementById('articleDateInput').value = new Date().toISOString().split('T')[0];
+            document.getElementById('articleSlugInput').value = '';
+            document.getElementById('articleContent').value = '';
             
-            if (selectMode) {
-                btn.innerHTML = '<i class="fas fa-times ml-2"></i> إلغاء التحديد';
-                btn.className = 'bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg transition';
-                bulkActions.classList.remove('hidden');
+            currentArticle = null;
+            
+            updatePreview();
+        }
+
+        function closeEditor() {
+            if (confirm('هل تريد إغلاق المحرر؟ التغييرات غير المحفوظة ستفقد.')) {
+                document.getElementById('editorContainer').classList.add('hidden');
+                document.getElementById('defaultView').classList.remove('hidden');
+                currentArticle = null;
+            }
+        }
+
+        // ========== حفظ المقال ==========
+        async function saveArticle() {
+            const title = document.getElementById('articleTitleInput').value.trim();
+            const date = document.getElementById('articleDateInput').value;
+            const slug = document.getElementById('articleSlugInput').value.trim() || generateSlug(title);
+            const content = document.getElementById('articleContent').value.trim();
+
+            if (!title || !content) {
+                showNotification('الرجاء ملء العنوان والمحتوى', 'warning');
+                return;
+            }
+
+            try {
+                // إنشاء/تحديث ملف MD
+                await saveMarkdownFile(slug, content, title, date);
+                
+                // تحديث الفهرس
+                await updateArticlesIndex(slug, title, date, content);
+                
+                showNotification('تم حفظ المقال بنجاح!', 'success');
+                loadArticles();
+                updateStats();
+                
+            } catch (error) {
+                showNotification('خطأ في الحفظ: ' + error.message, 'error');
+            }
+        }
+
+        async function saveMarkdownFile(slug, content, title, date) {
+            // في الواقع، هنا ستحتاج إلى رفع الملف إلى الخادم
+            // لكن بما أننا في GitHub Pages، سننشئ ملفاً للتحميل
+            
+            const mdContent = `---
+title: "${title}"
+date: "${date}"
+slug: "${slug}"
+---
+
+${content}`;
+
+            // إنشاء ملف للتحميل
+            const blob = new Blob([mdContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = `${slug}.md`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            
+            // تخزين مؤقت في localStorage (للعرض فقط)
+            localStorage.setItem(`article_${slug}`, mdContent);
+            
+            return slug;
+        }
+
+        async function updateArticlesIndex(slug, title, date, content) {
+            // إنشاء أو تحديث المقال في الفهرس
+            const articleIndex = articlesData.findIndex(a => a.id === slug);
+            
+            const description = content.substring(0, 150) + '...';
+            
+            const articleData = {
+                id: slug,
+                title: title,
+                date: date,
+                description: description,
+                image: 'images/blog-bg.jpg', // الصورة الافتراضية
+                content: `articles/${slug}.md`,
+                type: 'local-md',
+                tags: extractTags(content)
+            };
+            
+            if (articleIndex > -1) {
+                articlesData[articleIndex] = articleData;
             } else {
-                btn.innerHTML = '<i class="fas fa-check-double ml-2"></i> وضع التحديد';
-                btn.className = 'bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition';
-                bulkActions.classList.add('hidden');
+                articlesData.unshift(articleData);
             }
             
-            selectedCount.textContent = selectedArticles.size;
-            loadCurrentArticles();
+            // حفظ الفهرس
+            const indexData = {
+                lastUpdate: new Date().toISOString(),
+                articles: articlesData
+            };
+            
+            // إنشاء ملف الفهرس للتحميل
+            const blob = new Blob([JSON.stringify(indexData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = 'articles.json';
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            
+            // تخزين مؤقت
+            localStorage.setItem('articles_index', JSON.stringify(indexData));
         }
-        
-        function handleArticleClick(index, event) {
-            if (!selectMode) return;
-            if (event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') return;
+
+        // ========== إدارة الصور ==========
+        function setupDragAndDrop() {
+            const dropArea = document.getElementById('dropArea');
             
-            toggleSelectArticle(index);
-        }
-        
-        function toggleSelectArticle(index) {
-            if (selectedArticles.has(index)) {
-                selectedArticles.delete(index);
-            } else {
-                selectedArticles.add(index);
-            }
-            
-            document.getElementById('selectedCount').textContent = selectedArticles.size;
-            loadCurrentArticles();
-        }
-        
-        // ========== حذف المقالات ==========
-        function deleteSingleArticle(index) {
-            if (!confirm(`هل أنت متأكد من حذف المقال:\n"${currentArticlesData[index].title}"؟`)) {
-                return;
-            }
-            
-            if (!confirm('⚠️ هذا الإجراء لا يمكن التراجع عنه. تأكيد الحذف؟')) {
-                return;
-            }
-            
-            createBackupBeforeAction('حذف المقال: ' + currentArticlesData[index].title);
-            currentArticlesData.splice(index, 1);
-            saveArticlesToFile();
-            showNotification('تم حذف المقال بنجاح', 'success');
-        }
-        
-        function deleteSelectedArticles() {
-            if (selectedArticles.size === 0) {
-                showNotification('لم تحدد أي مقالات للحذف', 'warning');
-                return;
-            }
-            
-            const count = selectedArticles.size;
-            if (!confirm(`هل أنت متأكد من حذف ${count} مقال؟`)) {
-                return;
-            }
-            
-            if (!confirm('⚠️ هذا الإجراء لا يمكن التراجع عنه. تأكيد الحذف؟')) {
-                return;
-            }
-            
-            createBackupBeforeAction(`حذف ${count} مقال`);
-            const indices = Array.from(selectedArticles).sort((a, b) => b - a);
-            
-            indices.forEach(index => {
-                currentArticlesData.splice(index, 1);
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
             });
             
-            selectedArticles.clear();
-            toggleSelectMode();
-            saveArticlesToFile();
-            showNotification(`تم حذف ${count} مقال بنجاح`, 'success');
-        }
-        
-        // ========== تعديل المقالات ==========
-        function editArticle(index) {
-            const article = currentArticlesData[index];
-            if (!article) {
-                showNotification('المقال غير موجود', 'error');
-                return;
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
             }
             
-            document.getElementById('editArticleId').value = article.id || generateArticleId(article.title);
-            document.getElementById('editArticleIndex').value = index;
-            document.getElementById('editArticleTitle').value = article.title;
-            document.getElementById('editArticleDate').value = article.date;
-            document.getElementById('editArticleDescription').value = article.description;
-            document.getElementById('editArticleType').value = article.type || 'google-drive';
-            document.getElementById('editContentUrl').value = article.content || '';
-            document.getElementById('editImageUrl').value = article.image || '';
-            document.getElementById('editArticleTags').value = article.tags ? article.tags.join(', ') : '';
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
             
-            document.getElementById('editModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-            document.body.style.overflow = '';
-            document.getElementById('editArticleForm').reset();
-        }
-        
-        function saveEditedArticle() {
-            const index = parseInt(document.getElementById('editArticleIndex').value);
-            if (isNaN(index) || !currentArticlesData[index]) {
-                showNotification('خطأ في بيانات المقال', 'error');
-                return;
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.style.borderColor = 'var(--gold-solid)';
+                dropArea.style.background = 'rgba(191, 149, 63, 0.1)';
             }
             
-            createBackupBeforeAction('تعديل المقال: ' + currentArticlesData[index].title);
-            
-            currentArticlesData[index] = {
-                id: document.getElementById('editArticleId').value,
-                title: document.getElementById('editArticleTitle').value,
-                date: document.getElementById('editArticleDate').value,
-                description: document.getElementById('editArticleDescription').value,
-                type: document.getElementById('editArticleType').value,
-                content: document.getElementById('editContentUrl').value,
-                image: document.getElementById('editImageUrl').value,
-                tags: document.getElementById('editArticleTags').value
-                    .split(',')
-                    .map(tag => tag.trim())
-                    .filter(tag => tag !== '')
-            };
-            
-            saveArticlesToFile();
-            closeEditModal();
-            showNotification('تم تعديل المقال بنجاح', 'success');
-        }
-        
-        // ========== نسخ المقالات ==========
-        function duplicateArticleFromList(index) {
-            const article = currentArticlesData[index];
-            if (!article) {
-                showNotification('المقال غير موجود', 'error');
-                return;
+            function unhighlight() {
+                dropArea.style.borderColor = '';
+                dropArea.style.background = '';
             }
             
-            const duplicatedArticle = {
-                ...article,
-                id: article.id + '-copy-' + Date.now().toString().slice(-6),
-                title: article.title + ' (نسخة)',
-                date: new Date().toISOString().split('T')[0]
-            };
+            dropArea.addEventListener('drop', handleDrop, false);
             
-            currentArticlesData.unshift(duplicatedArticle);
-            saveArticlesToFile();
-            showNotification('تم نسخ المقال بنجاح', 'success');
-        }
-        
-        function duplicateArticle() {
-            const index = parseInt(document.getElementById('editArticleIndex').value);
-            const article = currentArticlesData[index];
-            
-            if (!article) {
-                showNotification('المقال غير موجود', 'error');
-                return;
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleImageFiles(files);
             }
-            
-            closeEditModal();
-            
-            const duplicatedArticle = {
-                ...article,
-                id: article.id + '-copy-' + Date.now().toString().slice(-6),
-                title: article.title + ' (نسخة)',
-                date: new Date().toISOString().split('T')[0]
-            };
-            
-            currentArticlesData.unshift(duplicatedArticle);
-            saveArticlesToFile();
-            showNotification('تم نسخ المقال بنجاح', 'success');
         }
-        
-        function previewEditedArticle() {
-            const article = {
-                id: document.getElementById('editArticleId').value,
-                title: document.getElementById('editArticleTitle').value,
-                date: document.getElementById('editArticleDate').value,
-                description: document.getElementById('editArticleDescription').value,
-                type: document.getElementById('editArticleType').value,
-                content: document.getElementById('editContentUrl').value,
-                image: document.getElementById('editImageUrl').value,
-                tags: document.getElementById('editArticleTags').value.split(',').map(t => t.trim()).filter(t => t)
-            };
-            
-            alert(`معاينة المقال بعد التعديل:\n\nالعنوان: ${article.title}\nالتاريخ: ${article.date}\nالنوع: ${article.type}\n\nاضغط "موافق" للمتابعة`);
+
+        function handleImageUpload(event) {
+            const files = event.target.files;
+            handleImageFiles(files);
         }
-        
-        // ========== وظائف مساعدة ==========
-        function createBackupBeforeAction(actionName) {
-            const backup = {
-                id: 'backup-before-' + actionName.replace(/\s+/g, '-') + '-' + Date.now(),
-                timestamp: new Date().toISOString(),
-                date: new Date().toLocaleDateString('ar-EG'),
-                time: new Date().toLocaleTimeString('ar-EG'),
-                action: actionName,
-                articles: JSON.parse(JSON.stringify(currentArticlesData)),
-                count: currentArticlesData.length
-            };
-            
-            const backups = JSON.parse(localStorage.getItem('article_backups') || '[]');
-            backups.unshift(backup);
-            
-            if (backups.length > 30) {
-                backups.pop();
-            }
-            
-            localStorage.setItem('article_backups', JSON.stringify(backups));
-            loadBackupStats();
-        }
-        
-        function saveArticlesToFile() {
-            const data = {
-                lastUpdate: new Date().toISOString(),
-                articles: currentArticlesData
-            };
-            
-            showNotification('جاري حفظ التغييرات...', 'info');
-            
-            setTimeout(() => {
-                const jsonOutput = document.getElementById('jsonOutput');
-                if (jsonOutput) {
-                    jsonOutput.textContent = JSON.stringify(data, null, 2);
-                    highlightJSON();
-                    showNotification('انسخ JSON واحفظه في ملف articles.json', 'info');
-                }
+
+        function handleImageFiles(files) {
+            for (let file of files) {
+                if (!file.type.match('image.*')) continue;
                 
-                loadCurrentArticles();
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    saveImageToGallery(file.name, e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveImageToGallery(filename, dataUrl) {
+            // إنشاء معرف فريد للصورة
+            const imageId = 'img_' + Date.now() + '_' + filename.replace(/\s+/g, '-');
+            
+            // تخزين في localStorage
+            let gallery = JSON.parse(localStorage.getItem('image_gallery') || '[]');
+            gallery.push({
+                id: imageId,
+                name: filename,
+                data: dataUrl,
+                date: new Date().toISOString()
+            });
+            
+            localStorage.setItem('image_gallery', JSON.stringify(gallery));
+            
+            // إنشاء ملف للتحميل
+            const base64Data = dataUrl.split(',')[1];
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'image/jpeg' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = filename;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            
+            showNotification('تم حفظ الصورة: ' + filename, 'success');
+            loadImages();
+            updateStats();
+        }
+
+        function loadImages() {
+            const gallery = JSON.parse(localStorage.getItem('image_gallery') || '[]');
+            imagesList = gallery;
+            
+            // عرض الصور في القائمة
+            const container = document.getElementById('imagesList');
+            if (gallery.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-white/50">
+                        <i class="fas fa-images text-2xl mb-2"></i>
+                        <p>لا توجد صور بعد</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = gallery.slice(0, 5).map(img => `
+                <div class="p-2 rounded-lg border border-white/10 hover:border-gold-solid/30 flex items-center gap-3">
+                    <img src="${img.data}" class="w-12 h-12 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <p class="text-white text-sm truncate">${img.name}</p>
+                        <p class="text-white/50 text-xs">${new Date(img.date).toLocaleDateString('ar-EG')}</p>
+                    </div>
+                    <button onclick="insertImage('${img.id}')" 
+                            class="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            `).join('');
+            
+            document.getElementById('imagesCount').textContent = gallery.length;
+        }
+
+        // ========== معرض الصور ==========
+        function insertImageFromGallery() {
+            const gallery = JSON.parse(localStorage.getItem('image_gallery') || '[]');
+            const container = document.getElementById('galleryImages');
+            
+            if (gallery.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-4 text-center py-8 text-white/50">
+                        <i class="fas fa-images text-4xl mb-4"></i>
+                        <p>لا توجد صور في المعرض</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = gallery.map(img => `
+                    <div class="relative group">
+                        <img src="${img.data}" 
+                             class="w-full h-32 object-cover rounded-lg cursor-pointer"
+                             onclick="selectImage('${img.data}', '${img.name}')">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2 rounded-lg">
+                            <button onclick="selectImage('${img.data}', '${img.name}')"
+                                    class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="deleteImage('${img.id}')"
+                                    class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('imageGalleryModal').classList.remove('hidden');
+        }
+
+        function closeImageGallery() {
+            document.getElementById('imageGalleryModal').classList.add('hidden');
+        }
+
+        function selectImage(dataUrl, filename) {
+            const markdownImage = `![${filename}](${dataUrl})`;
+            insertTextAtCursor(markdownImage);
+            closeImageGallery();
+        }
+
+        function deleteImage(imageId) {
+            if (confirm('هل تريد حذف هذه الصورة؟')) {
+                let gallery = JSON.parse(localStorage.getItem('image_gallery') || '[]');
+                gallery = gallery.filter(img => img.id !== imageId);
+                localStorage.setItem('image_gallery', JSON.stringify(gallery));
+                loadImages();
+                insertImageFromGallery(); // تحديث المعرض
+                showNotification('تم حذف الصورة', 'success');
+            }
+        }
+
+        // ========== أدوات المحرر ==========
+        function formatText(command) {
+            const textarea = document.getElementById('articleContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            
+            let formattedText = '';
+            
+            switch(command) {
+                case 'bold':
+                    formattedText = `**${selectedText}**`;
+                    break;
+                case 'italic':
+                    formattedText = `*${selectedText}*`;
+                    break;
+                case 'h1':
+                    formattedText = `# ${selectedText}`;
+                    break;
+                case 'h2':
+                    formattedText = `## ${selectedText}`;
+                    break;
+                case 'link':
+                    const url = prompt('أدخل الرابط:');
+                    if (url) {
+                        formattedText = `[${selectedText}](${url})`;
+                    }
+                    break;
+                case 'image':
+                    const imageUrl = prompt('أدخل رابط الصورة:');
+                    if (imageUrl) {
+                        formattedText = `![${selectedText}](${imageUrl})`;
+                    }
+                    break;
+                case 'code':
+                    formattedText = "```\n" + selectedText + "\n```";
+                    break;
+                case 'list':
+                    formattedText = selectedText.split('\n').map(line => `- ${line}`).join('\n');
+                    break;
+            }
+            
+            if (formattedText) {
+                textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+                textarea.focus();
+                textarea.setSelectionRange(start, start + formattedText.length);
+                updatePreview();
+            }
+        }
+
+        function insertTextAtCursor(text) {
+            const textarea = document.getElementById('articleContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            
+            textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + text.length, start + text.length);
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const content = document.getElementById('articleContent').value;
+            const preview = document.getElementById('previewContent');
+            
+            // تحويل Markdown بسيط
+            let html = content
+                .replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold gold-text mt-4 mb-2">$1</h1>')
+                .replace(/^## (.*$)/gm, '<h2 class="text-xl font-bold text-white mt-3 mb-2">$1</h2>')
+                .replace(/^### (.*$)/gm, '<h3 class="text-lg font-bold text-white mt-2 mb-1">$1</h3>')
+                .replace(/\*\*(.*)\*\*/g, '<strong class="font-bold text-white">$1</strong>')
+                .replace(/\*(.*)\*/g, '<em class="italic text-white/90">$1</em>')
+                .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="rounded-lg my-4 max-w-full">')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-400 hover:underline">$1</a>')
+                .replace(/^- (.*$)/gm, '<li class="mr-4">$1</li>')
+                .replace(/\n/g, '<br>');
+            
+            preview.innerHTML = html || '<p class="text-white/50">المعاينة ستظهر هنا...</p>';
+        }
+
+        // ========== حذف المقالات ==========
+        async function deleteArticle(articleId, event) {
+            event.stopPropagation();
+            
+            if (!confirm('هل أنت متأكد من حذف هذا المقال؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+                return;
+            }
+            
+            try {
+                // حذف من الفهرس
+                articlesData = articlesData.filter(a => a.id !== articleId);
                 
-                const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+                // تحديث الفهرس
+                const indexData = {
+                    lastUpdate: new Date().toISOString(),
+                    articles: articlesData
+                };
+                
+                // حفظ الفهرس الجديد
+                localStorage.setItem('articles_index', JSON.stringify(indexData));
+                
+                // إنشاء ملف للتحميل
+                const blob = new Blob([JSON.stringify(indexData, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 
                 a.href = url;
-                a.download = `articles-updated-${new Date().toISOString().split('T')[0]}.json`;
+                a.download = 'articles.json';
                 a.click();
+                
                 URL.revokeObjectURL(url);
                 
-            }, 500);
+                showNotification('تم حذف المقال بنجاح', 'success');
+                loadArticles();
+                updateStats();
+                
+            } catch (error) {
+                showNotification('خطأ في الحذف: ' + error.message, 'error');
+            }
         }
-        
-        function generateArticleId(title) {
+
+        // ========== دوال مساعدة ==========
+        function generateSlug(title) {
             return title
                 .toLowerCase()
-                .replace(/[^\w\u0600-\u06FF\s]/g, '')
+                .replace(/[^\w\u0600-\u06FF\s-]/g, '')
                 .replace(/\s+/g, '-')
                 .replace(/-+/g, '-')
-                .substring(0, 50) + '-' + Date.now().toString().slice(-6);
+                .substring(0, 50);
         }
-        
-        // ========== إشعارات ==========
+
+        function extractTags(content) {
+            const words = content.split(/\s+/);
+            const commonWords = ['في', 'من', 'على', 'أن', 'هذا', 'هذه', 'كان', 'يكون'];
+            const tags = words
+                .filter(word => word.length > 3 && !commonWords.includes(word))
+                .slice(0, 5);
+            return [...new Set(tags)]; // إزالة التكرارات
+        }
+
+        function updateStats() {
+            document.getElementById('articlesCount').textContent = articlesData.length;
+            document.getElementById('imagesCount').textContent = imagesList.length;
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('ar-EG');
+            
+            // تحديث عدد ملفات MD من localStorage
+            const mdCount = Object.keys(localStorage)
+                .filter(key => key.startsWith('article_'))
+                .length;
+            document.getElementById('mdFilesCount').textContent = mdCount;
+        }
+
         function showNotification(message, type = 'success') {
             const colors = {
                 success: 'bg-green-600',
                 error: 'bg-red-600',
-                warning: 'bg-yellow-600',
-                info: 'bg-blue-600'
-            };
-            
-            const icons = {
-                success: 'fa-check-circle',
-                error: 'fa-exclamation-triangle',
-                warning: 'fa-exclamation-circle',
-                info: 'fa-info-circle'
+                warning: 'bg-yellow-600'
             };
             
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 left-4 px-6 py-3 rounded-lg shadow-lg z-50 ${colors[type]} text-white notification`;
+            notification.className = `fixed top-4 left-4 px-6 py-3 rounded-lg shadow-lg z-50 ${colors[type]} text-white`;
             notification.innerHTML = `
-                <i class="fas ${icons[type]} ml-2"></i>
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'} ml-2"></i>
                 ${message}
             `;
             
@@ -1445,160 +1025,33 @@
                 notification.remove();
             }, 3000);
         }
-        
-        // ========== دوال النموذج الأساسي ==========
-        function generateArticle() {
-            const form = document.getElementById('articleForm');
-            if (!form.checkValidity()) {
-                alert('يرجى ملء جميع الحقول المطلوبة');
-                return;
-            }
+
+        // ========== دعم GitHub Pages ==========
+        // ملاحظة: في GitHub Pages، لا يمكن حفظ الملفات مباشرة
+        // لذلك النظام يقوم بإنشاء الملفات للتحميل، ويجب رفعها يدوياً
+        function showUploadInstructions() {
+            const instructions = `
+                <div class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+                    <div class="bg-black/90 border-2 border-gold-solid rounded-3xl p-8 max-w-2xl">
+                        <h2 class="text-2xl font-bold gold-text mb-4">تعليمات الرفع إلى GitHub</h2>
+                        <div class="space-y-4 text-white/80">
+                            <p>1. بعد إنشاء المقال، سيتم تحميل ملفين:</p>
+                            <ul class="mr-4 space-y-2">
+                                <li>• <code class="bg-black/50 px-2 py-1 rounded">اسم-المقال.md</code> - ضعه في <code>blog/articles/</code></li>
+                                <li>• <code class="bg-black/50 px-2 py-1 rounded">articles.json</code> - ضعه في <code>blog/data/</code></li>
+                            </ul>
+                            <p>2. الصور المرفوعة: ضعها في <code>blog/images/</code></p>
+                            <p>3. ارفع الملفات إلى مستودع GitHub الخاص بك</p>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" 
+                                class="gold-btn w-full py-3 rounded-xl mt-6 font-bold">
+                            فهمت
+                        </button>
+                    </div>
+                </div>
+            `;
             
-            const article = {
-                id: generateArticleId(document.getElementById('articleTitle').value),
-                title: document.getElementById('articleTitle').value,
-                date: document.getElementById('articleDate').value,
-                description: document.getElementById('articleDescription').value,
-                image: document.getElementById('imageUrl').value || 'images/blog-bg.jpg',
-                content: document.getElementById('contentUrl').value,
-                type: document.getElementById('articleType').value,
-                tags: document.getElementById('articleTags').value
-                    .split(',')
-                    .map(tag => tag.trim())
-                    .filter(tag => tag !== '')
-            };
-            
-            updatePreview(article);
-            
-            document.getElementById('previewSection').classList.remove('hidden');
-            document.getElementById('instructions').classList.add('hidden');
-            
-            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        
-        function updatePreview(article) {
-            document.getElementById('previewDate').textContent = article.date;
-            document.getElementById('previewTitle').textContent = article.title;
-            document.getElementById('previewDescription').textContent = article.description;
-            
-            let typeText = '';
-            switch(article.type) {
-                case 'google-drive': typeText = 'Google Drive'; break;
-                case 'url': typeText = 'رابط خارجي'; break;
-                case 'local': typeText = 'ملف محلي'; break;
-            }
-            document.getElementById('previewType').textContent = typeText;
-            
-            const jsonOutput = JSON.stringify([article], null, 2);
-            document.getElementById('jsonOutput').textContent = jsonOutput;
-            
-            highlightJSON();
-        }
-        
-        function highlightJSON() {
-            const jsonElement = document.getElementById('jsonOutput');
-            let jsonText = jsonElement.textContent;
-            
-            jsonText = jsonText
-                .replace(/("[^"]*"):/g, '<span class="text-green-400">$1</span>:')
-                .replace(/("[^"]*")/g, '<span class="text-yellow-300">$1</span>')
-                .replace(/\b(true|false|null)\b/g, '<span class="text-blue-400">$1</span>')
-                .replace(/\b(\d+)\b/g, '<span class="text-purple-400">$1</span>');
-            
-            jsonElement.innerHTML = jsonText;
-        }
-        
-        function copyJSON() {
-            const jsonText = document.getElementById('jsonOutput').textContent;
-            navigator.clipboard.writeText(jsonText).then(() => {
-                const successMsg = document.getElementById('successMessage');
-                successMsg.classList.remove('hidden');
-                
-                setTimeout(() => {
-                    successMsg.classList.add('hidden');
-                }, 3000);
-            }).catch(err => {
-                showNotification('خطأ في النسخ: ' + err, 'error');
-            });
-        }
-        
-        function downloadJSON() {
-            const jsonText = document.getElementById('jsonOutput').textContent;
-            const blob = new Blob([jsonText], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            
-            a.href = url;
-            a.download = `article-${Date.now()}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showNotification('تم تحميل الملف', 'success');
-        }
-        
-        function saveToArticles() {
-            const jsonText = document.getElementById('jsonOutput').textContent;
-            if (!jsonText || jsonText.trim() === '') {
-                showNotification('لا توجد بيانات لحفظها', 'error');
-                return;
-            }
-            
-            try {
-                const articleData = JSON.parse(jsonText);
-                if (Array.isArray(articleData) && articleData.length > 0) {
-                    showNotification('يجب إضافة المقال يدوياً إلى ملف articles.json', 'info');
-                    copyJSON();
-                }
-            } catch (error) {
-                showNotification('خطأ في بيانات JSON: ' + error.message, 'error');
-            }
-        }
-        
-        function resetForm() {
-            document.getElementById('articleForm').reset();
-            document.getElementById('articleDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('previewSection').classList.add('hidden');
-            document.getElementById('instructions').classList.remove('hidden');
-        }
-        
-        function openArticlesFile() {
-            window.open('blog-data/articles.json', '_blank');
-        }
-        
-        function testLink() {
-            const link = document.getElementById('contentUrl').value;
-            if (!link) {
-                showNotification('أدخل الرابط أولاً', 'warning');
-                return;
-            }
-            
-            showNotification('جاري اختبار الرابط...', 'info');
-            
-            fetch(link, { method: 'HEAD', mode: 'no-cors' })
-                .then(() => {
-                    showNotification('الرابط يعمل بنجاح ✓', 'success');
-                })
-                .catch(() => {
-                    showNotification('تعذر الوصول إلى الرابط', 'error');
-                });
-        }
-        
-        function convertDriveLink() {
-            const input = prompt('الصق رابط Google Drive (من رابط المشاركة):');
-            if (!input) return;
-            
-            let converted = input;
-            
-            if (input.includes('/file/d/')) {
-                const fileId = input.match(/\/file\/d\/([^\/]+)/)?.[1];
-                if (fileId) {
-                    converted = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                    alert(`تم التحويل:\n\n${converted}\n\nيمكنك نسخ هذا الرابط واستخدامه.`);
-                }
-            }
-            
-            document.getElementById('contentUrl').value = converted;
+            document.body.insertAdjacentHTML('beforeend', instructions);
         }
     </script>
 </body>

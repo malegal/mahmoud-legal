@@ -438,56 +438,6 @@
                 line-height: 1.7;
             }
         }
-        
-        /* أنماط إضافية للنظام الجديد */
-        .article-tag {
-            display: inline-block;
-            background: rgba(191, 149, 63, 0.1);
-            color: var(--gold-solid);
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.75rem;
-            margin: 0.125rem;
-        }
-        
-        .drive-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(66, 133, 244, 0.9);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.7rem;
-        }
-        
-        .local-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(52, 168, 83, 0.9);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.7rem;
-        }
-        
-        .article-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
-        
-        .last-update {
-            background: rgba(191, 149, 63, 0.05);
-            border: 1px solid rgba(191, 149, 63, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.875rem;
-        }
     </style>
 </head>
 <body>
@@ -510,6 +460,7 @@
                 <a href="#specialties" class="text-white hover:gold-text transition">تخصصاتنا</a>
                 <a href="#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
                 <a href="#blog" class="text-white hover:gold-text transition">المدونة</a>
+                <!-- إضافة رابط لوحة إدارة المدونة -->
                 <a href="blog-admin.html" class="text-white hover:gold-text transition">إدارة المدونة</a>
                 <div class="nav-buttons">
                     <a href="client-inquiry.html" class="track-case-btn px-4 py-2.5 rounded-lg text-xs flex items-center gap-2">
@@ -537,6 +488,7 @@
             <a href="#specialties" onclick="closeMenu()" class="gold-text">تخصصاتنا القانونية</a>
             <a href="#vision" onclick="closeMenu()" class="gold-text">الرؤية والأهداف</a>
             <a href="#blog" onclick="closeMenu()" class="gold-text">المدونة</a>
+            <!-- إضافة رابط لوحة إدارة المدونة للجوال -->
             <a href="blog-admin.html" onclick="closeMenu()" class="gold-text">إدارة المدونة</a>
             <div class="flex flex-col gap-4 mt-4">
                 <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg text-center">
@@ -890,12 +842,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-black serif-font gold-text mb-6 section-title">المدونة القانونية</h2>
                 <div class="w-32 h-1 bg-gradient-to-r from-transparent via-gold-solid to-transparent mx-auto"></div>
-                <p class="text-xl text-white/80 mt-4 max-w-3xl mx-auto">مقالات قانونية متخصصة - نظام تحديث تلقائي يدعم Google Drive</p>
-                
-                <div class="last-update inline-block mt-4" id="last-update-container">
-                    <i class="fas fa-sync-alt gold-text ml-2"></i>
-                    <span id="last-update-text">جاري تحديث القائمة...</span>
-                </div>
+                <p class="text-xl text-white/80 mt-4 max-w-3xl mx-auto">مقالات قانونية متخصصة وأبحاث في مختلف فروع القانون</p>
             </div>
 
             <div id="blog-posts" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -912,27 +859,6 @@
                 <a href="blog-admin.html" class="gold-btn inline-block mt-4 px-6 py-2 rounded-lg">
                     <i class="fas fa-cog ml-2"></i> الانتقال إلى لوحة الإدارة
                 </a>
-            </div>
-            
-            <div class="text-center mt-12 pt-8 border-t border-white/10">
-                <h3 class="text-2xl font-bold gold-text mb-4">📚 نظام المدونة المتقدم</h3>
-                <div class="grid md:grid-cols-3 gap-6 mt-6">
-                    <div class="card-glass p-6 rounded-xl">
-                        <i class="fas fa-cloud-upload-alt text-3xl gold-text mb-4"></i>
-                        <h4 class="font-bold text-lg mb-2">رفع على Google Drive</h4>
-                        <p class="text-white/70 text-sm">ارفع مقالات Word/PDF على Google Drive لتظهر تلقائياً</p>
-                    </div>
-                    <div class="card-glass p-6 rounded-xl">
-                        <i class="fas fa-sync text-3xl gold-text mb-4"></i>
-                        <h4 class="font-bold text-lg mb-2">تحديث تلقائي</h4>
-                        <p class="text-white/70 text-sm">تعديل ملف JSON خارجي لتحديث القائمة فورياً</p>
-                    </div>
-                    <div class="card-glass p-6 rounded-xl">
-                        <i class="fas fa-cogs text-3xl gold-text mb-4"></i>
-                        <h4 class="font-bold text-lg mb-2">إدارة سهلة</h4>
-                        <p class="text-white/70 text-sm">لوحة إدارة بسيطة لإضافة وتعديل المقالات</p>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -977,6 +903,7 @@
                 <a href="https://www.facebook.com/malegal" target="_blank" class="hover:gold-text"><i class="fab fa-facebook-f"></i></a>
                 <a href="mailto:ma.legal.eg@outlook.com" class="hover:gold-text"><i class="fas fa-envelope"></i></a>
             </div>
+            <!-- إضافة رابط لوحة إدارة المدونة في التذييل -->
             <div class="mt-6">
                 <a href="blog-admin.html" class="inline-block text-sm text-white/50 hover:text-gold-solid transition">
                     <i class="fas fa-tools ml-1"></i> لوحة إدارة المدونة
@@ -991,50 +918,14 @@
             <button onclick="closeModal()" class="absolute top-4 left-4 text-3xl gold-text"><i class="fas fa-times"></i></button>
             <img id="modal-image" class="w-full h-64 object-cover rounded-2xl mb-8" src="" alt="">
             <h2 id="modal-title" class="text-4xl font-black gold-text mb-6 text-right"></h2>
-            <div class="article-meta text-white/60 mb-6">
-                <span id="modal-date"><i class="fas fa-calendar ml-2"></i> </span>
-                <span id="modal-type" class="article-tag"></span>
-            </div>
             <div id="modal-content" class="text-white/90 text-lg leading-relaxed text-right"></div>
-            <div class="mt-8 pt-6 border-t border-white/10">
-                <div id="modal-tags" class="flex flex-wrap gap-2 mb-4"></div>
-                <div class="text-center">
-                    <button onclick="closeModal()" class="gold-btn px-6 py-2 rounded-lg">
-                        <i class="fas fa-times ml-2"></i> إغلاق المقال
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
-        // متغيرات النظام
+        // متغير عام لحفظ المقالات
         window.blogArticles = [];
-        window.blogData = null;
-        const BLOG_DATA_URL = 'blog-data/articles.json';
-        const LOCAL_FALLBACK_ARTICLES = [
-            { 
-                id: 'welcome', 
-                title: 'مرحباً بكم في المدونة القانونية', 
-                date: '2024-03-20', 
-                description: 'مدخل إلى عالم القانون والمحاماة ونظرة عامة على خدماتنا القانونية المتخصصة', 
-                image: 'blog/images/welcome.md.png', 
-                content: 'blog/welcome.md',
-                type: 'local',
-                tags: ['مقدمة', 'عام']
-            },
-            { 
-                id: 'contract', 
-                title: 'دليل شامل للعقود والاتفاقيات', 
-                date: '2024-03-21', 
-                description: 'كل ما تحتاج معرفته عن صياغة العقود وحماية حقوقك التعاقدية', 
-                image: 'blog/images/Contract.md.jpg', 
-                content: 'blog/Contract.md',
-                type: 'local',
-                tags: ['عقود', 'تجاري']
-            }
-        ];
-
+        
         document.addEventListener('DOMContentLoaded', function() {
             initializeSite();
             loadBlogPosts();
@@ -1124,52 +1015,35 @@
         async function loadBlogPosts() {
             const container = document.getElementById('blog-posts');
             const noPostsMessage = document.getElementById('no-posts-message');
-            const lastUpdateText = document.getElementById('last-update-text');
             
-            try {
-                // محاولة جلب البيانات من ملف JSON الخارجي
-                const response = await fetch(BLOG_DATA_URL + '?t=' + Date.now());
-                
-                if (response.ok) {
-                    window.blogData = await response.json();
-                    window.blogArticles = window.blogData.articles || [];
-                    
-                    // تحديث نص آخر تحديث
-                    if (window.blogData.lastUpdate) {
-                        lastUpdateText.innerHTML = `<span class="gold-text">آخر تحديث:</span> ${window.blogData.lastUpdate}`;
-                    } else {
-                        lastUpdateText.textContent = 'تم التحديث الآن';
-                    }
-                    
-                    if (window.blogArticles.length === 0) {
-                        container.innerHTML = '';
-                        noPostsMessage.classList.remove('hidden');
-                    } else {
-                        displayArticles(window.blogArticles);
-                    }
-                    
-                    console.log(`تم تحميل ${window.blogArticles.length} مقال من ملف خارجي`);
-                    
-                } else {
-                    throw new Error('لم يتم العثور على ملف المقالات الخارجي');
+            // المقالات الفعلية الموجودة في الموقع
+            const articles = [
+                { 
+                    id: 'welcome', 
+                    title: 'مرحباً بكم في المدونة القانونية', 
+                    date: '2024-03-20', 
+                    description: 'مدخل إلى عالم القانون والمحاماة ونظرة عامة على خدماتنا القانونية المتخصصة', 
+                    image: 'blog/images/welcome.md.png', 
+                    file: 'blog/welcome.md' 
+                },
+                { 
+                    id: 'contract', 
+                    title: 'دليل شامل للعقود والاتفاقيات', 
+                    date: '2024-03-21', 
+                    description: 'كل ما تحتاج معرفته عن صياغة العقود وحماية حقوقك التعاقدية', 
+                    image: 'blog/images/Contract.md.jpg', 
+                    file: 'blog/Contract.md' 
                 }
-                
-            } catch (error) {
-                console.log('استخدام القائمة المحلية:', error.message);
-                lastUpdateText.textContent = 'جاري استخدام القائمة المحلية';
-                
-                // استخدام القائمة المحلية الاحتياطية
-                window.blogData = {
-                    lastUpdate: new Date().toLocaleDateString('ar-EG'),
-                    articles: LOCAL_FALLBACK_ARTICLES
-                };
-                window.blogArticles = LOCAL_FALLBACK_ARTICLES;
-                
-                setTimeout(() => {
-                    lastUpdateText.innerHTML = `<span class="gold-text">القائمة المحلية:</span> ${window.blogData.lastUpdate}`;
-                }, 1000);
-                
-                displayArticles(window.blogArticles);
+            ];
+            
+            // حفظ المقالات في المتغير العام
+            window.blogArticles = articles;
+            
+            if (articles.length === 0) {
+                container.innerHTML = '';
+                noPostsMessage.classList.remove('hidden');
+            } else {
+                displayArticles(articles);
             }
         }
 
@@ -1188,33 +1062,25 @@
             
             articles.forEach((article, index) => {
                 const card = document.createElement('div');
-                card.className = 'blog-post-card card-glass rounded-2xl overflow-hidden fade-in-up gold-border hover:transform hover:scale-[1.02] transition-transform duration-300 relative';
+                card.className = 'blog-post-card card-glass rounded-2xl overflow-hidden fade-in-up gold-border hover:transform hover:scale-[1.02] transition-transform duration-300';
                 
-                // إضافة شارة حسب نوع المصدر
-                const badge = article.type === 'google-drive' 
-                    ? '<span class="drive-badge"><i class="fab fa-google-drive mr-1"></i> Google Drive</span>'
-                    : article.type === 'url' 
-                    ? '<span class="drive-badge" style="background: rgba(255, 193, 7, 0.9);"><i class="fas fa-link mr-1"></i> رابط خارجي</span>'
-                    : '<span class="local-badge"><i class="fas fa-server mr-1"></i> محلي</span>';
+                // استخدام صورة افتراضية إذا فشل تحميل الصورة
+                const imageUrl = article.image || 'images/blog-bg.jpg';
                 
                 card.innerHTML = `
-                    ${badge}
-                    <img src="${article.image}" 
+                    <img src="${imageUrl}" 
                          class="blog-post-image w-full h-64 object-cover"
                          alt="${article.title}"
                          onerror="this.src='images/blog-bg.jpg'">
                     <div class="blog-post-content p-6">
-                        <div class="article-meta">
-                            <span class="text-xs text-gray-400"><i class="fas fa-calendar ml-1"></i> ${article.date}</span>
-                            ${article.tags && article.tags.length > 0 
-                                ? `<span class="text-xs text-gold-solid"><i class="fas fa-tag ml-1"></i> ${article.tags[0]}</span>` 
-                                : ''}
+                        <div class="mb-3">
+                            <span class="text-xs text-gray-400 bg-black/30 px-2 py-1 rounded">${article.date}</span>
                         </div>
-                        <h3 class="text-xl font-bold gold-text mb-3 line-clamp-2">${article.title}</h3>
+                        <h3 class="text-xl font-bold gold-text mb-3">${article.title}</h3>
                         <p class="text-white/80 text-sm mb-4 blog-post-excerpt">${article.description}</p>
                         <div class="mt-auto">
                             <button onclick="showBlogPost(${index})" 
-                                    class="read-more-btn gold-btn px-4 py-2 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-gold-glow/30 w-full">
+                                    class="read-more-btn gold-btn px-4 py-2 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-gold-glow/30">
                                 <i class="fas fa-book-open mr-2"></i> اقرأ المقال
                             </button>
                         </div>
@@ -1229,9 +1095,6 @@
             const modalImage = document.getElementById('modal-image');
             const modalTitle = document.getElementById('modal-title');
             const modalContent = document.getElementById('modal-content');
-            const modalDate = document.getElementById('modal-date');
-            const modalType = document.getElementById('modal-type');
-            const modalTags = document.getElementById('modal-tags');
             
             const article = window.blogArticles[index];
             
@@ -1240,50 +1103,16 @@
                 return;
             }
             
-            // تعيين البيانات الأساسية
-            modalImage.src = article.image;
+            // تعيين الصورة والعنوان
+            modalImage.src = article.image || 'images/blog-bg.jpg';
             modalImage.alt = article.title;
             modalTitle.textContent = article.title;
-            modalDate.innerHTML = `<i class="fas fa-calendar ml-2"></i> ${article.date}`;
-            
-            // تعيين نوع المقال
-            let typeText = '';
-            let typeClass = '';
-            switch(article.type) {
-                case 'google-drive':
-                    typeText = '<i class="fab fa-google-drive ml-1"></i> Google Drive';
-                    typeClass = 'bg-blue-500/20 text-blue-300';
-                    break;
-                case 'url':
-                    typeText = '<i class="fas fa-link ml-1"></i> رابط خارجي';
-                    typeClass = 'bg-yellow-500/20 text-yellow-300';
-                    break;
-                default:
-                    typeText = '<i class="fas fa-server ml-1"></i> محلي';
-                    typeClass = 'bg-green-500/20 text-green-300';
-            }
-            modalType.innerHTML = typeText;
-            modalType.className = `article-tag ${typeClass}`;
-            
-            // تعيين الوسوم
-            modalTags.innerHTML = '';
-            if (article.tags && article.tags.length > 0) {
-                article.tags.forEach(tag => {
-                    const tagElement = document.createElement('span');
-                    tagElement.className = 'article-tag';
-                    tagElement.textContent = tag;
-                    modalTags.appendChild(tagElement);
-                });
-            }
             
             // إظهار حالة التحميل
             modalContent.innerHTML = `
                 <div class="text-center py-8">
                     <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold-solid"></div>
                     <p class="text-white/60 mt-4">جاري تحميل المقال...</p>
-                    ${article.type === 'google-drive' 
-                        ? '<p class="text-white/40 text-sm mt-2">(جاري جلب المحتوى من Google Drive)</p>' 
-                        : ''}
                 </div>
             `;
             
@@ -1293,41 +1122,32 @@
             document.body.style.overflow = 'hidden';
             
             try {
-                let content = '';
+                // جلب محتوى المقال
+                const response = await fetch(article.file);
                 
-                if (article.type === 'google-drive') {
-                    // تحميل من Google Drive
-                    content = await loadFromGoogleDrive(article.content);
-                } else if (article.type === 'url') {
-                    // تحميل من رابط خارجي
-                    const response = await fetch(article.content);
-                    if (!response.ok) throw new Error('تعذر الوصول إلى الرابط');
-                    content = await response.text();
-                } else {
-                    // تحميل محلي
-                    const response = await fetch(article.content);
-                    if (!response.ok) throw new Error('تعذر العثور على الملف المحلي');
-                    content = await response.text();
+                if (!response.ok) {
+                    throw new Error('لم يتم العثور على المقال');
                 }
                 
-                // تحويل المحتوى بناءً على نوعه
-                let htmlContent = '';
+                const text = await response.text();
                 
-                if (article.content.endsWith('.md') && typeof marked !== 'undefined') {
-                    // تحويل Markdown
-                    htmlContent = marked.parse(content);
-                } else if (article.content.endsWith('.html')) {
-                    // HTML كما هو
-                    htmlContent = content;
-                } else if (article.content.endsWith('.txt') || article.content.endsWith('.docx') || article.content.includes('drive.google.com')) {
-                    // نص عادي أو Word
-                    htmlContent = `<div class="prose prose-invert max-w-none whitespace-pre-line">${content}</div>`;
+                // تحويل Markdown إلى HTML
+                if (typeof marked !== 'undefined') {
+                    modalContent.innerHTML = marked.parse(text);
                 } else {
-                    // نص افتراضي
-                    htmlContent = `<div class="whitespace-pre-line">${content}</div>`;
+                    // إذا لم تكن مكتبة marked متاحة، عرض النص كما هو
+                    modalContent.innerHTML = `<div class="whitespace-pre-line">${text}</div>`;
                 }
                 
-                modalContent.innerHTML = htmlContent;
+                // إضافة معلومات المقال في الأسفل
+                modalContent.innerHTML += `
+                    <div class="mt-8 pt-6 border-t border-white/10">
+                        <div class="flex justify-between items-center text-sm text-gray-400">
+                            <span><i class="fas fa-calendar mr-2"></i> ${article.date}</span>
+                            <span><i class="fas fa-book mr-2"></i> ${article.title}</span>
+                        </div>
+                    </div>
+                `;
                 
             } catch (error) {
                 console.error('Error loading article:', error);
@@ -1335,44 +1155,9 @@
                     <div class="text-center py-8">
                         <i class="fas fa-exclamation-triangle text-4xl gold-text mb-4"></i>
                         <h3 class="text-xl font-bold gold-text mb-2">عذراً</h3>
-                        <p class="text-white/70">تعذر تحميل المقال: ${error.message}</p>
-                        <div class="mt-6 p-4 bg-white/5 rounded-lg">
-                            <p class="text-sm text-white/50 mb-2">تفاصيل المقال:</p>
-                            <p class="text-sm"><strong>النوع:</strong> ${article.type}</p>
-                            <p class="text-sm"><strong>المصدر:</strong> ${article.content}</p>
-                            <p class="text-sm mt-2">يرجى التأكد من أن الملف متاح ومتصل بالإنترنت</p>
-                        </div>
+                        <p class="text-white/70">تعذر تحميل المقال. يرجى المحاولة مرة أخرى لاحقاً.</p>
                     </div>
                 `;
-            }
-        }
-
-        async function loadFromGoogleDrive(url) {
-            try {
-                // تحسين رابط Google Drive
-                let driveUrl = url;
-                
-                // إذا كان رابط عرض، نحوله لرابط تحميل
-                if (url.includes('/file/d/')) {
-                    const fileId = url.match(/\/file\/d\/([^\/]+)/)?.[1];
-                    if (fileId) {
-                        driveUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                    }
-                }
-                
-                const response = await fetch(driveUrl);
-                if (response.ok) {
-                    return await response.text();
-                } else {
-                    // محاولة بديلة
-                    const altResponse = await fetch(url);
-                    if (altResponse.ok) {
-                        return await altResponse.text();
-                    }
-                    throw new Error('تعذر الوصول إلى الملف على Google Drive');
-                }
-            } catch (error) {
-                throw new Error(`خطأ في تحميل من Google Drive: ${error.message}`);
             }
         }
 
@@ -1383,30 +1168,8 @@
             document.body.style.overflow = '';
         }
         
-        // وظائف إضافية للنظام
-        async function refreshBlogPosts() {
-            const lastUpdateText = document.getElementById('last-update-text');
-            lastUpdateText.innerHTML = '<i class="fas fa-sync-alt animate-spin ml-2"></i> جاري التحديث...';
-            
-            // إضافة طابع زمني لمنع التخزين المؤقت
-            await loadBlogPosts();
-            
-            // إظهار رسالة نجاح
-            setTimeout(() => {
-                lastUpdateText.innerHTML = `<span class="gold-text">تم التحديث:</span> ${new Date().toLocaleTimeString('ar-EG')}`;
-            }, 500);
-        }
-        
-        // تحديث تلقائي كل 5 دقائق
-        setInterval(() => {
-            refreshBlogPosts();
-        }, 5 * 60 * 1000);
-        
         // تحسين تجربة الهواتف
         document.addEventListener('touchstart', function() {}, {passive: true});
-        
-        // إضافة زر تحديث يدوي (يمكن إضافته في الواجهة لاحقاً)
-        window.refreshBlog = refreshBlogPosts;
     </script>
 </body>
 </html>

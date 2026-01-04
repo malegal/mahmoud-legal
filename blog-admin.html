@@ -836,6 +836,11 @@ console.log('Hello World');
                             <i class="fas fa-key ml-2"></i>
                             تغيير توكن GitHub
                         </button>
+                        <button onclick="repairIndex()" 
+                                class="w-full text-right py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
+                            <i class="fas fa-tools ml-2"></i>
+                            إصلاح الفهرس الحالي
+                        </button>
                     </div>
                 </div>
                 
@@ -1394,11 +1399,13 @@ console.log('Hello World');
                     date: date,
                     description: description,
                     image: featuredImage,
-                    content: `articles/${slug}.md`,
+                    content: `blog/articles/${slug}.md`,
                     type: 'markdown',
                     tags: keywords ? keywords.split(',').map(k => k.trim()).filter(k => k) : [],
                     category: category,
-                    status: status
+                    status: status,
+                    slug: slug,
+                    keywords: keywords
                 });
                 
                 showNotification('تم حفظ المقال بنجاح في مستودع GitHub!', 'success');
@@ -1465,22 +1472,39 @@ ${content}`;
                     currentContent = JSON.parse(decoded);
                 }
                 
-                // تحديث الفهرس
-                const existingIndex = currentContent.articles.findIndex(a => a.id === articleData.id);
-                
-                // إضافة الخصائص المهمة لعرض المقال في المدونة
-                const articleForIndex = {
-                    ...articleData,
-                    // إضافة حقل shortContent ليكون هو المحتوى الكامل (يظهر عند النقر على اقرأ المزيد)
-                    shortContent: articleData.description, // هذا ما يظهر في البطاقة
-                    // تأكد أن content يشير إلى ملف الـ MD
-                    content: articleData.content
+                // تحضير المقال بالشكل المتوافق مع المدونة
+                const formattedArticle = {
+                    id: articleData.id || articleData.slug,
+                    title: articleData.title,
+                    date: articleData.date,
+                    description: articleData.description,
+                    image: articleData.image || 'images/blog-bg.jpg',
+                    content: articleData.content,
+                    type: 'markdown',
+                    tags: articleData.tags || [],
+                    category: articleData.category || 'مقالات قانونية',
+                    status: articleData.status || 'published',
+                    // الحقول الإضافية التي تتوقعها المدونة
+                    slug: articleData.slug || articleData.id,
+                    keywords: articleData.keywords || '',
+                    // هذه الحقول تظهر في البطاقة
+                    shortContent: articleData.description.substring(0, 150) + (articleData.description.length > 150 ? '...' : ''),
+                    // معلومات إضافية للمدونة
+                    published: articleData.status === 'published',
+                    draft: articleData.status === 'draft',
+                    archived: articleData.status === 'archived',
+                    readTime: Math.max(3, Math.floor(articleData.description.length / 100))
                 };
                 
+                // البحث عن المقال الحالي (إذا كان موجوداً للتحديث)
+                const existingIndex = currentContent.articles.findIndex(a => a.id === formattedArticle.id);
+                
                 if (existingIndex > -1) {
-                    currentContent.articles[existingIndex] = articleForIndex;
+                    // تحديث المقال الحالي
+                    currentContent.articles[existingIndex] = formattedArticle;
                 } else {
-                    currentContent.articles.unshift(articleForIndex);
+                    // إضافة مقال جديد في البداية
+                    currentContent.articles.unshift(formattedArticle);
                 }
                 
                 currentContent.lastUpdate = new Date().toISOString();
@@ -1497,6 +1521,9 @@ ${content}`;
                     const errorData = await updateResponse.json();
                     throw new Error(errorData.message || 'فشل في تحديث الفهرس');
                 }
+                
+                // تحديث القائمة المحلية
+                await loadArticlesForDashboard();
                 
                 return updateResponse.ok;
                 
@@ -1804,9 +1831,11 @@ ${content}`;
                 const result = {};
                 
                 lines.forEach(line => {
-                    if (line.includes(':')) {
-                        const [key, ...valueParts] = line.split(':');
-                        let value = valueParts.join(':').trim();
+                    line = line.trim();
+                    if (line.includes(':') && !line.startsWith('#')) {
+                        const colonIndex = line.indexOf(':');
+                        const key = line.substring(0, colonIndex).trim();
+                        let value = line.substring(colonIndex + 1).trim();
                         
                         // إزالة الاقتباسات
                         if ((value.startsWith('"') && value.endsWith('"')) || 
@@ -1814,7 +1843,7 @@ ${content}`;
                             value = value.substring(1, value.length - 1);
                         }
                         
-                        result[key.trim()] = value;
+                        result[key] = value;
                     }
                 });
                 
@@ -1907,6 +1936,76 @@ ${content}`;
                 }
             } catch (error) {
                 console.error('Error removing from index:', error);
+            }
+        }
+
+        // ========== دالة إصلاح الفهرس ==========
+        async function repairIndex() {
+            try {
+                if (!isConnected) {
+                    showNotification('غير متصل بـ GitHub', 'error');
+                    return;
+                }
+                
+                showNotification('جاري إصلاح الفهرس...', 'info');
+                
+                const indexPath = 'blog/data/articles.json';
+                const indexResponse = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/${indexPath}`, {
+                    headers: {
+                        'Authorization': `Bearer ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (indexResponse.ok) {
+                    const data = await indexResponse.json();
+                    const sha = data.sha;
+                    const decoded = atob(data.content);
+                    const currentContent = JSON.parse(decoded);
+                    
+                    // إصلاح كل مقال
+                    const fixedArticles = currentContent.articles.map(article => {
+                        // إنشاء مقال متوافق مع المدونة
+                        return {
+                            id: article.id || article.slug || generateSlug(article.title),
+                            title: article.title,
+                            date: article.date || new Date().toISOString().split('T')[0],
+                            description: article.description || article.shortContent || article.title,
+                            image: article.image || 'images/blog-bg.jpg',
+                            content: article.content || `blog/articles/${article.id || article.slug}.md`,
+                            type: article.type || 'markdown',
+                            tags: article.tags || [],
+                            category: article.category || 'مقالات قانونية',
+                            status: article.status || 'published',
+                            slug: article.slug || article.id,
+                            keywords: article.keywords || '',
+                            shortContent: (article.description || article.shortContent || '').substring(0, 150) + '...',
+                            published: article.published || (article.status === 'published'),
+                            draft: article.draft || (article.status === 'draft'),
+                            archived: article.archived || (article.status === 'archived'),
+                            readTime: article.readTime || Math.max(3, Math.floor((article.description || '').length / 100))
+                        };
+                    });
+                    
+                    currentContent.articles = fixedArticles;
+                    currentContent.lastUpdate = new Date().toISOString();
+                    
+                    // حفظ الفهرس المصلح
+                    await uploadToGitHub(
+                        indexPath,
+                        btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
+                        `إصلاح الفهرس`,
+                        sha
+                    );
+                    
+                    showNotification('تم إصلاح الفهرس بنجاح!', 'success');
+                    await loadArticlesForDashboard();
+                } else {
+                    throw new Error('لم يتم العثور على الفهرس');
+                }
+            } catch (error) {
+                console.error('Error repairing index:', error);
+                showNotification('خطأ في إصلاح الفهرس: ' + error.message, 'error');
             }
         }
     </script>

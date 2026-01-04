@@ -1,25 +1,85 @@
 {
-  "lastUpdate": "2024-12-01",
+  "lastUpdate": "2024-12-01T10:30:00.000Z",
   "articles": [
     {
-      "id": "welcome",
+      "id": "welcome-to-legal-blog-1701415800000",
       "title": "مرحباً بكم في المدونة القانونية",
       "date": "2024-03-20",
       "description": "مدخل إلى عالم القانون والمحاماة ونظرة عامة على خدماتنا القانونية المتخصصة",
       "image": "blog/images/welcome.md.png",
       "content": "blog/welcome.md",
       "type": "local",
-      "tags": ["مقدمة", "عام"]
+      "tags": ["مقدمة", "عام", "خدمات قانونية"]
     },
     {
-      "id": "contract-guide",
-      "title": "دليل العقود القانونية",
-      "date": "2024-03-25",
-      "description": "كل ما تحتاج معرفته عن صياغة العقود وحماية حقوقك التعاقدية",
+      "id": "complete-contracts-guide-1701502200000",
+      "title": "دليل شامل للعقود والاتفاقيات",
+      "date": "2024-03-21",
+      "description": "كل ما تحتاج معرفته عن صياغة العقود وحماية حقوقك التعاقدية في القانون المصري",
       "image": "blog/images/Contract.md.jpg",
       "content": "blog/Contract.md",
       "type": "local",
-      "tags": ["عقود", "تجاري"]
+      "tags": ["عقود", "قانون مدني", "اتفاقيات", "التزامات"]
+    },
+    {
+      "id": "intellectual-property-protection-1701588600000",
+      "title": "حماية الملكية الفكرية في مصر",
+      "date": "2024-03-25",
+      "description": "دليل كامل لحماية العلامات التجارية وحقوق المؤلف والبراءات وفقاً للقانون المصري",
+      "image": "https://drive.google.com/uc?export=view&id=YOUR_IMAGE_ID_HERE",
+      "content": "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID_HERE",
+      "type": "google-drive",
+      "tags": ["ملكية فكرية", "علامات تجارية", "براءات اختراع", "حقوق مؤلف"]
+    },
+    {
+      "id": "real-estate-disputes-guide-1701675000000",
+      "title": "دليل المنازعات العقارية",
+      "date": "2024-03-28",
+      "description": "كيفية حل المنازعات العقارية والتعامل مع قضايا التملك والتسجيل في الشهر العقاري",
+      "image": "images/blog-bg.jpg",
+      "content": "blog/real-estate.md",
+      "type": "local",
+      "tags": ["عقارات", "منازعات", "شهر عقاري", "تسجيل ملكية"]
+    },
+    {
+      "id": "labor-law-updates-2024-1701761400000",
+      "title": "أهم التعديلات في قانون العمل 2024",
+      "date": "2024-04-01",
+      "description": "مراجعة لأهم التعديلات التشريعية في قانون العمل المصري وتأثيرها على أصحاب الأعمال والعمال",
+      "image": "https://drive.google.com/uc?export=view&id=ANOTHER_IMAGE_ID",
+      "content": "https://drive.google.com/uc?export=download&id=ANOTHER_FILE_ID",
+      "type": "google-drive",
+      "tags": ["قانون عمل", "تعديلات تشريعية", "علاقات عمل", "حقوق عمالية"]
+    },
+    {
+      "id": "commercial-companies-law-1701847800000",
+      "title": "تأسيس الشركات في القانون التجاري",
+      "date": "2024-04-05",
+      "description": "خطوات تأسيس الشركات التجارية والضوابط القانونية لإجراءات التأسيس والدمج",
+      "image": "blog/images/company-law.jpg",
+      "content": "blog/commercial-companies.md",
+      "type": "local",
+      "tags": ["شركات", "قانون تجاري", "تأسيس", "دمج شركات"]
+    },
+    {
+      "id": "constitutional-appeals-guide-1701934200000",
+      "title": "دليل الطعون الدستورية",
+      "date": "2024-04-10",
+      "description": "كيفية رفع الطعون الدستورية أمام المحكمة الدستورية العليا والإجراءات المتبعة",
+      "image": "https://example.com/images/constitutional-law.jpg",
+      "content": "https://example.com/articles/constitutional-guide.html",
+      "type": "url",
+      "tags": ["دستورية", "طعون", "محكمة دستورية", "رقابة قضائية"]
+    },
+    {
+      "id": "civil-compensation-cases-1702020600000",
+      "title": "قضايا التعويض في القانون المدني",
+      "date": "2024-04-15",
+      "description": "دراسة متعمقة لقضايا التعويض المدني وشروط المسؤولية والعقود في النظام القانوني المصري",
+      "image": "blog/images/compensation.jpg",
+      "content": "blog/civil-compensation.md",
+      "type": "local",
+      "tags": ["تعويضات", "مسؤولية مدنية", "عقود", "قانون مدني"]
     }
   ]
 }

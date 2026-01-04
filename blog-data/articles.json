@@ -1,0 +1,25 @@
+{
+  "lastUpdate": "2024-12-01",
+  "articles": [
+    {
+      "id": "welcome",
+      "title": "مرحباً بكم في المدونة القانونية",
+      "date": "2024-03-20",
+      "description": "مدخل إلى عالم القانون والمحاماة ونظرة عامة على خدماتنا القانونية المتخصصة",
+      "image": "blog/images/welcome.md.png",
+      "content": "blog/welcome.md",
+      "type": "local",
+      "tags": ["مقدمة", "عام"]
+    },
+    {
+      "id": "contract-guide",
+      "title": "دليل العقود القانونية",
+      "date": "2024-03-25",
+      "description": "كل ما تحتاج معرفته عن صياغة العقود وحماية حقوقك التعاقدية",
+      "image": "blog/images/Contract.md.jpg",
+      "content": "blog/Contract.md",
+      "type": "local",
+      "tags": ["عقود", "تجاري"]
+    }
+  ]
+}

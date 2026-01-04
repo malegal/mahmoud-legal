@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة إدارة المدونة | مؤسسة محمود عبد الحميد</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #020617;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
+            --gold-solid: #bf953f;
+        }
+        
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: var(--primary-dark); 
+            color: #f8fafc;
+        }
+        
+        .gold-text { 
+            background: var(--gold-gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+        }
+        
+        .gold-btn { 
+            background: var(--gold-gradient); 
+            color: #1a1a1a; 
+            font-weight: 800; 
+            transition: all 0.4s ease; 
+        }
+        
+        .gold-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3); 
+        }
+        
+        .card-glass { 
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(191, 149, 63, 0.15); 
+            border-radius: 1.5rem; 
+        }
+        
+        input, textarea, select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 0 2px rgba(191, 149, 63, 0.2);
+        }
+        
+        .article-preview-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(var(--primary-dark), var(--primary-dark)) padding-box,
+                        linear-gradient(135deg, #bf953f, #fcf6ba, #b38728) border-box;
+        }
+        
+        .article-preview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.2);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--gold-gradient);
+            color: #1a1a1a;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- شريط التنقل -->
+    <nav class="bg-black/95 border-b border-gold-solid/20 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-2xl gold-text font-bold">
+                    <i class="fas fa-arrow-right ml-2"></i>
+                    العودة للموقع
+                </a>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold gold-text">
+                    <i class="fas fa-cogs ml-2"></i>
+                    لوحة إدارة المدونة
+                </h1>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- قسم التعليمات -->
+        <div class="card-glass p-6 mb-8">
+            <h2 class="text-2xl font-bold gold-text mb-4">
+                <i class="fas fa-graduation-cap ml-2"></i>
+                دليل الاستخدام السريع
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-black/50 p-4 rounded-xl border border-gold-solid/20">
+                    <h3 class="font-bold text-lg gold-text mb-2">
+                        <span class="step-number">1</span>
+                        رفع المقال
+                    </h3>
+                    <p class="text-white/70 text-sm">ارفع ملف Word/PDF على Google Drive</p>
+                </div>
+                <div class="bg-black/50 p-4 rounded-xl border border-gold-solid/20">
+                    <h3 class="font-bold text-lg gold-text mb-2">
+                        <span class="step-number">2</span>
+                        الحصول على الرابط
+                    </h3>
+                    <p class="text-white/70 text-sm">انقر بزر الماوس الأيمن → "الحصول على رابط قابل للمشاركة"</p>
+                </div>
+                <div class="bg-black/50 p-4 rounded-xl border border-gold-solid/20">
+                    <h3 class="font-bold text-lg gold-text mb-2">
+                        <span class="step-number">3</span>
+                        إضافة للموقع
+                    </h3>
+                    <p class="text-white/70 text-sm">انسخ الرابط في النموذج وأضف المقال</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <!-- النموذج الرئيسي -->
+            <div class="card-glass p-8">
+                <h2 class="text-2xl font-bold gold-text mb-6">
+                    <i class="fas fa-plus-circle ml-2"></i>
+                    إضافة مقال جديد
+                </h2>
+                
+                <form id="articleForm" class="space-y-6">
+                    
+                    <div>
+                        <label class="block text-white/80 mb-2 font-bold">عنوان المقال</label>
+                        <input type="text" id="articleTitle" 
+                               class="w-full p-4 rounded-xl text-white outline-none"
+                               placeholder="أدخل عنوان المقال بالكامل"
+                               required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white/80 mb-2 font-bold">تاريخ النشر</label>
+                        <input type="date" id="articleDate" 
+                               class="w-full p-4 rounded-xl text-white outline-none"
+                               value="2024-12-01"
+                               required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white/80 mb-2 font-bold">وصف مختصر</label>
+                        <textarea id="articleDescription" 
+                                  class="w-full p-4 rounded-xl text-white outline-none"
+                                  rows="3"
+                                  placeholder="اكتب وصفاً مختصراً للمقال (سيظهر في صفحة المدونة)"
+                                  required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white/80 mb-2 font-bold">نوع المقال</label>
+                        <select id="articleType" class="w-full p-4 rounded-xl text-white outline-none">
+                            <option value="google-drive">Google Drive (Word/PDF)</option>
+                            <option value="url">رابط خارجي</option>
+                            <option value="local">ملف محلي في الموقع</option>
+                        </select>
+                    </div>
+                    
+                    <div id="contentUrlGroup">
+                        <label class="block text-white/80 mb-2 font-bold">رابط الملف على Google Drive</label>
+                        <input type="text" id="contentUrl" 
+                               class="w-full p-4 rounded-xl text-white outline-none"
+                               placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
+                        <p class="text-white/50 text-sm mt-2">
+                            <i class="fas fa-info-circle ml-1"></i>
+                            انشر ملف Word أو PDF على Google Drive ثم انسخ رابط المشاركة
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white/80 mb-2 font-bold">رابط الصورة الرئيسية</label>
+                        <input type="text" id="imageUrl" 
+                               class="w-full p-4 rounded-xl text-white outline-none"
+                               placeholder="https://drive.google.com/... أو مسار محلي"
+                               required>
+                        <p class="text-white/50 text-sm mt-2">
+                            <i class="fas fa-info-circle ml-1"></i>
+                            يمكن استخدام صورة من Google Drive أو رفعها في مجلد images/
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white/80 mb-2 font-bold">الكلمات المفتاحية</label>
+                        <input type="text" id="articleTags" 
+                               class="w-full p-4 rounded-xl text-white outline-none"
+                               placeholder="قانون, عقود, تجاري (مفصولة بفواصل)">
+                    </div>
+                    
+                    <div class="flex gap-4 pt-4">
+                        <button type="button" onclick="generateArticle()" 
+                                class="gold-btn flex-1 py-4 rounded-xl text-lg font-bold">
+                            <i class="fas fa-magic ml-2"></i>
+                            إنشاء المقال
+                        </button>
+                        <button type="button" onclick="resetForm()" 
+                                class="bg-white/10 hover:bg-white/20 text-white flex-1 py-4 rounded-xl text-lg font-bold transition">
+                            <i class="fas fa-redo ml-2"></i>
+                            إعادة تعيين
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- معاينة الناتج -->
+            <div class="card-glass p-8">
+                <h2 class="text-2xl font-bold gold-text mb-6">
+                    <i class="fas fa-eye ml-2"></i>
+                    معاينة الناتج
+                </h2>
+                
+                <div id="previewSection" class="hidden">
+                    
+                    <!-- معاينة البطاقة -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold text-white mb-4">معاينة بطاقة المقال:</h3>
+                        <div id="articlePreviewCard" class="article-preview-card p-6 rounded-2xl">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-sm text-gray-400" id="previewDate">2024-12-01</span>
+                                <span class="text-xs bg-gold-solid/20 text-gold-solid px-2 py-1 rounded" id="previewType">Google Drive</span>
+                            </div>
+                            <h4 class="text-xl font-bold gold-text mb-3" id="previewTitle">عنوان المقال</h4>
+                            <p class="text-white/70 text-sm mb-4" id="previewDescription">وصف المقال...</p>
+                            <button class="gold-btn w-full py-2 rounded-lg text-sm">
+                                <i class="fas fa-book-open ml-2"></i> اقرأ المقال
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- JSON الناتج -->
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-4">كود JSON للنسخ:</h3>
+                        <div class="bg-black/50 rounded-xl p-4 border border-gold-solid/20">
+                            <pre id="jsonOutput" class="text-white/80 text-sm overflow-x-auto whitespace-pre-wrap"></pre>
+                        </div>
+                        
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="copyJSON()" 
+                                    class="gold-btn flex-1 py-3 rounded-xl font-bold">
+                                <i class="far fa-copy ml-2"></i>
+                                نسخ JSON
+                            </button>
+                            <button onclick="downloadJSON()" 
+                                    class="bg-blue-600 hover:bg-blue-700 text-white flex-1 py-3 rounded-xl font-bold transition">
+                                <i class="fas fa-download ml-2"></i>
+                                تحميل كملف
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-green-900/30 border border-green-600/30 rounded-xl hidden" id="successMessage">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-400 text-xl ml-3"></i>
+                                <div>
+                                    <p class="font-bold text-green-300">تم النسخ بنجاح!</p>
+                                    <p class="text-green-200 text-sm mt-1">انسخ المحتوى إلى ملف blog-data/articles.json</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- التعليمات -->
+                <div id="instructions" class="text-center py-12">
+                    <i class="fas fa-newspaper text-5xl gold-text mb-4"></i>
+                    <h3 class="text-xl font-bold gold-text mb-2">لا توجد معاينة حالياً</h3>
+                    <p class="text-white/60">املأ النموذج على اليسار وانقر على "إنشاء المقال"</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم المقالات الحالية -->
+        <div class="card-glass p-8 mt-8">
+            <h2 class="text-2xl font-bold gold-text mb-6">
+                <i class="fas fa-list-alt ml-2"></i>
+                المقالات الحالية في النظام
+            </h2>
+            
+            <div id="currentArticles" class="space-y-4">
+                <div class="text-center py-8">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold-solid"></div>
+                    <p class="text-white/60 mt-4">جاري تحميل المقالات الحالية...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- معلومات تقنية -->
+        <div class="card-glass p-6 mt-8">
+            <h3 class="text-lg font-bold gold-text mb-4">
+                <i class="fas fa-info-circle ml-2"></i>
+                معلومات تقنية
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-black/50 p-4 rounded-xl">
+                    <h4 class="font-bold text-white mb-2">مسار ملف المقالات:</h4>
+                    <code class="text-gold-solid bg-black/70 px-3 py-1 rounded">/blog-data/articles.json</code>
+                </div>
+                <div class="bg-black/50 p-4 rounded-xl">
+                    <h4 class="font-bold text-white mb-2">هيكل الملفات الموصى به:</h4>
+                    <pre class="text-white/70 text-sm">blog-data/
+├── articles.json
+├── uploads/
+└── backup/</pre>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // عناصر DOM
+        const form = document.getElementById('articleForm');
+        const previewSection = document.getElementById('previewSection');
+        const instructions = document.getElementById('instructions');
+        const currentArticlesDiv = document.getElementById('currentArticles');
+        
+        // تهيئة التاريخ الحالي
+        document.getElementById('articleDate').value = new Date().toISOString().split('T')[0];
+        
+        // تحميل المقالات الحالية
+        loadCurrentArticles();
+        
+        // تغيير نوع المقال
+        document.getElementById('articleType').addEventListener('change', function() {
+            const contentUrlGroup = document.getElementById('contentUrlGroup');
+            const contentUrlInput = document.getElementById('contentUrl');
+            
+            switch(this.value) {
+                case 'google-drive':
+                    contentUrlGroup.querySelector('label').textContent = 'رابط الملف على Google Drive';
+                    contentUrlInput.placeholder = 'https://drive.google.com/file/d/.../view?usp=sharing';
+                    break;
+                case 'url':
+                    contentUrlGroup.querySelector('label').textContent = 'رابط المقال الخارجي';
+                    contentUrlInput.placeholder = 'https://example.com/article.html';
+                    break;
+                case 'local':
+                    contentUrlGroup.querySelector('label').textContent = 'مسار الملف المحلي';
+                    contentUrlInput.placeholder = 'blog/articles/article-name.md';
+                    break;
+            }
+        });
+        
+        function generateArticle() {
+            if (!form.checkValidity()) {
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            // جمع البيانات من النموذج
+            const article = {
+                id: generateArticleId(),
+                title: document.getElementById('articleTitle').value,
+                date: document.getElementById('articleDate').value,
+                description: document.getElementById('articleDescription').value,
+                image: document.getElementById('imageUrl').value || 'images/blog-bg.jpg',
+                content: document.getElementById('contentUrl').value,
+                type: document.getElementById('articleType').value,
+                tags: document.getElementById('articleTags').value
+                    .split(',')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag !== '')
+            };
+            
+            // تحديث المعاينة
+            updatePreview(article);
+            
+            // إظهار قسم المعاينة وإخفاء التعليمات
+            previewSection.classList.remove('hidden');
+            instructions.classList.add('hidden');
+            
+            // التمرير إلى المعاينة
+            previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function generateArticleId() {
+            const title = document.getElementById('articleTitle').value;
+            return title
+                .toLowerCase()
+                .replace(/[^\w\u0600-\u06FF\s]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .substring(0, 50) + '-' + Date.now().toString().slice(-6);
+        }
+        
+        function updatePreview(article) {
+            // تحديث بطاقة المعاينة
+            document.getElementById('previewDate').textContent = article.date;
+            document.getElementById('previewTitle').textContent = article.title;
+            document.getElementById('previewDescription').textContent = article.description;
+            
+            let typeText = '';
+            switch(article.type) {
+                case 'google-drive': typeText = 'Google Drive'; break;
+                case 'url': typeText = 'رابط خارجي'; break;
+                case 'local': typeText = 'ملف محلي'; break;
+            }
+            document.getElementById('previewType').textContent = typeText;
+            
+            // تحديث JSON
+            const jsonOutput = JSON.stringify([article], null, 2);
+            document.getElementById('jsonOutput').textContent = jsonOutput;
+            
+            // تمييز JSON بلون
+            highlightJSON();
+        }
+        
+        function highlightJSON() {
+            const jsonElement = document.getElementById('jsonOutput');
+            let jsonText = jsonElement.textContent;
+            
+            // تمييز الكلمات المفتاحية (بسيط)
+            jsonText = jsonText
+                .replace(/("[^"]*"):/g, '<span class="text-green-400">$1</span>:')
+                .replace(/("[^"]*")/g, '<span class="text-yellow-300">$1</span>')
+                .replace(/\b(true|false|null)\b/g, '<span class="text-blue-400">$1</span>')
+                .replace(/\b(\d+)\b/g, '<span class="text-purple-400">$1</span>');
+            
+            jsonElement.innerHTML = jsonText;
+        }
+        
+        function copyJSON() {
+            const jsonText = document.getElementById('jsonOutput').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                const successMsg = document.getElementById('successMessage');
+                successMsg.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    successMsg.classList.add('hidden');
+                }, 3000);
+            }).catch(err => {
+                alert('خطأ في النسخ: ' + err);
+            });
+        }
+        
+        function downloadJSON() {
+            const jsonText = document.getElementById('jsonOutput').textContent;
+            const blob = new Blob([jsonText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = `article-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function resetForm() {
+            form.reset();
+            document.getElementById('articleDate').value = new Date().toISOString().split('T')[0];
+            previewSection.classList.add('hidden');
+            instructions.classList.remove('hidden');
+        }
+        
+        async function loadCurrentArticles() {
+            try {
+                const response = await fetch('blog-data/articles.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    displayCurrentArticles(data.articles || []);
+                } else {
+                    currentArticlesDiv.innerHTML = `
+                        <div class="text-center py-8">
+                            <i class="fas fa-exclamation-triangle text-3xl gold-text mb-4"></i>
+                            <p class="text-white/60">لم يتم العثور على ملف المقالات</p>
+                            <p class="text-white/40 text-sm mt-2">سيتم إنشاؤه تلقائياً عند إضافة أول مقال</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                currentArticlesDiv.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-exclamation-triangle text-3xl gold-text mb-4"></i>
+                        <p class="text-white/60">خطأ في تحميل المقالات: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayCurrentArticles(articles) {
+            if (articles.length === 0) {
+                currentArticlesDiv.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-newspaper text-3xl gold-text mb-4"></i>
+                        <p class="text-white/60">لا توجد مقالات حالياً</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            currentArticlesDiv.innerHTML = articles.map((article, index) => `
+                <div class="bg-black/50 p-4 rounded-xl border border-white/10 hover:border-gold-solid/30 transition">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-lg text-white">${index + 1}. ${article.title}</h4>
+                            <div class="flex items-center gap-4 mt-2">
+                                <span class="text-sm text-gray-400">
+                                    <i class="fas fa-calendar ml-1"></i> ${article.date}
+                                </span>
+                                <span class="text-sm px-2 py-1 rounded ${
+                                    article.type === 'google-drive' ? 'bg-blue-900/30 text-blue-300' :
+                                    article.type === 'url' ? 'bg-yellow-900/30 text-yellow-300' :
+                                    'bg-green-900/30 text-green-300'
+                                }">
+                                    ${article.type === 'google-drive' ? 'Google Drive' :
+                                      article.type === 'url' ? 'رابط خارجي' : 'محلي'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editArticle(${index})" 
+                                    class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
+                                <i class="fas fa-edit ml-1"></i>
+                            </button>
+                            <button onclick="deleteArticle(${index})" 
+                                    class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                                <i class="fas fa-trash ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-white/70 text-sm mt-3">${article.description}</p>
+                    ${article.tags && article.tags.length > 0 ? `
+                        <div class="flex flex-wrap gap-1 mt-3">
+                            ${article.tags.map(tag => `
+                                <span class="text-xs bg-gold-solid/10 text-gold-solid px-2 py-1 rounded">${tag}</span>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function editArticle(index) {
+            // هذه الوظيفة تحتاج إلى تطوير أكثر
+            alert('ميزة التعديل قيد التطوير. حالياً يمكنك نسخ JSON وتعديله يدوياً.');
+        }
+        
+        function deleteArticle(index) {
+            if (confirm('هل أنت متأكد من حذف هذا المقال؟')) {
+                alert('ميزة الحذف قيد التطوير. حالياً يمكنك حذف المقال من ملف articles.json يدوياً.');
+            }
+        }
+        
+        // مساعدة في تحويل روابط Google Drive
+        window.convertDriveLink = function() {
+            const input = prompt('الصق رابط Google Drive (من رابط المشاركة):');
+            if (!input) return;
+            
+            let converted = input;
+            
+            // تحويل من رابط المشاركة إلى رابط تحميل
+            if (input.includes('/file/d/')) {
+                const fileId = input.match(/\/file\/d\/([^\/]+)/)?.[1];
+                if (fileId) {
+                    converted = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                    alert(`تم التحويل:\n\n${converted}\n\nيمكنك نسخ هذا الرابط واستخدامه.`);
+                }
+            }
+            
+            document.getElementById('contentUrl').value = converted;
+        };
+    </script>
+</body>
+</html>

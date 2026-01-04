@@ -1,9 +1,3 @@
----
-title: مرحبًا بكم في المدونة القانونية
-date: 2025-12-22
-description: انطلاق المدونة القانونية للمستشار محمود عبد الحميد – محامي بالنقض والدستورية العليا
-image: https://github.com/malegal/ma-legal/blob/main/images/giammarco-boscaro-eWpBNXRHfTI-unsplash.jpg
----
 
 **أعزائي الزوار والمتابعين،**
 

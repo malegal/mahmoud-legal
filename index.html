@@ -286,6 +286,53 @@
             font-weight: bold;
         }
         
+        /* تصميم جديد للمدونة */
+        #blog-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            justify-items: center;
+        }
+        
+        .blog-post-card {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-post-image {
+            height: 220px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .blog-post-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .blog-post-excerpt {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .read-more-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: auto;
+        }
+        
         /* رسوم متحركة للمقالات */
         @keyframes fadeInUp {
             from {
@@ -310,6 +357,7 @@
         .fade-in-up:nth-child(5) { animation-delay: 0.4s; }
         .fade-in-up:nth-child(6) { animation-delay: 0.5s; }
         
+        /* تحسينات للعرض على الجوال */
         @media (max-width: 768px) {
             .header-glass nav {
                 padding: 10px 15px !important;
@@ -405,6 +453,16 @@
             #post-modal .bg-\[\#020617\] {
                 padding: 1.5rem !important;
             }
+            
+            /* تحسينات للمدونة على الجوال */
+            #blog-posts {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .blog-post-card {
+                max-width: 100%;
+            }
         }
         
         @media (max-width: 480px) {
@@ -419,6 +477,12 @@
             .card-glass {
                 padding: 15px !important;
                 border-radius: 1rem !important;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            #blog-posts {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         
@@ -486,41 +550,6 @@
         .section-spacing {
             padding-top: 6rem;
             padding-bottom: 6rem;
-        }
-        
-        .blog-post-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .blog-post-image {
-            height: 220px;
-            object-fit: cover;
-        }
-        
-        .blog-post-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .blog-post-excerpt {
-            flex: 1;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-        
-        .read-more-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
         }
         
         .track-case-btn {
@@ -969,7 +998,7 @@
                 <p class="text-xl text-white/80 mt-4 max-w-3xl mx-auto">مقالات قانونية متخصصة وأبحاث في مختلف فروع القانون</p>
             </div>
 
-            <div id="blog-posts" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="blog-posts" class="grid gap-8">
                 <div class="text-center py-12 col-span-3">
                     <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold-solid"></div>
                     <p class="text-white/60 mt-4">جاري تحميل المقالات القانونية...</p>
@@ -1249,16 +1278,6 @@
             
             noPostsMessage.classList.add('hidden');
             
-            // إضافة رسالة إعلامية بعدد المقالات
-            const countMessage = document.createElement('div');
-            countMessage.className = 'col-span-3 text-center mb-6 fade-in-up';
-            countMessage.innerHTML = `
-                <p class="text-white/70">
-                    <span class="gold-text font-bold">${articles.length}</span> مقالة قانونية متاحة
-                </p>
-            `;
-            container.appendChild(countMessage);
-            
             // عرض المقالات
             articles.forEach((article, index) => {
                 const card = document.createElement('div');
@@ -1302,16 +1321,16 @@
                                 <i class="fas fa-clock ml-1"></i> قراءة ${Math.max(3, Math.floor(article.description.length / 100))} دقائق
                             </span>
                         </div>
-                        <h3 class="text-xl font-bold gold-text mb-3 line-clamp-2" style="height: 3.5rem;">${article.title}</h3>
-                        <p class="text-white/80 text-sm mb-4 blog-post-excerpt" style="min-height: 4.5rem;">${article.description}</p>
+                        <h3 class="text-xl font-bold gold-text mb-3 line-clamp-2">${article.title}</h3>
+                        <p class="text-white/80 text-sm mb-4 blog-post-excerpt line-clamp-3">${article.description}</p>
                         <div class="mt-auto">
-                            <div class="flex flex-wrap gap-1 mb-4">
+                            <div class="flex flex-wrap gap-2 mb-4">
                                 ${article.tags && article.tags.slice(0, 3).map(tag => 
-                                    `<span class="text-xs bg-white/5 text-white/60 px-2 py-1 rounded">${tag}</span>`
+                                    `<span class="text-xs bg-white/10 text-white/70 px-2 py-1 rounded">${tag}</span>`
                                 ).join('')}
                             </div>
                             <button onclick="showBlogPost(${index})" 
-                                    class="read-more-btn gold-btn w-full px-4 py-3 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-gold-glow/30 flex items-center justify-center">
+                                    class="read-more-btn gold-btn w-full px-4 py-3 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-gold-glow/30 flex items-center justify-center transition-all duration-300">
                                 <i class="fas fa-book-open ml-2"></i> اقرأ المقال
                                 <i class="fas fa-arrow-left mr-2 text-sm"></i>
                             </button>

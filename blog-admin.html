@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <!-- أضف هذا بعد <header> وقبل <div class="admin-panel"> -->
-<div style="margin: 15px 0; text-align: right;">
-    <a href="/" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #e0e0e0; color: #333; text-decoration: none; border-radius: 5px; font-weight: bold;">
-        <i class="fas fa-home"></i> العودة للصفحة الرئيسية
-    </a>
-</div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة المدونة - مكتب المحاماة</title>
@@ -24,41 +18,7 @@
             color: #333;
             line-height: 1.6;
         }
-<script>
-// التحقق من كلمة السر قبل عرض المحتوى
-document.addEventListener('DOMContentLoaded', function() {
-    const correctPassword = 'mahmoud237';
-    const savedAuth = sessionStorage.getItem('blog_admin_auth');
-    
-    if (!savedAuth) {
-        const enteredPassword = prompt('🔐 الرجاء إدخال كلمة المرور للدخول إلى لوحة الإدارة:');
-        
-        if (enteredPassword === correctPassword) {
-            sessionStorage.setItem('blog_admin_auth', 'true');
-            alert('مرحباً! تم التحقق بنجاح.');
-        } else {
-            alert('❌ كلمة المرور غير صحيحة. سيتم توجيهك للصفحة الرئيسية.');
-            window.location.href = '/';
-            return;
-        }
-    }
-    
-    // إظهار زر تسجيل الخروج
-    const header = document.querySelector('header h1');
-    if (header) {
-        header.innerHTML += `
-            <button onclick="logout()" style="margin-right: auto; padding: 5px 15px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-            </button>
-        `;
-    }
-});
 
-function logout() {
-    sessionStorage.removeItem('blog_admin_auth');
-    window.location.reload();
-}
-</script>
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -72,6 +32,9 @@ function logout() {
             border-radius: 10px;
             margin-bottom: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
@@ -231,6 +194,11 @@ function logout() {
             color: white;
         }
 
+        .btn-publish {
+            background: #28a745;
+            color: white;
+        }
+
         .alert {
             padding: 15px;
             border-radius: 6px;
@@ -321,138 +289,404 @@ function logout() {
             font-size: 0.9rem;
             border-top: 1px solid #ddd;
         }
+
+        /* تصميم زر تسجيل الخروج */
+        .logout-btn {
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        /* تصميم شريط الأدوات العلوي */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .toolbar-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toolbar-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .toolbar-btn-test {
+            background: #6c757d;
+            color: white;
+        }
+
+        .toolbar-btn-status {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #e0e0e0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: 1px solid #ccc;
+        }
+
+        .home-link:hover {
+            background: #d0d0d0;
+        }
+
+        /* تصميم شاشة تسجيل الدخول */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1a237e, #283593);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            color: #283593;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .login-box input:focus {
+            border-color: #283593;
+            outline: none;
+        }
+
+        .login-btn {
+            background: #283593;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #1a237e;
+        }
+
+        .login-error {
+            color: #dc3545;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-gavel"></i> لوحة إدارة مدونة مكتب المحاماة</h1>
-        </header>
-
-        <div class="alert alert-success" id="successAlert">
-            <i class="fas fa-check-circle"></i> تم نشر المقال بنجاح!
-        </div>
-
-        <div class="alert alert-error" id="errorAlert">
-            <i class="fas fa-exclamation-circle"></i> حدث خطأ أثناء النشر. حاول مرة أخرى.
-        </div>
-
-        <div class="token-section">
-            <h3><i class="fas fa-key"></i> إعدادات GitHub</h3>
-            <p>لنشر المقالات تلقائيًا، يرجى إدخال توكن GitHub الخاص بك (يخزن محليًا على جهازك فقط):</p>
-            <div class="form-group">
-                <input type="password" id="githubToken" class="form-control" placeholder="أدخل توكن GitHub هنا">
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <h2><i class="fas fa-gavel"></i> تسجيل الدخول</h2>
+            <p style="color: #666; margin-bottom: 20px;">الرجاء إدخال كلمة المرور للوصول إلى لوحة الإدارة</p>
+            
+            <input type="password" id="passwordInput" placeholder="كلمة المرور" autocomplete="off">
+            <div id="loginError" class="login-error">
+                <i class="fas fa-exclamation-circle"></i> كلمة المرور غير صحيحة
             </div>
-            <button class="button" onclick="saveToken()"><i class="fas fa-save"></i> حفظ التوكن</button>
-            <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
-                <i class="fas fa-info-circle"></i> ستحتاج إلى إنشاء توكن جديد من إعدادات GitHub مع صلاحية <code>repo</code>.
-            </p>
+            
+            <button id="loginBtn" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> دخول
+            </button>
+            
+            <div style="margin-top: 20px; color: #999; font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> للاستفسارات: تواصل مع المدير
+            </div>
         </div>
+    </div>
 
-        <div class="admin-panel">
-            <section class="editor-section">
-                <h2 class="section-title"><i class="fas fa-edit"></i> مقال جديد</h2>
+    <!-- المحتوى الرئيسي (يظهر بعد تسجيل الدخول) -->
+    <div id="mainContent" style="display: none;">
+        <div class="container">
+            <!-- شريط الأدوات العلوي -->
+            <div class="toolbar">
+                <a href="/" class="home-link">
+                    <i class="fas fa-home"></i> الصفحة الرئيسية
+                </a>
                 
-                <div class="form-group">
-                    <label for="articleTitle">عنوان المقال</label>
-                    <input type="text" id="articleTitle" class="form-control" placeholder="أدخل عنوان المقال">
-                </div>
-
-                <div class="form-group">
-                    <label for="articleAuthor">اسم المؤلف</label>
-                    <input type="text" id="articleAuthor" class="form-control" placeholder="اسم المحامي أو الكاتب">
-                </div>
-
-                <div class="form-group">
-                    <label for="articleCategory">التصنيف</label>
-                    <select id="articleCategory" class="form-control">
-                        <option value="قانون تجاري">قانون تجاري</option>
-                        <option value="قانون عائلي">قانون عائلي</option>
-                        <option value="قانون جنائي">قانون جنائي</option>
-                        <option value="قانون عقاري">قانون عقاري</option>
-                        <option value="نصائح قانونية">نصائح قانونية</option>
-                        <option value="أخبار قانونية">أخبار قانونية</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="articleContent">محتوى المقال</label>
-                    <textarea id="articleContent" class="form-control" placeholder="اكتب محتوى المقال هنا..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="articleImage">رابط الصورة (اختياري)</label>
-                    <input type="text" id="articleImage" class="form-control" placeholder="https://example.com/image.jpg">
-                    <small style="color: #666;">يمكنك رفع الصورة إلى مجلد <code>blog/images</code> في مستودع GitHub ثم وضع الرابط هنا.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="articleSummary">ملخص المقال (اختياري)</label>
-                    <textarea id="articleSummary" class="form-control" placeholder="ملخص مختصر للمقال" rows="3"></textarea>
-                </div>
-
-                <div class="loading" id="loadingIndicator">
-                    <div class="spinner"></div>
-                    <p>جاري النشر، يرجى الانتظار...</p>
-                </div>
-
-                <button class="button button-success" onclick="publishArticle()" id="publishButton">
-                    <i class="fas fa-paper-plane"></i> نشر المقال الآن
-                </button>
-            </section>
-
-            <section class="drafts-section">
-                <h2 class="section-title"><i class="fas fa-save"></i> المسودات المحفوظة</h2>
-                <div class="drafts-list" id="draftsList">
-                    <!-- سيتم ملؤها بالمسودات من localStorage -->
-                </div>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="button" onclick="loadDrafts()">
-                        <i class="fas fa-sync-alt"></i> تحديث قائمة المسودات
+                <div class="toolbar-buttons">
+                    <button class="toolbar-btn toolbar-btn-test" onclick="testGitHubConnection()">
+                        <i class="fas fa-vial"></i> اختبار التوكن
+                    </button>
+                    <button class="toolbar-btn toolbar-btn-status" onclick="checkCurrentArticles()">
+                        <i class="fas fa-chart-bar"></i> حالة المدونة
+                    </button>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                     </button>
                 </div>
-            </section>
-        </div>
+            </div>
 
-        <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> كيفية استخدام لوحة الإدارة:</h3>
-            <ol>
-                <li>املأ بيانات المقال في الحقول المطلوبة.</li>
-                <li>أدخل توكن GitHub في الأعلى (مرة واحدة فقط لكل جهاز).</li>
-                <li>اضغط على زر "نشر المقال الآن" وسيتم رفع المقال تلقائيًا إلى مستودع GitHub.</li>
-                <li>إذا لم يكن هناك اتصال بالإنترنت، سيتم حفظ المقال كمشودة في جهازك.</li>
-                <li>يمكنك استكمال المسودات لاحقًا من القائمة على اليمين.</li>
-                <li>بعد النشر، سيظهر المقال في المدونة خلال بضع ثوانٍ بعد أن يعيد Vercel بناء الموقع.</li>
-            </ol>
-        </div>
+            <header>
+                <h1><i class="fas fa-gavel"></i> لوحة إدارة مدونة مكتب المحاماة</h1>
+            </header>
 
-        <footer>
-            <p>© 2023 مدونة مكتب المحاماة. جميع الحقوق محفوظة.</p>
-            <p>تم التطوير خصيصًا لمكتب المحاماة</p>
-        </footer>
+            <div class="alert alert-success" id="successAlert">
+                <i class="fas fa-check-circle"></i> تم نشر المقال بنجاح!
+            </div>
+
+            <div class="alert alert-error" id="errorAlert">
+                <i class="fas fa-exclamation-circle"></i> حدث خطأ أثناء النشر. حاول مرة أخرى.
+            </div>
+
+            <div class="token-section">
+                <h3><i class="fas fa-key"></i> إعدادات GitHub</h3>
+                <p>لنشر المقالات تلقائيًا، يرجى إدخال توكن GitHub الخاص بك (يخزن محليًا على جهازك فقط):</p>
+                <div class="form-group">
+                    <input type="password" id="githubToken" class="form-control" placeholder="أدخل توكن GitHub هنا">
+                </div>
+                <button class="button" onclick="saveToken()"><i class="fas fa-save"></i> حفظ التوكن</button>
+                <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                    <i class="fas fa-info-circle"></i> ستحتاج إلى إنشاء توكن جديد من إعدادات GitHub مع صلاحية <code>repo</code>.
+                </p>
+            </div>
+
+            <div class="admin-panel">
+                <section class="editor-section">
+                    <h2 class="section-title"><i class="fas fa-edit"></i> مقال جديد</h2>
+                    
+                    <div class="form-group">
+                        <label for="articleTitle">عنوان المقال</label>
+                        <input type="text" id="articleTitle" class="form-control" placeholder="أدخل عنوان المقال">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleAuthor">اسم المؤلف</label>
+                        <input type="text" id="articleAuthor" class="form-control" placeholder="اسم المحامي أو الكاتب">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleCategory">التصنيف</label>
+                        <select id="articleCategory" class="form-control">
+                            <option value="قانون تجاري">قانون تجاري</option>
+                            <option value="قانون عائلي">قانون عائلي</option>
+                            <option value="قانون جنائي">قانون جنائي</option>
+                            <option value="قانون عقاري">قانون عقاري</option>
+                            <option value="نصائح قانونية">نصائح قانونية</option>
+                            <option value="أخبار قانونية">أخبار قانونية</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleContent">محتوى المقال</label>
+                        <textarea id="articleContent" class="form-control" placeholder="اكتب محتوى المقال هنا..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleImage">رابط الصورة (اختياري)</label>
+                        <input type="text" id="articleImage" class="form-control" placeholder="https://example.com/image.jpg">
+                        <small style="color: #666;">يمكنك رفع الصورة إلى مجلد <code>blog/images</code> في مستودع GitHub ثم وضع الرابط هنا.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleSummary">ملخص المقال (اختياري)</label>
+                        <textarea id="articleSummary" class="form-control" placeholder="ملخص مختصر للمقال" rows="3"></textarea>
+                    </div>
+
+                    <div class="loading" id="loadingIndicator">
+                        <div class="spinner"></div>
+                        <p>جاري النشر، يرجى الانتظار...</p>
+                    </div>
+
+                    <button class="button button-success" onclick="publishArticle()" id="publishButton">
+                        <i class="fas fa-paper-plane"></i> نشر المقال الآن
+                    </button>
+                </section>
+
+                <section class="drafts-section">
+                    <h2 class="section-title"><i class="fas fa-save"></i> المسودات المحفوظة</h2>
+                    <div class="drafts-list" id="draftsList">
+                        <!-- سيتم ملؤها بالمسودات من localStorage -->
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="button" onclick="loadDrafts()">
+                            <i class="fas fa-sync-alt"></i> تحديث قائمة المسودات
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> كيفية استخدام لوحة الإدارة:</h3>
+                <ol>
+                    <li>املأ بيانات المقال في الحقول المطلوبة.</li>
+                    <li>أدخل توكن GitHub في الأعلى (مرة واحدة فقط لكل جهاز).</li>
+                    <li>اضغط على زر "نشر المقال الآن" وسيتم رفع المقال تلقائيًا إلى مستودع GitHub.</li>
+                    <li>إذا لم يكن هناك اتصال بالإنترنت، سيتم حفظ المقال كمشودة في جهازك.</li>
+                    <li>يمكنك استكمال المسودات لاحقًا من القائمة على اليمين.</li>
+                    <li>بعد النشر، سيظهر المقال في المدونة خلال بضع ثوانٍ بعد أن يعيد Vercel بناء الموقع.</li>
+                </ol>
+            </div>
+
+            <footer>
+                <p>© 2023 مدونة مكتب المحاماة. جميع الحقوق محفوظة.</p>
+                <p>تم التطوير خصيصًا لمكتب المحاماة</p>
+            </footer>
+        </div>
     </div>
 
     <script src="scripts/config.js"></script>
     <script src="scripts/update-blog.js"></script>
     <script>
-        // تحميل التوكن المحفوظ إذا وجد
+        // نظام التحقق من كلمة المرور
         document.addEventListener('DOMContentLoaded', function() {
-            const savedToken = localStorage.getItem('github_token');
-            if (savedToken) {
-                document.getElementById('githubToken').value = savedToken;
+            const correctPassword = 'mahmoud237';
+            const savedAuth = sessionStorage.getItem('blog_admin_auth');
+            const loginScreen = document.getElementById('loginScreen');
+            const mainContent = document.getElementById('mainContent');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+            
+            // التحقق من تسجيل الدخول السابق
+            if (savedAuth === 'true') {
+                loginScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                loadSavedToken();
+                loadDrafts();
+            } else {
+                loginScreen.style.display = 'flex';
+                mainContent.style.display = 'none';
             }
             
-            // تحميل المسودات عند فتح الصفحة
-            loadDrafts();
+            // وظيفة تسجيل الدخول
+            function login() {
+                const enteredPassword = passwordInput.value.trim();
+                
+                if (enteredPassword === correctPassword) {
+                    sessionStorage.setItem('blog_admin_auth', 'true');
+                    loginScreen.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    loadSavedToken();
+                    loadDrafts();
+                    loginError.style.display = 'none';
+                } else {
+                    loginError.style.display = 'block';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            }
+            
+            // أحداث الزر والمفتاح Enter
+            loginBtn.addEventListener('click', login);
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+            
+            // تركيز على حقل كلمة المرور عند التحميل
+            passwordInput.focus();
+            
+            // تحميل التوكن المحفوظ إذا وجد
+            function loadSavedToken() {
+                const savedToken = localStorage.getItem('github_token');
+                if (savedToken) {
+                    document.getElementById('githubToken').value = savedToken;
+                }
+            }
         });
-
+        
+        // وظيفة حفظ التوكن
         function saveToken() {
             const token = document.getElementById('githubToken').value.trim();
             if (token) {
                 localStorage.setItem('github_token', token);
-                alert('تم حفظ التوكن بنجاح!');
+                showMessage('تم حفظ التوكن بنجاح!', 'success');
             } else {
-                alert('يرجى إدخال التوكن أولاً.');
+                showMessage('يرجى إدخال التوكن أولاً.', 'error');
+            }
+        }
+        
+        // وظيفة تسجيل الخروج
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                sessionStorage.removeItem('blog_admin_auth');
+                window.location.reload();
+            }
+        }
+        
+        // وظيفة لعرض الرسائل
+        function showMessage(message, type) {
+            const alertDiv = type === 'success' ? 
+                document.getElementById('successAlert') : 
+                document.getElementById('errorAlert');
+            
+            if (alertDiv) {
+                alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+                alertDiv.style.display = 'block';
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        // تحميل المسودات عند فتح الصفحة
+        function loadDrafts() {
+            if (typeof blogPublisher !== 'undefined') {
+                blogPublisher.loadDrafts();
             }
         }
     </script>

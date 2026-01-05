@@ -2,117 +2,233 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>المحرر الاحترافي | محمود عبد الحميد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المقالات | محمود عبد الحميد</title>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #020617; color: white; font-family: 'Tajawal', sans-serif; }
+        :root { --gold: #bf953f; --dark: #020617; }
+        body { background-color: var(--dark); color: white; font-family: 'Tajawal', sans-serif; }
         .serif-font { font-family: 'Amiri', serif; }
-        .gold-text { color: #bf953f; }
-        .ql-container { background: rgba(255,255,255,0.05); color: white; border-radius: 0 0 12px 12px; height: 400px; font-size: 18px; }
-        .ql-toolbar { background: #eee; border-radius: 12px 12px 0 0; }
-        .ql-editor.ql-blank::before { color: rgba(255,255,255,0.3); }
+        .gold-border { border: 1px solid rgba(191, 149, 63, 0.3); }
+        .ql-container { background: rgba(255,255,255,0.05); border-radius: 0 0 12px 12px; height: 300px; color: white; font-size: 16px; }
+        .ql-toolbar { background: #f3f4f6; border-radius: 12px 12px 0 0; }
+        .article-card { background: rgba(255,255,255,0.03); transition: all 0.3s ease; }
+        .article-card:hover { background: rgba(255,255,255,0.07); }
     </style>
 </head>
-<body class="p-4 md:p-10">
-    <div id="lock-screen" class="fixed inset-0 z-[1000] bg-slate-950 flex flex-col items-center justify-center">
-        <h2 class="gold-text text-2xl mb-4 serif-font">دخول الإدارة</h2>
-        <input type="password" id="adminPass" placeholder="كلمة السر" class="bg-slate-900 border border-gold-solid p-3 rounded-xl text-center outline-none">
-        <button onclick="checkPass()" class="mt-4 bg-[#bf953f] text-black px-8 py-2 rounded-lg font-bold">دخول</button>
+<body class="min-h-screen">
+
+    <div id="lock-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex flex-col items-center justify-center p-6">
+        <div class="w-full max-w-sm text-center">
+            <i class="fas fa-user-shield text-5xl text-[#bf953f] mb-6"></i>
+            <h2 class="text-2xl font-bold mb-6 serif-font">دخول الإدارة</h2>
+            <input type="password" id="adminPass" placeholder="كلمة المرور" class="w-full bg-slate-900 border-2 border-[#bf953f]/30 p-4 rounded-2xl text-center outline-none focus:border-[#bf953f] mb-4">
+            <button onclick="checkPass()" class="w-full bg-[#bf953f] text-black font-black py-4 rounded-2xl shadow-xl hover:scale-105 transition">دخول النظام</button>
+        </div>
     </div>
 
-    <div id="admin-content" class="max-w-5xl mx-auto hidden">
-        <header class="text-center mb-10">
-            <h1 class="text-3xl font-bold gold-text serif-font">محرر المقالات القانونية</h1>
-            <p class="text-gray-400 mt-2">أنشئ ملفات .md تلقائياً في مستودعك</p>
-        </header>
-
-        <div class="space-y-6 bg-slate-900/50 p-6 rounded-3xl border border-white/5">
-            <div class="grid md:grid-cols-2 gap-4">
-                <input type="password" id="ghToken" placeholder="GitHub Personal Token" class="bg-black/40 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid">
-                <input type="text" id="fileName" placeholder="اسم الملف (مثال: criminal-case)" class="bg-black/40 border border-white/10 p-4 rounded-xl outline-none focus:border-gold-solid">
+    <div id="admin-content" class="hidden">
+        <nav class="border-b border-white/5 bg-black/20 p-4 sticky top-0 z-50 backdrop-blur-md">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <a href="index.html" class="text-gray-400 hover:text-[#bf953f] flex items-center gap-2 transition">
+                    <i class="fas fa-arrow-right"></i> <span>العودة للموقع</span>
+                </a>
+                <h1 class="gold-text font-black serif-font text-xl hidden md:block text-[#bf953f]">لوحة تحكم المكتبة القانونية</h1>
+                <div class="flex items-center gap-3">
+                    <span id="login-status" class="w-3 h-3 bg-red-500 rounded-full"></span>
+                    <span class="text-xs text-gray-400 hidden sm:inline">حالة الاتصال</span>
+                </div>
             </div>
-            
-            <input type="text" id="postTitle" placeholder="عنوان المقال الرئيسي" class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xl font-bold outline-none focus:border-gold-solid">
-            
-            <div id="editor-wrapper">
-                <div id="editor"></div>
-            </div>
+        </nav>
 
-            <button onclick="publish()" id="pubBtn" class="w-full bg-[#bf953f] hover:bg-yellow-600 text-black font-black py-5 rounded-2xl text-xl transition-all shadow-xl">
-                نشر المقال وتوليد الملف فوراً
-            </button>
-            
-            <div id="status" class="text-center hidden p-4 rounded-xl"></div>
-        </div>
+        <main class="max-w-6xl mx-auto p-4 md:p-8">
+            <section class="mb-12">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold flex items-center gap-3">
+                        <i class="fas fa-pen-nib text-[#bf953f]"></i> <span id="editor-title">كتابة مقال جديد</span>
+                    </h2>
+                    <button onclick="resetEditor()" id="reset-btn" class="hidden text-xs bg-red-500/10 text-red-500 px-3 py-1 rounded-full">إلغاء التعديل</button>
+                </div>
+                
+                <div class="space-y-4 bg-white/5 p-4 md:p-6 rounded-3xl gold-border">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="password" id="ghToken" placeholder="GitHub Token" class="bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
+                        <input type="text" id="fileName" placeholder="اسم الملف (مثال: criminal-case)" class="bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
+                    </div>
+                    <input type="text" id="postTitle" placeholder="عنوان المقال الذي سيظهر للجمهور" class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-lg font-bold outline-none focus:border-[#bf953f]">
+                    
+                    <div id="editor-container"><div id="editor"></div></div>
+
+                    <button onclick="publish()" id="pubBtn" class="w-full bg-[#bf953f] text-black font-black py-4 rounded-2xl text-lg shadow-lg hover:shadow-[#bf953f]/20 transition">
+                        <i class="fas fa-cloud-upload-alt ml-2"></i> حفظ ونشر المقال
+                    </button>
+                </div>
+            </section>
+
+            <section>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold flex items-center gap-3">
+                        <i class="fas fa-tasks text-[#bf953f]"></i> إدارة المقالات المنشورة
+                    </h2>
+                    <button onclick="loadExistingArticles()" class="text-sm text-[#bf953f] hover:underline">تحديث القائمة</button>
+                </div>
+                
+                <div id="articles-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="text-center py-10 col-span-full opacity-50">يرجى إدخال التوكن لعرض المقالات المتاحة للحذف أو التعديل</div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // نظام حماية بسيط
+        let isEditing = false;
+        let currentFileSha = null;
+
         function checkPass() {
-            const pass = document.getElementById('adminPass').value;
-            if(pass === "1234") { // استبدل 1234 بكلمة سرك الخاصة
-                document.getElementById('lock-screen').style.display = 'none';
+            if(document.getElementById('adminPass').value === "1234") {
+                document.getElementById('lock-screen').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
-            } else { alert("خطأ!"); }
+            } else { alert("كلمة المرور غير صحيحة"); }
         }
 
-        // إعداد أداة الكتابة الاحترافية
         var quill = new Quill('#editor', {
             theme: 'snow',
-            placeholder: 'اكتب محتوى المقال هنا بالتنسيق الذي تريده...',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
-                    ['bold', 'italic', 'underline'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'direction': 'rtl' }],
-                    ['link', 'clean']
-                ]
-            }
+            modules: { toolbar: [[{'header': [1, 2, false]}], ['bold', 'italic', 'underline'], [{'list': 'ordered'}, {'list': 'bullet'}], [{'direction': 'rtl'}], ['link', 'clean']] }
         });
 
+        const owner = "malegal";
+        const repo = "mahmoud-legal";
+
+        // وظيفة النشر أو التحديث
         async function publish() {
             const token = document.getElementById('ghToken').value;
             const title = document.getElementById('postTitle').value;
             const name = document.getElementById('fileName').value;
-            const content = quill.root.innerHTML; // أخذ المحتوى بصيغة HTML
+            const content = quill.root.innerHTML;
             const btn = document.getElementById('pubBtn');
-            const status = document.getElementById('status');
 
-            if(!token || !title || !name) { alert("أكمل البيانات!"); return; }
+            if(!token || !title || !name) { alert("أكمل البيانات أولاً"); return; }
 
             btn.disabled = true;
-            btn.innerText = "جاري الاتصال بـ GitHub...";
+            btn.innerHTML = '<i class="fas fa-spinner animate-spin"></i> جاري المعالجة...';
 
-            const owner = "malegal";
-            const repo = "mahmoud-legal";
-            const path = `blog/articles/${name}.md`;
-
-            // تحويل HTML بسيط إلى Markdown ليتمكن الموقع من قراءته
+            const path = `blog/articles/${name.endsWith('.md') ? name : name + '.md'}`;
             const mdContent = `# ${title}\n\n${content}`;
+
+            const body = {
+                message: isEditing ? `تعديل مقال: ${title}` : `نشر مقال: ${title}`,
+                content: btoa(unescape(encodeURIComponent(mdContent)))
+            };
+            if(isEditing && currentFileSha) body.sha = currentFileSha;
 
             try {
                 const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: `Article: ${title}`,
-                        content: btoa(unescape(encodeURIComponent(mdContent)))
-                    })
+                    body: JSON.stringify(body)
                 });
 
                 if(res.ok) {
-                    status.innerHTML = "✅ تم النشر! سيظهر المقال في الموقع خلال دقائق.";
-                    status.className = "text-green-400 bg-green-400/10 p-4 rounded-xl block";
-                } else { throw new Error("فشل الرفع"); }
-            } catch (e) {
-                status.innerHTML = "❌ خطأ: " + e.message;
-                status.className = "text-red-400 bg-red-400/10 p-4 rounded-xl block";
-            } finally { btn.disabled = false; btn.innerText = "نشر المقال وتوليد الملف فوراً"; }
+                    alert(isEditing ? "تم التعديل بنجاح!" : "تم النشر بنجاح!");
+                    resetEditor();
+                    loadExistingArticles();
+                } else { throw new Error("حدث خطأ في الاتصال"); }
+            } catch (e) { alert(e.message); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-upload-alt ml-2"></i> حفظ ونشر المقال'; }
         }
+
+        // جلب المقالات الحالية للإدارة
+        async function loadExistingArticles() {
+            const token = document.getElementById('ghToken').value;
+            if(!token) return;
+            
+            const list = document.getElementById('articles-list');
+            list.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-sync animate-spin text-2xl"></i></div>';
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/blog/articles`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                const files = await res.json();
+                
+                list.innerHTML = '';
+                files.filter(f => f.name.endsWith('.md')).forEach(file => {
+                    const card = document.createElement('div');
+                    card.className = 'article-card p-5 rounded-2xl gold-border flex flex-col justify-between';
+                    card.innerHTML = `
+                        <div>
+                            <h3 class="font-bold text-sm mb-4 truncate">${decodeURIComponent(file.name)}</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editArticle('${file.path}', '${file.sha}')" class="flex-1 bg-blue-500/20 text-blue-400 py-2 rounded-lg text-xs hover:bg-blue-500 hover:text-white transition">تعديل</button>
+                            <button onclick="deleteArticle('${file.path}', '${file.sha}')" class="flex-1 bg-red-500/20 text-red-400 py-2 rounded-lg text-xs hover:bg-red-500 hover:text-white transition">حذف</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+                document.getElementById('login-status').className = 'w-3 h-3 bg-green-500 rounded-full';
+            } catch (e) { list.innerHTML = '<div class="col-span-full text-red-400 text-center">تأكد من صحة التوكن</div>'; }
+        }
+
+        // وظيفة التعديل (جلب المحتوى للمحرر)
+        async function editArticle(path, sha) {
+            const token = document.getElementById('ghToken').value;
+            try {
+                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                const data = await res.json();
+                const rawContent = decodeURIComponent(escape(atob(data.content)));
+                
+                const titleMatch = rawContent.match(/^# (.*)\n/);
+                const title = titleMatch ? titleMatch[1] : '';
+                const body = rawContent.replace(/^# .*\n/, '');
+
+                document.getElementById('postTitle').value = title;
+                document.getElementById('fileName').value = data.name;
+                document.getElementById('fileName').disabled = true;
+                quill.root.innerHTML = body;
+                
+                isEditing = true;
+                currentFileSha = sha;
+                document.getElementById('editor-title').innerText = "تعديل المقال الحالي";
+                document.getElementById('reset-btn').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) { alert("فشل جلب المقال"); }
+        }
+
+        // وظيفة الحذف
+        async function deleteArticle(path, sha) {
+            if(!confirm("هل أنت متأكد من حذف هذا المقال نهائياً؟")) return;
+            const token = document.getElementById('ghToken').value;
+            
+            try {
+                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: "حذف مقال", sha: sha })
+                });
+                if(res.ok) { alert("تم الحذف!"); loadExistingArticles(); }
+            } catch (e) { alert("فشل الحذف"); }
+        }
+
+        function resetEditor() {
+            isEditing = false;
+            currentFileSha = null;
+            document.getElementById('postTitle').value = '';
+            document.getElementById('fileName').value = '';
+            document.getElementById('fileName').disabled = false;
+            quill.root.innerHTML = '';
+            document.getElementById('editor-title').innerText = "كتابة مقال جديد";
+            document.getElementById('reset-btn').classList.add('hidden');
+        }
+
+        // ربط التوكن بتحديث القائمة تلقائياً عند الكتابة
+        document.getElementById('ghToken').addEventListener('blur', loadExistingArticles);
     </script>
 </body>
 </html>

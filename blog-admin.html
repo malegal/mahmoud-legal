@@ -13,72 +13,83 @@
         body { background-color: var(--dark); color: white; font-family: 'Tajawal', sans-serif; }
         .serif-font { font-family: 'Amiri', serif; }
         .gold-border { border: 1px solid rgba(191, 149, 63, 0.3); }
-        .ql-container { background: rgba(255,255,255,0.05); border-radius: 0 0 12px 12px; height: 300px; color: white; font-size: 16px; }
+        .ql-container { background: rgba(255,255,255,0.05); border-radius: 0 0 12px 12px; height: 300px; color: white; font-size: 16px; text-align: right; }
         .ql-toolbar { background: #f3f4f6; border-radius: 12px 12px 0 0; }
+        .ql-editor.ql-blank::before { color: rgba(255,255,255,0.3); right: 15px; left: auto; }
         .article-card { background: rgba(255,255,255,0.03); transition: all 0.3s ease; }
-        .article-card:hover { background: rgba(255,255,255,0.07); }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <div id="lock-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex flex-col items-center justify-center p-6">
-        <div class="w-full max-w-sm text-center">
-            <i class="fas fa-user-shield text-5xl text-[#bf953f] mb-6"></i>
-            <h2 class="text-2xl font-bold mb-6 serif-font">دخول الإدارة</h2>
-            <input type="password" id="adminPass" placeholder="كلمة المرور" class="w-full bg-slate-900 border-2 border-[#bf953f]/30 p-4 rounded-2xl text-center outline-none focus:border-[#bf953f] mb-4">
-            <button onclick="checkPass()" class="w-full bg-[#bf953f] text-black font-black py-4 rounded-2xl shadow-xl hover:scale-105 transition">دخول النظام</button>
+    <div id="lock-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex flex-col items-center justify-center p-6 text-center">
+        <div class="w-full max-w-sm">
+            <i class="fas fa-shield-halved text-6xl text-[#bf953f] mb-6"></i>
+            <h2 class="text-2xl font-bold mb-6 serif-font">دخول الإدارة الآمن</h2>
+            <input type="password" id="adminPass" placeholder="كلمة المرور" class="w-full bg-slate-900 border-2 border-[#bf953f]/30 p-4 rounded-2xl text-center outline-none focus:border-[#bf953f] mb-4 text-white">
+            <button onclick="checkPass()" class="w-full bg-[#bf953f] text-black font-black py-4 rounded-2xl shadow-xl hover:scale-105 transition">دخول</button>
         </div>
     </div>
 
     <div id="admin-content" class="hidden">
         <nav class="border-b border-white/5 bg-black/20 p-4 sticky top-0 z-50 backdrop-blur-md">
             <div class="max-w-6xl mx-auto flex justify-between items-center">
-                <a href="index.html" class="text-gray-400 hover:text-[#bf953f] flex items-center gap-2 transition">
-                    <i class="fas fa-arrow-right"></i> <span>العودة للموقع</span>
+                <a href="index.html" class="text-gray-400 hover:text-[#bf953f] flex items-center gap-2 transition font-bold">
+                    <i class="fas fa-home"></i> <span>الرئيسية</span>
                 </a>
-                <h1 class="gold-text font-black serif-font text-xl hidden md:block text-[#bf953f]">لوحة تحكم المكتبة القانونية</h1>
-                <div class="flex items-center gap-3">
-                    <span id="login-status" class="w-3 h-3 bg-red-500 rounded-full"></span>
-                    <span class="text-xs text-gray-400 hidden sm:inline">حالة الاتصال</span>
+                <h1 class="text-[#bf953f] font-black serif-font text-lg">لوحة تحكم الأستاذ محمود</h1>
+                <div id="connection-indicator" class="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20">
+                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] text-red-500 font-bold uppercase">Offline</span>
                 </div>
             </div>
         </nav>
 
         <main class="max-w-6xl mx-auto p-4 md:p-8">
             <section class="mb-12">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold flex items-center gap-3">
-                        <i class="fas fa-pen-nib text-[#bf953f]"></i> <span id="editor-title">كتابة مقال جديد</span>
+                <div class="bg-white/5 p-4 md:p-8 rounded-3xl gold-border shadow-2xl">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <i class="fas fa-edit text-[#bf953f]"></i> <span id="editor-status-text">إضافة مقال جديد</span>
                     </h2>
-                    <button onclick="resetEditor()" id="reset-btn" class="hidden text-xs bg-red-500/10 text-red-500 px-3 py-1 rounded-full">إلغاء التعديل</button>
-                </div>
-                
-                <div class="space-y-4 bg-white/5 p-4 md:p-6 rounded-3xl gold-border">
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <input type="password" id="ghToken" placeholder="GitHub Token" class="bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
-                        <input type="text" id="fileName" placeholder="اسم الملف (مثال: criminal-case)" class="bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
-                    </div>
-                    <input type="text" id="postTitle" placeholder="عنوان المقال الذي سيظهر للجمهور" class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-lg font-bold outline-none focus:border-[#bf953f]">
-                    
-                    <div id="editor-container"><div id="editor"></div></div>
 
-                    <button onclick="publish()" id="pubBtn" class="w-full bg-[#bf953f] text-black font-black py-4 rounded-2xl text-lg shadow-lg hover:shadow-[#bf953f]/20 transition">
-                        <i class="fas fa-cloud-upload-alt ml-2"></i> حفظ ونشر المقال
-                    </button>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 mr-2 italic">مفتاح الوصول (GitHub Token)</label>
+                            <input type="password" id="ghToken" placeholder="Personal Access Token" class="w-full bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-gray-400 mr-2 italic">اسم الملف الرابط (بالإنجليزي)</label>
+                            <input type="text" id="fileName" placeholder="مثلاً: inheritance-law" class="w-full bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-6">
+                        <input type="text" id="postTitle" placeholder="عنوان المقال القانوني..." class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xl font-bold outline-none focus:border-[#bf953f]">
+                        
+                        <div class="relative">
+                            <i class="fas fa-image absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                            <input type="text" id="postImage" placeholder="رابط صورة المقال (اختياري)" class="w-full bg-black/40 border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#bf953f]">
+                        </div>
+                    </div>
+                    
+                    <div id="editor-container" class="mb-6"><div id="editor"></div></div>
+
+                    <div class="flex gap-4">
+                        <button onclick="publish()" id="pubBtn" class="flex-[2] bg-[#bf953f] text-black font-black py-4 rounded-2xl text-lg hover:shadow-lg hover:shadow-[#bf953f]/20 transition active:scale-95">
+                            <i class="fas fa-paper-plane ml-2"></i> حفظ ونشر المقال
+                        </button>
+                        <button onclick="resetEditor()" id="reset-btn" class="flex-1 bg-white/5 text-gray-400 py-4 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition">
+                            إلغاء
+                        </button>
+                    </div>
                 </div>
             </section>
 
             <section>
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold flex items-center gap-3">
-                        <i class="fas fa-tasks text-[#bf953f]"></i> إدارة المقالات المنشورة
-                    </h2>
-                    <button onclick="loadExistingArticles()" class="text-sm text-[#bf953f] hover:underline">تحديث القائمة</button>
-                </div>
-                
-                <div id="articles-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="text-center py-10 col-span-full opacity-50">يرجى إدخال التوكن لعرض المقالات المتاحة للحذف أو التعديل</div>
-                </div>
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                    <i class="fas fa-folder-open text-[#bf953f]"></i> المقالات الحالية
+                </h3>
+                <div id="articles-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </div>
             </section>
         </main>
     </div>
@@ -88,39 +99,51 @@
         let isEditing = false;
         let currentFileSha = null;
 
+        // كلمة السر الجديدة
         function checkPass() {
-            if(document.getElementById('adminPass').value === "1234") {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === "mahmoud237") {
                 document.getElementById('lock-screen').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
-            } else { alert("كلمة المرور غير صحيحة"); }
+            } else { alert("عذراً، كلمة المرور خاطئة"); }
         }
 
         var quill = new Quill('#editor', {
             theme: 'snow',
-            modules: { toolbar: [[{'header': [1, 2, false]}], ['bold', 'italic', 'underline'], [{'list': 'ordered'}, {'list': 'bullet'}], [{'direction': 'rtl'}], ['link', 'clean']] }
+            modules: { toolbar: [[{'header': [1, 2, false]}], ['bold', 'italic'], [{'list': 'ordered'}, {'list': 'bullet'}], [{'direction': 'rtl'}], ['link', 'image', 'clean']] }
         });
 
         const owner = "malegal";
         const repo = "mahmoud-legal";
 
-        // وظيفة النشر أو التحديث
         async function publish() {
             const token = document.getElementById('ghToken').value;
             const title = document.getElementById('postTitle').value;
             const name = document.getElementById('fileName').value;
+            const imageUrl = document.getElementById('postImage').value || "images/blog-bg.jpg"; // صورة افتراضية
             const content = quill.root.innerHTML;
             const btn = document.getElementById('pubBtn');
 
-            if(!token || !title || !name) { alert("أكمل البيانات أولاً"); return; }
+            if(!token || !title || !name) { alert("تأكد من إدخال التوكن، العنوان، واسم الملف"); return; }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner animate-spin"></i> جاري المعالجة...';
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> جاري الحفظ...';
 
             const path = `blog/articles/${name.endsWith('.md') ? name : name + '.md'}`;
-            const mdContent = `# ${title}\n\n${content}`;
+            
+            // هيكلة ملف الـ MD ليشمل الصورة في البداية
+            const mdContent = `---
+title: ${title}
+image: ${imageUrl}
+---
+# ${title}
+
+![صورة المقال](${imageUrl})
+
+${content}`;
 
             const body = {
-                message: isEditing ? `تعديل مقال: ${title}` : `نشر مقال: ${title}`,
+                message: isEditing ? `تعديل المقال: ${title}` : `نشر مقال جديد: ${title}`,
                 content: btoa(unescape(encodeURIComponent(mdContent)))
             };
             if(isEditing && currentFileSha) body.sha = currentFileSha;
@@ -133,48 +156,45 @@
                 });
 
                 if(res.ok) {
-                    alert(isEditing ? "تم التعديل بنجاح!" : "تم النشر بنجاح!");
+                    alert("تمت العملية بنجاح!");
                     resetEditor();
                     loadExistingArticles();
-                } else { throw new Error("حدث خطأ في الاتصال"); }
-            } catch (e) { alert(e.message); }
-            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-upload-alt ml-2"></i> حفظ ونشر المقال'; }
+                } else { throw new Error(); }
+            } catch (e) { alert("فشل الاتصال بـ GitHub. تأكد من صحة التوكن."); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane ml-2"></i> حفظ ونشر المقال'; }
         }
 
-        // جلب المقالات الحالية للإدارة
         async function loadExistingArticles() {
             const token = document.getElementById('ghToken').value;
             if(!token) return;
             
-            const list = document.getElementById('articles-list');
-            list.innerHTML = '<div class="col-span-full text-center py-10"><i class="fas fa-sync animate-spin text-2xl"></i></div>';
-
             try {
                 const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/blog/articles`, {
                     headers: { 'Authorization': `token ${token}` }
                 });
                 const files = await res.json();
                 
+                const list = document.getElementById('articles-list');
                 list.innerHTML = '';
+                
                 files.filter(f => f.name.endsWith('.md')).forEach(file => {
                     const card = document.createElement('div');
-                    card.className = 'article-card p-5 rounded-2xl gold-border flex flex-col justify-between';
+                    card.className = 'article-card p-4 rounded-2xl border border-white/10 hover:border-[#bf953f]/50 transition';
                     card.innerHTML = `
-                        <div>
-                            <h3 class="font-bold text-sm mb-4 truncate">${decodeURIComponent(file.name)}</h3>
-                        </div>
+                        <p class="text-xs text-gray-500 mb-2 truncate">${file.name}</p>
                         <div class="flex gap-2">
-                            <button onclick="editArticle('${file.path}', '${file.sha}')" class="flex-1 bg-blue-500/20 text-blue-400 py-2 rounded-lg text-xs hover:bg-blue-500 hover:text-white transition">تعديل</button>
-                            <button onclick="deleteArticle('${file.path}', '${file.sha}')" class="flex-1 bg-red-500/20 text-red-400 py-2 rounded-lg text-xs hover:bg-red-500 hover:text-white transition">حذف</button>
+                            <button onclick="editArticle('${file.path}', '${file.sha}')" class="flex-1 bg-white/5 py-2 rounded-lg text-xs hover:bg-[#bf953f] hover:text-black transition">تعديل</button>
+                            <button onclick="deleteArticle('${file.path}', '${file.sha}')" class="flex-1 bg-red-500/10 text-red-500 py-2 rounded-lg text-xs hover:bg-red-500 hover:text-white transition">حذف</button>
                         </div>
                     `;
                     list.appendChild(card);
                 });
-                document.getElementById('login-status').className = 'w-3 h-3 bg-green-500 rounded-full';
-            } catch (e) { list.innerHTML = '<div class="col-span-full text-red-400 text-center">تأكد من صحة التوكن</div>'; }
+                
+                document.getElementById('connection-indicator').className = 'flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20';
+                document.getElementById('connection-indicator').innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span><span class="text-[10px] text-green-500 font-bold uppercase">Connected</span>';
+            } catch (e) {}
         }
 
-        // وظيفة التعديل (جلب المحتوى للمحرر)
         async function editArticle(path, sha) {
             const token = document.getElementById('ghToken').value;
             try {
@@ -184,35 +204,34 @@
                 const data = await res.json();
                 const rawContent = decodeURIComponent(escape(atob(data.content)));
                 
-                const titleMatch = rawContent.match(/^# (.*)\n/);
-                const title = titleMatch ? titleMatch[1] : '';
-                const body = rawContent.replace(/^# .*\n/, '');
+                // استخراج البيانات من الملف
+                const titleMatch = rawContent.match(/^# (.*)\n/m);
+                const imgMatch = rawContent.match(/!\[.*\]\((.*)\)/);
+                const body = rawContent.split('\n\n').slice(2).join('\n\n');
 
-                document.getElementById('postTitle').value = title;
+                document.getElementById('postTitle').value = titleMatch ? titleMatch[1] : '';
+                document.getElementById('postImage').value = imgMatch ? imgMatch[1] : '';
                 document.getElementById('fileName').value = data.name;
                 document.getElementById('fileName').disabled = true;
                 quill.root.innerHTML = body;
                 
                 isEditing = true;
                 currentFileSha = sha;
-                document.getElementById('editor-title').innerText = "تعديل المقال الحالي";
-                document.getElementById('reset-btn').classList.remove('hidden');
+                document.getElementById('editor-status-text').innerText = "تعديل مقال منشور";
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (e) { alert("فشل جلب المقال"); }
+            } catch (e) { alert("فشل في جلب محتوى المقال"); }
         }
 
-        // وظيفة الحذف
         async function deleteArticle(path, sha) {
-            if(!confirm("هل أنت متأكد من حذف هذا المقال نهائياً؟")) return;
+            if(!confirm("سيتم حذف المقال نهائياً من الموقع، هل أنت متأكد؟")) return;
             const token = document.getElementById('ghToken').value;
-            
             try {
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: "حذف مقال", sha: sha })
                 });
-                if(res.ok) { alert("تم الحذف!"); loadExistingArticles(); }
+                loadExistingArticles();
             } catch (e) { alert("فشل الحذف"); }
         }
 
@@ -220,14 +239,13 @@
             isEditing = false;
             currentFileSha = null;
             document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
             document.getElementById('fileName').value = '';
             document.getElementById('fileName').disabled = false;
             quill.root.innerHTML = '';
-            document.getElementById('editor-title').innerText = "كتابة مقال جديد";
-            document.getElementById('reset-btn').classList.add('hidden');
+            document.getElementById('editor-status-text').innerText = "إضافة مقال جديد";
         }
 
-        // ربط التوكن بتحديث القائمة تلقائياً عند الكتابة
         document.getElementById('ghToken').addEventListener('blur', loadExistingArticles);
     </script>
 </body>

@@ -8,7 +8,10 @@ class BlogPublisher {
     
     async init() {
         // التحقق من الاتصال
-        window.addEventListener('online', () => this.isOnline = true);
+        window.addEventListener('online', () => {
+            this.isOnline = true;
+            this.syncOldDrafts();
+        });
         window.addEventListener('offline', () => this.isOnline = false);
         
         // محاولة مزامنة المسودات القديمة
@@ -27,32 +30,26 @@ class BlogPublisher {
         this.showLoading(true);
         
         try {
-            // 4. حفظ محليًا كمسودة أولاً
-            this.saveAsDraft(article);
+            // 4. استخدم الدالة المبسطة للنشر
+            const published = await this.simplePublish(article);
             
-            // 5. محاولة النشر إلى GitHub
-            let published = false;
-            
-            if (this.isOnline) {
-                published = await this.uploadToGitHub(article);
-            }
-            
-            // 6. التعامل مع النتيجة
+            // 5. التعامل مع النتيجة
             if (published) {
                 this.showSuccess('تم نشر المقال بنجاح! سيظهر في المدونة خلال ثوانٍ.');
                 this.clearForm();
                 this.removeDraft(article.id);
-            } else if (this.isOnline) {
-                this.showError('فشل النشر إلى GitHub. تم حفظ المقال كمشودة.');
             } else {
+                // إذا فشل النشر، احفظ كمشودة
+                this.saveAsDraft(article);
                 this.showInfo('تم حفظ المقال كمشودة. سينشر تلقائيًا عند الاتصال بالإنترنت.');
             }
             
         } catch (error) {
             console.error('خطأ في النشر:', error);
             this.showError('حدث خطأ غير متوقع. تم حفظ المقال كمشودة.');
+            this.saveAsDraft(article);
         } finally {
-            // 7. إخفاء مؤشر التحميل
+            // 6. إخفاء مؤشر التحميل
             this.showLoading(false);
         }
     }
@@ -96,177 +93,165 @@ class BlogPublisher {
         return true;
     }
     
-    // رفع المقال إلى GitHub
-    async uploadToGitHub(article) {
-        const token = localStorage.getItem('github_token');
-        
-        if (!token) {
-            this.showError('لم يتم العثور على توكن GitHub. الرجاء إدخاله أولاً.');
-            return false;
-        }
-        
+    // دالة نشر مبسطة للمقالات
+    async simplePublish(article) {
         try {
-            // أ. الحصول على المقالات الحالية
-            const currentArticles = await this.getCurrentArticles(token);
-            
-            // ب. إضافة المقال الجديد
-            currentArticles.unshift(article); // في البداية
-            
-            // ج. تحديث ملف articles.json
-            const updated = await this.updateArticlesFile(currentArticles, token, article.title);
-            
-            if (updated) {
-                // د. إنشاء ملف HTML منفصل للمقال
-                await this.createArticleFile(article, token);
-                return true;
+            const token = localStorage.getItem('github_token');
+            if (!token) {
+                this.showError('❌ لم يتم إدخال توكن GitHub. الرجاء إدخاله أولاً.');
+                return false;
             }
             
-            return false;
-            
-        } catch (error) {
-            console.error('خطأ في رفع المقال:', error);
-            return false;
-        }
-    }
-    
-    // الحصول على المقالات الحالية
-    async getCurrentArticles(token) {
-        try {
-            const response = await fetch(
-                `${BLOG_CONFIG.GITHUB_RAW_BASE}/${BLOG_CONFIG.ARTICLES_JSON_PATH}`
-            );
-            
-            if (response.ok) {
-                const data = await response.json();
-                return data.articles || [];
+            // 1. جلب المقالات الحالية
+            let data = { articles: [] };
+            try {
+                const response = await fetch(
+                    'https://raw.githubusercontent.com/malegal/mahmoud-legal/main/blog/data/articles.json'
+                );
+                
+                if (response.ok) {
+                    data = await response.json();
+                    // التأكد من وجود مصفوفة articles
+                    if (!data.articles) {
+                        data.articles = [];
+                    }
+                }
+            } catch (fetchError) {
+                console.log('بدء بمصفوفة مقالات جديدة');
+                data.articles = [];
             }
-        } catch (error) {
-            console.warn('لا يمكن تحميل المقالات الحالية، سيتم البدء بمصفوفة فارغة');
-        }
-        
-        return [];
-    }
-    
-    // تحديث ملف articles.json
-    async updateArticlesFile(articles, token, articleTitle) {
-        const content = {
-            articles: articles,
-            lastUpdated: new Date().toISOString(),
-            totalArticles: articles.length,
-            categories: BLOG_CONFIG.CATEGORIES
-        };
-        
-        const url = `${BLOG_CONFIG.GITHUB_API_BASE}/${BLOG_CONFIG.ARTICLES_JSON_PATH}`;
-        
-        // الحصول على SHA للملف الحالي إذا كان موجودًا
-        let sha = null;
-        try {
-            const fileInfo = await fetch(url, {
+            
+            // 2. إضافة المقال الجديد
+            // التأكد من أن للمقال معرف فريد
+            article.id = article.id || Date.now();
+            article.date = article.date || new Date().toLocaleDateString('ar-SA');
+            
+            // إضافة المقال في بداية المصفوفة
+            data.articles.unshift(article);
+            
+            // 3. تحديث ملف articles.json مباشرة
+            const updateUrl = 'https://api.github.com/repos/malegal/mahmoud-legal/contents/blog/data/articles.json';
+            
+            // الحصول على SHA للملف الحالي
+            let sha = '';
+            try {
+                const fileInfo = await fetch(updateUrl, {
+                    headers: { 
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (fileInfo.ok) {
+                    const info = await fileInfo.json();
+                    sha = info.sha;
+                }
+            } catch (shaError) {
+                console.log('الملف غير موجود، سيتم إنشاؤه جديداً');
+            }
+            
+            // رفع التحديث
+            const updateResponse = await fetch(updateUrl, {
+                method: 'PUT',
                 headers: {
                     'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `إضافة مقال جديد: ${article.title}`,
+                    content: btoa(JSON.stringify(data, null, 2)),
+                    sha: sha || undefined,
+                    branch: 'main'
+                })
             });
             
-            if (fileInfo.ok) {
-                const data = await fileInfo.json();
-                sha = data.sha;
+            if (updateResponse.ok) {
+                console.log('✅ تم تحديث articles.json بنجاح');
+                
+                // محاولة تحديث index.html لتفعيل Vercel rebuild
+                try {
+                    await this.triggerVercelRebuild(token);
+                } catch (rebuildError) {
+                    console.log('ملاحظة: يمكن تحديث Vercel يدويًا');
+                }
+                
+                return true;
+            } else {
+                const errorData = await updateResponse.json();
+                console.error('❌ خطأ في تحديث GitHub:', errorData);
+                
+                let errorMsg = 'فشل النشر إلى GitHub';
+                if (errorData.message) {
+                    errorMsg += ': ' + errorData.message;
+                    
+                    // رسائل خطأ شائعة
+                    if (errorData.message.includes('bad credentials')) {
+                        errorMsg = 'التوكن غير صالح أو منتهي الصلاحية';
+                    } else if (errorData.message.includes('not found')) {
+                        errorMsg = 'المستودع غير موجود أو لا يوجد صلاحية للوصول';
+                    }
+                }
+                
+                this.showError(errorMsg);
+                return false;
             }
+            
         } catch (error) {
-            // الملف غير موجود، سننشئه جديدًا
+            console.error('خطأ في النشر المبسط:', error);
+            this.showError('حدث خطأ غير متوقع: ' + error.message);
+            return false;
         }
-        
-        // إعداد الطلب
-        const requestBody = {
-            message: `إضافة مقال جديد: ${articleTitle}`,
-            content: btoa(JSON.stringify(content, null, 2)),
-            branch: BLOG_CONFIG.BRANCH
-        };
-        
-        if (sha) {
-            requestBody.sha = sha;
-        }
-        
-        // إرسال الطلب
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-        });
-        
-        return response.ok;
     }
     
-    // إنشاء ملف HTML منفصل للمقال
-    async createArticleFile(article, token) {
-        const htmlContent = this.generateArticleHTML(article);
-        const fileName = `article-${article.id}.html`;
-        const filePath = `${BLOG_CONFIG.ARTICLES_DIR}${fileName}`;
-        
-        const url = `${BLOG_CONFIG.GITHUB_API_BASE}/${filePath}`;
-        
-        const requestBody = {
-            message: `إنشاء ملف للمقال: ${article.title}`,
-            content: btoa(htmlContent),
-            branch: BLOG_CONFIG.BRANCH
-        };
-        
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-        });
-        
-        return response.ok;
-    }
-    
-    // توليد HTML للمقال
-    generateArticleHTML(article) {
-        return `<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${article.title} - ${BLOG_CONFIG.BLOG_NAME}</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.8; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .article-header { text-align: center; margin-bottom: 40px; }
-        .article-title { color: #283593; font-size: 2rem; margin-bottom: 10px; }
-        .article-meta { color: #666; font-size: 0.9rem; }
-        .article-content { font-size: 1.1rem; }
-        .article-image { max-width: 100%; height: auto; border-radius: 10px; margin: 20px 0; }
-        .back-link { display: inline-block; margin-top: 30px; color: #283593; text-decoration: none; }
-    </style>
-</head>
-<body>
-    <article>
-        <header class="article-header">
-            <h1 class="article-title">${article.title}</h1>
-            <div class="article-meta">
-                <span>نشر في: ${article.date}</span> | 
-                <span>بواسطة: ${article.author}</span> | 
-                <span>التصنيف: ${article.category}</span>
-            </div>
-        </header>
-        
-        ${article.image ? `<img src="${article.image}" alt="${article.title}" class="article-image">` : ''}
-        
-        <div class="article-content">
-            ${article.content.replace(/\n/g, '<br>')}
-        </div>
-        
-        <a href="/" class="back-link">← العودة إلى المدونة</a>
-    </article>
-</body>
-</html>`;
+    // محاولة تفعيل إعادة بناء Vercel
+    async triggerVercelRebuild(token) {
+        try {
+            // تحديث ملف بسيط لتشغيل rebuild
+            const vercelUrl = 'https://api.github.com/repos/malegal/mahmoud-legal/contents/vercel.json';
+            
+            // جلب SHA الحالي
+            let sha = '';
+            try {
+                const fileRes = await fetch(vercelUrl, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+                if (fileRes.ok) {
+                    const fileData = await fileRes.json();
+                    sha = fileData.sha;
+                }
+            } catch (e) {
+                // تجاهل الخطأ إذا لم يوجد الملف
+            }
+            
+            // تحديث طفيف
+            const vercelConfig = {
+                "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+                "buildCommand": null,
+                "outputDirectory": ".",
+                "github": {
+                    "silent": true
+                },
+                "lastUpdated": new Date().toISOString()
+            };
+            
+            await fetch(vercelUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'تحديث للإشارة إلى مقال جديد',
+                    content: btoa(JSON.stringify(vercelConfig, null, 2)),
+                    sha: sha || undefined,
+                    branch: 'main'
+                })
+            });
+            
+            console.log('✅ تم تشغيل إعادة بناء Vercel');
+        } catch (error) {
+            console.log('⚠️ يمكن تحديث Vercel يدويًا من لوحة التحكم');
+        }
     }
     
     // إدارة المسودات المحلية
@@ -276,7 +261,14 @@ class BlogPublisher {
             
             // تجنب التكرار
             drafts = drafts.filter(d => d.id !== article.id);
-            drafts.push({...article, isDraft: true, savedAt: new Date().toISOString()});
+            drafts.push({
+                ...article, 
+                isDraft: true, 
+                savedAt: new Date().toISOString(),
+                // إضافة معلومات إضافية للمسودة
+                title: article.title || 'مقال بدون عنوان',
+                content: article.content || ''
+            });
             
             localStorage.setItem('blog_drafts', JSON.stringify(drafts));
             
@@ -310,18 +302,26 @@ class BlogPublisher {
                 return;
             }
             
+            // ترتيب المسودات من الأحدث إلى الأقدم
+            drafts.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+            
             draftsList.innerHTML = drafts.map(draft => `
                 <div class="draft-item">
                     <h4>${draft.title || 'بدون عنوان'}</h4>
                     <p><strong>التصنيف:</strong> ${draft.category || 'غير محدد'}</p>
                     <p><strong>الحفظ:</strong> ${new Date(draft.savedAt).toLocaleDateString('ar-SA')}</p>
-                    <p>${(draft.summary || draft.content || '').substring(0, 100)}...</p>
+                    <p style="color: #666; font-size: 0.9rem;">
+                        ${(draft.summary || draft.content || '').substring(0, 80)}${(draft.summary || draft.content || '').length > 80 ? '...' : ''}
+                    </p>
                     <div class="draft-actions">
                         <button class="btn-edit" onclick="editDraft(${draft.id})">
                             <i class="fas fa-edit"></i> تعديل
                         </button>
                         <button class="btn-delete" onclick="deleteDraft(${draft.id})">
                             <i class="fas fa-trash"></i> حذف
+                        </button>
+                        <button class="btn-publish" onclick="publishDraft(${draft.id})" style="background: #28a745; color: white;">
+                            <i class="fas fa-paper-plane"></i> نشر
                         </button>
                     </div>
                 </div>
@@ -331,118 +331,4 @@ class BlogPublisher {
         }
     }
     
-    // مزامنة المسودات القديمة عند الاتصال
-    async syncOldDrafts() {
-        if (!this.isOnline) return;
-        
-        const drafts = JSON.parse(localStorage.getItem('blog_drafts')) || [];
-        const unsyncedDrafts = drafts.filter(d => d.isDraft);
-        
-        if (unsyncedDrafts.length === 0) return;
-        
-        for (const draft of unsyncedDrafts) {
-            try {
-                const published = await this.uploadToGitHub(draft);
-                if (published) {
-                    this.removeDraft(draft.id);
-                }
-            } catch (error) {
-                console.error('خطأ في مزامنة المسودة:', error);
-            }
-        }
-    }
-    
-    // وظائف المساعدة
-    extractTags(content) {
-        const commonTags = ['قانون', 'محكمة', 'عقد', 'تجاري', 'عائلي', 'جنائي', 'عقاري'];
-        const foundTags = commonTags.filter(tag => 
-            content.toLowerCase().includes(tag.toLowerCase())
-        );
-        return foundTags.slice(0, 5);
-    }
-    
-    getDefaultImage() {
-        const defaultImages = [
-            'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800',
-            'https://images.unsplash.com/photo-1589391886085-8b6b0ac72a1a?w-800',
-            'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800'
-        ];
-        return defaultImages[Math.floor(Math.random() * defaultImages.length)];
-    }
-    
-    clearForm() {
-        document.getElementById('articleTitle').value = '';
-        document.getElementById('articleAuthor').value = '';
-        document.getElementById('articleContent').value = '';
-        document.getElementById('articleImage').value = '';
-        document.getElementById('articleSummary').value = '';
-    }
-    
-    showLoading(show) {
-        const loader = document.getElementById('loadingIndicator');
-        const button = document.getElementById('publishButton');
-        
-        if (loader) loader.style.display = show ? 'block' : 'none';
-        if (button) {
-            button.disabled = show;
-            button.innerHTML = show ? 
-                '<i class="fas fa-spinner fa-spin"></i> جاري النشر...' : 
-                '<i class="fas fa-paper-plane"></i> نشر المقال الآن';
-        }
-    }
-    
-    showSuccess(message) {
-        const alert = document.getElementById('successAlert');
-        if (alert) {
-            alert.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 5000);
-        }
-    }
-    
-    showError(message) {
-        const alert = document.getElementById('errorAlert');
-        if (alert) {
-            alert.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-            alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 5000);
-        }
-    }
-    
-    showInfo(message) {
-        alert(`ℹ️ ${message}`);
-    }
-}
-
-// وظائف للمسودات (تعرض عالميًا)
-function editDraft(draftId) {
-    const drafts = JSON.parse(localStorage.getItem('blog_drafts')) || [];
-    const draft = drafts.find(d => d.id === draftId);
-    
-    if (draft) {
-        document.getElementById('articleTitle').value = draft.title || '';
-        document.getElementById('articleAuthor').value = draft.author || '';
-        document.getElementById('articleCategory').value = draft.category || 'قانون تجاري';
-        document.getElementById('articleContent').value = draft.content || '';
-        document.getElementById('articleImage').value = draft.image || '';
-        document.getElementById('articleSummary').value = draft.summary || '';
-        
-        // حذف المسودة بعد تحميلها
-        blogPublisher.removeDraft(draftId);
-    }
-}
-
-function deleteDraft(draftId) {
-    if (confirm('هل أنت متأكد من حذف هذه المسودة؟')) {
-        blogPublisher.removeDraft(draftId);
-    }
-}
-
-// تهيئة النظام
-const blogPublisher = new BlogPublisher();
-
-// جعل الدوال متاحة عالميًا
-window.publishArticle = () => blogPublisher.publishArticle();
-window.loadDrafts = () => blogPublisher.loadDrafts();
-window.editDraft = editDraft;
-window.deleteDraft = deleteDraft;
+    // مزامنة المسود

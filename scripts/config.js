@@ -1,14 +1,17 @@
 // ملف الإعدادات - قم بتعديله ليناسب مستودعك
-const BLOG_CONFIG = {
-    // معلومات المستودع
-    REPO_OWNER: 'اسم المستخدم الخاص بك', // ← غيّر هذا
-    REPO_NAME: 'اسم المستودع', // ← غيّر هذا
+const BLOG_CONFIG = {// scripts/config.js - تأكد من هذه المعلومات
+    REPO_OWNER: 'malegal',  // ← اسم المستخدم الصحيح
+    REPO_NAME: 'mahmoud-legal',  // ← اسم المستودع الصحيح
     BRANCH: 'main',
     
-    // مسارات الملفات
+    // مسارات الملفات (لا تغير هذه إلا إذا غيرت الهيكل)
     ARTICLES_JSON_PATH: 'blog/data/articles.json',
     ARTICLES_DIR: 'blog/articles/',
     IMAGES_DIR: 'blog/images/',
+    
+    // ... باقي الكود كما هو
+};
+window.BLOG_CONFIG = BLOG_CONFIG;
     
     // روابط GitHub
     get GITHUB_API_BASE() {
@@ -26,9 +29,9 @@ const BLOG_CONFIG = {
     // التصنيفات الافتراضية
     CATEGORIES: [
         'قانون تجاري',
-        'قانون عائلي', 
+        'قانون مدني', 
         'قانون جنائي',
-        'قانون عقاري',
+        'قانون الأسرة',
         'نصائح قانونية',
         'أخبار قانونية'
     ]

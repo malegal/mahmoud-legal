@@ -3,2009 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة إدارة المدونة | نظام GitHub المباشر</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <title>إدارة المدونة - مكتب المحاماة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-dark: #020617;
-            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
-            --gold-solid: #bf953f;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        body { 
-            font-family: 'Tajawal', sans-serif; 
-            background-color: var(--primary-dark); 
-            color: #f8fafc;
-        }
-        
-        .gold-text { 
-            background: var(--gold-gradient); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            background-clip: text;
-        }
-        
-        .gold-btn { 
-            background: var(--gold-gradient); 
-            color: #1a1a1a; 
-            font-weight: 800; 
-            transition: all 0.4s ease; 
-        }
-        
-        .gold-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3); 
-        }
-        
-        .card-glass { 
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px); 
-            border: 1px solid rgba(191, 149, 63, 0.15); 
-            border-radius: 1.5rem; 
-        }
-        
-        .article-list-item {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border-left: 3px solid transparent;
-        }
-        
-        .article-list-item:hover {
-            border-left-color: var(--gold-solid);
-            transform: translateX(-5px);
-        }
-        
-        .markdown-editor {
-            font-family: 'Cascadia Code', 'Courier New', monospace;
-            font-size: 16px;
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
             line-height: 1.6;
         }
-        
-        .markdown-editor:focus {
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.8rem;
+        }
+
+        header h1 i {
+            font-size: 2rem;
+        }
+
+        .admin-panel {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-section, .drafts-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            color: #283593;
+        }
+
+        .section-title i {
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #283593;
             outline: none;
         }
-        
-        .image-preview {
-            transition: all 0.3s ease;
+
+        textarea.form-control {
+            min-height: 300px;
+            resize: vertical;
         }
-        
-        .image-preview:hover {
-            transform: scale(1.05);
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: #283593;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
         }
-        
-        .github-connected {
-            border: 2px solid #238636;
-        }
-        
-        .github-disconnected {
-            border: 2px solid #f85149;
-        }
-        
-        .prose {
-            color: #e5e7eb;
-        }
-        
-        .prose h1, .prose h2, .prose h3, .prose h4 {
-            color: #f8fafc;
-            font-weight: bold;
-            margin-top: 1.5em;
-            margin-bottom: 0.5em;
-        }
-        
-        .prose h1 { font-size: 2.25em; }
-        .prose h2 { font-size: 1.875em; }
-        .prose h3 { font-size: 1.5em; }
-        
-        .prose p {
-            margin-bottom: 1em;
-            line-height: 1.8;
-        }
-        
-        .prose ul, .prose ol {
-            margin-right: 1.5em;
-            margin-bottom: 1em;
-        }
-        
-        .prose li {
-            margin-bottom: 0.5em;
-        }
-        
-        .prose strong {
-            color: #fbbf24;
-            font-weight: bold;
-        }
-        
-        .prose a {
-            color: #60a5fa;
-            text-decoration: underline;
-        }
-        
-        .prose img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
-            margin: 1em 0;
-        }
-        
-        .prose code {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.2em 0.4em;
-            border-radius: 0.25rem;
-            font-family: monospace;
-        }
-        
-        .prose pre {
-            background: #1e293b;
-            padding: 1em;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            margin: 1em 0;
-        }
-        
-        .prose blockquote {
-            border-right: 4px solid var(--gold-solid);
-            padding-right: 1em;
-            margin: 1em 0;
-            color: #94a3b8;
-        }
-        
-        /* أنماط جديدة للأزرار */
-        .nav-btn {
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-        
-        .nav-btn:hover {
+
+        .button:hover {
+            background: #1a237e;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        
-        .logout-btn {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+
+        .button i {
+            font-size: 1.2rem;
+        }
+
+        .button-success {
+            background: #28a745;
+        }
+
+        .button-success:hover {
+            background: #218838;
+        }
+
+        .drafts-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .draft-item {
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+        }
+
+        .draft-item h4 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .draft-item p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .draft-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .draft-actions button {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-delete {
+            background: #dc3545;
             color: white;
         }
-        
-        .logout-btn:hover {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .token-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .token-section h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .instructions {
+            background: #e7f3ff;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 30px;
+            border-right: 5px solid #283593;
+        }
+
+        .instructions h3 {
+            color: #283593;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            padding-right: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        .instructions code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #283593;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-gavel"></i> لوحة إدارة مدونة مكتب المحاماة</h1>
+        </header>
 
-    <!-- نافذة إعداد GitHub -->
-    <div id="githubSetupModal" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
-        <div class="bg-black/90 border-2 border-gold-solid rounded-3xl p-8 max-w-2xl w-full">
-            <div class="text-center mb-8">
-                <i class="fab fa-github text-5xl gold-text mb-4"></i>
-                <h2 class="text-2xl font-bold gold-text mb-2">إعداد اتصال GitHub</h2>
-                <p class="text-white/70">لحفظ المقالات مباشرة في المستودع، تحتاج إلى إدخال التوكن</p>
-            </div>
-            
-            <div class="space-y-6">
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">GitHub Personal Access Token</label>
-                    <input type="password" 
-                           id="githubTokenInput"
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           placeholder="github_pat_xxxxxxxxxxxxxxxxxxxx"
-                           autocomplete="off">
-                    
-                    <div class="text-white/60 text-sm mt-3 space-y-2">
-                        <p><i class="fas fa-info-circle ml-2"></i> كيفية إنشاء التوكن:</p>
-                        <ol class="mr-4 space-y-1">
-                            <li>1. اذهب إلى <a href="https://github.com/settings/tokens" target="_blank" class="text-blue-400">GitHub Tokens</a></li>
-                            <li>2. انقر على "Generate new token" ثم "Generate new token (classic)"</li>
-                            <li>3. أعطِه اسم (مثل: Blog Admin)</li>
-                            <li>4. اختر صلاحيات: <code class="bg-black/50 px-1">repo</code> (كاملة)</li>
-                            <li>5. انسخ التوكن وأدخله هنا</li>
-                        </ol>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">اسم المستودع</label>
-                    <input type="text" 
-                           id="repoNameInput"
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           value="malegal/mahmoud-legal"
-                           readonly>
-                </div>
-                
-                <div>
-                    <label class="block text-white/80 mb-2 font-bold">الفرع</label>
-                    <input type="text" 
-                           id="branchInput"
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none"
-                           value="main"
-                           readonly>
-                </div>
-                
-                <div class="flex gap-4 pt-4">
-                    <button onclick="saveGitHubConfig()" 
-                            class="gold-btn flex-1 py-4 rounded-xl text-lg font-bold">
-                        <i class="fas fa-check ml-2"></i>
-                        حفظ والتوصيل
-                    </button>
-                    <button onclick="skipGitHubSetup()" 
-                            class="bg-white/10 hover:bg-white/20 text-white flex-1 py-4 rounded-xl text-lg font-bold transition">
-                        <i class="fas fa-times ml-2"></i>
-                        التخطي مؤقتاً
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- المحتوى الرئيسي -->
-    <div id="mainContent" class="hidden">
-        <!-- شريط التنقل العلوي المعدل -->
-        <div class="bg-black/90 border-b border-gold-solid/20 py-3 px-6">
-            <div class="max-w-7xl mx-auto">
-                <!-- الصف العلوي: الترحيب والتحكم -->
-                <div class="flex justify-between items-center mb-3">
-                    <div class="flex items-center gap-4">
-                        <div id="githubStatus" class="flex items-center gap-2 px-3 py-1 rounded-full github-disconnected">
-                            <i class="fab fa-github"></i>
-                            <span class="text-sm">غير متصل</span>
-                        </div>
-                        <div id="connectionStatus" class="text-sm text-white/60">
-                            جاري التحميل...
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-3">
-                        <button onclick="showDashboard()" 
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition nav-btn">
-                            <i class="fas fa-tachometer-alt ml-2"></i>
-                            لوحة التحكم
-                        </button>
-                        <button onclick="openArticleList()" 
-                                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition nav-btn">
-                            <i class="fas fa-list ml-2"></i>
-                            قائمة المقالات
-                        </button>
-                        <button onclick="openCreateArticle()" 
-                                class="gold-btn px-6 py-2 rounded-lg font-bold nav-btn">
-                            <i class="fas fa-plus ml-2"></i>
-                            مقال جديد
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- الصف السفلي: أزرار التنقل -->
-                <div class="flex justify-between items-center pt-3 border-t border-white/10">
-                    <div class="flex items-center gap-3">
-                        <a href="index.html" 
-                           class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition nav-btn">
-                            <i class="fas fa-home ml-2"></i>
-                            الصفحة الرئيسية
-                        </a>
-                        <a href="blog.html" 
-                           class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition nav-btn">
-                            <i class="fas fa-newspaper ml-2"></i>
-                            عرض المدونة
-                        </a>
-                        <button onclick="refreshArticles()" 
-                                class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition nav-btn">
-                            <i class="fas fa-sync-alt ml-2"></i>
-                            تحديث القائمة
-                        </button>
-                    </div>
-                    
-                    <div class="flex items-center gap-3">
-                        <button onclick="showSettings()" 
-                                class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition nav-btn">
-                            <i class="fas fa-cog ml-2"></i>
-                            الإعدادات
-                        </button>
-                        <button onclick="logout()" 
-                                class="logout-btn px-4 py-2 rounded-lg transition nav-btn">
-                            <i class="fas fa-sign-out-alt ml-2"></i>
-                            تسجيل الخروج
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="alert alert-success" id="successAlert">
+            <i class="fas fa-check-circle"></i> تم نشر المقال بنجاح!
         </div>
 
-        <!-- المحتوى الديناميكي -->
-        <div id="dynamicContent" class="max-w-7xl mx-auto px-4 py-8">
-            <!-- لوحة التحكم الافتراضية -->
-            <div id="dashboardView">
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-bold gold-text mb-4">
-                        <i class="fas fa-tachometer-alt ml-3"></i>
-                        لوحة تحكم المدونة
-                    </h1>
-                    <p class="text-white/70 text-lg">مرحباً بك في نظام إدارة المقالات المتكامل</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="card-glass p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
-                                <i class="fas fa-plus text-blue-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">مقال جديد</h3>
-                                <p class="text-white/60 text-sm">ابدأ بكتابة مقال جديد</p>
-                            </div>
-                        </div>
-                        <button onclick="openCreateArticle()" 
-                                class="gold-btn w-full py-3 rounded-xl font-bold">
-                            <i class="fas fa-edit ml-2"></i>
-                            بدء كتابة مقال
-                        </button>
-                    </div>
-                    
-                    <div class="card-glass p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
-                                <i class="fas fa-list text-green-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">إدارة المقالات</h3>
-                                <p class="text-white/60 text-sm">عرض وتعديل المقالات الحالية</p>
-                            </div>
-                        </div>
-                        <button onclick="openArticleList()" 
-                                class="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition">
-                            <i class="fas fa-th-list ml-2"></i>
-                            عرض جميع المقالات
-                        </button>
-                    </div>
-                    
-                    <div class="card-glass p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
-                                <i class="fas fa-chart-bar text-purple-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">إحصائيات</h3>
-                                <p class="text-white/60 text-sm">نظرة سريعة على المدونة</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-white/60">عدد المقالات:</span>
-                                <span id="statsArticleCount" class="text-white font-bold">0</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">آخر تحديث:</span>
-                                <span id="statsLastUpdate" class="text-white">-</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">الحالة:</span>
-                                <span id="statsConnection" class="text-green-400">غير متصل</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card-glass p-8">
-                    <h2 class="text-2xl font-bold gold-text mb-6">
-                        <i class="fas fa-question-circle ml-2"></i>
-                        دليل سريع للاستخدام
-                    </h2>
-                    
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-bold text-white mb-3">إنشاء مقال جديد:</h3>
-                            <ol class="space-y-3 text-white/70 mr-4">
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">1</span>
-                                    <span>انقر على "مقال جديد" في الأعلى</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">2</span>
-                                    <span>اكتب العنوان والمحتوى في المحرر</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">3</span>
-                                    <span>استخدم أدوات التنسيق لإضافة تنسيقات</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">4</span>
-                                    <span>انقر على "حفظ" لحفظ المقال مباشرة في GitHub</span>
-                                </li>
-                            </ol>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-bold text-white mb-3">نصائح مهمة:</h3>
-                            <ul class="space-y-3 text-white/70">
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>المقالات تحفظ تلقائياً في <code class="bg-black/50 px-2 py-1 rounded">blog/articles/</code></span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>الصور تحفظ في <code class="bg-black/50 px-2 py-1 rounded">blog/images/</code></span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>تأكد من وجود اتصال بالإنترنت للحفظ</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>يمكنك معاينة المقال قبل النشر</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="alert alert-error" id="errorAlert">
+            <i class="fas fa-exclamation-circle"></i> حدث خطأ أثناء النشر. حاول مرة أخرى.
         </div>
-    </div>
 
-    <!-- قائمة المقالات (جانبية) -->
-    <div id="articleListSidebar" class="fixed top-0 right-0 h-full w-96 bg-black/95 border-r border-gold-solid/20 z-40 hidden transform transition-transform">
-        <div class="p-6 h-full overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold gold-text">المقالات</h2>
-                <button onclick="closeArticleList()" class="text-2xl gold-text">
-                    <i class="fas fa-times"></i>
+        <div class="token-section">
+            <h3><i class="fas fa-key"></i> إعدادات GitHub</h3>
+            <p>لنشر المقالات تلقائيًا، يرجى إدخال توكن GitHub الخاص بك (يخزن محليًا على جهازك فقط):</p>
+            <div class="form-group">
+                <input type="password" id="githubToken" class="form-control" placeholder="أدخل توكن GitHub هنا">
+            </div>
+            <button class="button" onclick="saveToken()"><i class="fas fa-save"></i> حفظ التوكن</button>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                <i class="fas fa-info-circle"></i> ستحتاج إلى إنشاء توكن جديد من إعدادات GitHub مع صلاحية <code>repo</code>.
+            </p>
+        </div>
+
+        <div class="admin-panel">
+            <section class="editor-section">
+                <h2 class="section-title"><i class="fas fa-edit"></i> مقال جديد</h2>
+                
+                <div class="form-group">
+                    <label for="articleTitle">عنوان المقال</label>
+                    <input type="text" id="articleTitle" class="form-control" placeholder="أدخل عنوان المقال">
+                </div>
+
+                <div class="form-group">
+                    <label for="articleAuthor">اسم المؤلف</label>
+                    <input type="text" id="articleAuthor" class="form-control" placeholder="اسم المحامي أو الكاتب">
+                </div>
+
+                <div class="form-group">
+                    <label for="articleCategory">التصنيف</label>
+                    <select id="articleCategory" class="form-control">
+                        <option value="قانون تجاري">قانون تجاري</option>
+                        <option value="قانون عائلي">قانون عائلي</option>
+                        <option value="قانون جنائي">قانون جنائي</option>
+                        <option value="قانون عقاري">قانون عقاري</option>
+                        <option value="نصائح قانونية">نصائح قانونية</option>
+                        <option value="أخبار قانونية">أخبار قانونية</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="articleContent">محتوى المقال</label>
+                    <textarea id="articleContent" class="form-control" placeholder="اكتب محتوى المقال هنا..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="articleImage">رابط الصورة (اختياري)</label>
+                    <input type="text" id="articleImage" class="form-control" placeholder="https://example.com/image.jpg">
+                    <small style="color: #666;">يمكنك رفع الصورة إلى مجلد <code>blog/images</code> في مستودع GitHub ثم وضع الرابط هنا.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="articleSummary">ملخص المقال (اختياري)</label>
+                    <textarea id="articleSummary" class="form-control" placeholder="ملخص مختصر للمقال" rows="3"></textarea>
+                </div>
+
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>جاري النشر، يرجى الانتظار...</p>
+                </div>
+
+                <button class="button button-success" onclick="publishArticle()" id="publishButton">
+                    <i class="fas fa-paper-plane"></i> نشر المقال الآن
                 </button>
-            </div>
-            
-            <div id="articleListContent" class="space-y-3">
-                <!-- سيتم ملؤها بالمقالات -->
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <!-- قالب إنشاء المقال -->
-    <template id="createArticleTemplate">
-        <div class="space-y-8">
-            <!-- شريط الأدوات -->
-            <div class="card-glass p-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-2xl font-bold gold-text mb-2">
-                            <i class="fas fa-plus-circle ml-2"></i>
-                            إنشاء مقال جديد
-                        </h1>
-                        <p class="text-white/60">املأ النموذج وانقر على حفظ لنشر المقال في المدونة</p>
-                    </div>
-                    <div class="flex gap-3">
-                        <button onclick="showDashboard()" 
-                                class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition">
-                            <i class="fas fa-arrow-right ml-2"></i>
-                            العودة
-                        </button>
-                        <button onclick="previewArticle()" 
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
-                            <i class="fas fa-eye ml-2"></i>
-                            معاينة
-                        </button>
-                        <button onclick="saveArticle()" 
-                                class="gold-btn px-6 py-2 rounded-lg font-bold">
-                            <i class="fas fa-save ml-2"></i>
-                            حفظ المقال
-                        </button>
-                    </div>
+            <section class="drafts-section">
+                <h2 class="section-title"><i class="fas fa-save"></i> المسودات المحفوظة</h2>
+                <div class="drafts-list" id="draftsList">
+                    <!-- سيتم ملؤها بالمسودات من localStorage -->
                 </div>
-            </div>
-
-            <!-- المحتوى الرئيسي -->
-            <div class="grid lg:grid-cols-3 gap-8">
-                <!-- النموذج -->
-                <div class="lg:col-span-2">
-                    <div class="card-glass p-6 space-y-6">
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">
-                                <i class="fas fa-heading ml-2"></i>
-                                عنوان المقال
-                                <span class="text-red-400 text-sm mr-2">*</span>
-                            </label>
-                            <input type="text" 
-                                   id="articleTitle"
-                                   class="w-full p-4 rounded-xl bg-black/50 text-white border border-gold-solid/30 outline-none text-xl"
-                                   placeholder="اكتب عنوان المقال هنا"
-                                   required>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-white/80 mb-2 font-bold">
-                                    <i class="fas fa-calendar ml-2"></i>
-                                    تاريخ النشر
-                                </label>
-                                <input type="date" 
-                                       id="articleDate"
-                                       class="w-full p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none"
-                                       required>
-                            </div>
-                            <div>
-                                <label class="block text-white/80 mb-2 font-bold">
-                                    <i class="fas fa-link ml-2"></i>
-                                    رابط المقال (Slug)
-                                    <span class="text-red-400 text-sm mr-2">*</span>
-                                </label>
-                                <input type="text" 
-                                       id="articleSlug"
-                                       class="w-full p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none"
-                                       placeholder="سيتم إنشاؤه تلقائياً"
-                                       required>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">
-                                <i class="fas fa-align-left ml-2"></i>
-                                الوصف المختصر
-                                <span class="text-red-400 text-sm mr-2">*</span>
-                            </label>
-                            <textarea id="articleDescription"
-                                      class="w-full p-4 rounded-xl bg-black/50 text-white border border-white/10 outline-none"
-                                      rows="3"
-                                      placeholder="وصف مختصر يظهر في صفحة المدونة الرئيسية"
-                                      required></textarea>
-                            <p class="text-white/50 text-sm mt-2">
-                                <i class="fas fa-info-circle ml-1"></i>
-                                هذا الوصف سيظهر في قائمة المقالات في المدونة الرئيسية
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-white/80 mb-2 font-bold">
-                                <i class="fas fa-edit ml-2"></i>
-                                محتوى المقال
-                                <span class="text-red-400 text-sm mr-2">*</span>
-                            </label>
-                            <div class="border border-white/10 rounded-xl overflow-hidden">
-                                <div class="bg-black/70 px-4 py-3 border-b border-white/10 flex gap-3 flex-wrap">
-                                    <button onclick="insertMarkdown('# ', '')" 
-                                            class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white">
-                                        <i class="fas fa-heading"></i> H1
-                                    </button>
-                                    <button onclick="insertMarkdown('## ', '')" 
-                                            class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white">
-                                        <i class="fas fa-heading"></i> H2
-                                    </button>
-                                    <button onclick="insertMarkdown('**', '**')" 
-                                            class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white">
-                                        <i class="fas fa-bold"></i>
-                                    </button>
-                                    <button onclick="insertMarkdown('*', '*')" 
-                                            class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white">
-                                        <i class="fas fa-italic"></i>
-                                    </button>
-                                    <button onclick="insertMarkdown('[', '](URL)')" 
-                                            class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white">
-                                        <i class="fas fa-link"></i>
-                                    </button>
-                                    <button onclick="openImageUploader()" 
-                                            class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded">
-                                        <i class="fas fa-image ml-2"></i> إضافة صورة
-                                    </button>
-                                    <button onclick="insertMarkdown('- ', '')" 
-                                            class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white">
-                                        <i class="fas fa-list"></i>
-                                    </button>
-                                    <button onclick="insertMarkdown('```\n', '\n```')" 
-                                            class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-white">
-                                        <i class="fas fa-code"></i>
-                                    </button>
-                                </div>
-                                <textarea id="articleContent"
-                                          class="markdown-editor w-full p-6 bg-black/30 text-white outline-none"
-                                          rows="25"
-                                          placeholder="اكتب محتوى المقال هنا بصيغة Markdown...
-                                          
-# العنوان الرئيسي
-
-## عنوان فرعي
-
-هذا نص عادي يمكن تنسيقه **بخط عريض** أو *بخط مائل*.
-
-- قائمة نقطية
-- نقطة أخرى
-
-![وصف الصورة](images/example.jpg)
-
-يمكنك إضافة [روابط](https://example.com)
-
-```javascript
-// وأكواد برمجية
-console.log('Hello World');
-```"></textarea>
-                            </div>
-                            <p class="text-white/50 text-sm mt-2">
-                                <i class="fas fa-info-circle ml-1"></i>
-                                هذا المحتوى الكامل سيظهر في صفحة المقال المنفصلة عند الضغط على "اقرأ المزيد"
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- اللوحة الجانبية -->
-                <div class="space-y-8">
-                    <!-- رفع الصور -->
-                    <div class="card-glass p-6">
-                        <h3 class="text-lg font-bold gold-text mb-4">
-                            <i class="fas fa-images ml-2"></i>
-                            رفع الصور
-                        </h3>
-                        
-                        <div id="dropZone" 
-                             class="border-2 border-dashed border-gold-solid/30 rounded-xl p-8 text-center cursor-pointer hover:bg-gold-solid/5 transition mb-4"
-                             ondragover="event.preventDefault()"
-                             ondrop="handleImageDrop(event)">
-                            <i class="fas fa-cloud-upload-alt text-3xl gold-text mb-3"></i>
-                            <p class="text-white/70 mb-1">اسحب وأفلت الصور هنا</p>
-                            <p class="text-white/50 text-sm">أو <span class="text-gold-solid cursor-pointer" onclick="document.getElementById('fileInput').click()">انقر للاختيار</span></p>
-                        </div>
-                        
-                        <input type="file" 
-                               id="fileInput" 
-                               multiple 
-                               accept="image/*" 
-                               class="hidden" 
-                               onchange="handleImageSelect(event)">
-                        
-                        <div id="uploadedImages" class="space-y-3 max-h-64 overflow-y-auto">
-                            <!-- الصور المرفوعة تظهر هنا -->
-                        </div>
-                    </div>
-                    
-                    <!-- الإعدادات -->
-                    <div class="card-glass p-6">
-                        <h3 class="text-lg font-bold gold-text mb-4">
-                            <i class="fas fa-cog ml-2"></i>
-                            إعدادات المقال
-                        </h3>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-white/80 mb-2">
-                                    <i class="fas fa-image ml-2"></i>
-                                    الصورة الرئيسية
-                                    <span class="text-red-400 text-sm mr-2">*</span>
-                                </label>
-                                <input type="text" 
-                                       id="featuredImage"
-                                       class="w-full p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none"
-                                       placeholder="images/اسم-الصورة.jpg"
-                                       value="images/blog-bg.jpg"
-                                       required>
-                                <p class="text-white/50 text-sm mt-2">
-                                    <i class="fas fa-info-circle ml-1"></i>
-                                    هذه الصورة تظهر في بطاقة المقال في الصفحة الرئيسية
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-white/80 mb-2">
-                                    <i class="fas fa-tags ml-2"></i>
-                                    الكلمات المفتاحية
-                                </label>
-                                <input type="text" 
-                                       id="articleKeywords"
-                                       class="w-full p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none"
-                                       placeholder="قانون, عقود, محاماة, تشريعات">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-white/80 mb-2">
-                                    <i class="fas fa-folder ml-2"></i>
-                                    التصنيف
-                                </label>
-                                <select id="articleCategory" class="w-full p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none">
-                                    <option value="مقالات قانونية">مقالات قانونية</option>
-                                    <option value="تحليل قانوني">تحليل قانوني</option>
-                                    <option value="نصائح قانونية">نصائح قانونية</option>
-                                    <option value="أحكام قضائية">أحكام قضائية</option>
-                                    <option value="مقالات عامة">مقالات عامة</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-white/80 mb-2">
-                                    <i class="fas fa-eye ml-2"></i>
-                                    حالة المقال
-                                </label>
-                                <select id="articleStatus" class="w-full p-3 rounded-xl bg-black/50 text-white border border-white/10 outline-none">
-                                    <option value="published" selected>منشور</option>
-                                    <option value="draft">مسودة</option>
-                                    <option value="archived">مؤرشف</option>
-                                </select>
-                                <p class="text-white/50 text-sm mt-2">
-                                    <i class="fas fa-info-circle ml-1"></i>
-                                    اختر "منشور" ليظهر المقال في المدونة مباشرة
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- معلومات المقال -->
-                    <div class="card-glass p-6">
-                        <h3 class="text-lg font-bold gold-text mb-4">
-                            <i class="fas fa-info-circle ml-2"></i>
-                            معلومات المقال
-                        </h3>
-                        
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-white/60">عدد الكلمات:</span>
-                                <span id="wordCount" class="text-white font-bold">0</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">عدد الأحرف:</span>
-                                <span id="charCount" class="text-white">0</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">وقت القراءة:</span>
-                                <span id="readTime" class="text-white">0 دقيقة</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">مسار الملف:</span>
-                                <span id="filePath" class="text-gold-solid text-xs truncate">blog/articles/</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">حالة الحفظ:</span>
-                                <span id="saveStatus" class="text-yellow-400">لم يحفظ بعد</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- قالب معاينة المقال -->
-    <template id="previewArticleTemplate">
-        <div class="space-y-8">
-            <div class="card-glass p-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-2xl font-bold gold-text mb-2">
-                            <i class="fas fa-eye ml-2"></i>
-                            معاينة المقال
-                        </h1>
-                        <p class="text-white/60">هذه معاينة لكيفية ظهور المقال في المدونة</p>
-                    </div>
-                    <div class="flex gap-3">
-                        <button onclick="backToEditor()" 
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
-                            <i class="fas fa-edit ml-2"></i>
-                            العودة للتحرير
-                        </button>
-                        <button onclick="saveArticle()" 
-                                class="gold-btn px-6 py-2 rounded-lg font-bold">
-                            <i class="fas fa-save ml-2"></i>
-                            حفظ ونشر
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card-glass p-8">
-                <div id="previewContent" class="prose prose-invert max-w-none">
-                    <!-- سيتم ملؤها بمحتوى المقال -->
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <!-- نافذة الإعدادات -->
-    <div id="settingsModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
-        <div class="bg-black/90 border-2 border-gold-solid rounded-3xl p-8 max-w-2xl w-full">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold gold-text">
-                    <i class="fas fa-cog ml-2"></i>
-                    إعدادات النظام
-                </h2>
-                <button onclick="hideSettings()" class="text-2xl gold-text">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-4">اتصال GitHub</h3>
-                    <div class="bg-black/50 p-4 rounded-xl">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-white">الحالة:</span>
-                            <span id="settingsConnectionStatus" class="text-green-400 font-bold">متصل</span>
-                        </div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-white">المستودع:</span>
-                            <span class="text-gold-solid">malegal/mahmoud-legal</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-white">الفرع:</span>
-                            <span class="text-gold-solid">main</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-4">إدارة الجلسة</h3>
-                    <div class="space-y-3">
-                        <button onclick="clearLocalData()" 
-                                class="w-full text-right py-3 px-4 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
-                            <i class="fas fa-trash ml-2"></i>
-                            مسح البيانات المحلية
-                        </button>
-                        <button onclick="resetGitHubToken()" 
-                                class="w-full text-right py-3 px-4 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition">
-                            <i class="fas fa-key ml-2"></i>
-                            تغيير توكن GitHub
-                        </button>
-                        <button onclick="repairIndex()" 
-                                class="w-full text-right py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
-                            <i class="fas fa-tools ml-2"></i>
-                            إصلاح الفهرس الحالي
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="pt-6 border-t border-white/10">
-                    <button onclick="hideSettings()" 
-                            class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition">
-                        إغلاق
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button" onclick="loadDrafts()">
+                        <i class="fas fa-sync-alt"></i> تحديث قائمة المسودات
                     </button>
                 </div>
-            </div>
+            </section>
         </div>
+
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> كيفية استخدام لوحة الإدارة:</h3>
+            <ol>
+                <li>املأ بيانات المقال في الحقول المطلوبة.</li>
+                <li>أدخل توكن GitHub في الأعلى (مرة واحدة فقط لكل جهاز).</li>
+                <li>اضغط على زر "نشر المقال الآن" وسيتم رفع المقال تلقائيًا إلى مستودع GitHub.</li>
+                <li>إذا لم يكن هناك اتصال بالإنترنت، سيتم حفظ المقال كمشودة في جهازك.</li>
+                <li>يمكنك استكمال المسودات لاحقًا من القائمة على اليمين.</li>
+                <li>بعد النشر، سيظهر المقال في المدونة خلال بضع ثوانٍ بعد أن يعيد Vercel بناء الموقع.</li>
+            </ol>
+        </div>
+
+        <footer>
+            <p>© 2023 مدونة مكتب المحاماة. جميع الحقوق محفوظة.</p>
+            <p>تم التطوير خصيصًا لمكتب المحاماة</p>
+        </footer>
     </div>
 
+    <script src="scripts/config.js"></script>
+    <script src="scripts/update-blog.js"></script>
     <script>
-        // ========== متغيرات النظام ==========
-        let githubToken = null;
-        let repoConfig = {
-            owner: 'malegal',
-            repo: 'mahmoud-legal',
-            branch: 'main'
-        };
-        let currentArticle = null;
-        let uploadedImages = [];
-        let isConnected = false;
-        let currentArticleSlug = '';
-        let articlesData = [];
-
-        // ========== تهيئة النظام ==========
+        // تحميل التوكن المحفوظ إذا وجد
         document.addEventListener('DOMContentLoaded', function() {
-            loadGitHubConfig();
-            setupEventListeners();
+            const savedToken = localStorage.getItem('github_token');
+            if (savedToken) {
+                document.getElementById('githubToken').value = savedToken;
+            }
             
-            // إعداد تاريخ اليوم كقيمة افتراضية
-            const today = new Date().toISOString().split('T')[0];
-            
-            // إخفاء نافذة GitHub Setup مؤقتاً للاختبار
-            setTimeout(() => {
-                if (!githubToken) {
-                    document.getElementById('githubSetupModal').classList.remove('hidden');
-                } else {
-                    testGitHubConnection();
-                    showDashboard();
-                }
-            }, 500);
+            // تحميل المسودات عند فتح الصفحة
+            loadDrafts();
         });
 
-        // ========== إدارة اتصال GitHub ==========
-        function loadGitHubConfig() {
-            const savedToken = localStorage.getItem('github_token');
-            const savedRepo = localStorage.getItem('github_repo');
-            const savedBranch = localStorage.getItem('github_branch');
-            
-            if (savedToken) {
-                githubToken = savedToken;
-                document.getElementById('githubTokenInput').value = savedToken;
-            }
-            
-            if (savedRepo) {
-                const repoData = JSON.parse(savedRepo);
-                repoConfig = { ...repoConfig, ...repoData };
-                document.getElementById('repoNameInput').value = `${repoConfig.owner}/${repoConfig.repo}`;
-            }
-            
-            if (savedBranch) {
-                repoConfig.branch = savedBranch;
-                document.getElementById('branchInput').value = savedBranch;
-            }
-        }
-
-        function saveGitHubConfig() {
-            const token = document.getElementById('githubTokenInput').value.trim();
-            const repoInput = document.getElementById('repoNameInput').value.trim();
-            
-            if (!token) {
-                alert('يرجى إدخال التوكن');
-                return;
-            }
-            
-            if (!repoInput.includes('/')) {
-                alert('صيغة المستودع غير صحيحة. استخدم: مالك/اسم-المستودع');
-                return;
-            }
-            
-            const [owner, repo] = repoInput.split('/');
-            
-            githubToken = token;
-            repoConfig = {
-                owner: owner.trim(),
-                repo: repo.trim(),
-                branch: document.getElementById('branchInput').value.trim() || 'main'
-            };
-            
-            localStorage.setItem('github_token', token);
-            localStorage.setItem('github_repo', JSON.stringify(repoConfig));
-            localStorage.setItem('github_branch', repoConfig.branch);
-            
-            document.getElementById('githubSetupModal').classList.add('hidden');
-            showNotification('تم حفظ الإعدادات بنجاح!', 'success');
-            testGitHubConnection();
-        }
-
-        function skipGitHubSetup() {
-            document.getElementById('githubSetupModal').classList.add('hidden');
-            document.getElementById('mainContent').classList.remove('hidden');
-            showDashboard();
-            showNotification('يمكنك إعداد GitHub لاحقاً من قائمة الإعدادات', 'info');
-        }
-
-        async function testGitHubConnection() {
-            if (!githubToken) return;
-            
-            updateConnectionStatus('جاري اختبار الاتصال...', 'connecting');
-            
-            try {
-                const response = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}`, {
-                    headers: {
-                        'Authorization': `Bearer ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (response.ok) {
-                    isConnected = true;
-                    updateConnectionStatus('متصل بـ GitHub', 'connected');
-                    document.getElementById('mainContent').classList.remove('hidden');
-                    loadArticlesForDashboard();
-                    updateDashboardStats();
-                } else {
-                    throw new Error('فشل الاتصال');
-                }
-            } catch (error) {
-                updateConnectionStatus('فشل الاتصال بـ GitHub', 'disconnected');
-                showNotification('خطأ في الاتصال بـ GitHub. تحقق من التوكن والإعدادات.', 'error');
-            }
-        }
-
-        function updateConnectionStatus(message, status) {
-            const statusElement = document.getElementById('connectionStatus');
-            const githubElement = document.getElementById('githubStatus');
-            
-            statusElement.textContent = message;
-            
-            githubElement.className = 'flex items-center gap-2 px-3 py-1 rounded-full';
-            if (status === 'connected') {
-                githubElement.classList.add('github-connected');
-                githubElement.innerHTML = '<i class="fab fa-github"></i><span class="text-sm">متصل</span>';
-            } else if (status === 'connecting') {
-                githubElement.innerHTML = '<i class="fas fa-sync fa-spin"></i><span class="text-sm">جاري الاتصال...</span>';
+        function saveToken() {
+            const token = document.getElementById('githubToken').value.trim();
+            if (token) {
+                localStorage.setItem('github_token', token);
+                alert('تم حفظ التوكن بنجاح!');
             } else {
-                githubElement.classList.add('github-disconnected');
-                githubElement.innerHTML = '<i class="fab fa-github"></i><span class="text-sm">غير متصل</span>';
-            }
-            
-            // تحديث لوحة التحكم
-            if (document.getElementById('statsConnection')) {
-                document.getElementById('statsConnection').textContent = 
-                    status === 'connected' ? 'متصل' : 'غير متصل';
-                document.getElementById('statsConnection').className = 
-                    status === 'connected' ? 'text-green-400' : 'text-red-400';
-            }
-        }
-
-        // ========== لوحة التحكم ==========
-        function showDashboard() {
-            const dashboardHTML = `
-                <div class="text-center mb-12">
-                    <h1 class="text-4xl font-bold gold-text mb-4">
-                        <i class="fas fa-tachometer-alt ml-3"></i>
-                        لوحة تحكم المدونة
-                    </h1>
-                    <p class="text-white/70 text-lg">مرحباً بك في نظام إدارة المقالات المتكامل</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div class="card-glass p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
-                                <i class="fas fa-plus text-blue-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">مقال جديد</h3>
-                                <p class="text-white/60 text-sm">ابدأ بكتابة مقال جديد</p>
-                            </div>
-                        </div>
-                        <button onclick="openCreateArticle()" 
-                                class="gold-btn w-full py-3 rounded-xl font-bold">
-                            <i class="fas fa-edit ml-2"></i>
-                            بدء كتابة مقال
-                        </button>
-                    </div>
-                    
-                    <div class="card-glass p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
-                                <i class="fas fa-list text-green-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">إدارة المقالات</h3>
-                                <p class="text-white/60 text-sm">عرض وتعديل المقالات الحالية</p>
-                            </div>
-                        </div>
-                        <button onclick="openArticleList()" 
-                                class="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition">
-                            <i class="fas fa-th-list ml-2"></i>
-                            عرض جميع المقالات
-                        </button>
-                    </div>
-                    
-                    <div class="card-glass p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
-                                <i class="fas fa-chart-bar text-purple-400 text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">إحصائيات</h3>
-                                <p class="text-white/60 text-sm">نظرة سريعة على المدونة</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-white/60">عدد المقالات:</span>
-                                <span id="statsArticleCount" class="text-white font-bold">${articlesData.length}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">آخر تحديث:</span>
-                                <span id="statsLastUpdate" class="text-white">${new Date().toLocaleDateString('ar-EG')}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-white/60">الحالة:</span>
-                                <span id="statsConnection" class="${isConnected ? 'text-green-400' : 'text-red-400'}">
-                                    ${isConnected ? 'متصل' : 'غير متصل'}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card-glass p-8">
-                    <h2 class="text-2xl font-bold gold-text mb-6">
-                        <i class="fas fa-question-circle ml-2"></i>
-                        دليل سريع للاستخدام
-                    </h2>
-                    
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-bold text-white mb-3">إنشاء مقال جديد:</h3>
-                            <ol class="space-y-3 text-white/70 mr-4">
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">1</span>
-                                    <span>انقر على "مقال جديد" في الأعلى</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">2</span>
-                                    <span>اكتب العنوان والمحتوى في المحرر</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">3</span>
-                                    <span>استخدم أدوات التنسيق لإضافة تنسيقات</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="bg-gold-solid text-black w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">4</span>
-                                    <span>انقر على "حفظ" لحفظ المقال مباشرة في GitHub</span>
-                                </li>
-                            </ol>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-bold text-white mb-3">نصائح مهمة:</h3>
-                            <ul class="space-y-3 text-white/70">
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>المقالات تحفظ تلقائياً في <code class="bg-black/50 px-2 py-1 rounded">blog/articles/</code></span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>الصور تحفظ في <code class="bg-black/50 px-2 py-1 rounded">blog/images/</code></span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>تأكد من وجود اتصال بالإنترنت للحفظ</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i class="fas fa-check text-green-400 mt-1"></i>
-                                    <span>يمكنك معاينة المقال قبل النشر</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('dynamicContent').innerHTML = dashboardHTML;
-            updateDashboardStats();
-        }
-
-        async function loadArticlesForDashboard() {
-            try {
-                const response = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/blog/data/articles.json`, {
-                    headers: {
-                        'Authorization': `Bearer ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    const decoded = atob(data.content);
-                    const articlesJson = JSON.parse(decoded);
-                    articlesData = articlesJson.articles || [];
-                    
-                    // تحديث الإحصائيات
-                    updateDashboardStats();
-                }
-            } catch (error) {
-                console.error('Error loading articles for dashboard:', error);
-                articlesData = [];
-            }
-        }
-
-        function updateDashboardStats() {
-            if (document.getElementById('statsArticleCount')) {
-                document.getElementById('statsArticleCount').textContent = articlesData.length;
-                document.getElementById('statsLastUpdate').textContent = new Date().toLocaleDateString('ar-EG');
-            }
-        }
-
-        // ========== إدارة المقالات ==========
-        function openCreateArticle() {
-            const template = document.getElementById('createArticleTemplate');
-            document.getElementById('dynamicContent').innerHTML = template.innerHTML;
-            
-            // تعيين القيم الافتراضية
-            document.getElementById('articleDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('articleTitle').value = '';
-            document.getElementById('articleSlug').value = '';
-            document.getElementById('articleDescription').value = '';
-            document.getElementById('articleContent').value = '';
-            document.getElementById('featuredImage').value = 'images/blog-bg.jpg';
-            document.getElementById('articleKeywords').value = '';
-            document.getElementById('articleCategory').value = 'مقالات قانونية';
-            document.getElementById('articleStatus').value = 'published';
-            
-            // إعداد مستمعات الأحداث
-            document.getElementById('articleTitle').addEventListener('input', updateSlug);
-            document.getElementById('articleContent').addEventListener('input', updateStats);
-            document.getElementById('articleSlug').addEventListener('input', updateFilePath);
-            
-            // تحديث الإحصائيات أول مرة
-            updateStats();
-            updateFilePath();
-            
-            // تعيين التركيز على حقل العنوان
-            document.getElementById('articleTitle').focus();
-        }
-
-        function updateSlug() {
-            const title = document.getElementById('articleTitle').value;
-            const slug = generateSlug(title);
-            document.getElementById('articleSlug').value = slug;
-            updateFilePath();
-        }
-
-        function updateFilePath() {
-            const slug = document.getElementById('articleSlug').value || 'مقال-جديد';
-            document.getElementById('filePath').textContent = `blog/articles/${slug}.md`;
-            currentArticleSlug = slug;
-        }
-
-        function updateStats() {
-            const content = document.getElementById('articleContent').value || '';
-            const words = content.trim().split(/\s+/).filter(word => word.length > 0).length;
-            const chars = content.length;
-            const readTime = Math.ceil(words / 200); // 200 كلمة في الدقيقة
-            
-            if (document.getElementById('wordCount')) {
-                document.getElementById('wordCount').textContent = words;
-                document.getElementById('charCount').textContent = chars;
-                document.getElementById('readTime').textContent = `${readTime} دقيقة`;
-            }
-        }
-
-        function generateSlug(text) {
-            if (!text) return '';
-            return text
-                .toLowerCase()
-                .replace(/[^\w\u0600-\u06FF\s-]/g, '')
-                .replace(/\s+/g, '-')
-                .replace(/-+/g, '-')
-                .replace(/^-+|-+$/g, '')
-                .substring(0, 100);
-        }
-
-        // ========== رفع الصور ==========
-        function openImageUploader() {
-            document.getElementById('fileInput').click();
-        }
-
-        function handleImageSelect(event) {
-            const files = Array.from(event.target.files);
-            uploadImages(files);
-        }
-
-        function handleImageDrop(event) {
-            event.preventDefault();
-            const files = Array.from(event.dataTransfer.files);
-            uploadImages(files);
-        }
-
-        async function uploadImages(files) {
-            if (!isConnected) {
-                showNotification('غير متصل بـ GitHub. يرجى الاتصال أولاً.', 'error');
-                return;
-            }
-            
-            for (const file of files) {
-                if (!file.type.startsWith('image/')) {
-                    showNotification(`الملف ${file.name} ليس صورة`, 'warning');
-                    continue;
-                }
-                
-                try {
-                    showNotification(`جاري رفع ${file.name}...`, 'info');
-                    
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        const base64Content = e.target.result.split(',')[1];
-                        const fileName = generateImageName(file.name);
-                        const filePath = `blog/images/${fileName}`;
-                        
-                        const response = await uploadToGitHub(filePath, base64Content, `رفع صورة: ${fileName}`);
-                        
-                        if (response.ok) {
-                            const data = await response.json();
-                            const imageUrl = `https://raw.githubusercontent.com/${repoConfig.owner}/${repoConfig.repo}/${repoConfig.branch}/${filePath}`;
-                            
-                            uploadedImages.push({
-                                name: fileName,
-                                url: imageUrl,
-                                path: filePath
-                            });
-                            
-                            addImageToGallery(fileName, imageUrl);
-                            showNotification(`تم رفع ${file.name} بنجاح!`, 'success');
-                            
-                            // إدراج الصورة في المحتوى
-                            insertMarkdown(`![${file.name}](${imageUrl})`, '');
-                        } else {
-                            const errorData = await response.json();
-                            throw new Error(errorData.message || 'فشل الرفع');
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                } catch (error) {
-                    showNotification(`خطأ في رفع ${file.name}: ${error.message}`, 'error');
-                }
-            }
-        }
-
-        function generateImageName(originalName) {
-            const timestamp = Date.now();
-            const random = Math.random().toString(36).substring(2, 8);
-            const extension = originalName.split('.').pop();
-            const cleanName = originalName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9\u0600-\u06FF]/g, '-');
-            return `${cleanName}-${timestamp}-${random}.${extension}`.toLowerCase();
-        }
-
-        function addImageToGallery(name, url) {
-            const gallery = document.getElementById('uploadedImages');
-            const imageElement = document.createElement('div');
-            imageElement.className = 'flex items-center gap-3 p-3 bg-black/30 rounded-lg';
-            imageElement.innerHTML = `
-                <img src="${url}" class="w-12 h-12 object-cover rounded image-preview">
-                <div class="flex-1">
-                    <p class="text-white text-sm truncate">${name}</p>
-                    <p class="text-white/50 text-xs">انقر نقرتين لإدراج</p>
-                </div>
-                <button onclick="copyImageUrl('${url}')" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">
-                    <i class="fas fa-copy"></i>
-                </button>
-            `;
-            
-            imageElement.addEventListener('dblclick', () => {
-                insertMarkdown(`![${name}](${url})`, '');
-                showNotification('تم إدراج الصورة في المحتوى', 'success');
-            });
-            
-            gallery.appendChild(imageElement);
-        }
-
-        // ========== حفظ المقال ==========
-        async function saveArticle() {
-            if (!isConnected) {
-                showNotification('غير متصل بـ GitHub. يرجى الاتصال أولاً.', 'error');
-                return;
-            }
-            
-            const title = document.getElementById('articleTitle').value.trim();
-            const date = document.getElementById('articleDate').value;
-            const slug = document.getElementById('articleSlug').value.trim() || generateSlug(title);
-            const description = document.getElementById('articleDescription').value.trim();
-            const content = document.getElementById('articleContent').value.trim();
-            const featuredImage = document.getElementById('featuredImage').value.trim();
-            const keywords = document.getElementById('articleKeywords').value;
-            const category = document.getElementById('articleCategory').value;
-            const status = document.getElementById('articleStatus').value;
-            
-            // التحقق من الحقول المطلوبة
-            if (!title) {
-                showNotification('يرجى إدخال عنوان المقال', 'warning');
-                document.getElementById('articleTitle').focus();
-                return;
-            }
-            
-            if (!content) {
-                showNotification('يرجى إدخال محتوى المقال', 'warning');
-                document.getElementById('articleContent').focus();
-                return;
-            }
-            
-            if (!slug) {
-                showNotification('يرجى إدخال رابط المقال (slug)', 'warning');
-                document.getElementById('articleSlug').focus();
-                return;
-            }
-            
-            if (!description) {
-                showNotification('يرجى إدخال وصف مختصر للمقال', 'warning');
-                document.getElementById('articleDescription').focus();
-                return;
-            }
-            
-            try {
-                showNotification('جاري حفظ المقال...', 'info');
-                
-                // تحديث حالة الحفظ
-                if (document.getElementById('saveStatus')) {
-                    document.getElementById('saveStatus').textContent = 'جاري الحفظ...';
-                    document.getElementById('saveStatus').className = 'text-yellow-400';
-                }
-                
-                // 1. حفظ ملف Markdown
-                const mdContent = generateMarkdownContent(title, date, content, description, featuredImage, keywords, category, slug, status);
-                const mdPath = `blog/articles/${slug}.md`;
-                
-                const mdResponse = await uploadToGitHub(mdPath, btoa(unescape(encodeURIComponent(mdContent))), `إضافة/تحديث مقال: ${title}`);
-                
-                if (!mdResponse.ok) {
-                    const errorData = await mdResponse.json();
-                    throw new Error(errorData.message || 'فشل في حفظ ملف المقال');
-                }
-                
-                // 2. تحديث ملف الفهرس
-                await updateArticlesIndex({
-                    id: slug,
-                    title: title,
-                    date: date,
-                    description: description,
-                    image: featuredImage,
-                    content: `blog/articles/${slug}.md`,
-                    type: 'markdown',
-                    tags: keywords ? keywords.split(',').map(k => k.trim()).filter(k => k) : [],
-                    category: category,
-                    status: status,
-                    slug: slug,
-                    keywords: keywords
-                });
-                
-                showNotification('تم حفظ المقال بنجاح في مستودع GitHub!', 'success');
-                
-                // تحديث حالة الحفظ
-                if (document.getElementById('saveStatus')) {
-                    document.getElementById('saveStatus').textContent = 'تم الحفظ بنجاح';
-                    document.getElementById('saveStatus').className = 'text-green-400';
-                }
-                
-                // 3. إعادة تحميل قائمة المقالات
-                loadArticlesForDashboard();
-                
-                // 4. الانتقال إلى لوحة التحكم بعد ثانيتين
-                setTimeout(() => {
-                    showDashboard();
-                }, 2000);
-                
-            } catch (error) {
-                showNotification(`خطأ في الحفظ: ${error.message}`, 'error');
-                console.error('Save error:', error);
-                
-                // تحديث حالة الحفظ
-                if (document.getElementById('saveStatus')) {
-                    document.getElementById('saveStatus').textContent = 'فشل الحفظ';
-                    document.getElementById('saveStatus').className = 'text-red-400';
-                }
-            }
-        }
-
-        function generateMarkdownContent(title, date, content, description, image, keywords, category, slug, status) {
-            return `---
-title: "${title}"
-date: "${date}"
-description: "${description}"
-image: "${image}"
-keywords: "${keywords}"
-category: "${category}"
-slug: "${slug}"
-status: "${status}"
----
-
-${content}`;
-        }
-
-        async function updateArticlesIndex(articleData) {
-            try {
-                // جلب الفهرس الحالي
-                const indexPath = 'blog/data/articles.json';
-                const indexResponse = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/${indexPath}`, {
-                    headers: {
-                        'Authorization': `Bearer ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                let currentContent = { lastUpdate: new Date().toISOString(), articles: [] };
-                let sha = null;
-                
-                if (indexResponse.ok) {
-                    const data = await indexResponse.json();
-                    sha = data.sha;
-                    const decoded = atob(data.content);
-                    currentContent = JSON.parse(decoded);
-                }
-                
-                // تحضير المقال بالشكل المتوافق مع المدونة
-                const formattedArticle = {
-                    id: articleData.id || articleData.slug,
-                    title: articleData.title,
-                    date: articleData.date,
-                    description: articleData.description,
-                    image: articleData.image || 'images/blog-bg.jpg',
-                    content: articleData.content,
-                    type: 'markdown',
-                    tags: articleData.tags || [],
-                    category: articleData.category || 'مقالات قانونية',
-                    status: articleData.status || 'published',
-                    // الحقول الإضافية التي تتوقعها المدونة
-                    slug: articleData.slug || articleData.id,
-                    keywords: articleData.keywords || '',
-                    // هذه الحقول تظهر في البطاقة
-                    shortContent: articleData.description.substring(0, 150) + (articleData.description.length > 150 ? '...' : ''),
-                    // معلومات إضافية للمدونة
-                    published: articleData.status === 'published',
-                    draft: articleData.status === 'draft',
-                    archived: articleData.status === 'archived',
-                    readTime: Math.max(3, Math.floor(articleData.description.length / 100))
-                };
-                
-                // البحث عن المقال الحالي (إذا كان موجوداً للتحديث)
-                const existingIndex = currentContent.articles.findIndex(a => a.id === formattedArticle.id);
-                
-                if (existingIndex > -1) {
-                    // تحديث المقال الحالي
-                    currentContent.articles[existingIndex] = formattedArticle;
-                } else {
-                    // إضافة مقال جديد في البداية
-                    currentContent.articles.unshift(formattedArticle);
-                }
-                
-                currentContent.lastUpdate = new Date().toISOString();
-                
-                // حفظ الفهرس المحدث
-                const updateResponse = await uploadToGitHub(
-                    indexPath,
-                    btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
-                    `تحديث الفهرس: ${articleData.title}`,
-                    sha
-                );
-                
-                if (!updateResponse.ok) {
-                    const errorData = await updateResponse.json();
-                    throw new Error(errorData.message || 'فشل في تحديث الفهرس');
-                }
-                
-                // تحديث القائمة المحلية
-                await loadArticlesForDashboard();
-                
-                return updateResponse.ok;
-                
-            } catch (error) {
-                console.error('Error updating index:', error);
-                throw error;
-            }
-        }
-
-        // ========== دوال GitHub API ==========
-        async function uploadToGitHub(path, content, message, sha = null) {
-            const body = {
-                message: message,
-                content: content,
-                branch: repoConfig.branch
-            };
-            
-            if (sha) {
-                body.sha = sha;
-            }
-            
-            return await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/${path}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            });
-        }
-
-        function loadArticles() {
-            loadArticlesForDashboard();
-        }
-
-        function updateArticlesList(articles) {
-            const container = document.getElementById('articleListContent');
-            
-            if (!articles || articles.length === 0) {
-                container.innerHTML = '<p class="text-white/50 text-center py-8">لا توجد مقالات بعد</p>';
-                return;
-            }
-            
-            container.innerHTML = articles.map(article => `
-                <div class="article-list-item p-4 rounded-lg bg-black/30 hover:bg-black/50" onclick="editArticle('${article.id}')">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-bold text-white mb-1">${article.title}</h4>
-                            <p class="text-white/60 text-sm">${article.date}</p>
-                            <span class="text-xs px-2 py-1 mt-1 inline-block rounded ${
-                                article.status === 'published' ? 'bg-green-600' : 
-                                article.status === 'draft' ? 'bg-yellow-600' : 'bg-gray-600'
-                            }">
-                                ${article.status === 'published' ? 'منشور' : 
-                                  article.status === 'draft' ? 'مسودة' : 'مؤرشف'}
-                            </span>
-                        </div>
-                        <button onclick="deleteArticle('${article.id}', event)" 
-                                class="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <p class="text-white/70 text-sm mt-2 truncate">${article.description || ''}</p>
-                </div>
-            `).join('');
-        }
-
-        // ========== أدوات المحرر ==========
-        function insertMarkdown(before, after) {
-            const textarea = document.getElementById('articleContent');
-            if (!textarea) return;
-            
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            const selectedText = textarea.value.substring(start, end);
-            
-            const newText = before + selectedText + after;
-            
-            textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
-            
-            // تحديث التحديد
-            textarea.focus();
-            textarea.setSelectionRange(start + before.length, start + before.length + selectedText.length);
-            
-            updateStats();
-        }
-
-        function copyImageUrl(url) {
-            navigator.clipboard.writeText(url).then(() => {
-                showNotification('تم نسخ رابط الصورة', 'success');
-            });
-        }
-
-        // ========== المعاينة ==========
-        function previewArticle() {
-            const title = document.getElementById('articleTitle')?.value || 'عنوان المقال';
-            const content = document.getElementById('articleContent')?.value || '';
-            const description = document.getElementById('articleDescription')?.value || '';
-            const previewTemplate = document.getElementById('previewArticleTemplate');
-            document.getElementById('dynamicContent').innerHTML = previewTemplate.innerHTML;
-            
-            // تحويل Markdown إلى HTML
-            const previewDiv = document.getElementById('previewContent');
-            
-            // إضافة العنوان أولاً
-            let html = `<h1 class="text-3xl font-bold gold-text mb-6">${title}</h1>`;
-            
-            // إضافة الوصف
-            if (description) {
-                html += `<div class="bg-blue-900/20 p-4 rounded-lg mb-6 border-r-4 border-blue-500">
-                    <p class="text-white/80 text-lg"><strong>الوصف:</strong> ${description}</p>
-                </div>`;
-            }
-            
-            // ثم تحويل باقي المحتوى
-            if (content) {
-                html += marked.parse(content);
-            } else {
-                html += '<p class="text-white/50 text-center py-8">لا يوجد محتوى للمعاينة</p>';
-            }
-            
-            // إضافة ملاحظة
-            html += `<div class="mt-8 p-4 bg-yellow-900/20 rounded-lg border-r-4 border-yellow-500">
-                <p class="text-white/70"><i class="fas fa-info-circle ml-2"></i> هذه معاينة لكيفية ظهور المقال في صفحة المقال الكاملة عند النقر على "اقرأ المزيد" في المدونة.</p>
-            </div>`;
-            
-            previewDiv.innerHTML = html;
-        }
-
-        function backToEditor() {
-            openCreateArticle();
-            
-            // استعادة القيم إذا كانت موجودة
-            const title = document.getElementById('articleTitle')?.value || '';
-            const content = document.getElementById('articleContent')?.value || '';
-            
-            if (title && content) {
-                document.getElementById('articleTitle').value = title;
-                document.getElementById('articleContent').value = content;
-                updateStats();
-                updateFilePath();
-            }
-        }
-
-        // ========== إدارة القائمة الجانبية ==========
-        function openArticleList() {
-            loadArticles();
-            document.getElementById('articleListSidebar').classList.remove('hidden');
-            document.getElementById('articleListSidebar').style.transform = 'translateX(0)';
-        }
-
-        function closeArticleList() {
-            document.getElementById('articleListSidebar').style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                document.getElementById('articleListSidebar').classList.add('hidden');
-            }, 300);
-        }
-
-        // ========== دوال المساعدة ==========
-        function refreshArticles() {
-            loadArticlesForDashboard();
-            showNotification('تم تحديث قائمة المقالات', 'success');
-        }
-
-        function logout() {
-            if (confirm('هل تريد تسجيل الخروج من لوحة الإدارة؟')) {
-                localStorage.removeItem('github_token');
-                localStorage.removeItem('github_repo');
-                localStorage.removeItem('github_branch');
-                window.location.href = 'index.html';
-            }
-        }
-
-        function showSettings() {
-            document.getElementById('settingsModal').classList.remove('hidden');
-            document.getElementById('settingsConnectionStatus').textContent = isConnected ? 'متصل' : 'غير متصل';
-            document.getElementById('settingsConnectionStatus').className = isConnected ? 'text-green-400' : 'text-red-400';
-        }
-
-        function hideSettings() {
-            document.getElementById('settingsModal').classList.add('hidden');
-        }
-
-        function clearLocalData() {
-            if (confirm('هل تريد مسح جميع البيانات المحلية؟ هذا يشمل إعدادات GitHub والمقالات المحفوظة محلياً.')) {
-                localStorage.clear();
-                showNotification('تم مسح البيانات المحلية', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
-            }
-        }
-
-        function resetGitHubToken() {
-            if (confirm('هل تريد تغيير توكن GitHub؟ سيتم تسجيل خروجك لإدخال التوكن الجديد.')) {
-                localStorage.removeItem('github_token');
-                showNotification('تم حذف التوكن، سيتم إعادة تحميل الصفحة', 'info');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-            }
-        }
-
-        function showNotification(message, type = 'info') {
-            // إنشاء عنصر الإشعار
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 left-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
-                type === 'success' ? 'bg-green-600' :
-                type === 'error' ? 'bg-red-600' :
-                type === 'warning' ? 'bg-yellow-600' : 'bg-blue-600'
-            } text-white transform transition-transform duration-300`;
-            
-            notification.innerHTML = `
-                <i class="fas ${
-                    type === 'success' ? 'fa-check-circle' :
-                    type === 'error' ? 'fa-exclamation-triangle' :
-                    type === 'warning' ? 'fa-exclamation-circle' : 'fa-info-circle'
-                } ml-2"></i>
-                ${message}
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateY(-100px)';
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 3000);
-        }
-
-        function setupEventListeners() {
-            // إغلاق القائمة الجانبية بالنقر خارجها
-            document.addEventListener('click', (event) => {
-                const sidebar = document.getElementById('articleListSidebar');
-                const toggleButton = event.target.closest('[onclick*="openArticleList"]');
-                
-                if (sidebar && !sidebar.contains(event.target) && !toggleButton && !sidebar.classList.contains('hidden')) {
-                    closeArticleList();
-                }
-            });
-        }
-
-        // ========== دوال المقالات ==========
-        async function editArticle(articleId) {
-            try {
-                const response = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/blog/articles/${articleId}.md`, {
-                    headers: {
-                        'Authorization': `Bearer ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    const content = decodeURIComponent(escape(atob(data.content)));
-                    
-                    // تحليل محتوى YAML/Markdown
-                    const parts = content.split('---');
-                    let frontmatter = {};
-                    let articleContent = '';
-                    
-                    if (parts.length >= 3) {
-                        try {
-                            frontmatter = parseYAML(parts[1]);
-                            articleContent = parts.slice(2).join('---').trim();
-                        } catch (e) {
-                            articleContent = content;
-                        }
-                    } else {
-                        articleContent = content;
-                    }
-                    
-                    openCreateArticle();
-                    
-                    // تعبئة الحقول بالمحتوى
-                    setTimeout(() => {
-                        document.getElementById('articleTitle').value = frontmatter.title || articleId;
-                        document.getElementById('articleDate').value = frontmatter.date || new Date().toISOString().split('T')[0];
-                        document.getElementById('articleSlug').value = articleId;
-                        document.getElementById('articleDescription').value = frontmatter.description || '';
-                        document.getElementById('articleContent').value = articleContent;
-                        document.getElementById('featuredImage').value = frontmatter.image || 'images/blog-bg.jpg';
-                        document.getElementById('articleKeywords').value = frontmatter.keywords || '';
-                        document.getElementById('articleCategory').value = frontmatter.category || 'مقالات قانونية';
-                        document.getElementById('articleStatus').value = frontmatter.status || 'published';
-                        
-                        updateStats();
-                        updateFilePath();
-                    }, 100);
-                    
-                    closeArticleList();
-                } else {
-                    throw new Error('لم يتم العثور على المقال');
-                }
-            } catch (error) {
-                showNotification(`خطأ في تحميل المقال: ${error.message}`, 'error');
-            }
-        }
-
-        function parseYAML(yamlString) {
-            try {
-                const lines = yamlString.trim().split('\n');
-                const result = {};
-                
-                lines.forEach(line => {
-                    line = line.trim();
-                    if (line.includes(':') && !line.startsWith('#')) {
-                        const colonIndex = line.indexOf(':');
-                        const key = line.substring(0, colonIndex).trim();
-                        let value = line.substring(colonIndex + 1).trim();
-                        
-                        // إزالة الاقتباسات
-                        if ((value.startsWith('"') && value.endsWith('"')) || 
-                            (value.startsWith("'") && value.endsWith("'"))) {
-                            value = value.substring(1, value.length - 1);
-                        }
-                        
-                        result[key] = value;
-                    }
-                });
-                
-                return result;
-            } catch (e) {
-                console.error('YAML parse error:', e);
-                return {};
-            }
-        }
-
-        async function deleteArticle(articleId, event) {
-            event.stopPropagation();
-            
-            if (!confirm(`هل أنت متأكد من حذف المقال "${articleId}"؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
-                return;
-            }
-            
-            try {
-                // 1. جلب sha للملف
-                const response = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/blog/articles/${articleId}.md`, {
-                    headers: {
-                        'Authorization': `Bearer ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    const sha = data.sha;
-                    
-                    // 2. حذف الملف
-                    const deleteResponse = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/blog/articles/${articleId}.md`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${githubToken}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: `حذف مقال: ${articleId}`,
-                            sha: sha,
-                            branch: repoConfig.branch
-                        })
-                    });
-                    
-                    if (deleteResponse.ok) {
-                        // 3. تحديث الفهرس
-                        await removeFromIndex(articleId);
-                        
-                        showNotification('تم حذف المقال بنجاح', 'success');
-                        loadArticlesForDashboard();
-                    } else {
-                        throw new Error('فشل في حذف الملف');
-                    }
-                } else {
-                    throw new Error('لم يتم العثور على المقال');
-                }
-            } catch (error) {
-                showNotification(`خطأ في حذف المقال: ${error.message}`, 'error');
-            }
-        }
-
-        async function removeFromIndex(articleId) {
-            try {
-                const indexPath = 'blog/data/articles.json';
-                const indexResponse = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/${indexPath}`, {
-                    headers: {
-                        'Authorization': `Bearer ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (indexResponse.ok) {
-                    const data = await indexResponse.json();
-                    const sha = data.sha;
-                    const decoded = atob(data.content);
-                    const currentContent = JSON.parse(decoded);
-                    
-                    // إزالة المقال من الفهرس
-                    currentContent.articles = currentContent.articles.filter(a => a.id !== articleId);
-                    currentContent.lastUpdate = new Date().toISOString();
-                    
-                    // حفظ الفهرس المحدث
-                    await uploadToGitHub(
-                        indexPath,
-                        btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
-                        `حذف مقال من الفهرس: ${articleId}`,
-                        sha
-                    );
-                }
-            } catch (error) {
-                console.error('Error removing from index:', error);
-            }
-        }
-
-        // ========== دالة إصلاح الفهرس ==========
-        async function repairIndex() {
-            try {
-                if (!isConnected) {
-                    showNotification('غير متصل بـ GitHub', 'error');
-                    return;
-                }
-                
-                showNotification('جاري إصلاح الفهرس...', 'info');
-                
-                const indexPath = 'blog/data/articles.json';
-                const indexResponse = await fetch(`https://api.github.com/repos/${repoConfig.owner}/${repoConfig.repo}/contents/${indexPath}`, {
-                    headers: {
-                        'Authorization': `Bearer ${githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (indexResponse.ok) {
-                    const data = await indexResponse.json();
-                    const sha = data.sha;
-                    const decoded = atob(data.content);
-                    const currentContent = JSON.parse(decoded);
-                    
-                    // إصلاح كل مقال
-                    const fixedArticles = currentContent.articles.map(article => {
-                        // إنشاء مقال متوافق مع المدونة
-                        return {
-                            id: article.id || article.slug || generateSlug(article.title),
-                            title: article.title,
-                            date: article.date || new Date().toISOString().split('T')[0],
-                            description: article.description || article.shortContent || article.title,
-                            image: article.image || 'images/blog-bg.jpg',
-                            content: article.content || `blog/articles/${article.id || article.slug}.md`,
-                            type: article.type || 'markdown',
-                            tags: article.tags || [],
-                            category: article.category || 'مقالات قانونية',
-                            status: article.status || 'published',
-                            slug: article.slug || article.id,
-                            keywords: article.keywords || '',
-                            shortContent: (article.description || article.shortContent || '').substring(0, 150) + '...',
-                            published: article.published || (article.status === 'published'),
-                            draft: article.draft || (article.status === 'draft'),
-                            archived: article.archived || (article.status === 'archived'),
-                            readTime: article.readTime || Math.max(3, Math.floor((article.description || '').length / 100))
-                        };
-                    });
-                    
-                    currentContent.articles = fixedArticles;
-                    currentContent.lastUpdate = new Date().toISOString();
-                    
-                    // حفظ الفهرس المصلح
-                    await uploadToGitHub(
-                        indexPath,
-                        btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
-                        `إصلاح الفهرس`,
-                        sha
-                    );
-                    
-                    showNotification('تم إصلاح الفهرس بنجاح!', 'success');
-                    await loadArticlesForDashboard();
-                } else {
-                    throw new Error('لم يتم العثور على الفهرس');
-                }
-            } catch (error) {
-                console.error('Error repairing index:', error);
-                showNotification('خطأ في إصلاح الفهرس: ' + error.message, 'error');
+                alert('يرجى إدخال التوكن أولاً.');
             }
         }
     </script>

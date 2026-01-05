@@ -1,1 +1,19 @@
-
+{
+  "articles": [],
+  "lastUpdated": "2023-01-01T00:00:00.000Z",
+  "totalArticles": 0,
+  "categories": [
+    "قانون تجاري",
+    "قانون عائلي",
+    "قانون جنائي", 
+    "قانون عقاري",
+    "نصائح قانونية",
+    "أخبار قانونية"
+  ],
+  "settings": {
+    "blogName": "مدونة مكتب المحاماة",
+    "postsPerPage": 10,
+    "language": "ar",
+    "theme": "light"
+  }
+}

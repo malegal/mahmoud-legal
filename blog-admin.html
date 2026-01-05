@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <!-- أضف هذا بعد <header> وقبل <div class="admin-panel"> -->
+<div style="margin: 15px 0; text-align: right;">
+    <a href="/" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #e0e0e0; color: #333; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        <i class="fas fa-home"></i> العودة للصفحة الرئيسية
+    </a>
+</div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة المدونة - مكتب المحاماة</title>
@@ -18,7 +24,41 @@
             color: #333;
             line-height: 1.6;
         }
+<script>
+// التحقق من كلمة السر قبل عرض المحتوى
+document.addEventListener('DOMContentLoaded', function() {
+    const correctPassword = 'mahmoud237';
+    const savedAuth = sessionStorage.getItem('blog_admin_auth');
+    
+    if (!savedAuth) {
+        const enteredPassword = prompt('🔐 الرجاء إدخال كلمة المرور للدخول إلى لوحة الإدارة:');
+        
+        if (enteredPassword === correctPassword) {
+            sessionStorage.setItem('blog_admin_auth', 'true');
+            alert('مرحباً! تم التحقق بنجاح.');
+        } else {
+            alert('❌ كلمة المرور غير صحيحة. سيتم توجيهك للصفحة الرئيسية.');
+            window.location.href = '/';
+            return;
+        }
+    }
+    
+    // إظهار زر تسجيل الخروج
+    const header = document.querySelector('header h1');
+    if (header) {
+        header.innerHTML += `
+            <button onclick="logout()" style="margin-right: auto; padding: 5px 15px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
+        `;
+    }
+});
 
+function logout() {
+    sessionStorage.removeItem('blog_admin_auth');
+    window.location.reload();
+}
+</script>
         .container {
             max-width: 1200px;
             margin: 0 auto;

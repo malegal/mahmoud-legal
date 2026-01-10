@@ -2,11 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>استعلام عن القضية - مؤسسة محمود عبد الحميد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استعلام عن القضية - مؤسسة محمود عبد الحميد للمحاماة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,325 +18,168 @@
             background: #020617;
             color: #f8fafc;
             min-height: 100vh;
-            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
-            overflow-x: hidden;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('images/hero-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 0 20px;
         }
         
-        /* الهيدر المحسن */
         .header {
             background: rgba(0, 0, 0, 0.95);
             border-bottom: 2px solid #bf953f;
-            padding: 8px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 20px 0;
         }
         
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             text-decoration: none;
             color: #bf953f;
-            flex: 1;
-            min-width: 250px;
-        }
-        
-        .logo-img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-        
-        .logo-text {
-            text-align: right;
-            line-height: 1.2;
-        }
-        
-        .logo-text h1 {
-            font-family: 'Amiri', serif;
             font-size: 20px;
-            color: #fcf6ba;
-            margin: 0;
-        }
-        
-        .logo-text h2 {
-            font-family: 'Amiri', serif;
-            font-size: 14px;
-            color: #bf953f;
-            margin: 0;
-            font-weight: normal;
-        }
-        
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .nav-btn {
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
-            color: #020617;
-            padding: 8px 20px;
-            font-size: 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
             font-weight: bold;
-            text-decoration: none;
-            white-space: nowrap;
         }
         
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
+        .logo img {
+            height: 50px;
+            width: auto;
         }
         
-        /* محتوى الصفحة */
         .inquiry-container {
-            min-height: calc(100vh - 150px);
+            min-height: 70vh;
+            padding: 60px 0;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 40px 15px;
         }
         
-        .inquiry-box {
+        .inquiry-form {
             background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(191, 149, 63, 0.2);
-            padding: 30px;
+            padding: 40px;
             border-radius: 20px;
-            width: 100%;
-            max-width: 800px;
-            text-align: center;
             box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
         }
         
-        .inquiry-box h1 {
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
             font-size: 28px;
             color: #bf953f;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            flex-wrap: wrap;
         }
         
-        .inquiry-box p {
-            color: #cbd5e1;
-            margin-bottom: 30px;
+        .form-header p {
+            color: #94a3b8;
             font-size: 16px;
-            line-height: 1.6;
         }
         
         .form-group {
             margin-bottom: 25px;
-            text-align: right;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
             color: #bf953f;
-            font-weight: bold;
+            margin-bottom: 8px;
             font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: flex-end;
+            font-weight: 500;
         }
         
         .form-control {
             width: 100%;
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(191, 149, 63, 0.3);
+            border: 1px solid rgba(191, 149, 63, 0.3);
             border-radius: 10px;
-            color: white;
+            color: #f8fafc;
             font-size: 16px;
             transition: all 0.3s;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
         }
         
         .form-control:focus {
             outline: none;
             border-color: #bf953f;
-            box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
+            box-shadow: 0 0 0 2px rgba(191, 149, 63, 0.2);
         }
         
-        .btn-inquiry {
+        .help-text {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-primary {
+            width: 100%;
             background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
             color: #020617;
-            padding: 16px 40px;
-            font-size: 18px;
-            border-radius: 10px;
             border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            font-weight: bold;
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .btn-inquiry:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(191, 149, 63, 0.3);
-        }
-        
-        /* نتائج الاستعلام */
-        .result-box {
-            display: none;
-            text-align: right;
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            border: 3px solid #bf953f;
-            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .info-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
+            padding: 16px;
             border-radius: 10px;
-            border: 1px solid rgba(191, 149, 63, 0.2);
-        }
-        
-        .info-label {
-            color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .info-value {
-            color: #fcf6ba;
-            font-size: 16px;
-            font-weight: bold;
-            word-break: break-word;
-        }
-        
-        .session-item {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-right: 3px solid #bf953f;
-        }
-        
-        .session-date {
-            color: #bf953f;
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-        }
-        
-        /* قسم الاتصال */
-        .contact-section {
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(191, 149, 63, 0.1);
-            border-radius: 12px;
-            border: 1px solid rgba(191, 149, 63, 0.3);
-            text-align: center;
-        }
-        
-        .contact-section h3 {
-            color: #bf953f;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
             font-size: 18px;
-        }
-        
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .contact-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            border: 1px solid rgba(191, 149, 63, 0.2);
-            text-decoration: none;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         
-        .contact-item:hover {
-            transform: translateY(-3px);
-            background: rgba(191, 149, 63, 0.15);
-            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.2);
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(191, 149, 63, 0.3);
         }
         
-        .contact-item i {
-            font-size: 20px;
-            color: #bf953f;
-            margin-bottom: 8px;
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
         
-        .contact-item span {
-            color: #cbd5e1;
-            font-size: 13px;
-            margin-bottom: 3px;
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
         }
         
-        .contact-link {
-            color: #fcf6ba;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 15px;
+        .alert-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid #22c55e;
+            color: #86efac;
         }
         
-        /* الفوتر */
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+        
         .footer {
             background: rgba(0, 0, 0, 0.9);
-            padding: 25px 0;
+            padding: 30px 0;
             text-align: center;
             border-top: 1px solid rgba(191, 149, 63, 0.2);
         }
@@ -347,347 +189,20 @@
             font-size: 14px;
         }
         
-        .whatsapp-link {
-            color: #bf953f;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 8px;
-            font-weight: bold;
-        }
-        
-        .whatsapp-link:hover {
-            color: #fcf6ba;
-        }
-        
-        /* الرسائل */
-        .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin: 10px 0;
-            display: none;
-            font-size: 14px;
-        }
-        
-        .message.error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 2px solid #f87171;
-        }
-        
-        .message.success {
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            border: 2px solid #4ade80;
-        }
-        
-        /* تعليمات */
-        .instructions {
-            background: rgba(191, 149, 63, 0.1);
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 30px;
-            text-align: right;
-            border-right: 3px solid #bf953f;
-        }
-        
-        .instructions h3 {
-            color: #bf953f;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: flex-end;
-            font-size: 18px;
-        }
-        
-        .instructions ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .instructions li {
-            padding: 8px 0;
-            color: #cbd5e1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: flex-end;
-            font-size: 14px;
-        }
-        
-        .instructions li:before {
-            content: "•";
-            color: #bf953f;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        
-        /* أزرار */
-        .print-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid #bf953f;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        
-        .print-btn:hover {
-            background: #bf953f;
-            color: #020617;
-        }
-        
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .result-header h2 {
-            color: #bf953f;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 20px;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* تحسينات للهواتف الصغيرة */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .logo {
-                justify-content: center;
-                min-width: auto;
-            }
-            
-            .logo-text h1 {
-                font-size: 18px;
-            }
-            
-            .logo-text h2 {
-                font-size: 13px;
-            }
-            
-            .logo-img {
-                width: 45px;
-                height: 45px;
-            }
-            
-            .inquiry-box {
-                padding: 20px;
-                border-radius: 15px;
-            }
-            
-            .inquiry-box h1 {
-                font-size: 24px;
-            }
-            
-            .inquiry-box p {
-                font-size: 15px;
-            }
-            
-            .btn-inquiry {
-                padding: 14px 30px;
-                font-size: 16px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .contact-info {
-                grid-template-columns: 1fr;
-            }
-            
-            .result-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .result-header h2 {
-                font-size: 18px;
-            }
-            
-            .instructions {
-                padding: 15px;
-            }
-            
-            .instructions li {
-                font-size: 13px;
-            }
-        }
-        
-        /* تحسينات إضافية للشاشات الصغيرة جداً */
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 10px;
-            }
-            
-            .inquiry-box {
-                padding: 15px;
-            }
-            
-            .inquiry-box h1 {
-                font-size: 20px;
-            }
-            
-            .inquiry-box p {
-                font-size: 14px;
-                margin-bottom: 20px;
-            }
-            
-            .form-control {
-                padding: 12px;
-                font-size: 14px;
-            }
-            
-            .form-group label {
-                font-size: 14px;
-            }
-            
-            .btn-inquiry {
-                padding: 12px;
-                font-size: 15px;
-            }
-            
-            .info-item {
-                padding: 12px;
-            }
-            
-            .info-value {
-                font-size: 15px;
-            }
-            
-            .contact-section {
-                padding: 15px;
-            }
-            
-            .contact-section h3 {
-                font-size: 16px;
-            }
-            
-            .contact-item {
-                padding: 10px;
-            }
-            
-            .contact-link {
-                font-size: 14px;
-            }
-            
-            .footer {
-                padding: 20px 0;
-            }
-            
-            .footer p {
-                font-size: 12px;
-            }
-            
-            .instructions h3 {
-                font-size: 16px;
-            }
-        }
-        
-        /* تحسينات للشاشات الكبيرة */
-        @media (min-width: 1200px) {
-            .inquiry-box {
-                max-width: 900px;
-            }
-            
-            .info-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        /* تحسينات للطباعة */
-        @media print {
-            body {
-                background: white;
-                color: black;
-            }
-            
-            .header, .nav-btn, .btn-inquiry, .contact-section, .footer, .print-btn, .instructions {
-                display: none !important;
-            }
-            
-            .inquiry-box {
-                background: white;
-                border: none;
-                box-shadow: none;
-                padding: 0;
-                max-width: 100%;
-            }
-            
-            .result-box {
-                display: block !important;
-                border: 1px solid #ccc;
-                box-shadow: none;
-                background: white;
-                color: black;
-            }
-            
-            .info-item, .session-item {
-                background: #f9f9f9;
-                border: 1px solid #ddd;
-            }
-            
-            .info-value, .session-date {
-                color: black;
-            }
-        }
-        
-        /* إصلاحات للـ IOS */
-        input, button, textarea {
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        /* منع التكبير التلقائي على iOS */
-        @supports (-webkit-touch-callout: none) {
-            input, textarea {
-                font-size: 16px !important;
-            }
-        }
-        
-        /* تحسينات للتفاعل */
         .loading {
-            position: relative;
-            pointer-events: none;
-            opacity: 0.7;
+            display: none;
+            text-align: center;
+            margin: 20px 0;
         }
         
-        .loading:after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid #bf953f;
+        .loading-spinner {
+            border: 3px solid rgba(191, 149, 63, 0.3);
             border-radius: 50%;
+            border-top: 3px solid #bf953f;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
         
         @keyframes spin {
@@ -695,9 +210,14 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* تحسينات للظهور */
-        .fade-in {
-            animation: fadeIn 0.5s ease;
+        @media (max-width: 768px) {
+            .inquiry-form {
+                padding: 25px;
+            }
+            
+            .form-header h2 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
@@ -706,160 +226,68 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="#" class="logo">
-                    <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'">
-                    <div class="logo-text">
-                        <h1>محمود عبد الحميد</h1>
-                        <h2>المحامي بالنقض و الدستورية العليا</h2>
-                    </div>
+                <a href="index.html" class="logo">
+                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد">
+                    <span>مؤسسة محمود عبد الحميد للمحاماة</span>
                 </a>
-                <div class="nav-buttons">
-                    <a href="index.html" target="_blank" class="nav-btn">
-                        <i class="fas fa-home"></i> الصفحة الرئيسية
-                    </a>
-                </div>
             </nav>
         </div>
     </header>
 
     <!-- محتوى الصفحة -->
     <main>
-        <div class="inquiry-container">
-            <div class="inquiry-box">
-                <h1><i class="fas fa-search"></i> استعلام عن القضية</h1>
-                <p>أدخل بياناتك للاطلاع على آخر تطورات قضيتك بكل خصوصية وأمان</p>
-                
-                <form id="inquiryForm">
-                    <div class="form-group">
-                        <label for="phone">
-                            <i class="fas fa-phone"></i> رقم هاتف العميل
-                        </label>
-                        <input type="tel" id="phone" class="form-control" 
-                               placeholder="أدخل رقم الهاتف المسجل (مثال: 01115821523)" 
-                               inputmode="numeric"
-                               pattern="[0-9]*"
-                               required>
-                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
-                            رقم الهاتف المسجل في ملف القضية
-                        </small>
+        <div class="container">
+            <div class="inquiry-container">
+                <div class="inquiry-form">
+                    <div class="form-header">
+                        <h2><i class="fas fa-search"></i> استعلام عن حالة القضية</h2>
+                        <p>أدخل رقم هاتفك وكود القضية للتحقق</p>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="caseCode">
-                            <i class="fas fa-file-contract"></i> كود القضية
-                        </label>
-                        <input type="text" id="caseCode" class="form-control" 
-                               placeholder="أدخل الكود المكون من 8 أحرف وأرقام (مثال: MA-123456)" 
-                               autocapitalize="characters"
-                               required>
-                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
-                            كود القضية الذي استلمته من المحامي
-                        </small>
+                    <div id="alertMessage" class="alert"></div>
+                    
+                    <div class="loading" id="loading">
+                        <div class="loading-spinner"></div>
+                        <p>جاري الإرسال...</p>
                     </div>
                     
-                    <button type="submit" class="btn-inquiry">
-                        <i class="fas fa-external-link-alt"></i> اطلع على القضية
-                    </button>
-                    
-                    <div id="errorMessage" class="message error"></div>
-                    <div id="successMessage" class="message success"></div>
-                </form>
-                
-                <div id="inquiryResult" class="result-box">
-                    <div class="result-header">
-                        <h2><i class="fas fa-file-contract"></i> تفاصيل القضية</h2>
-                        <button class="print-btn" onclick="printCaseDetails()">
-                            <i class="fas fa-print"></i> طباعة
+                    <form id="inquiryForm">
+                        <div class="form-group">
+                            <label for="phone"><i class="fas fa-phone"></i> رقم الهاتف</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                class="form-control" 
+                                placeholder="مثال: 20123456789" 
+                                required
+                                pattern="^[0-9+]{10,15}$"
+                            >
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                أدخل رقم الهاتف المسجل في القضية
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="caseCode"><i class="fas fa-file-code"></i> كود القضية</label>
+                            <input 
+                                type="text" 
+                                id="caseCode" 
+                                class="form-control" 
+                                placeholder="مثال: MA-26101-8X9j3B" 
+                                required
+                                pattern="^MA-\d{5}-[A-Za-z0-9]{6}$"
+                            >
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                تنسيق الكود: MA-سنةرقمإداري-كودعشوائي
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i> إرسال رمز التحقق
                         </button>
-                    </div>
-                    
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-hashtag"></i> كود القضية</div>
-                            <div class="info-value" id="resultCaseCode">-</div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-user"></i> اسم العميل</div>
-                            <div class="info-value" id="resultClientName">-</div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-user-friends"></i> اسم الخصم</div>
-                            <div class="info-value" id="resultOpponentName">-</div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-hashtag"></i> رقم القضية</div>
-                            <div class="info-value" id="resultCaseNumber">-</div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-calendar"></i> سنة القضية</div>
-                            <div class="info-value" id="resultCaseYear">-</div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-label"><i class="fas fa-gavel"></i> المحكمة</div>
-                            <div class="info-value" id="resultCourt">-</div>
-                        </div>
-                    </div>
-                    
-                    <h3 style="color: #bf953f; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 18px;">
-                        <i class="fas fa-gavel"></i> آخر جلسة مسجلة
-                    </h3>
-                    
-                    <div id="lastSessionInfo">
-                        <!-- سيتم تعبئتها بالجافاسكربت -->
-                    </div>
-                    
-                    <!-- قسم الاتصال للاستفسار -->
-                    <div class="contact-section">
-                        <h3><i class="fas fa-headset"></i> للاستفسار يرجى التواصل عبر:</h3>
-                        
-                        <div class="contact-info">
-                            <a href="#" class="contact-item" onclick="openWhatsApp(event)">
-                                <i class="fab fa-whatsapp"></i>
-                                <span>الواتساب</span>
-                                <span class="contact-link">01101076000</span>
-                            </a>
-                            
-                            <a href="#" class="contact-item" onclick="openEmail(event)">
-                                <i class="fas fa-envelope"></i>
-                                <span>البريد الإلكتروني</span>
-                                <span class="contact-link">ma.legaleg@outlook.com</span>
-                            </a>
-                            
-                            <a href="#" class="contact-item" onclick="bookAppointment(event)">
-                                <i class="fas fa-calendar-check"></i>
-                                <span>حجز موعد مقابلة</span>
-                                <span style="color: #bf953f; font-size: 13px;">في المكتب</span>
-                            </a>
-                        </div>
-                        
-                        <p style="color: #94a3b8; margin-top: 15px; font-size: 13px;">
-                            <i class="fas fa-info-circle"></i>
-                            جميع الرسائل ترد خلال 24 ساعة عمل
-                        </p>
-                    </div>
-                    
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
-                        <p style="color: #94a3b8; font-size: 13px; display: flex; align-items: center; gap: 8px;">
-                            <i class="fas fa-info-circle"></i>
-                            ملاحظة: هذه المعلومات خاصة بك فقط. يرجى عدم مشاركة كود القضية مع أي شخص.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="instructions">
-                    <h3><i class="fas fa-info-circle"></i> ملاحظات هامة</h3>
-                    <ul>
-                        <li>تأكد من إدخال رقم الهاتف المسجل في ملف القضية</li>
-                        <li>الكود يبدأ بـ MA- متبوعاً بـ 6 أرقام (مثال: MA-123456)</li>
-                        <li>إذا نسيت الكود، يرجى التواصل مع المكتب على الواتساب</li>
-                        <li>جميع البيانات محمية بسرية تامة وفقاً للقوانين</li>
-                        <li>يظهر فقط بيانات آخر جلسة بدون تفاصيل القرار</li>
-                    </ul>
+                    </form>
                 </div>
             </div>
         </div>
@@ -869,514 +297,161 @@
     <footer class="footer">
         <div class="container">
             <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
-            <p>للاستفسار: <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-link">
-                <i class="fab fa-whatsapp"></i> 01101076000
-            </a></p>
+            <p>أسوان - أمام مجمع المحاكم | هاتف: 01101076000</p>
         </div>
     </footer>
 
+    <!-- Supabase Configuration Script -->
     <script>
-        // إعداد Supabase
+        // تصحيح المتغير - كان مكتوباً خطأ
         const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
-        
-        // متغيرات عامة
-        let currentCaseCode = '';
-        let currentCaseData = null;
-        let supabaseClient = null;
 
-        // دالة تهيئة Supabase
-        async function initSupabase() {
+        // تحميل مكتبة Supabase
+        async function loadSupabase() {
             if (!window.supabase) {
-                // تحميل مكتبة Supabase
                 return new Promise((resolve, reject) => {
                     const script = document.createElement('script');
-                    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+                    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js';
                     script.onload = () => {
-                        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                         console.log('✅ تم تهيئة Supabase بنجاح');
                         resolve();
                     };
                     script.onerror = reject;
                     document.head.appendChild(script);
                 });
-            } else {
-                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                return Promise.resolve();
+            }
+            return Promise.resolve();
+        }
+
+        // التحقق من صحة كود القضية
+        function validateCaseCode(caseCode) {
+            // تنسيق: MA-سنةرقمإداري-كودعشوائي
+            const pattern = /^MA-\d{5}-[A-Za-z0-9]{6}$/;
+            return pattern.test(caseCode);
+        }
+
+        // التحقق من صحة رقم الهاتف
+        function validatePhone(phone) {
+            const pattern = /^[0-9+]{10,15}$/;
+            return pattern.test(phone);
+        }
+
+        // عرض رسالة تنبيه
+        function showAlert(message, type = 'error') {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, 5000);
             }
         }
 
-        // البحث عن القضية
-        async function searchCase(phone, caseCode) {
+        // إرسال طلب OTP
+        async function sendOTPRequest(phone, caseCode) {
             try {
-                // الانتظار حتى يتم تحميل Supabase
-                if (!supabaseClient) {
-                    await initSupabase();
+                // استخدام Vercel Edge Function
+                const response = await fetch('/api/send-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        phone: phone,
+                        caseCode: caseCode
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // حفظ البيانات مؤقتاً للخطوة التالية
+                    sessionStorage.setItem('pendingPhone', phone);
+                    sessionStorage.setItem('pendingCaseCode', caseCode);
+                    
+                    // الانتقال إلى صفحة التحقق
+                    window.location.href = 'verify-otp.html';
+                } else {
+                    throw new Error(data.error || 'حدث خطأ في الإرسال');
                 }
-                
-                console.log('🔍 جاري البحث عن:', { phone, caseCode });
-                
-                // البحث في جدول cases
-                const { data: caseData, error: caseError } = await supabaseClient
-                    .from('cases')
-                    .select('*')
-                    .eq('client_phone', phone)
-                    .eq('case_code', caseCode.toUpperCase())
-                    .single();
+            } catch (error) {
+                console.error('Error sending OTP:', error);
+                throw error;
+            }
+        }
 
-                if (caseError) {
-                    console.error('❌ خطأ في البحث عن القضية:', caseError);
-                    return { 
-                        success: false, 
-                        message: '❌ لم يتم العثور على القضية. يرجى التحقق من رقم الهاتف وكود القضية.' 
-                    };
+        // معالجة تقديم النموذج
+        document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value.trim();
+            const caseCode = document.getElementById('caseCode').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingDiv = document.getElementById('loading');
+            
+            // التحقق من المدخلات
+            if (!validatePhone(phone)) {
+                showAlert('يرجى إدخال رقم هاتف صحيح (10-15 رقم)');
+                return;
+            }
+            
+            if (!validateCaseCode(caseCode)) {
+                showAlert('يرجى إدخال كود قضية صحيح (مثال: MA-26101-8X9j3B)');
+                return;
+            }
+            
+            // عرض التحميل
+            submitBtn.disabled = true;
+            loadingDiv.style.display = 'block';
+            
+            try {
+                // التحقق أولاً من وجود القضية في Supabase
+                await loadSupabase();
+                
+                const { data: caseData, error: caseError } = await window.supabaseClient
+                    .from('cases')
+                    .select('client_phone')
+                    .eq('case_code', caseCode)
+                    .single();
+                
+                if (caseError || !caseData) {
+                    throw new Error('كود القضية غير صحيح أو غير مسجل');
                 }
                 
-                if (!caseData) {
-                    return { 
-                        success: false, 
-                        message: '❌ لا توجد قضية مطابقة للبيانات المدخلة.' 
-                    };
-                }
-                
-                console.log('✅ تم العثور على القضية:', caseData);
-                
-                // جلب آخر جلسة لهذه القضية
-                const { data: lastSession, error: sessionError } = await supabaseClient
-                    .from('sessions')
-                    .select('*')
-                    .eq('case_id', caseData.id)
-                    .order('session_date', { ascending: false })
-                    .limit(1);
-                
-                if (sessionError) {
-                    console.error('❌ خطأ في جلب الجلسات:', sessionError);
-                }
-                
-                return { 
-                    success: true, 
-                    data: caseData,
-                    lastSession: lastSession && lastSession.length > 0 ? lastSession[0] : null
-                };
+                // إرسال طلب OTP
+                await sendOTPRequest(phone, caseCode);
                 
             } catch (error) {
-                console.error('❌ خطأ غير متوقع:', error);
-                return { 
-                    success: false, 
-                    message: '⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.' 
-                };
+                console.error('Error:', error);
+                showAlert(error.message || 'حدث خطأ في التحقق من البيانات');
+            } finally {
+                // إخفاء التحميل
+                submitBtn.disabled = false;
+                loadingDiv.style.display = 'none';
             }
-        }
+        });
 
-        // عرض الأخطاء
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            const successDiv = document.getElementById('successMessage');
-            
-            successDiv.style.display = 'none';
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                errorDiv.style.display = 'none';
-            }, 5000);
-        }
-
-        // عرض رسائل النجاح
-        function showSuccess(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            const successDiv = document.getElementById('successMessage');
-            
-            errorDiv.style.display = 'none';
-            successDiv.textContent = message;
-            successDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                successDiv.style.display = 'none';
-            }, 3000);
-        }
-
-        // عرض نتائج البحث
-        function displayResults(caseData, lastSession) {
-            // حفظ البيانات الحالية
-            currentCaseCode = caseData.case_code;
-            currentCaseData = caseData;
-            
-            // تعبئة بيانات القضية
-            document.getElementById('resultCaseCode').textContent = caseData.case_code || '-';
-            document.getElementById('resultClientName').textContent = caseData.client_name || '-';
-            document.getElementById('resultOpponentName').textContent = caseData.opponent_name || '-';
-            document.getElementById('resultCaseNumber').textContent = caseData.case_number || '-';
-            document.getElementById('resultCaseYear').textContent = caseData.case_year || '-';
-            document.getElementById('resultCourt').textContent = caseData.court_name || '-';
-            
-            // عرض آخر جلسة
-            const sessionContainer = document.getElementById('lastSessionInfo');
-            if (lastSession) {
-                const sessionDate = new Date(lastSession.session_date);
-                const formattedDate = sessionDate.toLocaleDateString('ar-EG', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                sessionContainer.innerHTML = `
-                    <div class="session-item">
-                        <div class="session-date">
-                            <i class="fas fa-calendar-day"></i>
-                            تاريخ آخر جلسة: ${formattedDate}
-                        </div>
-                        <div style="color: #cbd5e1; margin-bottom: 5px;">
-                            <i class="fas fa-info-circle"></i> الحالة: ${lastSession.decision || 'تمت الجلسة'}
-                        </div>
-                        <div style="color: #94a3b8; font-size: 13px;">
-                            <i class="fas fa-clock"></i> تم تسجيل الجلسة في النظام
-                        </div>
-                    </div>
-                `;
-            } else {
-                sessionContainer.innerHTML = `
-                    <div class="session-item">
-                        <div style="color: #94a3b8; text-align: center; padding: 15px;">
-                            <i class="fas fa-calendar-times"></i>
-                            لا توجد جلسات مسجلة لهذه القضية بعد
-                        </div>
-                    </div>
-                `;
-            }
-            
-            // إظهار نتائج البحث
-            const resultBox = document.getElementById('inquiryResult');
-            resultBox.style.display = 'block';
-            resultBox.classList.add('fade-in');
-            
-            // التمرير إلى النتائج
-            setTimeout(() => {
-                resultBox.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }, 100);
-            
-            showSuccess('✅ تم العثور على القضية بنجاح');
-        }
-
-        // فتح الواتساب للتواصل
-        function openWhatsApp(event) {
-            event.preventDefault();
-            
-            if (!currentCaseCode) {
-                showError('⚠️ يرجى البحث عن القضية أولاً');
-                return;
-            }
-            
-            const phoneNumber = '201101076000';
-            const message = `السلام عليكم، أود الاستفسار عن قضيتي التي تحمل الكود: ${currentCaseCode}`;
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // فتح الإيميل للتواصل
-        function openEmail(event) {
-            event.preventDefault();
-            
-            if (!currentCaseCode) {
-                showError('⚠️ يرجى البحث عن القضية أولاً');
-                return;
-            }
-            
-            const email = 'ma.legaleg@outlook.com';
-            const subject = `استفسار عن القضية ${currentCaseCode}`;
-            const body = `السلام عليكم،\n\nأود الاستفسار عن قضيتي التي تحمل الكود: ${currentCaseCode}\n\nمع الشكر والتقدير`;
-            const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            
-            window.location.href = mailtoUrl;
-        }
-
-        // حجز موعد مقابلة
-        function bookAppointment(event) {
-            event.preventDefault();
-            
-            if (!currentCaseCode) {
-                showError('⚠️ يرجى البحث عن القضية أولاً');
-                return;
-            }
-            
-            // عرض نافذة اختيار التاريخ والوقت
-            Swal.fire({
-                title: 'حجز موعد مقابلة',
-                html: `
-                    <div style="text-align: right; direction: rtl;">
-                        <p style="color: #bf953f; margin-bottom: 15px; font-size: 14px;">
-                            <i class="fas fa-info-circle"></i>
-                            كود قضيتك: <strong>${currentCaseCode}</strong>
-                        </p>
-                        
-                        <div class="form-group">
-                            <label for="appointmentDate" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: 14px;">
-                                <i class="fas fa-calendar-alt"></i> التاريخ
-                            </label>
-                            <input type="date" id="appointmentDate" class="form-control" 
-                                   style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: 14px;">
-                        </div>
-                        
-                        <div class="form-group" style="margin-top: 15px;">
-                            <label for="appointmentTime" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: 14px;">
-                                <i class="fas fa-clock"></i> الوقت
-                            </label>
-                            <select id="appointmentTime" class="form-control" 
-                                    style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: 14px;">
-                                <option value="09:00">09:00 صباحاً</option>
-                                <option value="10:00">10:00 صباحاً</option>
-                                <option value="11:00">11:00 صباحاً</option>
-                                <option value="12:00">12:00 ظهراً</option>
-                                <option value="13:00">01:00 مساءً</option>
-                                <option value="14:00">02:00 مساءً</option>
-                                <option value="15:00">03:00 مساءً</option>
-                                <option value="16:00">04:00 مساءً</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group" style="margin-top: 15px;">
-                            <label for="appointmentNotes" style="color: #cbd5e1; margin-bottom: 5px; display: block; font-size: 14px;">
-                                <i class="fas fa-edit"></i> ملاحظات إضافية (اختياري)
-                            </label>
-                            <textarea id="appointmentNotes" class="form-control" rows="3"
-                                      style="background: rgba(255,255,255,0.1); color: white; border: 1px solid #bf953f; padding: 10px; border-radius: 5px; width: 100%; font-size: 14px;"
-                                      placeholder="أي ملاحظات إضافية ترغب في إضافتها..."></textarea>
-                        </div>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'إرسال طلب الموعد',
-                cancelButtonText: 'إلغاء',
-                confirmButtonColor: '#bf953f',
-                cancelButtonColor: '#d33',
-                width: window.innerWidth < 600 ? '90%' : '500px',
-                customClass: {
-                    popup: 'sweet-popup',
-                    title: 'sweet-title'
-                },
-                preConfirm: () => {
-                    const date = document.getElementById('appointmentDate').value;
-                    const time = document.getElementById('appointmentTime').value;
-                    const notes = document.getElementById('appointmentNotes').value;
-                    
-                    if (!date) {
-                        Swal.showValidationMessage('يرجى اختيار التاريخ');
-                        return false;
-                    }
-                    
-                    return { date, time, notes };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const { date, time, notes } = result.value;
-                    
-                    // تنسيق التاريخ
-                    const dateObj = new Date(date);
-                    const formattedDate = dateObj.toLocaleDateString('ar-EG', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                    
-                    // إنشاء رسالة الواتساب
-                    const phoneNumber = '201101076000';
-                    let message = `طلب حجز موعد مقابلة\n\n`;
-                    message += `كود القضية: ${currentCaseCode}\n`;
-                    message += `اسم العميل: ${currentCaseData.client_name}\n`;
-                    message += `تاريخ الموعد: ${formattedDate}\n`;
-                    message += `وقت الموعد: ${time}\n`;
-                    
-                    if (notes) {
-                        message += `ملاحظات العميل: ${notes}\n`;
-                    }
-                    
-                    message += `\n---\nتم إرسال هذا الطلب تلقائياً من نظام استعلام العملاء`;
-                    
-                    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                    
-                    // فتح الواتساب
-                    window.open(whatsappUrl, '_blank');
-                    
-                    // رسالة تأكيد للمستخدم
-                    Swal.fire({
-                        title: 'تم إرسال طلب الموعد',
-                        html: `
-                            <div style="text-align: center;">
-                                <i class="fas fa-check-circle" style="color: #4ade80; font-size: 40px; margin-bottom: 20px;"></i>
-                                <p style="color: #cbd5e1; font-size: 14px;">
-                                    تم إرسال طلب حجز الموعد بنجاح<br>
-                                    سيتواصل معك المكتب لتأكيد الموعد
-                                </p>
-                            </div>
-                        `,
-                        confirmButtonText: 'حسناً',
-                        confirmButtonColor: '#bf953f'
-                    });
-                }
-            });
-        }
-
-        // طباعة تفاصيل القضية
-        function printCaseDetails() {
-            const printContent = document.getElementById('inquiryResult').innerHTML;
-            const originalContent = document.body.innerHTML;
-            
-            document.body.innerHTML = `
-                <!DOCTYPE html>
-                <html lang="ar" dir="rtl">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>استعلام عن القضية - مؤسسة محمود عبد الحميد</title>
-                    <style>
-                        @media print {
-                            body {
-                                font-family: 'Amiri', 'Tajawal', sans-serif;
-                                padding: 20px;
-                                color: #000;
-                                background: white;
-                            }
-                            .print-header {
-                                text-align: center;
-                                margin-bottom: 30px;
-                                border-bottom: 2px solid #bf953f;
-                                padding-bottom: 15px;
-                            }
-                            .print-header h2 {
-                                color: #bf953f;
-                                font-family: 'Amiri', serif;
-                            }
-                            .info-grid {
-                                display: grid;
-                                grid-template-columns: repeat(2, 1fr);
-                                gap: 15px;
-                                margin-bottom: 20px;
-                            }
-                            .info-item {
-                                border: 1px solid #ddd;
-                                padding: 10px;
-                                border-radius: 5px;
-                                break-inside: avoid;
-                            }
-                            .info-label {
-                                color: #666;
-                                font-size: 12px;
-                            }
-                            .info-value {
-                                font-weight: bold;
-                                font-size: 14px;
-                            }
-                            .footer {
-                                margin-top: 50px;
-                                text-align: center;
-                                color: #666;
-                                font-size: 12px;
-                                border-top: 1px solid #ddd;
-                                padding-top: 15px;
-                            }
-                            .contact-section, .print-btn, .nav-btn, button, a {
-                                display: none !important;
-                            }
-                            @page {
-                                margin: 1cm;
-                            }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="print-header">
-                        <h2>استعلام عن القضية - مؤسسة محمود عبد الحميد للمحاماة</h2>
-                        <p>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')} ${new Date().toLocaleTimeString('ar-EG')}</p>
-                    </div>
-                    ${printContent}
-                    <div class="footer">
-                        <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
-                        <p>للاستفسار: 01101076000</p>
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            setTimeout(() => {
-                window.print();
-                
-                // استعادة المحتوى الأصلي
-                setTimeout(() => {
-                    document.body.innerHTML = originalContent;
-                    window.location.reload();
-                }, 100);
-            }, 500);
-        }
-
-        // تهيئة التطبيق
+        // تحميل Supabase عند فتح الصفحة
         document.addEventListener('DOMContentLoaded', async function() {
-            // تهيئة Supabase
-            await initSupabase();
-            
-            // إضافة مستمع لاستمارة البحث
-            document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
+            try {
+                await loadSupabase();
                 
-                const phone = document.getElementById('phone').value.trim();
-                const caseCode = document.getElementById('caseCode').value.trim();
+                // التحقق من وجود جلسة نشطة
+                const sessionPhone = sessionStorage.getItem('sessionPhone');
+                const sessionCaseCode = sessionStorage.getItem('sessionCaseCode');
                 
-                // التحقق من المدخلات
-                if (!phone) {
-                    showError('⚠️ يرجى إدخال رقم الهاتف');
-                    return;
+                if (sessionPhone && sessionCaseCode) {
+                    // تعبئة الحقول تلقائياً
+                    document.getElementById('phone').value = sessionPhone;
+                    document.getElementById('caseCode').value = sessionCaseCode;
                 }
-                
-                if (!caseCode) {
-                    showError('⚠️ يرجى إدخال كود القضية');
-                    return;
-                }
-                
-                // عرض رسالة تحميل
-                const submitBtn = e.target.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري البحث...';
-                submitBtn.disabled = true;
-                submitBtn.classList.add('loading');
-                
-                try {
-                    const result = await searchCase(phone, caseCode.toUpperCase());
-                    
-                    if (result.success) {
-                        displayResults(result.data, result.lastSession);
-                    } else {
-                        showError(result.message);
-                        document.getElementById('inquiryResult').style.display = 'none';
-                    }
-                } catch (error) {
-                    console.error('❌ خطأ غير متوقع:', error);
-                    showError('⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.');
-                } finally {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('loading');
-                }
-            });
-            
-            // التركيز على حقل الهاتف عند التحميل
-            document.getElementById('phone').focus();
-            
-            // إضافة أمثلة للاختبار (للتطوير فقط)
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                document.getElementById('phone').value = '01115821523';
-                document.getElementById('caseCode').value = 'MA-916174';
-            }
-            
-            // تحسين تجربة المستخدم على الهواتف
-            if ('ontouchstart' in window) {
-                document.querySelectorAll('input, button, a').forEach(element => {
-                    element.style.minHeight = '44px';
-                });
+            } catch (error) {
+                console.error('Failed to load Supabase:', error);
             }
         });
     </script>

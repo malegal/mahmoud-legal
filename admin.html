@@ -127,6 +127,20 @@
                             <label>الدائرة</label>
                             <input id="circle" class="form-control">
                         </div>  
+                        <div class="col-md-6">
+                            <label>نوع القضية</label>
+                            <select id="case_type" class="form-select" required>
+                                <option value="">اختر نوع القضية...</option>
+                                <option value="مدنية">مدنية</option>
+                                <option value="جنائية">جنائية</option>
+                                <option value="تجارية">تجارية</option>
+                                <option value="عمالية">عمالية</option>
+                                <option value="أحوال شخصية">أحوال شخصية</option>
+                                <option value="إدارية">إدارية</option>
+                                <option value="دستورية">دستورية</option>
+                                <option value="ضريبية">ضريبية</option>
+                            </select>
+                        </div>  
                         <div class="col-md-12">
                             <label>موضوع القضية</label>
                             <textarea id="case_subject" class="form-control" rows="2"></textarea>
@@ -191,6 +205,10 @@
                         <div class="col-md-4">
                             <label>صفة العميل</label>
                             <input id="s_client_role" class="form-control" readonly>
+                        </div>  
+                        <div class="col-md-4">
+                            <label>نوع القضية</label>
+                            <input id="s_case_type" class="form-control" readonly>
                         </div>  
                         <div class="col-md-6">
                             <label>تاريخ الجلسة</label>
@@ -340,6 +358,20 @@
                         <div class="col-md-6">
                             <label>الدائرة</label>
                             <input id="edit_circle" class="form-control">
+                        </div>  
+                        <div class="col-md-6">
+                            <label>نوع القضية</label>
+                            <select id="edit_case_type" class="form-select" required>
+                                <option value="">اختر نوع القضية...</option>
+                                <option value="مدنية">مدنية</option>
+                                <option value="جنائية">جنائية</option>
+                                <option value="تجارية">تجارية</option>
+                                <option value="عمالية">عمالية</option>
+                                <option value="أحوال شخصية">أحوال شخصية</option>
+                                <option value="إدارية">إدارية</option>
+                                <option value="دستورية">دستورية</option>
+                                <option value="ضريبية">ضريبية</option>
+                            </select>
                         </div>  
                         <div class="col-md-12">
                             <label>موضوع القضية</label>
@@ -569,6 +601,7 @@ async function selectCaseForSession(caseId) {
         document.getElementById('s_opponent').value = data.opponent_name || '';  
         document.getElementById('s_client_role').value = data.client_role;  
         document.getElementById('s_notes').value = data.notes || '';  
+        document.getElementById('s_case_type').value = data.case_type || 'مدنية';  
         
         // الحصول على آخر حالة للقضية من الجلسات
         const { data: lastSession } = await db
@@ -603,7 +636,7 @@ caseForm.onsubmit = async e => {
     const code = `MA-${Date.now().toString().slice(-6)}`;  
     
     try {
-        const { error } = await db.from('cases').insert([{  
+        const caseData = {
             client_name: client_name.value,  
             client_phone: client_phone.value,  
             client_email: client_email.value,  
@@ -613,10 +646,13 @@ caseForm.onsubmit = async e => {
             case_year: case_year.value,  
             court_name: court_name.value,  
             circle: circle.value,  
+            case_type: case_type.value,  // إضافة نوع القضية
             case_code: code,  
             case_subject: case_subject.value,  
             notes: notes.value
-        }]);  
+        };
+        
+        const { error } = await db.from('cases').insert([caseData]);  
         
         if (error) {
             console.error("تفاصيل الخطأ:", error);
@@ -677,6 +713,7 @@ function addToGoogleCalendar() {
     const description = `  
 القضية: ${selectedCaseForCalendar.case_number}/${selectedCaseForCalendar.case_year}  
 المحكمة: ${selectedCaseForCalendar.court_name}  
+نوع القضية: ${selectedCaseForCalendar.case_type || 'مدنية'}  
 القرار: ${s_decision.value || 'لم يتم تحديد قرار'}  
 كود القضية: ${selectedCaseForCalendar.case_code}  
     `.trim();  
@@ -889,6 +926,7 @@ function renderSearchResults(data, type) {
                     <div><strong>العميل:</strong> ${caseData.client_name}</div>  
                     <div><strong>الخصم:</strong> ${caseData.opponent_name || 'غير محدد'}</div>  
                     <div><strong>القضية:</strong> ${caseData.case_number}/${caseData.case_year}</div>  
+                    <div><strong>نوع القضية:</strong> ${caseData.case_type || 'مدنية'}</div>  
                 </div>  
                 ${item.decision ? `<div class="mt-2 p-2 bg-light small rounded"><b>القرار:</b> ${item.decision}</div>` : ''}  
             </div>`;  
@@ -921,6 +959,7 @@ function renderSearchResults(data, type) {
                     <div><strong>الإيميل:</strong> ${item.client_email || 'غير محدد'}</div>  
                     <div><strong>الخصم:</strong> ${item.opponent_name || 'غير محدد'}</div>  
                     <div><strong>القضية:</strong> ${item.case_number}/${item.case_year}</div>  
+                    <div><strong>نوع القضية:</strong> ${item.case_type || 'مدنية'}</div>  
                     ${item.case_subject ? `<div class="mt-1"><strong>الموضوع:</strong> ${item.case_subject}</div>` : ''}  
                 </div>  
                 <div class="mt-2 small border-top pt-2">  
@@ -999,6 +1038,9 @@ async function openCaseDetails(caseId) {
                 </div>  
                 <div class="col-md-6">  
                     <strong>الدائرة:</strong> ${caseData.circle || 'غير محدد'}  
+                </div>  
+                <div class="col-md-6">  
+                    <strong>نوع القضية:</strong> ${caseData.case_type || 'مدنية'}  
                 </div>  
                 <div class="col-md-6">  
                     <strong>صفة العميل:</strong> ${caseData.client_role}  
@@ -1117,6 +1159,7 @@ async function loadCaseForEdit(caseId) {
     document.getElementById('edit_case_year').value = data.case_year;  
     document.getElementById('edit_court_name').value = data.court_name;  
     document.getElementById('edit_circle').value = data.circle || '';  
+    document.getElementById('edit_case_type').value = data.case_type || 'مدنية';  
     document.getElementById('edit_case_subject').value = data.case_subject || '';  
     document.getElementById('edit_notes').value = data.notes || '';  
   
@@ -1142,6 +1185,7 @@ async function updateCase() {
         case_year: document.getElementById('edit_case_year').value,  
         court_name: document.getElementById('edit_court_name').value,  
         circle: document.getElementById('edit_circle').value,  
+        case_type: document.getElementById('edit_case_type').value,  
         case_subject: document.getElementById('edit_case_subject').value,  
         notes: document.getElementById('edit_notes').value,  
         updated_at: new Date().toISOString()  
@@ -1385,6 +1429,8 @@ async function printCasePDF() {
     doc.text(`المحكمة: ${caseData.court_name}`, 20, y);  
     y += 10;  
     doc.text(`الدائرة: ${caseData.circle || 'غير محدد'}`, 20, y);  
+    y += 10;  
+    doc.text(`نوع القضية: ${caseData.case_type || 'مدنية'}`, 20, y);  
     y += 10;  
     doc.text(`حالة القضية: ${caseData.case_status || 'جديدة'}`, 20, y);  
     y += 15;  

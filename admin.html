@@ -349,17 +349,6 @@
                             <label>ملاحظات</label>
                             <textarea id="edit_notes" class="form-control" rows="3"></textarea>
                         </div>  
-                        <div class="col-md-6">  
-                            <label>حالة القضية</label>  
-                            <select id="edit_case_status" class="form-select">
-                                <option value="جديدة">جديدة</option>
-                                <option value="مؤجلة">مؤجلة</option>
-                                <option value="مشطوبة">مشطوبة</option>
-                                <option value="موقوفة">موقوفة</option>
-                                <option value="محجوزة للحكم">محجوزة للحكم</option>
-                                <option value="محكوم فيها">محكوم فيها</option>
-                            </select>  
-                        </div>  
                     </div>  
                 </form>  
             </div>  
@@ -580,7 +569,20 @@ async function selectCaseForSession(caseId) {
         document.getElementById('s_opponent').value = data.opponent_name || '';  
         document.getElementById('s_client_role').value = data.client_role;  
         document.getElementById('s_notes').value = data.notes || '';  
-        document.getElementById('s_case_status').value = data.case_status || 'جديدة';  
+        
+        // الحصول على آخر حالة للقضية من الجلسات
+        const { data: lastSession } = await db
+            .from('sessions')
+            .select('case_status')
+            .eq('case_id', caseId)
+            .order('session_date', { ascending: false })
+            .limit(1);
+        
+        if (lastSession && lastSession.length > 0) {
+            document.getElementById('s_case_status').value = lastSession[0].case_status || 'جديدة';
+        } else {
+            document.getElementById('s_case_status').value = 'جديدة';
+        }
           
         document.getElementById('caseSearchResults').style.display = 'none';  
         document.getElementById('s_search').value = data.case_code;  
@@ -599,49 +601,44 @@ caseForm.onsubmit = async e => {
     e.preventDefault();  
     Swal.fire({ title: 'جاري الحفظ...', didOpen: () => Swal.showLoading() });  
     const code = `MA-${Date.now().toString().slice(-6)}`;  
-    const { error } = await db.from('cases').insert([{  
-        client_name: client_name.value,  
-        client_phone: client_phone.value,  
-        client_email: client_email.value,  
-        client_role: client_role.value,  
-        opponent_name: opponent_name.value,  
-        case_number: case_number.value,  
-        case_year: case_year.value,  
-        court_name: court_name.value,  
-        circle: circle.value,  
-        case_code: code,  
-        case_subject: case_subject.value,  
-        notes: notes.value,  
-        case_status: 'جديدة' // حالة افتراضية  
-    }]);  
-    if (error) Swal.fire("خطأ", error.message, "error");  
-    else {  
-        Swal.fire({  
-            title: "تم الحفظ",  
-            html: `كود القضية: <strong>${code}</strong>`,  
-            icon: "success"  
-        });  
-        caseForm.reset();  
-    }  
+    
+    try {
+        const { error } = await db.from('cases').insert([{  
+            client_name: client_name.value,  
+            client_phone: client_phone.value,  
+            client_email: client_email.value,  
+            client_role: client_role.value,  
+            opponent_name: opponent_name.value,  
+            case_number: case_number.value,  
+            case_year: case_year.value,  
+            court_name: court_name.value,  
+            circle: circle.value,  
+            case_code: code,  
+            case_subject: case_subject.value,  
+            notes: notes.value
+        }]);  
+        
+        if (error) {
+            console.error("تفاصيل الخطأ:", error);
+            Swal.fire("خطأ", error.message, "error");  
+        } else {  
+            Swal.fire({  
+                title: "تم الحفظ",  
+                html: `كود القضية: <strong>${code}</strong>`,  
+                icon: "success"  
+            });  
+            caseForm.reset();  
+        }
+    } catch (err) {
+        console.error("خطأ غير متوقع:", err);
+        Swal.fire("خطأ", "حدث خطأ غير متوقع أثناء الحفظ", "error");
+    }
 };  
   
 // حفظ الجلسة  
 async function saveSession() {  
     if (!currentCaseId) return Swal.fire("تنبيه", "اختر قضية صحيحة أولاً", "warning");  
     if (!s_date.value) return Swal.fire("تنبيه", "أدخل تاريخ الجلسة", "warning");  
-    
-    // تحديث حالة القضية  
-    const { error: updateError } = await db  
-        .from('cases')  
-        .update({  
-            case_status: document.getElementById('s_case_status').value,  
-            updated_at: new Date().toISOString()  
-        })  
-        .eq('id', currentCaseId);  
-    
-    if (updateError) {  
-        return Swal.fire("خطأ", updateError.message, "error");  
-    }  
     
     // حفظ الجلسة  
     const { error } = await db.from('sessions').insert([{  
@@ -768,7 +765,7 @@ async function searchCases(){
         return Swal.fire("خطأ", "فشل البحث: " + error.message, "error");  
     }  
       
-    // جلب الجلسات لكل قضية  
+    // جلب الجلسات واخر حالة لكل قضية  
     if(data && data.length > 0) {  
         for(let caseItem of data) {  
             const { data: sessions } = await db  
@@ -777,6 +774,13 @@ async function searchCases(){
                 .eq('case_id', caseItem.id)  
                 .order('session_date', { ascending: false });  
             caseItem.sessions = sessions || [];  
+            
+            // الحصول على آخر حالة للقضية من آخر جلسة
+            if (sessions && sessions.length > 0) {
+                caseItem.last_case_status = sessions[0].case_status;
+            } else {
+                caseItem.last_case_status = 'جديدة';
+            }
         }  
     }  
       
@@ -891,7 +895,7 @@ function renderSearchResults(data, type) {
         });  
     } else {  
         data.forEach(item => {  
-            const statusClass = getStatusClass(item.case_status);  
+            const statusClass = getStatusClass(item.last_case_status);  
               
             html += `  
             <div class="case-card">  
@@ -901,7 +905,7 @@ function renderSearchResults(data, type) {
                         <div class="text-muted small">${item.court_name}</div>  
                     </div>  
                     <div class="d-flex align-items-center gap-2">  
-                        <span class="case-status ${statusClass}">${item.case_status || 'جديدة'}</span>  
+                        <span class="case-status ${statusClass}">${item.last_case_status || 'جديدة'}</span>  
                         <div class="btn-group btn-group-sm">  
                             <button class="btn btn-outline-warning" onclick="loadCaseForEdit('${item.id}')">  
                                 <i class="bi bi-pencil"></i>  
@@ -965,7 +969,13 @@ async function openCaseDetails(caseId) {
         .eq('case_id', caseId)  
         .order('session_date', { ascending: false });  
       
-    const statusClass = getStatusClass(caseData.case_status);  
+    // الحصول على آخر حالة للقضية من آخر جلسة
+    let lastCaseStatus = 'جديدة';
+    if (sessions && sessions.length > 0) {
+        lastCaseStatus = sessions[0].case_status || 'جديدة';
+    }
+    
+    const statusClass = getStatusClass(lastCaseStatus);  
       
     let detailsHTML = `  
         <div class="case-details">  
@@ -974,7 +984,7 @@ async function openCaseDetails(caseId) {
                     <h4 class="case-code">${caseData.case_code}</h4>  
                     <h5>${caseData.client_name} ضد ${caseData.opponent_name || 'غير محدد'}</h5>  
                 </div>  
-                <span class="case-status ${statusClass}">${caseData.case_status || 'جديدة'}</span>  
+                <span class="case-status ${statusClass}">${lastCaseStatus}</span>  
             </div>  
               
             <div class="row g-3">  
@@ -1077,7 +1087,8 @@ async function openCaseDetails(caseId) {
     // تخزين بيانات القضية للطباعة  
     window.currentCaseForPrint = {  
         ...caseData,  
-        sessions: sessions || []  
+        sessions: sessions || [],
+        case_status: lastCaseStatus  
     };  
       
     const caseModal = new bootstrap.Modal(document.getElementById('caseModal'));  
@@ -1108,7 +1119,6 @@ async function loadCaseForEdit(caseId) {
     document.getElementById('edit_circle').value = data.circle || '';  
     document.getElementById('edit_case_subject').value = data.case_subject || '';  
     document.getElementById('edit_notes').value = data.notes || '';  
-    document.getElementById('edit_case_status').value = data.case_status || 'جديدة';  
   
     // حفظ ID القضية للاستخدام لاحقاً  
     window.editingCaseId = caseId;  
@@ -1134,7 +1144,6 @@ async function updateCase() {
         circle: document.getElementById('edit_circle').value,  
         case_subject: document.getElementById('edit_case_subject').value,  
         notes: document.getElementById('edit_notes').value,  
-        case_status: document.getElementById('edit_case_status').value,  
         updated_at: new Date().toISOString()  
     };  
   
@@ -1281,23 +1290,6 @@ async function updateSession() {
     if (error) {  
         Swal.fire("خطأ", error.message, "error");  
     } else {  
-        // تحديث حالة القضية أيضاً  
-        const { data: sessionData } = await db  
-            .from('sessions')  
-            .select('case_id')  
-            .eq('id', window.editingSessionId)  
-            .single();  
-        
-        if (sessionData) {  
-            await db  
-                .from('cases')  
-                .update({  
-                    case_status: document.getElementById('edit_session_case_status').value,  
-                    updated_at: new Date().toISOString()  
-                })  
-                .eq('id', sessionData.case_id);  
-        }  
-          
         Swal.fire("تم", "تم تحديث الجلسة بنجاح", "success");  
         bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();  
           

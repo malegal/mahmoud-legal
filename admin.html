@@ -441,6 +441,16 @@ const db=supabase.createClient(SB_URL,SB_KEY);
 let currentCaseId = null;  
 let selectedCaseForCalendar = null;  
 let deferredPrompt = null;  
+
+// إلغاء تسجيل Service Workers لمنع مشاكل الاتصال
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+            registration.unregister();
+        }
+        console.log('تم إلغاء تسجيل Service Workers');
+    });
+}
   
 // PWA Setup  
 window.addEventListener('beforeinstallprompt', (e) => {  
@@ -482,49 +492,28 @@ const manifest = {
 document.getElementById('app-manifest').setAttribute('href',   
     'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest))  
 );  
-  
-// تسجيل Service Worker  
-if ('serviceWorker' in navigator) {  
-    window.addEventListener('load', () => {  
-        navigator.serviceWorker.register('/sw.js').catch(err => {  
-            console.log('Service Worker registration failed: ', err);  
-        });  
-    });  
-}  
-  
-// إنشاء Service Worker بسيط  
-const swCode = `  
-self.addEventListener('install', event => {  
-    self.skipWaiting();  
-});  
-  
-self.addEventListener('fetch', event => {  
-    event.respondWith(  
-        fetch(event.request).catch(() => {  
-            return new Response('You are offline');  
-        })  
-    );  
-});  
-  
-self.addEventListener('push', event => {  
-    const options = {  
-        body: event.data.text(),  
-        icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>',  
-        badge: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>',  
-        vibrate: [200, 100, 200],  
-        data: { url: '/' }  
-    };  
-      
-    event.waitUntil(  
-        self.registration.showNotification('إشعار جلسة', options)  
-    );  
-});  
-`;  
-  
-// حفظ Service Worker  
-const blob = new Blob([swCode], {type: 'application/javascript'});  
-const swUrl = URL.createObjectURL(blob);  
-  
+
+// اختبار اتصال Supabase
+async function testSupabaseConnection() {
+    try {
+        console.log('اختبار اتصال Supabase...');
+        const { data, error } = await db
+            .from('cases')
+            .select('count', { count: 'exact', head: true });
+        
+        if (error) {
+            console.error('خطأ في Supabase:', error);
+            return false;
+        }
+        
+        console.log('✅ اتصال Supabase ناجح!');
+        return true;
+    } catch (err) {
+        console.error('❌ خطأ في الاتصال:', err);
+        return false;
+    }
+}
+
 // الدوال الأساسية  
 function login(){  
     if(document.getElementById('password').value==="mahmoud237"){  
@@ -538,6 +527,7 @@ function login(){
         });  
         loadUpcoming('week');  
         requestNotificationPermission();  
+        testSupabaseConnection(); // اختبار الاتصال
     } else {  
         Swal.fire("خطأ","كلمة المرور غير صحيحة","error");  
     }  
@@ -557,84 +547,117 @@ async function searchCasesForSession(query) {
         return;  
     }  
   
-    const { data, error } = await db  
-        .from('cases')  
-        .select('*')  
-        .or(`case_code.ilike.%${query}%,case_number.ilike.%${query}%,client_name.ilike.%${query}%`)  
-        .limit(5);  
-  
-    if (data && data.length > 0) {  
-        const resultsDiv = document.getElementById('caseSearchResults');  
-        resultsDiv.innerHTML = data.map(caseItem => `  
-            <div class="case-card p-2 mb-1" onclick="selectCaseForSession('${caseItem.id}')">  
-                <div class="d-flex justify-content-between">  
-                    <strong>${caseItem.case_code}</strong>  
-                    <small>${caseItem.court_name}</small>  
+    try {
+        const { data, error } = await db  
+            .from('cases')  
+            .select('*')  
+            .or(`case_code.ilike.%${query}%,case_number.ilike.%${query}%,client_name.ilike.%${query}%`)  
+            .limit(5);  
+    
+        if (error) {
+            console.error('خطأ في البحث:', error);
+            return;
+        }
+        
+        if (data && data.length > 0) {  
+            const resultsDiv = document.getElementById('caseSearchResults');  
+            resultsDiv.innerHTML = data.map(caseItem => `  
+                <div class="case-card p-2 mb-1" onclick="selectCaseForSession('${caseItem.id}')">  
+                    <div class="d-flex justify-content-between">  
+                        <strong>${caseItem.case_code || 'بدون كود'}</strong>  
+                        <small>${caseItem.court_name}</small>  
+                    </div>  
+                    <div>${caseItem.client_name} - ${caseItem.case_number}/${caseItem.case_year}</div>  
                 </div>  
-                <div>${caseItem.client_name} - ${caseItem.case_number}/${caseItem.case_year}</div>  
-            </div>  
-        `).join('');  
+            `).join('');  
+            resultsDiv.style.display = 'block';  
+        } else {  
+            document.getElementById('caseSearchResults').innerHTML = '<div class="text-center p-2">لا توجد نتائج</div>';  
+            resultsDiv.style.display = 'block';  
+        }  
+    } catch (err) {
+        console.error('خطأ في البحث:', err);
+        document.getElementById('caseSearchResults').innerHTML = '<div class="text-center p-2 text-danger">خطأ في الاتصال</div>';  
         resultsDiv.style.display = 'block';  
-    } else {  
-        document.getElementById('caseSearchResults').style.display = 'none';  
-    }  
+    }
 }  
   
 async function selectCaseForSession(caseId) {  
-    const { data, error } = await db  
-        .from('cases')  
-        .select('*')  
-        .eq('id', caseId)  
-        .single();  
-  
-    if (data) {  
-        currentCaseId = data.id;  
-        selectedCaseForCalendar = data;  
-          
-        // تعبئة جميع بيانات القضية  
-        document.getElementById('s_case_number').value = data.case_number;  
-        document.getElementById('s_case_year').value = data.case_year;  
-        document.getElementById('s_court').value = data.court_name;  
-        document.getElementById('s_client').value = data.client_name;  
-        document.getElementById('s_client_phone').value = data.client_phone;  
-        document.getElementById('s_client_email').value = data.client_email || '';  
-        document.getElementById('s_opponent').value = data.opponent_name || '';  
-        document.getElementById('s_client_role').value = data.client_role;  
-        document.getElementById('s_notes').value = data.notes || '';  
-        document.getElementById('s_case_type').value = data.case_type || 'مدنية';  
-        
-        // الحصول على آخر حالة للقضية من الجلسات
-        const { data: lastSession } = await db
-            .from('sessions')
-            .select('case_status')
-            .eq('case_id', caseId)
-            .order('session_date', { ascending: false })
-            .limit(1);
-        
-        if (lastSession && lastSession.length > 0) {
-            document.getElementById('s_case_status').value = lastSession[0].case_status || 'جديدة';
-        } else {
-            document.getElementById('s_case_status').value = 'جديدة';
+    try {
+        const { data, error } = await db  
+            .from('cases')  
+            .select('*')  
+            .eq('id', caseId)  
+            .single();  
+    
+        if (error) {
+            Swal.fire("خطأ", "حدث خطأ في جلب بيانات القضية", "error");
+            return;
         }
-          
-        document.getElementById('caseSearchResults').style.display = 'none';  
-        document.getElementById('s_search').value = data.case_code;  
-        document.getElementById('calendarBtn').disabled = false;  
-          
-        // تعيين التاريخ الافتراضي للجلسة (بعد 7 أيام من اليوم)  
-        const nextWeek = new Date();  
-        nextWeek.setDate(nextWeek.getDate() + 7);  
-        const localDateTime = nextWeek.toISOString().slice(0, 16);  
-        document.getElementById('s_date').value = localDateTime;  
-    }  
+        
+        if (data) {  
+            currentCaseId = data.id;  
+            selectedCaseForCalendar = data;  
+              
+            // تعبئة جميع بيانات القضية  
+            document.getElementById('s_case_number').value = data.case_number;  
+            document.getElementById('s_case_year').value = data.case_year;  
+            document.getElementById('s_court').value = data.court_name;  
+            document.getElementById('s_client').value = data.client_name;  
+            document.getElementById('s_client_phone').value = data.client_phone;  
+            document.getElementById('s_client_email').value = data.client_email || '';  
+            document.getElementById('s_opponent').value = data.opponent_name || '';  
+            document.getElementById('s_client_role').value = data.client_role;  
+            document.getElementById('s_notes').value = data.notes || '';  
+            document.getElementById('s_case_type').value = data.case_type || 'مدنية';  
+            
+            // الحصول على آخر حالة للقضية من الجلسات
+            const { data: lastSession } = await db
+                .from('sessions')
+                .select('case_status')
+                .eq('case_id', caseId)
+                .order('session_date', { ascending: false })
+                .limit(1);
+            
+            if (lastSession && lastSession.length > 0) {
+                document.getElementById('s_case_status').value = lastSession[0].case_status || 'جديدة';
+            } else {
+                document.getElementById('s_case_status').value = 'جديدة';
+            }
+              
+            document.getElementById('caseSearchResults').style.display = 'none';  
+            document.getElementById('s_search').value = data.case_code || `${data.case_number}/${data.case_year}`;  
+            document.getElementById('calendarBtn').disabled = false;  
+              
+            // تعيين التاريخ الافتراضي للجلسة (بعد 7 أيام من اليوم)  
+            const nextWeek = new Date();  
+            nextWeek.setDate(nextWeek.getDate() + 7);  
+            const localDateTime = nextWeek.toISOString().slice(0, 16);  
+            document.getElementById('s_date').value = localDateTime;  
+        }  
+    } catch (err) {
+        console.error('خطأ في جلب القضية:', err);
+        Swal.fire("خطأ", "حدث خطأ في جلب بيانات القضية", "error");
+    }
 }  
   
-// حفظ القضية - قاعدة البيانات تنتج الكود
+// حفظ القضية
 caseForm.onsubmit = async e => {  
     e.preventDefault();  
-    Swal.fire({ title: 'جاري الحفظ...', didOpen: () => Swal.showLoading() });  
+    Swal.fire({ 
+        title: 'جاري الحفظ...', 
+        didOpen: () => Swal.showLoading(),
+        allowOutsideClick: false 
+    });  
     
     try {
+        // تحقق من أن جميع الحقول المطلوبة مملوءة
+        if (!client_name.value || !client_phone.value || !client_role.value || 
+            !case_number.value || !case_year.value || !court_name.value || !case_type.value) {
+            Swal.fire("خطأ", "يرجى ملء جميع الحقول المطلوبة", "error");
+            return;
+        }
+        
         const caseData = {
             client_name: client_name.value,  
             client_phone: client_phone.value,  
@@ -647,50 +670,115 @@ caseForm.onsubmit = async e => {
             circle: circle.value,  
             case_type: case_type.value,
             case_subject: case_subject.value,  
-            notes: notes.value
-            // ملاحظة: لم نضف case_code - قاعدة البيانات تولده تلقائياً
+            notes: notes.value,
+            created_at: new Date().toISOString()
         };
         
-        // إرسال البيانات والحصول على البيانات المعادة (بما فيها الكود الذي ولدته قاعدة البيانات)
-        const { data, error } = await db.from('cases').insert([caseData]).select();  
+        console.log('بيانات القضية المرسلة:', caseData);
+        
+        // إرسال البيانات
+        const { data, error } = await db
+            .from('cases')
+            .insert([caseData])
+            .select()
+            .single();
         
         if (error) {
             console.error("تفاصيل الخطأ:", error);
-            Swal.fire("خطأ", error.message, "error");  
-        } else {  
-            const savedCase = data[0]; // تحتوي على كود القضية الذي ولدته قاعدة البيانات
-            Swal.fire({  
-                title: "تم الحفظ",  
-                html: `كود القضية: <strong>${savedCase.case_code}</strong>`,  
-                icon: "success"  
-            });  
-            caseForm.reset();  
+            
+            // محاولة بديلة إذا فشلت المحاولة الأولى
+            if (error.code === '23505') { // كود مكرر
+                Swal.fire("خطأ", "رقم القضية موجود مسبقاً", "error");
+            } else {
+                // محاولة مرة أخرى بدون .single()
+                const { data: retryData, error: retryError } = await db
+                    .from('cases')
+                    .insert([caseData])
+                    .select();
+                
+                if (retryError) {
+                    Swal.fire("خطأ", retryError.message, "error");  
+                } else if (retryData && retryData.length > 0) {
+                    const savedCase = retryData[0];
+                    showSuccessMessage(savedCase);
+                }
+            }
+        } else if (data) {  
+            showSuccessMessage(data);
+        } else {
+            Swal.fire("خطأ", "لم يتم حفظ القضية، يرجى المحاولة مرة أخرى", "error");
         }
     } catch (err) {
         console.error("خطأ غير متوقع:", err);
         Swal.fire("خطأ", "حدث خطأ غير متوقع أثناء الحفظ", "error");
     }
-};  
+};
+
+// دالة لعرض رسالة النجاح
+function showSuccessMessage(savedCase) {
+    Swal.fire({  
+        title: "تم الحفظ بنجاح",  
+        html: `<div class="text-center">
+                  <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+                  <h4 class="mt-3">تم تسجيل القضية</h4>
+                  <p class="case-code mt-2">${savedCase.case_code || `${savedCase.case_number}/${savedCase.case_year}`}</p>
+                  <small class="text-muted">يمكنك الآن تسجيل جلسات للقضية</small>
+               </div>`,  
+        icon: "success",
+        confirmButtonText: "تم"
+    });  
+    caseForm.reset();  
+    document.getElementById('caseCodeResult').innerHTML = `
+        <div class="alert alert-success">
+            <strong>كود القضية:</strong> ${savedCase.case_code || `${savedCase.case_number}/${savedCase.case_year}`}
+        </div>
+    `;
+}
   
 // حفظ الجلسة  
 async function saveSession() {  
     if (!currentCaseId) return Swal.fire("تنبيه", "اختر قضية صحيحة أولاً", "warning");  
     if (!s_date.value) return Swal.fire("تنبيه", "أدخل تاريخ الجلسة", "warning");  
     
-    // حفظ الجلسة  
-    const { error } = await db.from('sessions').insert([{  
-        case_id: currentCaseId,  
-        session_date: s_date.value,  
-        decision: s_decision.value,  
-        case_status: document.getElementById('s_case_status').value  
-    }]);  
+    Swal.fire({ title: 'جاري حفظ الجلسة...', didOpen: () => Swal.showLoading() });
     
-    if (error) Swal.fire("خطأ", error.message, "error");  
-    else {  
-        Swal.fire("تم الحفظ", "", "success");  
-        loadUpcoming('week');  
-        sendNotification('تم تسجيل جلسة جديدة', 'تم إضافة جلسة جديدة إلى القضية');  
-    }  
+    try {
+        // حفظ الجلسة  
+        const { data, error } = await db.from('sessions').insert([{  
+            case_id: currentCaseId,  
+            session_date: s_date.value,  
+            decision: s_decision.value,  
+            case_status: document.getElementById('s_case_status').value,
+            created_at: new Date().toISOString()
+        }]).select();  
+        
+        if (error) {
+            console.error('خطأ في حفظ الجلسة:', error);
+            Swal.fire("خطأ", error.message, "error");  
+        } else {  
+            Swal.fire({
+                title: "تم الحفظ بنجاح",
+                text: "تم إضافة الجلسة إلى القضية",
+                icon: "success",
+                timer: 2000
+            });  
+            loadUpcoming('week');  
+            sendNotification('تم تسجيل جلسة جديدة', 'تم إضافة جلسة جديدة إلى القضية');  
+            
+            // مسح الحقول
+            document.getElementById('s_decision').value = '';
+            document.getElementById('s_case_status').value = 'جديدة';
+            
+            // تعيين تاريخ جديد بعد 7 أيام
+            const nextWeek = new Date();  
+            nextWeek.setDate(nextWeek.getDate() + 7);  
+            const localDateTime = nextWeek.toISOString().slice(0, 16);  
+            document.getElementById('s_date').value = localDateTime;  
+        }  
+    } catch (err) {
+        console.error('خطأ غير متوقع في حفظ الجلسة:', err);
+        Swal.fire("خطأ", "حدث خطأ غير متوقع أثناء حفظ الجلسة", "error");
+    }
 }  
   
 // إضافة إلى تقويم Google  
@@ -710,10 +798,10 @@ function addToGoogleCalendar() {
     // إضافة ساعة واحدة للمدة  
     const endDateTime = new Date(sessionDateTime.getTime() + 60 * 60 * 1000);  
       
-    const title = `جلسة قضية: ${selectedCaseForCalendar.client_name} ضد ${selectedCaseForCalendar.opponent_name}`;  
+    const title = `جلسة قضية: ${selectedCaseForCalendar.client_name} ضد ${selectedCaseForCalendar.opponent_name || 'الخصم'}`;  
     const description = `  
 القضية: ${selectedCaseForCalendar.case_number}/${selectedCaseForCalendar.case_year}  
-كود القضية: ${selectedCaseForCalendar.case_code}  
+كود القضية: ${selectedCaseForCalendar.case_code || 'بدون كود'}  
 المحكمة: ${selectedCaseForCalendar.court_name}  
 نوع القضية: ${selectedCaseForCalendar.case_type || 'مدنية'}  
 القرار: ${s_decision.value || 'لم يتم تحديد قرار'}  
@@ -757,33 +845,38 @@ async function searchByDateRange() {
       
     Swal.fire({title: 'جاري البحث...', didOpen: () => Swal.showLoading()});  
       
-    // البحث في الجلسات في النطاق الزمني  
-    const { data: sessions, error } = await db  
-        .from('sessions')  
-        .select('*')  
-        .gte('session_date', from)  
-        .lte('session_date', to)  
-        .order('session_date', { ascending: false });  
-      
-    if (error) {  
-        Swal.close();  
-        return Swal.fire("خطأ", "فشل البحث: " + error.message, "error");  
-    }  
-      
-    // جلب بيانات القضايا لكل جلسة  
-    if (sessions && sessions.length > 0) {  
-        for (let session of sessions) {  
-            const { data: caseData } = await db  
-                .from('cases')  
-                .select('*')  
-                .eq('id', session.case_id)  
-                .single();  
-            session.cases = caseData || {};  
+    try {
+        // البحث في الجلسات في النطاق الزمني  
+        const { data: sessions, error } = await db  
+            .from('sessions')  
+            .select('*')  
+            .gte('session_date', from)  
+            .lte('session_date', to)  
+            .order('session_date', { ascending: false });  
+          
+        if (error) {  
+            Swal.close();  
+            return Swal.fire("خطأ", "فشل البحث: " + error.message, "error");  
         }  
-    }  
-      
-    Swal.close();  
-    renderSearchResults(sessions, "sessions");  
+          
+        // جلب بيانات القضايا لكل جلسة  
+        if (sessions && sessions.length > 0) {  
+            for (let session of sessions) {  
+                const { data: caseData } = await db  
+                    .from('cases')  
+                    .select('*')  
+                    .eq('id', session.case_id)  
+                    .single();  
+                session.cases = caseData || {};  
+            }  
+        }  
+          
+        Swal.close();  
+        renderSearchResults(sessions, "sessions");  
+    } catch (err) {
+        Swal.close();
+        Swal.fire("خطأ", "حدث خطأ أثناء البحث: " + err.message, "error");
+    }
 }  
   
 // البحث العام  
@@ -793,36 +886,41 @@ async function searchCases(){
       
     Swal.fire({title: 'جاري البحث...', didOpen: () => Swal.showLoading()});  
       
-    const { data, error } = await db  
-        .from('cases')  
-        .select('*')  
-        .or(`case_number.ilike.%${t}%,client_name.ilike.%${t}%,client_phone.ilike.%${t}%,case_code.ilike.%${t}%,client_email.ilike.%${t}%`);  
-      
-    Swal.close();  
-    if(error) {  
-        return Swal.fire("خطأ", "فشل البحث: " + error.message, "error");  
-    }  
-      
-    // جلب الجلسات واخر حالة لكل قضية  
-    if(data && data.length > 0) {  
-        for(let caseItem of data) {  
-            const { data: sessions } = await db  
-                .from('sessions')  
-                .select('*')  
-                .eq('case_id', caseItem.id)  
-                .order('session_date', { ascending: false });  
-            caseItem.sessions = sessions || [];  
-            
-            // الحصول على آخر حالة للقضية من آخر جلسة
-            if (sessions && sessions.length > 0) {
-                caseItem.last_case_status = sessions[0].case_status;
-            } else {
-                caseItem.last_case_status = 'جديدة';
-            }
+    try {
+        const { data, error } = await db  
+            .from('cases')  
+            .select('*')  
+            .or(`case_number.ilike.%${t}%,client_name.ilike.%${t}%,client_phone.ilike.%${t}%,case_code.ilike.%${t}%,client_email.ilike.%${t}%`);  
+          
+        Swal.close();  
+        if(error) {  
+            return Swal.fire("خطأ", "فشل البحث: " + error.message, "error");  
         }  
-    }  
-      
-    renderSearchResults(data, "cases");  
+          
+        // جلب الجلسات واخر حالة لكل قضية  
+        if(data && data.length > 0) {  
+            for(let caseItem of data) {  
+                const { data: sessions } = await db  
+                    .from('sessions')  
+                    .select('*')  
+                    .eq('case_id', caseItem.id)  
+                    .order('session_date', { ascending: false });  
+                caseItem.sessions = sessions || [];  
+                
+                // الحصول على آخر حالة للقضية من آخر جلسة
+                if (sessions && sessions.length > 0) {
+                    caseItem.last_case_status = sessions[0].case_status;
+                } else {
+                    caseItem.last_case_status = 'جديدة';
+                }
+            }  
+        }  
+          
+        renderSearchResults(data, "cases");  
+    } catch (err) {
+        Swal.close();
+        Swal.fire("خطأ", "حدث خطأ أثناء البحث: " + err.message, "error");
+    }
 }  
   
 async function searchByPhone(){  
@@ -854,30 +952,35 @@ async function filterSessions(range){
       
     const endDateStr = endDate.toISOString().split('T')[0];  
       
-    const { data, error } = await db  
-        .from('sessions')  
-        .select('*')  
-        .gte('session_date', startDate)  
-        .lte('session_date', endDateStr)  
-        .order('session_date', { ascending: true });  
-      
-    Swal.close();  
-    if(error) {  
-        return Swal.fire("خطأ", "فشل جلب الجلسات: " + error.message, "error");  
-    }  
-      
-    if(data && data.length > 0) {  
-        for(let session of data) {  
-            const { data: caseData } = await db  
-                .from('cases')  
-                .select('*')  
-                .eq('id', session.case_id)  
-                .single();  
-            session.cases = caseData || {};  
+    try {
+        const { data, error } = await db  
+            .from('sessions')  
+            .select('*')  
+            .gte('session_date', startDate)  
+            .lte('session_date', endDateStr)  
+            .order('session_date', { ascending: true });  
+          
+        Swal.close();  
+        if(error) {  
+            return Swal.fire("خطأ", "فشل جلب الجلسات: " + error.message, "error");  
         }  
-    }  
-      
-    renderSearchResults(data, "sessions");  
+          
+        if(data && data.length > 0) {  
+            for(let session of data) {  
+                const { data: caseData } = await db  
+                    .from('cases')  
+                    .select('*')  
+                    .eq('id', session.case_id)  
+                    .single();  
+                session.cases = caseData || {};  
+            }  
+        }  
+          
+        renderSearchResults(data, "sessions");  
+    } catch (err) {
+        Swal.close();
+        Swal.fire("خطأ", "حدث خطأ أثناء جلب الجلسات: " + err.message, "error");
+    }
 }  
   
 // عرض النتائج في بطاقات  
@@ -924,7 +1027,7 @@ function renderSearchResults(data, type) {
                     </div>  
                 </div>  
                 <div class="mt-2">  
-                    <div><strong>كود القضية:</strong> ${caseData.case_code || 'مولود من النظام'}</div>  
+                    <div><strong>كود القضية:</strong> ${caseData.case_code || 'بدون كود'}</div>  
                     <div><strong>العميل:</strong> ${caseData.client_name}</div>  
                     <div><strong>الخصم:</strong> ${caseData.opponent_name || 'غير محدد'}</div>  
                     <div><strong>القضية:</strong> ${caseData.case_number}/${caseData.case_year}</div>  
@@ -941,7 +1044,7 @@ function renderSearchResults(data, type) {
             <div class="case-card">  
                 <div class="d-flex justify-content-between align-items-start">  
                     <div onclick="openCaseDetails('${item.id}')" style="cursor:pointer; flex-grow:1;">  
-                        <b class="case-code">${item.case_code || 'مولود من النظام'}</b>  
+                        <b class="case-code">${item.case_code || 'بدون كود'}</b>  
                         <div class="text-muted small">${item.court_name}</div>  
                     </div>  
                     <div class="d-flex align-items-center gap-2">  
@@ -994,183 +1097,191 @@ function getStatusClass(status) {
   
 // فتح تفاصيل القضية  
 async function openCaseDetails(caseId) {  
-    const { data: caseData, error } = await db  
-        .from('cases')  
-        .select('*')  
-        .eq('id', caseId)  
-        .single();  
-      
-    if (error || !caseData) {  
-        return Swal.fire("خطأ", "لم يتم العثور على القضية", "error");  
-    }  
-      
-    const { data: sessions } = await db  
-        .from('sessions')  
-        .select('*')  
-        .eq('case_id', caseId)  
-        .order('session_date', { ascending: false });  
-      
-    // الحصول على آخر حالة للقضية من آخر جلسة
-    let lastCaseStatus = 'جديدة';
-    if (sessions && sessions.length > 0) {
-        lastCaseStatus = sessions[0].case_status || 'جديدة';
-    }
-    
-    const statusClass = getStatusClass(lastCaseStatus);  
-      
-    let detailsHTML = `  
-        <div class="case-details">  
-            <div class="d-flex justify-content-between align-items-start mb-3">  
-                <div>  
-                    <h4 class="case-code">${caseData.case_code || 'مولود من النظام'}</h4>  
-                    <h5>${caseData.client_name} ضد ${caseData.opponent_name || 'غير محدد'}</h5>  
-                </div>  
-                <span class="case-status ${statusClass}">${lastCaseStatus}</span>  
-            </div>  
-              
-            <div class="row g-3">  
-                <div class="col-md-6">  
-                    <strong>رقم القضية:</strong> ${caseData.case_number}  
-                </div>  
-                <div class="col-md-6">  
-                    <strong>سنة القضية:</strong> ${caseData.case_year}  
-                </div>  
-                <div class="col-md-6">  
-                    <strong>المحكمة:</strong> ${caseData.court_name}  
-                </div>  
-                <div class="col-md-6">  
-                    <strong>الدائرة:</strong> ${caseData.circle || 'غير محدد'}  
-                </div>  
-                <div class="col-md-6">  
-                    <strong>نوع القضية:</strong> ${caseData.case_type || 'مدنية'}  
-                </div>  
-                <div class="col-md-6">  
-                    <strong>صفة العميل:</strong> ${caseData.client_role}  
-                </div>  
-                <div class="col-md-6">  
-                    <strong>هاتف العميل:</strong> ${caseData.client_phone}  
-                </div>  
-                <div class="col-md-6">  
-                    <strong>إيميل العميل:</strong> ${caseData.client_email || 'غير محدد'}  
-                </div>  
-            </div>  
-              
-            ${caseData.case_subject ? `  
-            <div class="mt-3">  
-                <strong>موضوع القضية:</strong>  
-                <p class="border p-2 rounded bg-light">${caseData.case_subject}</p>  
-            </div>  
-            ` : ''}  
-              
-            ${caseData.notes ? `  
-            <div class="mt-3">  
-                <strong>ملاحظات:</strong>  
-                <p class="border p-2 rounded bg-light">${caseData.notes}</p>  
-            </div>  
-            ` : ''}  
-              
-            <div class="mt-4">  
-                <h6>الجلسات المسجلة (${sessions ? sessions.length : 0})</h6>  
-                <div class="sessions-list" style="max-height: 300px; overflow-y: auto;">  
-    `;  
-      
-    if (sessions && sessions.length > 0) {  
-        sessions.forEach(session => {  
-            const sessionDate = new Date(session.session_date);  
-            const formattedDate = sessionDate.toLocaleDateString('ar-EG', {  
-                weekday: 'long',  
-                year: 'numeric',  
-                month: 'long',  
-                day: 'numeric',  
-                hour: '2-digit',  
-                minute: '2-digit'  
-            });  
-              
-            const sessionStatusClass = getStatusClass(session.case_status);  
-              
-            detailsHTML += `  
-                <div class="session-card mb-2">  
-                    <div class="d-flex justify-content-between">  
-                        <div>  
-                            <strong>${formattedDate}</strong>  
-                            <span class="case-status ${sessionStatusClass} ms-2">${session.case_status || 'جديدة'}</span>  
-                        </div>  
-                        <div class="btn-group btn-group-sm">  
-                            <button class="btn btn-outline-warning" onclick="loadSessionForEdit('${session.id}')">  
-                                <i class="bi bi-pencil"></i>  
-                            </button>  
-                            <button class="btn btn-outline-danger" onclick="deleteSessionFromDetails('${session.id}', '${caseData.id}')">  
-                                <i class="bi bi-trash"></i>  
-                            </button>  
-                        </div>  
+    try {
+        const { data: caseData, error } = await db  
+            .from('cases')  
+            .select('*')  
+            .eq('id', caseId)  
+            .single();  
+          
+        if (error || !caseData) {  
+            return Swal.fire("خطأ", "لم يتم العثور على القضية", "error");  
+        }  
+          
+        const { data: sessions } = await db  
+            .from('sessions')  
+            .select('*')  
+            .eq('case_id', caseId)  
+            .order('session_date', { ascending: false });  
+          
+        // الحصول على آخر حالة للقضية من آخر جلسة
+        let lastCaseStatus = 'جديدة';
+        if (sessions && sessions.length > 0) {
+            lastCaseStatus = sessions[0].case_status || 'جديدة';
+        }
+        
+        const statusClass = getStatusClass(lastCaseStatus);  
+          
+        let detailsHTML = `  
+            <div class="case-details">  
+                <div class="d-flex justify-content-between align-items-start mb-3">  
+                    <div>  
+                        <h4 class="case-code">${caseData.case_code || 'بدون كود'}</h4>  
+                        <h5>${caseData.client_name} ضد ${caseData.opponent_name || 'غير محدد'}</h5>  
                     </div>  
-                    ${session.decision ? `<div class="mt-1"><strong>القرار:</strong> ${session.decision}</div>` : ''}  
+                    <span class="case-status ${statusClass}">${lastCaseStatus}</span>  
                 </div>  
-            `;  
-        });  
-    } else {  
-        detailsHTML += '<div class="alert alert-info">لا توجد جلسات مسجلة</div>';  
-    }  
-      
-    detailsHTML += `  
+                  
+                <div class="row g-3">  
+                    <div class="col-md-6">  
+                        <strong>رقم القضية:</strong> ${caseData.case_number}  
+                    </div>  
+                    <div class="col-md-6">  
+                        <strong>سنة القضية:</strong> ${caseData.case_year}  
+                    </div>  
+                    <div class="col-md-6">  
+                        <strong>المحكمة:</strong> ${caseData.court_name}  
+                    </div>  
+                    <div class="col-md-6">  
+                        <strong>الدائرة:</strong> ${caseData.circle || 'غير محدد'}  
+                    </div>  
+                    <div class="col-md-6">  
+                        <strong>نوع القضية:</strong> ${caseData.case_type || 'مدنية'}  
+                    </div>  
+                    <div class="col-md-6">  
+                        <strong>صفة العميل:</strong> ${caseData.client_role}  
+                    </div>  
+                    <div class="col-md-6">  
+                        <strong>هاتف العميل:</strong> ${caseData.client_phone}  
+                    </div>  
+                    <div class="col-md-6">  
+                        <strong>إيميل العميل:</strong> ${caseData.client_email || 'غير محدد'}  
+                    </div>  
+                </div>  
+                  
+                ${caseData.case_subject ? `  
+                <div class="mt-3">  
+                    <strong>موضوع القضية:</strong>  
+                    <p class="border p-2 rounded bg-light">${caseData.case_subject}</p>  
+                </div>  
+                ` : ''}  
+                  
+                ${caseData.notes ? `  
+                <div class="mt-3">  
+                    <strong>ملاحظات:</strong>  
+                    <p class="border p-2 rounded bg-light">${caseData.notes}</p>  
+                </div>  
+                ` : ''}  
+                  
+                <div class="mt-4">  
+                    <h6>الجلسات المسجلة (${sessions ? sessions.length : 0})</h6>  
+                    <div class="sessions-list" style="max-height: 300px; overflow-y: auto;">  
+        `;  
+          
+        if (sessions && sessions.length > 0) {  
+            sessions.forEach(session => {  
+                const sessionDate = new Date(session.session_date);  
+                const formattedDate = sessionDate.toLocaleDateString('ar-EG', {  
+                    weekday: 'long',  
+                    year: 'numeric',  
+                    month: 'long',  
+                    day: 'numeric',  
+                    hour: '2-digit',  
+                    minute: '2-digit'  
+                });  
+                  
+                const sessionStatusClass = getStatusClass(session.case_status);  
+                  
+                detailsHTML += `  
+                    <div class="session-card mb-2">  
+                        <div class="d-flex justify-content-between">  
+                            <div>  
+                                <strong>${formattedDate}</strong>  
+                                <span class="case-status ${sessionStatusClass} ms-2">${session.case_status || 'جديدة'}</span>  
+                            </div>  
+                            <div class="btn-group btn-group-sm">  
+                                <button class="btn btn-outline-warning" onclick="loadSessionForEdit('${session.id}')">  
+                                    <i class="bi bi-pencil"></i>  
+                                </button>  
+                                <button class="btn btn-outline-danger" onclick="deleteSessionFromDetails('${session.id}', '${caseData.id}')">  
+                                    <i class="bi bi-trash"></i>  
+                                </button>  
+                            </div>  
+                        </div>  
+                        ${session.decision ? `<div class="mt-1"><strong>القرار:</strong> ${session.decision}</div>` : ''}  
+                    </div>  
+                `;  
+            });  
+        } else {  
+            detailsHTML += '<div class="alert alert-info">لا توجد جلسات مسجلة</div>';  
+        }  
+          
+        detailsHTML += `  
+                    </div>  
+                </div>  
+                <div class="mt-4 d-flex gap-2">  
+                    <button class="btn btn-warning" onclick="loadCaseForEdit('${caseData.id}')">  
+                        <i class="bi bi-pencil"></i> تعديل القضية  
+                    </button>  
+                    <button class="btn btn-danger" onclick="confirmDeleteCaseFromDetails('${caseData.id}')">  
+                        <i class="bi bi-trash"></i> حذف القضية  
+                    </button>  
                 </div>  
             </div>  
-            <div class="mt-4 d-flex gap-2">  
-                <button class="btn btn-warning" onclick="loadCaseForEdit('${caseData.id}')">  
-                    <i class="bi bi-pencil"></i> تعديل القضية  
-                </button>  
-                <button class="btn btn-danger" onclick="confirmDeleteCaseFromDetails('${caseData.id}')">  
-                    <i class="bi bi-trash"></i> حذف القضية  
-                </button>  
-            </div>  
-        </div>  
-    `;  
-      
-    document.getElementById('caseDetails').innerHTML = detailsHTML;  
-      
-    // تخزين بيانات القضية للطباعة  
-    window.currentCaseForPrint = {  
-        ...caseData,  
-        sessions: sessions || [],
-        case_status: lastCaseStatus  
-    };  
-      
-    const caseModal = new bootstrap.Modal(document.getElementById('caseModal'));  
-    caseModal.show();  
+        `;  
+          
+        document.getElementById('caseDetails').innerHTML = detailsHTML;  
+          
+        // تخزين بيانات القضية للطباعة  
+        window.currentCaseForPrint = {  
+            ...caseData,  
+            sessions: sessions || [],
+            case_status: lastCaseStatus  
+        };  
+          
+        const caseModal = new bootstrap.Modal(document.getElementById('caseModal'));  
+        caseModal.show();  
+    } catch (err) {
+        Swal.fire("خطأ", "حدث خطأ في جلب تفاصيل القضية", "error");
+    }
 }  
   
 // تحميل القضية للتعديل  
 async function loadCaseForEdit(caseId) {  
-    const { data, error } = await db  
-        .from('cases')  
-        .select('*')  
-        .eq('id', caseId)  
-        .single();  
-  
-    if (error || !data) {  
-        return Swal.fire("خطأ", "لم يتم العثور على القضية", "error");  
-    }  
-  
-    // تعبئة الحقول  
-    document.getElementById('edit_client_name').value = data.client_name;  
-    document.getElementById('edit_client_phone').value = data.client_phone;  
-    document.getElementById('edit_client_email').value = data.client_email || '';  
-    document.getElementById('edit_client_role').value = data.client_role;  
-    document.getElementById('edit_opponent_name').value = data.opponent_name || '';  
-    document.getElementById('edit_case_number').value = data.case_number;  
-    document.getElementById('edit_case_year').value = data.case_year;  
-    document.getElementById('edit_court_name').value = data.court_name;  
-    document.getElementById('edit_circle').value = data.circle || '';  
-    document.getElementById('edit_case_type').value = data.case_type || 'مدنية';  
-    document.getElementById('edit_case_subject').value = data.case_subject || '';  
-    document.getElementById('edit_notes').value = data.notes || '';  
-  
-    // حفظ ID القضية للاستخدام لاحقاً  
-    window.editingCaseId = caseId;  
-  
-    // عرض المودال  
-    const editModal = new bootstrap.Modal(document.getElementById('editCaseModal'));  
-    editModal.show();  
+    try {
+        const { data, error } = await db  
+            .from('cases')  
+            .select('*')  
+            .eq('id', caseId)  
+            .single();  
+    
+        if (error || !data) {  
+            return Swal.fire("خطأ", "لم يتم العثور على القضية", "error");  
+        }  
+    
+        // تعبئة الحقول  
+        document.getElementById('edit_client_name').value = data.client_name;  
+        document.getElementById('edit_client_phone').value = data.client_phone;  
+        document.getElementById('edit_client_email').value = data.client_email || '';  
+        document.getElementById('edit_client_role').value = data.client_role;  
+        document.getElementById('edit_opponent_name').value = data.opponent_name || '';  
+        document.getElementById('edit_case_number').value = data.case_number;  
+        document.getElementById('edit_case_year').value = data.case_year;  
+        document.getElementById('edit_court_name').value = data.court_name;  
+        document.getElementById('edit_circle').value = data.circle || '';  
+        document.getElementById('edit_case_type').value = data.case_type || 'مدنية';  
+        document.getElementById('edit_case_subject').value = data.case_subject || '';  
+        document.getElementById('edit_notes').value = data.notes || '';  
+    
+        // حفظ ID القضية للاستخدام لاحقاً  
+        window.editingCaseId = caseId;  
+    
+        // عرض المودال  
+        const editModal = new bootstrap.Modal(document.getElementById('editCaseModal'));  
+        editModal.show();  
+    } catch (err) {
+        Swal.fire("خطأ", "حدث خطأ في تحميل القضية للتعديل", "error");
+    }
 }  
   
 // تحديث القضية  
@@ -1193,22 +1304,26 @@ async function updateCase() {
         updated_at: new Date().toISOString()  
     };  
 
-    const { error } = await db  
-        .from('cases')  
-        .update(updatedData)  
-        .eq('id', window.editingCaseId);  
-
-    if (error) {  
-        Swal.fire("خطأ", error.message, "error");  
-    } else {  
-        Swal.fire("تم", "تم تحديث القضية بنجاح", "success");  
-        bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();  
-          
-        // إعادة تحميل البيانات إذا كان في نتائج البحث  
-        if (searchInput.value) {  
-            searchCases();  
+    try {
+        const { error } = await db  
+            .from('cases')  
+            .update(updatedData)  
+            .eq('id', window.editingCaseId);  
+    
+        if (error) {  
+            Swal.fire("خطأ", error.message, "error");  
+        } else {  
+            Swal.fire("تم", "تم تحديث القضية بنجاح", "success");  
+            bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();  
+              
+            // إعادة تحميل البيانات إذا كان في نتائج البحث  
+            if (searchInput.value) {  
+                searchCases();  
+            }  
         }  
-    }  
+    } catch (err) {
+        Swal.fire("خطأ", "حدث خطأ أثناء تحديث القضية", "error");
+    }
 }  
   
 // تأكيد حذف القضية  
@@ -1233,23 +1348,29 @@ function confirmDeleteCase() {
   
 // حذف القضية  
 async function deleteCase(caseId) {  
-    // حذف الجلسات أولاً  
-    await db.from('sessions').delete().eq('case_id', caseId);  
-      
-    // حذف القضية  
-    const { error } = await db.from('cases').delete().eq('id', caseId);  
-      
-    if (error) {  
-        Swal.fire("خطأ", error.message, "error");  
-    } else {  
-        Swal.fire("تم", "تم حذف القضية بنجاح", "success");  
-        bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();  
+    Swal.fire({ title: 'جاري الحذف...', didOpen: () => Swal.showLoading() });
+    
+    try {
+        // حذف الجلسات أولاً  
+        await db.from('sessions').delete().eq('case_id', caseId);  
           
-        // إعادة تحميل البيانات  
-        if (searchInput.value) {  
-            searchCases();  
+        // حذف القضية  
+        const { error } = await db.from('cases').delete().eq('id', caseId);  
+          
+        if (error) {  
+            Swal.fire("خطأ", error.message, "error");  
+        } else {  
+            Swal.fire("تم", "تم حذف القضية بنجاح", "success");  
+            bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();  
+              
+            // إعادة تحميل البيانات  
+            if (searchInput.value) {  
+                searchCases();  
+            }  
         }  
-    }  
+    } catch (err) {
+        Swal.fire("خطأ", "حدث خطأ أثناء حذف القضية", "error");
+    }
 }  
   
 // تأكيد حذف القضية من تفاصيل القضية  
@@ -1292,29 +1413,33 @@ function confirmDeleteCaseFromSearch(caseId) {
   
 // تحميل الجلسة للتعديل  
 async function loadSessionForEdit(sessionId) {  
-    const { data, error } = await db  
-        .from('sessions')  
-        .select('*')  
-        .eq('id', sessionId)  
-        .single();  
-  
-    if (error || !data) {  
-        return Swal.fire("خطأ", "لم يتم العثور على الجلسة", "error");  
-    }  
-  
-    // تعبئة الحقول  
-    const sessionDate = new Date(data.session_date);  
-    const localDateTime = sessionDate.toISOString().slice(0, 16);  
-    document.getElementById('edit_session_date').value = localDateTime;  
-    document.getElementById('edit_decision').value = data.decision || '';  
-    document.getElementById('edit_session_case_status').value = data.case_status || 'جديدة';  
-  
-    // حفظ ID الجلسة للاستخدام لاحقاً  
-    window.editingSessionId = sessionId;  
-  
-    // عرض المودال  
-    const editModal = new bootstrap.Modal(document.getElementById('editSessionModal'));  
-    editModal.show();  
+    try {
+        const { data, error } = await db  
+            .from('sessions')  
+            .select('*')  
+            .eq('id', sessionId)  
+            .single();  
+    
+        if (error || !data) {  
+            return Swal.fire("خطأ", "لم يتم العثور على الجلسة", "error");  
+        }  
+    
+        // تعبئة الحقول  
+        const sessionDate = new Date(data.session_date);  
+        const localDateTime = sessionDate.toISOString().slice(0, 16);  
+        document.getElementById('edit_session_date').value = localDateTime;  
+        document.getElementById('edit_decision').value = data.decision || '';  
+        document.getElementById('edit_session_case_status').value = data.case_status || 'جديدة';  
+    
+        // حفظ ID الجلسة للاستخدام لاحقاً  
+        window.editingSessionId = sessionId;  
+    
+        // عرض المودال  
+        const editModal = new bootstrap.Modal(document.getElementById('editSessionModal'));  
+        editModal.show();  
+    } catch (err) {
+        Swal.fire("خطأ", "حدث خطأ في تحميل الجلسة للتعديل", "error");
+    }
 }  
   
 // تحديث الجلسة  
@@ -1327,21 +1452,25 @@ async function updateSession() {
         case_status: document.getElementById('edit_session_case_status').value,  
         updated_at: new Date().toISOString()  
     };  
-  
-    const { error } = await db  
-        .from('sessions')  
-        .update(updatedData)  
-        .eq('id', window.editingSessionId);  
-  
-    if (error) {  
-        Swal.fire("خطأ", error.message, "error");  
-    } else {  
-        Swal.fire("تم", "تم تحديث الجلسة بنجاح", "success");  
-        bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();  
-          
-        // إعادة تحميل الجلسات القادمة  
-        loadUpcoming('week');  
-    }  
+    
+    try {
+        const { error } = await db  
+            .from('sessions')  
+            .update(updatedData)  
+            .eq('id', window.editingSessionId);  
+    
+        if (error) {  
+            Swal.fire("خطأ", error.message, "error");  
+        } else {  
+            Swal.fire("تم", "تم تحديث الجلسة بنجاح", "success");  
+            bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();  
+              
+            // إعادة تحميل الجلسات القادمة  
+            loadUpcoming('week');  
+        }  
+    } catch (err) {
+        Swal.fire("خطأ", "حدث خطأ أثناء تحديث الجلسة", "error");
+    }
 }  
   
 // تأكيد حذف الجلسة  
@@ -1366,20 +1495,24 @@ function confirmDeleteSession() {
   
 // حذف الجلسة  
 async function deleteSession(sessionId) {  
-    const { error } = await db  
-        .from('sessions')  
-        .delete()  
-        .eq('id', sessionId);  
-  
-    if (error) {  
-        Swal.fire("خطأ", error.message, "error");  
-    } else {  
-        Swal.fire("تم", "تم حذف الجلسة بنجاح", "success");  
-        bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();  
-          
-        // إعادة تحميل الجلسات القادمة  
-        loadUpcoming('week');  
-    }  
+    try {
+        const { error } = await db  
+            .from('sessions')  
+            .delete()  
+            .eq('id', sessionId);  
+    
+        if (error) {  
+            Swal.fire("خطأ", error.message, "error");  
+        } else {  
+            Swal.fire("تم", "تم حذف الجلسة بنجاح", "success");  
+            bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();  
+              
+            // إعادة تحميل الجلسات القادمة  
+            loadUpcoming('week');  
+        }  
+    } catch (err) {
+        Swal.fire("خطأ", "حدث خطأ أثناء حذف الجلسة", "error");
+    }
 }  
   
 // حذف الجلسة من تفاصيل القضية  
@@ -1424,7 +1557,7 @@ async function printCasePDF() {
     let y = 40;  
       
     // معلومات القضية  
-    doc.text(`كود القضية: ${caseData.case_code || 'مولود من النظام'}`, 20, y);  
+    doc.text(`كود القضية: ${caseData.case_code || 'بدون كود'}`, 20, y);  
     y += 10;  
     doc.text(`رقم القضية: ${caseData.case_number}/${caseData.case_year}`, 20, y);  
     y += 10;  
@@ -1501,7 +1634,7 @@ async function printCasePDF() {
     doc.text(`تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}`, 20, 280);  
       
     // حفظ الملف  
-    doc.save(`قضية_${caseData.case_code || 'غير_مسمى'}.pdf`);  
+    doc.save(`قضية_${caseData.case_code || caseData.case_number || 'غير_مسمى'}.pdf`);  
 }  
   
 // تصدير جميع النتائج إلى PDF  
@@ -1540,81 +1673,86 @@ async function loadUpcoming(range, btn){
     }  
       
     const endDateStr = endDate.toISOString().split('T')[0];  
-  
-    const { data, error } = await db  
-        .from('sessions')  
-        .select('*')  
-        .gte('session_date', startDate)  
-        .lte('session_date', endDateStr)  
-        .order('session_date', { ascending: true });  
-      
-    if(error) {   
-        upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل</div>";   
-        return;   
-    }  
-      
-    if(data && data.length > 0) {  
-        for(let session of data) {  
-            const { data: caseData } = await db  
-                .from('cases')  
-                .select('*')  
-                .eq('id', session.case_id)  
-                .single();  
-            session.cases = caseData || {};  
+    
+    try {
+        const { data, error } = await db  
+            .from('sessions')  
+            .select('*')  
+            .gte('session_date', startDate)  
+            .lte('session_date', endDateStr)  
+            .order('session_date', { ascending: true });  
+          
+        if(error) {   
+            upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل</div>";   
+            return;   
         }  
-    }  
-      
-    if(data.length === 0) {  
-        upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات قادمة</p>";  
-        return;  
-    }  
-      
-    upcomingSessions.innerHTML = data.map(s => {  
-        const caseData = s.cases || {};  
-        const sessionDate = new Date(s.session_date);  
-        const formattedDate = sessionDate.toLocaleDateString('ar-EG', {  
-            weekday: 'long',  
-            year: 'numeric',  
-            month: 'long',  
-            day: 'numeric',  
-            hour: '2-digit',  
-            minute: '2-digit'  
-        });  
           
-        const statusClass = getStatusClass(s.case_status);  
+        if(data && data.length > 0) {  
+            for(let session of data) {  
+                const { data: caseData } = await db  
+                    .from('cases')  
+                    .select('*')  
+                    .eq('id', session.case_id)  
+                    .single();  
+                session.cases = caseData || {};  
+            }  
+        }  
           
-        return `  
-        <div class="session-card">  
-            <div class="d-flex justify-content-between">  
+        if(!data || data.length === 0) {  
+            upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات قادمة</p>";  
+            return;  
+        }  
+          
+        upcomingSessions.innerHTML = data.map(s => {  
+            const caseData = s.cases || {};  
+            const sessionDate = new Date(s.session_date);  
+            const formattedDate = sessionDate.toLocaleDateString('ar-EG', {  
+                weekday: 'long',  
+                year: 'numeric',  
+                month: 'long',  
+                day: 'numeric',  
+                hour: '2-digit',  
+                minute: '2-digit'  
+            });  
+              
+            const statusClass = getStatusClass(s.case_status);  
+              
+            return `  
+            <div class="session-card">  
+                <div class="d-flex justify-content-between">  
+                    <div>  
+                        <b>${formattedDate}</b>  
+                        <span class="case-status ${statusClass} ms-2">${s.case_status || 'جديدة'}</span>  
+                    </div>  
+                    <div class="btn-group btn-group-sm">  
+                        <button class="btn btn-outline-warning" onclick="loadSessionForEdit('${s.id}')">  
+                            <i class="bi bi-pencil"></i>  
+                        </button>  
+                        <button class="btn btn-outline-danger" onclick="deleteSession('${s.id}')">  
+                            <i class="bi bi-trash"></i>  
+                        </button>  
+                    </div>  
+                </div>  
                 <div>  
-                    <b>${formattedDate}</b>  
-                    <span class="case-status ${statusClass} ms-2">${s.case_status || 'جديدة'}</span>  
+                    ${caseData.client_name || 'غير معروف'} -   
+                    قضية ${caseData.case_number || 'غير محدد'}/${caseData.case_year || 'غير محدد'}  
                 </div>  
-                <div class="btn-group btn-group-sm">  
-                    <button class="btn btn-outline-warning" onclick="loadSessionForEdit('${s.id}')">  
-                        <i class="bi bi-pencil"></i>  
+                <div><small>كود القضية: ${caseData.case_code || 'بدون كود'}</small></div>  
+                ${caseData.opponent_name ? `<div><small>ضد: ${caseData.opponent_name}</small></div>` : ''}  
+                <div class="mt-2 d-flex gap-2">  
+                    <button class="btn btn-sm btn-outline-success" onclick="event.stopPropagation(); addToGoogleCalendarFromSession('${s.id}')">  
+                        <i class="bi bi-calendar-plus"></i>  
                     </button>  
-                    <button class="btn btn-outline-danger" onclick="deleteSession('${s.id}')">  
-                        <i class="bi bi-trash"></i>  
+                    <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation(); setReminder('${s.id}')">  
+                        <i class="bi bi-bell"></i>  
                     </button>  
                 </div>  
-            </div>  
-            <div>  
-                ${caseData.client_name || 'غير معروف'} -   
-                قضية ${caseData.case_number || 'غير محدد'}/${caseData.case_year || 'غير محدد'}  
-            </div>  
-            <div><small>كود القضية: ${caseData.case_code || 'مولود من النظام'}</small></div>  
-            ${caseData.opponent_name ? `<div><small>ضد: ${caseData.opponent_name}</small></div>` : ''}  
-            <div class="mt-2 d-flex gap-2">  
-                <button class="btn btn-sm btn-outline-success" onclick="event.stopPropagation(); addToGoogleCalendarFromSession('${s.id}')">  
-                    <i class="bi bi-calendar-plus"></i>  
-                </button>  
-                <button class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation(); setReminder('${s.id}')">  
-                    <i class="bi bi-bell"></i>  
-                </button>  
-            </div>  
-        </div>`;  
-    }).join('');  
+            </div>`;  
+        }).join('');  
+    } catch (err) {
+        console.error('خطأ في تحميل الجلسات القادمة:', err);
+        upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في تحميل الجلسات القادمة</div>";
+    }
 }  
   
 // الإشعارات  
@@ -1670,16 +1808,10 @@ document.addEventListener('DOMContentLoaded', function() {
     nextWeek.setDate(now.getDate() + 7);  
     const localDateTime = nextWeek.toISOString().slice(0, 16);  
     document.getElementById('s_date').value = localDateTime;  
+    
+    // اختبار اتصال Supabase عند تحميل الصفحة
+    testSupabaseConnection();
 });  
-  
-// تسجيل Service Worker عند التحميل  
-if ('serviceWorker' in navigator) {  
-    navigator.serviceWorker.register(swUrl).then(registration => {  
-        console.log('Service Worker registered:', registration);  
-    }).catch(error => {  
-        console.log('Service Worker registration failed:', error);  
-    });  
-}  
 </script>  
   
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  

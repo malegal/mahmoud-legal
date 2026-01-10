@@ -146,6 +146,13 @@
             margin-top: 10px;
         }
         
+        /* حالة القضية بألوان مختلفة */
+        .status-pending { background: linear-gradient(135deg, #f59e0b 0%, #fde68a 100%); }
+        .status-active { background: linear-gradient(135deg, #10b981 0%, #a7f3d0 100%); }
+        .status-closed { background: linear-gradient(135deg, #ef4444 0%, #fca5a5 100%); }
+        .status-appeal { background: linear-gradient(135deg, #8b5cf6 0%, #ddd6fe 100%); }
+        .status-judgment { background: linear-gradient(135deg, #3b82f6 0%, #93c5fd 100%); }
+        
         .alert-notice {
             background: rgba(191, 149, 63, 0.15);
             border: 1px solid #bf953f;
@@ -235,6 +242,94 @@
             color: #020617;
         }
         
+        /* تصميم سجل الجلسات */
+        .sessions-history {
+            margin-top: 40px;
+            border-top: 1px solid rgba(191, 149, 63, 0.3);
+            padding-top: 25px;
+        }
+        
+        .sessions-history h3 {
+            color: #bf953f;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+        }
+        
+        .session-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-right: 3px solid #bf953f;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .session-card:hover {
+            transform: translateX(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .session-number {
+            color: #bf953f;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .session-date {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .session-details {
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        
+        .session-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        
+        /* شريط التحميل */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(191, 149, 63, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #bf953f;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading p {
+            color: #bf953f;
+            font-size: 18px;
+        }
+        
         /* الفوتر */
         .footer {
             background: rgba(0, 0, 0, 0.9);
@@ -247,13 +342,42 @@
             color: #94a3b8;
         }
         
+        /* رسائل التنبيه */
+        .alert-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+        
+        .alert-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid #22c55e;
+            color: #86efac;
+        }
+        
         @media (max-width: 768px) {
             .case-details {
                 padding: 25px;
             }
             
+            .case-header h2 {
+                font-size: 28px;
+            }
+            
             .detail-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .detail-item {
+                padding: 20px;
             }
             
             .action-buttons {
@@ -263,6 +387,12 @@
             .action-buttons a {
                 width: 100%;
                 justify-content: center;
+            }
+            
+            .session-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
             }
         }
     </style>
@@ -286,11 +416,20 @@
     <main>
         <div class="container">
             <div class="result-container">
-                <div id="caseResult">
-                    <!-- سيتم تعبئة البيانات هنا بالجافاسكربت -->
+                <!-- رسالة تحميل -->
+                <div id="loadingIndicator" class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>جاري تحميل بيانات القضية...</p>
                 </div>
                 
-                <div class="alert-notice">
+                <!-- رسالة الخطأ -->
+                <div id="errorMessage" class="alert-message alert-error" style="display: none;"></div>
+                
+                <!-- مكان عرض نتائج القضية -->
+                <div id="caseResult"></div>
+                
+                <!-- التنبيه والأزرار -->
+                <div class="alert-notice" id="actionButtons" style="display: none;">
                     <h3><i class="fas fa-exclamation-triangle"></i> تنبيه هام</h3>
                     <p><strong>هذا آخر تحديث للقضية. ولمزيد من المعلومات، يرجى:</strong></p>
                     <div class="action-buttons">
@@ -300,7 +439,7 @@
                         <a href="index.html#booking" class="appointment-btn">
                             <i class="fas fa-calendar-check"></i> حجز موعد للمقابلة في المكتب
                         </a>
-                        <a href="client-inquiry.html" class="new-inquiry-btn">
+                        <a href="client-inquiry.html" class="new-inquiry-btn" id="newInquiryBtn">
                             <i class="fas fa-redo"></i> استعلام جديد
                         </a>
                     </div>
@@ -323,12 +462,15 @@
         const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
 
-        // تحميل مكتبة Supabase
+        // تصحيح: كان هناك خطأ إملائي في تهيئة Supabase (SUBABASE_URL بدلاً من SUPABASE_URL)
         async function loadSupabase() {
             if (!window.supabase) {
                 const script = document.createElement('script');
                 script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js';
                 script.onload = initializeSupabase;
+                script.onerror = () => {
+                    showError('فشل في تحميل مكتبة Supabase. تحقق من اتصال الإنترنت.');
+                };
                 document.head.appendChild(script);
             } else {
                 initializeSupabase();
@@ -338,10 +480,11 @@
         // تهيئة Supabase
         function initializeSupabase() {
             try {
-                window.supabaseClient = window.supabase.createClient(SUBABASE_URL, SUPABASE_ANON_KEY);
+                window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 console.log('✅ تم تهيئة Supabase بنجاح');
             } catch (error) {
                 console.error('❌ خطأ في تهيئة Supabase:', error);
+                showError('خطأ في الاتصال بقاعدة البيانات');
             }
         }
 
@@ -368,16 +511,88 @@
             }
         }
 
+        // ==================== دوال مساعدة ====================
+        
+        // عرض رسالة خطأ
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+        
+        // إخفاء مؤشر التحميل
+        function hideLoading() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+        
+        // إظهار أزرار الإجراءات
+        function showActionButtons() {
+            document.getElementById('actionButtons').style.display = 'block';
+        }
+        
+        // تنسيق التاريخ
+        function formatDate(dateString) {
+            if (!dateString) return 'غير محدد';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long'
+                });
+            } catch {
+                return dateString;
+            }
+        }
+        
+        // الحصول على فئة CSS للحالة
+        function getStatusClass(status) {
+            if (!status) return 'status-badge';
+            
+            const statusMap = {
+                'قيد النظر': 'status-pending',
+                'قيد المحاكمة': 'status-active',
+                'ملغاة': 'status-closed',
+                'منتهية': 'status-closed',
+                'تحت الاستئناف': 'status-appeal',
+                'محكوم بها': 'status-judgment',
+                'جلسة أولى': 'status-pending',
+                'جلسة ثانية': 'status-active',
+                'جلسة نهائية': 'status-judgment'
+            };
+            
+            return `status-badge ${statusMap[status] || 'status-badge'}`;
+        }
+        
         // ==================== عرض بيانات القضية ====================
         async function displayCaseData() {
             const container = document.getElementById('caseResult');
             
-            // جلب البيانات من localStorage
-            const caseData = JSON.parse(localStorage.getItem('caseData') || '{}');
-            const phone = localStorage.getItem('inquiryPhone');
-            const caseCode = localStorage.getItem('inquiryCaseCode');
+            // التحقق من وجود جلسة نشطة
+            const sessionPhone = sessionStorage.getItem('sessionPhone');
+            const sessionCaseCode = sessionStorage.getItem('sessionCaseCode');
+            const storedCaseData = sessionStorage.getItem('caseData');
             
-            if (!caseData || Object.keys(caseData).length === 0) {
+            let caseData = {};
+            let phone = '';
+            let caseCode = '';
+            
+            if (sessionPhone && sessionCaseCode && storedCaseData) {
+                // استخدام بيانات الجلسة
+                caseData = JSON.parse(storedCaseData);
+                phone = sessionPhone;
+                caseCode = sessionCaseCode;
+            } else {
+                // استخدام البيانات القديمة من localStorage (للتوافق مع النظام القديم)
+                caseData = JSON.parse(localStorage.getItem('caseData') || '{}');
+                phone = localStorage.getItem('inquiryPhone') || '';
+                caseCode = localStorage.getItem('inquiryCaseCode') || '';
+            }
+            
+            // التحقق من وجود البيانات
+            if (!caseData || Object.keys(caseData).length === 0 || !caseData.id) {
                 container.innerHTML = `
                     <div class="case-details" style="text-align: center;">
                         <h2 style="color: #bf953f; margin-bottom: 20px;">
@@ -391,6 +606,8 @@
                         </a>
                     </div>
                 `;
+                hideLoading();
+                showActionButtons();
                 return;
             }
             
@@ -398,20 +615,10 @@
             const sessions = await getCaseSessions(caseData.id);
             const lastSession = sessions.length > 0 ? sessions[0] : null;
             
-            // تنسيق التاريخ
-            function formatDate(dateString) {
-                if (!dateString) return 'غير محدد';
-                try {
-                    const date = new Date(dateString);
-                    return date.toLocaleDateString('ar-EG', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                } catch {
-                    return dateString;
-                }
-            }
+            // تحديد حالة القضية الحالية (من آخر جلسة أو من البيانات الأساسية)
+            const currentStatus = lastSession && lastSession.case_status 
+                ? lastSession.case_status 
+                : caseData.status || 'قيد النظر';
             
             // بناء HTML لعرض البيانات
             container.innerHTML = `
@@ -422,6 +629,7 @@
                     </div>
                     
                     <div class="detail-grid">
+                        <!-- معلومات العميل -->
                         <div class="detail-item">
                             <strong><i class="fas fa-user"></i> اسم العميل:</strong>
                             <span>${caseData.client_name || 'غير محدد'}</span>
@@ -432,6 +640,13 @@
                             <span>${caseData.opponent_name || 'غير محدد'}</span>
                         </div>
                         
+                        <!-- البريد الإلكتروني الجديد (client_email) -->
+                        <div class="detail-item">
+                            <strong><i class="fas fa-envelope"></i> البريد الإلكتروني:</strong>
+                            <span>${caseData.client_email || 'غير مسجل'}</span>
+                        </div>
+                        
+                        <!-- معلومات القضية -->
                         <div class="detail-item">
                             <strong><i class="fas fa-hashtag"></i> رقم القضية:</strong>
                             <span>${caseData.case_number || 'غير محدد'}</span>
@@ -443,6 +658,28 @@
                         </div>
                         
                         <div class="detail-item">
+                            <strong><i class="fas fa-gavel"></i> المحكمة:</strong>
+                            <span>${caseData.court || 'غير محدد'}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <strong><i class="fas fa-building"></i> الدائرة:</strong>
+                            <span>${caseData.department || 'غير محدد'}</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <strong><i class="fas fa-book"></i> الموضوع:</strong>
+                            <span>${caseData.subject || 'غير محدد'}</span>
+                        </div>
+                        
+                        <!-- معلومات الاتصال -->
+                        <div class="detail-item">
+                            <strong><i class="fas fa-phone"></i> رقم الهاتف المسجل:</strong>
+                            <span>${phone || caseData.client_phone || 'غير محدد'}</span>
+                        </div>
+                        
+                        <!-- معلومات الجلسة الأخيرة -->
+                        <div class="detail-item">
                             <strong><i class="fas fa-calendar-day"></i> تاريخ آخر جلسة:</strong>
                             <span>${lastSession ? formatDate(lastSession.session_date) : 'لا توجد جلسات سابقة'}</span>
                         </div>
@@ -452,31 +689,33 @@
                             <span>${lastSession ? (lastSession.decision || 'لم يتم تسجيل قرار') : 'لا توجد جلسات سابقة'}</span>
                         </div>
                         
+                        <!-- حالة القضية -->
                         <div class="detail-item">
-                            <strong><i class="fas fa-phone"></i> رقم الهاتف المسجل:</strong>
-                            <span>${phone || caseData.client_phone || 'غير محدد'}</span>
-                        </div>
-                        
-                        <div class="detail-item">
-                            <strong><i class="fas fa-info-circle"></i> حالة القضية:</strong>
-                            <span class="status-badge">${caseData.status || 'قيد النظر'}</span>
+                            <strong><i class="fas fa-info-circle"></i> حالة القضية الحالية:</strong>
+                            <span class="${getStatusClass(currentStatus)}">${currentStatus}</span>
                         </div>
                     </div>
                     
-                    ${sessions.length > 1 ? `
-                    <div style="margin-top: 40px; border-top: 1px solid rgba(191, 149, 63, 0.3); padding-top: 25px;">
-                        <h3 style="color: #bf953f; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-history"></i> آخر 5 جلسات
-                        </h3>
-                        <div style="display: grid; gap: 15px;">
+                    <!-- سجل الجلسات -->
+                    ${sessions.length > 0 ? `
+                    <div class="sessions-history">
+                        <h3><i class="fas fa-history"></i> سجل الجلسات</h3>
+                        <div>
                             ${sessions.map((session, index) => `
-                                <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; border-right: 3px solid #bf953f;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                        <span style="color: #bf953f; font-weight: bold;">الجلسة ${index + 1}</span>
-                                        <span style="color: #94a3b8;">${formatDate(session.session_date)}</span>
+                                <div class="session-card">
+                                    <div class="session-header">
+                                        <span class="session-number">
+                                            <i class="fas fa-calendar-alt"></i> الجلسة ${index + 1}
+                                        </span>
+                                        <span class="session-date">${formatDate(session.session_date)}</span>
                                     </div>
-                                    <div style="color: #e2e8f0;">
-                                        ${session.decision ? `<strong>القرار:</strong> ${session.decision}` : 'لم يتم تسجيل قرار'}
+                                    <div class="session-details">
+                                        <p><strong>القرار:</strong> ${session.decision || 'لم يتم تسجيل قرار'}</p>
+                                        ${session.case_status ? `
+                                        <div class="session-status ${getStatusClass(session.case_status)}">
+                                            الحالة: ${session.case_status}
+                                        </div>
+                                        ` : ''}
                                     </div>
                                 </div>
                             `).join('')}
@@ -484,26 +723,99 @@
                     </div>
                     ` : ''}
                     
+                    <!-- تذييل -->
                     <div style="text-align: center; margin-top: 40px; padding-top: 25px; border-top: 1px solid rgba(191, 149, 63, 0.3);">
                         <p style="color: #94a3b8; font-size: 14px;">
                             <i class="fas fa-clock"></i> آخر تحديث للبيانات: ${new Date().toLocaleString('ar-EG')}
+                        </p>
+                        <p style="color: #64748b; font-size: 12px; margin-top: 10px;">
+                            <i class="fas fa-info-circle"></i> يمكنك استخدام زر "استعلام جديد" للبحث عن قضية أخرى دون الحاجة لإعادة التحقق
                         </p>
                     </div>
                 </div>
             `;
             
-            // تنظيف التخزين المحلي بعد العرض
-            setTimeout(() => {
-                localStorage.removeItem('caseData');
-                localStorage.removeItem('inquiryPhone');
-                localStorage.removeItem('inquiryCaseCode');
-            }, 1000);
+            // إخفاء التحميل وإظهار الأزرار
+            hideLoading();
+            showActionButtons();
         }
 
+        // ==================== إدارة الجلسة ====================
+        
+        // التحقق من صلاحية الجلسة
+        function checkSessionValidity() {
+            const sessionPhone = sessionStorage.getItem('sessionPhone');
+            const sessionCaseCode = sessionStorage.getItem('sessionCaseCode');
+            const sessionTime = sessionStorage.getItem('sessionTime');
+            
+            // إذا لم توجد جلسة
+            if (!sessionPhone || !sessionCaseCode) {
+                return false;
+            }
+            
+            // التحقق من أن الجلسة لم تنتهي (صالحة لمدة 30 دقيقة)
+            if (sessionTime) {
+                const sessionStart = parseInt(sessionTime);
+                const currentTime = new Date().getTime();
+                const sessionAge = currentTime - sessionStart;
+                const maxSessionAge = 30 * 60 * 1000; // 30 دقيقة
+                
+                if (sessionAge > maxSessionAge) {
+                    // انتهت صلاحية الجلسة
+                    clearSession();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // مسح بيانات الجلسة
+        function clearSession() {
+            sessionStorage.removeItem('sessionPhone');
+            sessionStorage.removeItem('sessionCaseCode');
+            sessionStorage.removeItem('caseData');
+            sessionStorage.removeItem('sessionTime');
+        }
+        
+        // ==================== الأحداث ====================
+        
         // تحميل البيانات عند فتح الصفحة
         document.addEventListener('DOMContentLoaded', async function() {
-            await loadSupabase();
-            await displayCaseData();
+            // التحقق من صلاحية الجلسة
+            const hasValidSession = checkSessionValidity();
+            
+            if (!hasValidSession) {
+                // إذا لم توجد جلسة صالحة، توجيه للصفحة الرئيسية
+                window.location.href = 'client-inquiry.html';
+                return;
+            }
+            
+            try {
+                await loadSupabase();
+                await displayCaseData();
+            } catch (error) {
+                console.error('خطأ في تحميل البيانات:', error);
+                showError('حدث خطأ في تحميل بيانات القضية. يرجى المحاولة مرة أخرى.');
+            }
+        });
+        
+        // زر الاستعلام الجديد
+        document.getElementById('newInquiryBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // الاحتفاظ ببيانات الجلسة للاستعلام التالي
+            // (سيتم استخدامها في client-inquiry.html لملء الحقول تلقائياً)
+            window.location.href = 'client-inquiry.html';
+        });
+        
+        // تنظيف البيانات القديمة عند إغلاق الصفحة
+        window.addEventListener('beforeunload', function() {
+            // لا تحذف بيانات الجلسة، بل احتفظ بها للاستعلام التالي
+            // فقط نظف localStorage القديم
+            localStorage.removeItem('caseData');
+            localStorage.removeItem('inquiryPhone');
+            localStorage.removeItem('inquiryCaseCode');
         });
     </script>
 </body>

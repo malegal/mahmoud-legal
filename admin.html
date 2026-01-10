@@ -629,11 +629,10 @@ async function selectCaseForSession(caseId) {
     }  
 }  
   
-// حفظ القضية  
+// حفظ القضية - قاعدة البيانات تنتج الكود
 caseForm.onsubmit = async e => {  
     e.preventDefault();  
     Swal.fire({ title: 'جاري الحفظ...', didOpen: () => Swal.showLoading() });  
-    const code = `MA-${Date.now().toString().slice(-6)}`;  
     
     try {
         const caseData = {
@@ -646,21 +645,23 @@ caseForm.onsubmit = async e => {
             case_year: case_year.value,  
             court_name: court_name.value,  
             circle: circle.value,  
-            case_type: case_type.value,  // إضافة نوع القضية
-            case_code: code,  
+            case_type: case_type.value,
             case_subject: case_subject.value,  
             notes: notes.value
+            // ملاحظة: لم نضف case_code - قاعدة البيانات تولده تلقائياً
         };
         
-        const { error } = await db.from('cases').insert([caseData]);  
+        // إرسال البيانات والحصول على البيانات المعادة (بما فيها الكود الذي ولدته قاعدة البيانات)
+        const { data, error } = await db.from('cases').insert([caseData]).select();  
         
         if (error) {
             console.error("تفاصيل الخطأ:", error);
             Swal.fire("خطأ", error.message, "error");  
         } else {  
+            const savedCase = data[0]; // تحتوي على كود القضية الذي ولدته قاعدة البيانات
             Swal.fire({  
                 title: "تم الحفظ",  
-                html: `كود القضية: <strong>${code}</strong>`,  
+                html: `كود القضية: <strong>${savedCase.case_code}</strong>`,  
                 icon: "success"  
             });  
             caseForm.reset();  
@@ -712,10 +713,10 @@ function addToGoogleCalendar() {
     const title = `جلسة قضية: ${selectedCaseForCalendar.client_name} ضد ${selectedCaseForCalendar.opponent_name}`;  
     const description = `  
 القضية: ${selectedCaseForCalendar.case_number}/${selectedCaseForCalendar.case_year}  
+كود القضية: ${selectedCaseForCalendar.case_code}  
 المحكمة: ${selectedCaseForCalendar.court_name}  
 نوع القضية: ${selectedCaseForCalendar.case_type || 'مدنية'}  
 القرار: ${s_decision.value || 'لم يتم تحديد قرار'}  
-كود القضية: ${selectedCaseForCalendar.case_code}  
     `.trim();  
   
     // تحويل التواريخ إلى التنسيق المطلوب لـ Google Calendar (YYYYMMDDTHHMMSSZ)  
@@ -923,6 +924,7 @@ function renderSearchResults(data, type) {
                     </div>  
                 </div>  
                 <div class="mt-2">  
+                    <div><strong>كود القضية:</strong> ${caseData.case_code || 'مولود من النظام'}</div>  
                     <div><strong>العميل:</strong> ${caseData.client_name}</div>  
                     <div><strong>الخصم:</strong> ${caseData.opponent_name || 'غير محدد'}</div>  
                     <div><strong>القضية:</strong> ${caseData.case_number}/${caseData.case_year}</div>  
@@ -939,7 +941,7 @@ function renderSearchResults(data, type) {
             <div class="case-card">  
                 <div class="d-flex justify-content-between align-items-start">  
                     <div onclick="openCaseDetails('${item.id}')" style="cursor:pointer; flex-grow:1;">  
-                        <b class="case-code">${item.case_code}</b>  
+                        <b class="case-code">${item.case_code || 'مولود من النظام'}</b>  
                         <div class="text-muted small">${item.court_name}</div>  
                     </div>  
                     <div class="d-flex align-items-center gap-2">  
@@ -1020,7 +1022,7 @@ async function openCaseDetails(caseId) {
         <div class="case-details">  
             <div class="d-flex justify-content-between align-items-start mb-3">  
                 <div>  
-                    <h4 class="case-code">${caseData.case_code}</h4>  
+                    <h4 class="case-code">${caseData.case_code || 'مولود من النظام'}</h4>  
                     <h5>${caseData.client_name} ضد ${caseData.opponent_name || 'غير محدد'}</h5>  
                 </div>  
                 <span class="case-status ${statusClass}">${lastCaseStatus}</span>  
@@ -1190,12 +1192,12 @@ async function updateCase() {
         notes: document.getElementById('edit_notes').value,  
         updated_at: new Date().toISOString()  
     };  
-  
+
     const { error } = await db  
         .from('cases')  
         .update(updatedData)  
         .eq('id', window.editingCaseId);  
-  
+
     if (error) {  
         Swal.fire("خطأ", error.message, "error");  
     } else {  
@@ -1422,7 +1424,7 @@ async function printCasePDF() {
     let y = 40;  
       
     // معلومات القضية  
-    doc.text(`كود القضية: ${caseData.case_code}`, 20, y);  
+    doc.text(`كود القضية: ${caseData.case_code || 'مولود من النظام'}`, 20, y);  
     y += 10;  
     doc.text(`رقم القضية: ${caseData.case_number}/${caseData.case_year}`, 20, y);  
     y += 10;  
@@ -1499,7 +1501,7 @@ async function printCasePDF() {
     doc.text(`تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}`, 20, 280);  
       
     // حفظ الملف  
-    doc.save(`قضية_${caseData.case_code}.pdf`);  
+    doc.save(`قضية_${caseData.case_code || 'غير_مسمى'}.pdf`);  
 }  
   
 // تصدير جميع النتائج إلى PDF  
@@ -1601,6 +1603,7 @@ async function loadUpcoming(range, btn){
                 ${caseData.client_name || 'غير معروف'} -   
                 قضية ${caseData.case_number || 'غير محدد'}/${caseData.case_year || 'غير محدد'}  
             </div>  
+            <div><small>كود القضية: ${caseData.case_code || 'مولود من النظام'}</small></div>  
             ${caseData.opponent_name ? `<div><small>ضد: ${caseData.opponent_name}</small></div>` : ''}  
             <div class="mt-2 d-flex gap-2">  
                 <button class="btn btn-sm btn-outline-success" onclick="event.stopPropagation(); addToGoogleCalendarFromSession('${s.id}')">  

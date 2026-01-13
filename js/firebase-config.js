@@ -1,4 +1,6 @@
 // ==================== FIREBASE CONFIGURATION ====================
+console.log('📁 Loading firebase-config.js...');
+
 const FIREBASE_CONFIG = {
     apiKey: "AIzaSyDMkk2HBsa1KAsyDYWSfkgGyqMYzZzXmz0",
     authDomain: "lawofficeotp.firebaseapp.com",
@@ -9,22 +11,28 @@ const FIREBASE_CONFIG = {
     measurementId: "G-Z3D4HP4YBM"
 };
 
-// Environment Setting
-// Change to 'production' when deploying with real SMS service
-const ENVIRONMENT = 'development'; // 'development' or 'production'
+// ==================== IMPORTANT: CHANGE TO PRODUCTION ====================
+const ENVIRONMENT = 'production'; // ⚠️ تغيير من 'development' إلى 'production'
 
 // Firebase App Initialization
 let firebaseApp = null;
 
 function initializeFirebase() {
     try {
+        console.log('🔄 Initializing Firebase for:', ENVIRONMENT);
+        
         if (typeof firebase === 'undefined') {
-            throw new Error('Firebase SDK not loaded. Check script tags in HTML.');
+            throw new Error('Firebase SDK not loaded. Check if scripts are loaded in HTML.');
         }
         
-        if (!firebase.apps || firebase.apps.length === 0) {
+        if (!firebase.apps.length) {
             firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
-            console.log('✅ Firebase initialized successfully');
+            console.log('✅ Firebase initialized successfully for production');
+            
+            // Configure language for SMS (Arabic)
+            firebase.auth().languageCode = 'ar';
+            console.log('🌍 Language set to Arabic for SMS');
+            
             return firebaseApp;
         } else {
             firebaseApp = firebase.app();
@@ -32,231 +40,170 @@ function initializeFirebase() {
             return firebaseApp;
         }
     } catch (error) {
-        console.error('❌ Firebase initialization error:', error);
-        throw new Error(`فشل في تهيئة Firebase: ${error.message}`);
+        console.error('❌ Firebase initialization failed:', error);
+        showGlobalAlert('فشل في تهيئة Firebase. تأكد من اتصال الإنترنت وحظر الإعلانات.');
+        return null;
     }
+}
+
+// Global alert function
+function showGlobalAlert(message, type = 'error') {
+    const alertDiv = document.createElement('div');
+    alertDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        left: 20px;
+        padding: 15px;
+        background: ${type === 'error' ? '#ef4444' : '#10b981'};
+        color: white;
+        border-radius: 10px;
+        z-index: 9999;
+        text-align: center;
+        font-family: 'Tajawal', sans-serif;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    `;
+    alertDiv.textContent = message;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+        }
+    }, 5000);
 }
 
 // Firebase Services
 function getFirestore() {
-    if (!firebaseApp) {
-        initializeFirebase();
-    }
+    if (!firebaseApp) initializeFirebase();
     return firebase.firestore();
 }
 
 function getAuth() {
-    if (!firebaseApp) {
-        initializeFirebase();
-    }
+    if (!firebaseApp) initializeFirebase();
     return firebase.auth();
 }
 
 function getFunctions() {
-    if (!firebaseApp) {
-        initializeFirebase();
-    }
+    if (!firebaseApp) initializeFirebase();
     return firebase.functions();
 }
 
-function getMessaging() {
-    if (!firebaseApp) {
-        initializeFirebase();
-    }
-    return firebase.messaging();
-}
-
-// Test Firebase Connection
-async function testFirebaseConnection() {
-    try {
-        const auth = getAuth();
-        const firestore = getFirestore();
-        
-        console.log('✅ Firebase services loaded:', {
-            auth: !!auth,
-            firestore: !!firestore,
-            functions: !!getFunctions(),
-            messaging: !!getMessaging()
-        });
-        
-        return {
-            connected: true,
-            projectId: FIREBASE_CONFIG.projectId,
-            environment: ENVIRONMENT
-        };
-    } catch (error) {
-        console.error('❌ Firebase connection test failed:', error);
-        return {
-            connected: false,
-            error: error.message,
-            config: FIREBASE_CONFIG
-        };
-    }
-}
-
-// Cloud Functions Service
-const CloudFunctions = {
-    // Send OTP via SMS
-    async sendOTPviaSMS(phoneNumber, otp, clientName) {
-        if (ENVIRONMENT === 'development') {
-            // Development mode - simulation
-            console.log(`📱 [DEV MODE] SMS would be sent to: ${phoneNumber}`);
-            console.log(`📱 [DEV MODE] OTP Code: ${otp}`);
-            console.log(`📱 [DEV MODE] Client: ${clientName}`);
-            
-            // Simulate delay
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    console.log('✅ [DEV MODE] SMS simulation completed');
-                    resolve({ 
-                        success: true, 
-                        message: 'تم محاكاة إرسال SMS بنجاح (وضع التطوير)',
-                        simulation: true,
-                        otp: otp // Return OTP for testing
-                    });
-                }, 1500);
-            });
-        } else {
-            // Production mode - call real Firebase Cloud Function
-            try {
-                console.log(`📱 [PRODUCTION] Calling Cloud Function for SMS to: ${phoneNumber}`);
-                
-                const functions = getFunctions();
-                
-                // For production, you need to:
-                // 1. Deploy a Cloud Function named 'sendOTPviaSMS'
-                // 2. Uncomment the code below
-                
-                /*
-                const sendSMSFunction = functions.httpsCallable('sendOTPviaSMS');
-                const result = await sendSMSFunction({
-                    phoneNumber: phoneNumber,
-                    otp: otp,
-                    clientName: clientName,
-                    countryCode: '+20' // Egypt
-                });
-                
-                return result.data;
-                */
-                
-                // Temporary fallback for production without Cloud Functions
-                return {
-                    success: true,
-                    message: 'في وضع الإنتاج، يجب نشر Cloud Function أولاً',
-                    requiresSetup: true,
-                    otp: otp // Return OTP for now
-                };
-                
-            } catch (error) {
-                console.error('❌ Cloud Function error:', error);
-                throw new Error('فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى.');
-            }
-        }
-    },
-    
-    // Send Magic Link via Email
-    async sendMagicLink(email, clientName, clientId) {
-        if (ENVIRONMENT === 'development') {
-            // Development mode - simulation
-            const magicLink = `${window.location.origin}/inquiry-result.html?token=${btoa(clientId)}&email=${encodeURIComponent(email)}`;
-            console.log(`📧 [DEV MODE] Email would be sent to: ${email}`);
-            console.log(`📧 [DEV MODE] Magic Link: ${magicLink}`);
-            
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    console.log('✅ [DEV MODE] Email simulation completed');
-                    resolve({ 
-                        success: true, 
-                        message: 'تم محاكاة إرسال الإيميل بنجاح (وضع التطوير)',
-                        magicLink: magicLink,
-                        simulation: true
-                    });
-                }, 1500);
-            });
-        } else {
-            // Production mode - call real Firebase Cloud Function
-            try {
-                console.log(`📧 [PRODUCTION] Calling Cloud Function for email to: ${email}`);
-                
-                // For production, deploy a Cloud Function named 'sendMagicLink'
-                // Similar to SMS function above
-                
-                return {
-                    success: true,
-                    message: 'في وضع الإنتاج، يجب نشر Cloud Function أولاً',
-                    requiresSetup: true,
-                    magicLink: `${window.location.origin}/inquiry-result.html?token=${btoa(clientId)}`
-                };
-                
-            } catch (error) {
-                console.error('❌ Cloud Function error:', error);
-                throw new Error('فشل في إرسال الإيميل. يرجى المحاولة مرة أخرى.');
-            }
-        }
-    },
-    
-    // Verify phone number (for production with Firebase Auth)
-    async verifyPhoneNumber(phoneNumber) {
+// SMS Service for Production
+const SmsService = {
+    async sendOTP(phoneNumber, clientName) {
         try {
+            console.log(`📱 [PRODUCTION] Preparing to send SMS to: ${phoneNumber}`);
+            
             const auth = getAuth();
+            
+            // Check if reCAPTCHA container exists
+            let recaptchaContainer = document.getElementById('recaptcha-container');
+            if (!recaptchaContainer) {
+                recaptchaContainer = document.createElement('div');
+                recaptchaContainer.id = 'recaptcha-container';
+                recaptchaContainer.style.cssText = 'position: fixed; top: -100px;';
+                document.body.appendChild(recaptchaContainer);
+                console.log('✅ Created reCAPTCHA container');
+            }
+            
+            // Setup invisible reCAPTCHA
             const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                size: 'invisible'
+                'size': 'invisible',
+                'callback': function(response) {
+                    console.log('✅ reCAPTCHA solved:', response);
+                },
+                'expired-callback': function() {
+                    console.log('⚠️ reCAPTCHA expired');
+                }
             });
             
-            const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, appVerifier);
-            return confirmationResult;
+            // Format phone number for Firebase (Egypt: +20XXXXXXXXX)
+            const formattedPhone = phoneNumber.startsWith('+20') ? phoneNumber : `+20${phoneNumber.substring(1)}`;
+            console.log(`📱 Formatted phone for Firebase: ${formattedPhone}`);
+            
+            // Send SMS via Firebase Authentication
+            console.log('📤 Sending SMS via Firebase Authentication...');
+            
+            const confirmationResult = await auth.signInWithPhoneNumber(formattedPhone, appVerifier);
+            
+            console.log('✅ SMS sent successfully! Confirmation result:', confirmationResult.verificationId);
+            
+            return {
+                success: true,
+                verificationId: confirmationResult.verificationId,
+                phoneNumber: formattedPhone,
+                message: 'تم إرسال رمز التحقق بنجاح'
+            };
+            
         } catch (error) {
-            console.error('Phone verification error:', error);
-            throw error;
-        }
-    }
-};
-
-// Firebase Analytics (optional)
-function getAnalytics() {
-    if (!firebaseApp) {
-        initializeFirebase();
-    }
-    return firebase.analytics();
-}
-
-// Log Events for Analytics
-const AnalyticsService = {
-    logEvent(eventName, eventParams = {}) {
-        try {
-            if (ENVIRONMENT === 'production') {
-                const analytics = getAnalytics();
-                firebase.analytics().logEvent(eventName, {
-                    ...eventParams,
-                    timestamp: new Date().toISOString(),
-                    environment: ENVIRONMENT
-                });
-            } else {
-                console.log(`📊 [ANALYTICS - DEV] Event: ${eventName}`, eventParams);
+            console.error('❌ SMS sending error:', error);
+            
+            let errorMessage = 'خطأ في إرسال الرسالة';
+            
+            if (error.code) {
+                switch(error.code) {
+                    case 'auth/invalid-phone-number':
+                        errorMessage = 'رقم الهاتف غير صحيح. تأكد من كتابة رقم مصري صحيح (11 رقم)';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'تم إرسال العديد من الطلبات. يرجى الانتظار دقيقة';
+                        break;
+                    case 'auth/quota-exceeded':
+                        errorMessage = 'تم تجاوز الحد اليومي للإرسال. يرجى المحاولة غداً';
+                        break;
+                    case 'auth/captcha-check-failed':
+                        errorMessage = 'فشل التحقق من reCAPTCHA. يرجى تحديث الصفحة';
+                        break;
+                    default:
+                        errorMessage = `خطأ: ${error.code}`;
+                }
             }
-        } catch (error) {
-            console.error('Analytics error:', error);
+            
+            throw new Error(errorMessage);
         }
     },
     
-    logInquiryStart(identifier) {
-        this.logEvent('inquiry_start', {
-            identifier_type: identifier.includes('@') ? 'email' : 'phone',
-            identifier_length: identifier.length
-        });
-    },
-    
-    logOTPSent(method, identifier) {
-        this.logEvent('otp_sent', {
-            method: method,
-            identifier: identifier.substring(0, 3) + '...' // Partial for privacy
-        });
-    },
-    
-    logCaseSearch(caseCode) {
-        this.logEvent('case_search', {
-            case_code: caseCode
-        });
+    async verifyOTP(verificationId, otpCode) {
+        try {
+            console.log(`🔐 Verifying OTP: ${otpCode} for verification ID: ${verificationId}`);
+            
+            const auth = getAuth();
+            const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otpCode);
+            
+            const userCredential = await auth.signInWithCredential(credential);
+            
+            console.log('✅ OTP verified successfully! User:', userCredential.user.uid);
+            
+            // Sign out immediately after verification (we just needed to verify)
+            await auth.signOut();
+            
+            return {
+                success: true,
+                verified: true,
+                userId: userCredential.user.uid
+            };
+            
+        } catch (error) {
+            console.error('❌ OTP verification error:', error);
+            
+            let errorMessage = 'خطأ في التحقق';
+            
+            if (error.code) {
+                switch(error.code) {
+                    case 'auth/invalid-verification-code':
+                        errorMessage = 'الرمز غير صحيح. يرجى المحاولة مرة أخرى';
+                        break;
+                    case 'auth/code-expired':
+                        errorMessage = 'انتهت صلاحية الرمز. يرجى طلب رمز جديد';
+                        break;
+                    default:
+                        errorMessage = `خطأ في التحقق: ${error.code}`;
+                }
+            }
+            
+            throw new Error(errorMessage);
+        }
     }
 };
 
@@ -265,46 +212,16 @@ window.FirebaseConfig = {
     FIREBASE_CONFIG,
     ENVIRONMENT,
     initializeFirebase,
-    getFirestore,
     getAuth,
+    getFirestore,
     getFunctions,
-    getMessaging,
-    getAnalytics,
-    testFirebaseConnection,
-    CloudFunctions,
-    AnalyticsService
+    SmsService
 };
 
-// Auto-initialize when loaded
+// Auto-initialize
 document.addEventListener('DOMContentLoaded', function() {
-    try {
-        initializeFirebase();
-        console.log('Firebase Config Module Loaded Successfully');
-        
-        // Test connection
-        testFirebaseConnection().then(result => {
-            if (result.connected) {
-                console.log('Firebase Connection Test: ✅ PASSED');
-                console.log('Project:', result.projectId);
-                console.log('Environment:', result.environment);
-                
-                // Log initialization
-                AnalyticsService.logEvent('firebase_initialized', {
-                    status: 'success',
-                    environment: ENVIRONMENT
-                });
-            } else {
-                console.warn('Firebase Connection Test: ⚠️ WARNING');
-                console.warn('Error:', result.error);
-                
-                AnalyticsService.logEvent('firebase_initialized', {
-                    status: 'failed',
-                    error: result.error,
-                    environment: ENVIRONMENT
-                });
-            }
-        });
-    } catch (error) {
-        console.error('Failed to auto-initialize Firebase:', error);
-    }
+    console.log('📄 Initializing Firebase on DOM load...');
+    initializeFirebase();
 });
+
+console.log('✅ firebase-config.js loaded for PRODUCTION');

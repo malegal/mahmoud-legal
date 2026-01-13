@@ -1,310 +1,600 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>استعلام عن القضايا - محمود عبد الحميد</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام استعلام القضايا - مؤسسة محمود عبد الحميد للمحاماة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0a;
-            --card: #111111;
-            --gold: #d4af37;
-            --gold-dark: #b8972e;
-            --gold-light: #e8c670;
-            --text: #f1f5f9;
-            --muted: #94a3b8;
-            --border: rgba(212,175,55,0.2);
-            --success: #10b981;
-            --danger: #ef4444;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --gold-color: #f1c40f;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+        }
+        
         body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 2rem 1rem;
-        }
-        .container { max-width: 520px; margin: 0 auto; }
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.65);
-        }
-        h1 {
-            text-align: center;
-            color: var(--gold-light);
-            font-size: 1.6rem;
-            margin-bottom: 1.8rem;
-        }
-        label {
-            display: block;
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 0.6rem;
-            font-size: 0.95rem;
-        }
-        input {
-            width: 100%;
-            padding: 0.95rem 1.1rem;
-            background: #0d0d0d;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: white;
-            font-size: 1.05rem;
-            margin-bottom: 1.4rem;
-        }
-        input:focus { outline:none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
-
-        .methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 1rem;
-            margin: 1.8rem 0;
-        }
-        .method-btn {
-            background: #0f0f0f;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.1rem 0.6rem;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .method-btn.active, .method-btn:hover {
-            border-color: var(--gold);
-            background: rgba(212,175,55,0.08);
-        }
-        .method-btn i { font-size: 1.6rem; color: var(--gold-light); margin-bottom: 0.5rem; }
-        .method-btn span { font-weight: 600; font-size: 0.9rem; }
-
-        button {
-            width: 100%;
-            padding: 1rem;
-            margin: 1rem 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-        .btn-primary {
-            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
-            color: #0a0a0a;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212,175,55,0.35); }
-        .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
-
-        .section { margin: 2rem 0; display: none; }
-        .section.active { display: block; }
-
-        .case-inputs { margin-top: 1.5rem; }
-        .case-entry {
             display: flex;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
+            justify-content: center;
             align-items: center;
+            padding: 20px;
         }
-        .case-entry input { margin: 0; flex: 1; }
-        .remove-case { color: var(--danger); cursor: pointer; font-size: 1.3rem; }
-
-        .result-card {
-            background: rgba(212,175,55,0.07);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.2rem;
-            margin: 1rem 0;
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
         }
-
-        .msg {
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 1rem 0;
+        
+        .logo-container {
             text-align: center;
+            margin-bottom: 30px;
+            color: white;
         }
-        .msg-success { background: rgba(16,185,129,0.18); border: 1px solid var(--success); color: #86efac; }
-        .msg-error   { background: rgba(239,68,68,0.18);  border: 1px solid var(--danger);   color: #fca5a5; }
-
-        @media (max-width: 480px) { .methods { grid-template-columns: 1fr 1fr; } }
+        
+        .logo-container h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+        
+        .logo-container p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .auth-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background: #219653;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .delivery-methods {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .method-btn {
+            flex: 1;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .method-btn:hover {
+            border-color: var(--secondary-color);
+        }
+        
+        .method-btn.selected {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        .method-btn.selected i {
+            color: white;
+        }
+        
+        .method-btn i {
+            font-size: 24px;
+            color: var(--secondary-color);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 576px) {
+            .auth-card {
+                padding: 25px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .delivery-methods {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="card">
-        <h1>استعلام عن القضايا</h1>
-
-        <!-- الخطوة 1: إدخال الاتصال + اختيار الطريقة -->
-        <div id="step-contact" class="section active">
-            <label for="contact">رقم الهاتف أو البريد الإلكتروني</label>
-            <input id="contact" type="text" placeholder="01101076000 أو name@example.com" />
-
-            <div class="methods">
-                <div class="method-btn active" data-method="whatsapp"><i class="fab fa-whatsapp"></i><span>واتساب</span></div>
-                <div class="method-btn" data-method="telegram"><i class="fab fa-telegram-plane"></i><span>تليجرام</span></div>
-                <div class="method-btn" data-method="sms"><i class="fas fa-sms"></i><span>SMS</span></div>
-                <div class="method-btn" data-method="email"><i class="fas fa-envelope"></i><span>إيميل</span></div>
+    <div class="container">
+        <div class="logo-container">
+            <h1><i class="fas fa-balance-scale"></i> مؤسسة محمود عبد الحميد للمحاماة</h1>
+            <p>نظام استعلام القضايا الإلكتروني</p>
+        </div>
+        
+        <div class="auth-card">
+            <div class="form-header">
+                <h2>مرحباً بك</h2>
+                <p>أدخل رقم الهاتف أو البريد الإلكتروني المسجل لدينا</p>
             </div>
-
-            <button id="btn-send-otp" class="btn-primary">إرسال رمز التحقق</button>
-        </div>
-
-        <!-- الخطوة 2: إدخال OTP -->
-        <div id="step-otp" class="section">
-            <label for="otp">رمز التحقق (OTP)</label>
-            <input id="otp" type="text" placeholder="أدخل الرمز المكون من 6 أرقام" maxlength="6" inputmode="numeric" />
-
-            <button id="btn-verify-otp" class="btn-primary">تحقق من الرمز</button>
-            <button id="btn-resend" class="btn-primary" style="margin-top:0.8rem; background:#333;">إعادة إرسال الرمز</button>
-        </div>
-
-        <!-- الخطوة 3: إدخال أكواد القضايا + عرض النتائج -->
-        <div id="step-cases" class="section">
-            <div class="case-inputs" id="caseInputs">
-                <div class="case-entry">
-                    <input type="text" class="case-code" placeholder="كود القضية (مثال: MA-26101-8X9j3B)" />
-                    <i class="fas fa-trash remove-case" title="حذف"></i>
+            
+            <div id="alertMessage" class="alert"></div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>جاري التحقق...</p>
+            </div>
+            
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="identifier" class="form-label">
+                        <i class="fas fa-user"></i> رقم الهاتف أو البريد الإلكتروني
+                    </label>
+                    <input 
+                        type="text" 
+                        id="identifier" 
+                        class="form-control" 
+                        placeholder="مثال: +201234567890 أو email@example.com" 
+                        required
+                    >
                 </div>
+                
+                <div class="delivery-methods">
+                    <div class="method-btn selected" data-method="sms">
+                        <i class="fas fa-sms"></i>
+                        <span>رسالة SMS</span>
+                    </div>
+                    <div class="method-btn" data-method="email">
+                        <i class="fas fa-envelope"></i>
+                        <span>البريد الإلكتروني</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    إرسال رمز التحقق
+                </button>
+            </form>
+            
+            <div class="footer">
+                <p>© 2024 جميع الحقوق محفوظة</p>
+                <p>أسوان - أمام مجمع المحاكم | هاتف: 01101076000</p>
             </div>
-
-            <button id="btn-add-case" style="background:#222; color:var(--gold-light); border:1px solid var(--border);">
-                + إضافة قضية أخرى
-            </button>
-
-            <button id="btn-submit-cases" class="btn-primary" style="margin-top:1.5rem;">استعلم عن القضايا</button>
-
-            <div id="results"></div>
         </div>
-
-        <div id="msg" class="msg" style="display:none;"></div>
     </div>
-</div>
 
-<script>
-    let selectedMethod = 'whatsapp';
-    let otpCode = ''; // للمحاكاة فقط
-
-    // اختيار طريقة
-    document.querySelectorAll('.method-btn').forEach(el => {
-        el.addEventListener('click', () => {
-            document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            selectedMethod = el.dataset.method;
+    <script>
+        // إعداد Supabase
+        const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
+        
+        // إعداد Firebase (تستبدل هذه القيم بقيم مشروعك)
+        const FIREBASE_CONFIG = {
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        let selectedMethod = 'sms';
+        let supabaseClient = null;
+        
+        // تهيئة التطبيق
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+            setupEventListeners();
         });
-    });
-
-    // إرسال OTP
-    document.getElementById('btn-send-otp').addEventListener('click', async () => {
-        const contact = document.getElementById('contact').value.trim();
-        const msg = document.getElementById('msg');
-
-        if (!contact) {
-            showMsg('أدخل رقم الهاتف أو الإيميل', 'error');
-            return;
-        }
-
-        showMsg('جاري التحقق وإرسال الرمز...', '');
-
-        // ------------------ هنا المكان الحقيقي للـ backend call ------------------
-        // مثال محاكاة
-        await new Promise(r => setTimeout(r, 1200));
-
-        // في الواقع: تحقق من وجود الرقم/الإيميل في Supabase
-        // إذا موجود → توليد OTP → حفظ في جدول otp_codes → إرسال عبر Twilio/Resend/Telegram
-
-        otpCode = '123456'; // محاكاة فقط – غيّره لاحقًا
-        showMsg(`تم إرسال رمز التحقق عبر \( {selectedMethod} إلى \){contact} (رمز تجريبي: ${otpCode})`, 'success');
-
-        document.getElementById('step-contact').classList.remove('active');
-        document.getElementById('step-otp').classList.add('active');
-    });
-
-    // التحقق من OTP
-    document.getElementById('btn-verify-otp').addEventListener('click', () => {
-        const entered = document.getElementById('otp').value.trim();
-        if (entered === otpCode) {
-            showMsg('تم التحقق بنجاح!', 'success');
-            document.getElementById('step-otp').classList.remove('active');
-            document.getElementById('step-cases').classList.add('active');
-        } else {
-            showMsg('الرمز غير صحيح', 'error');
-        }
-    });
-
-    // إعادة إرسال
-    document.getElementById('btn-resend').addEventListener('click', () => {
-        document.getElementById('otp').value = '';
-        document.getElementById('btn-send-otp').click(); // محاكاة إعادة الإرسال
-    });
-
-    // إضافة حقل كود قضية
-    document.getElementById('btn-add-case').addEventListener('click', () => {
-        const div = document.createElement('div');
-        div.className = 'case-entry';
-        div.innerHTML = `
-            <input type="text" class="case-code" placeholder="كود القضية (مثال: MA-26101-8X9j3B)" />
-            <i class="fas fa-trash remove-case" title="حذف"></i>
-        `;
-        document.getElementById('caseInputs').appendChild(div);
-    });
-
-    // حذف حقل
-    document.addEventListener('click', e => {
-        if (e.target.classList.contains('remove-case')) {
-            e.target.parentElement.remove();
-        }
-    });
-
-    // استعلام عن القضايا
-    document.getElementById('btn-submit-cases').addEventListener('click', () => {
-        const codes = Array.from(document.querySelectorAll('.case-code'))
-            .map(el => el.value.trim())
-            .filter(v => v);
-
-        if (codes.length === 0) {
-            showMsg('أدخل كود قضية واحد على الأقل', 'error');
-            return;
-        }
-
-        showMsg('جاري الاستعلام...', '');
-
-        // ------------------ هنا query Supabase حقيقي ------------------
-        // مثال محاكاة نتائج
-        setTimeout(() => {
-            let html = '';
-            codes.forEach(code => {
-                if (code.startsWith('MA-')) {
-                    html += `
-                        <div class="result-card">
-                            <strong>${code}</strong><br>
-                            <div style="margin-top:0.6rem;color:#aaa;">
-                                الحالة: جارية<br>
-                                آخر جلسة: 2026-01-05<br>
-                                الخصم: شركة الإنشاءات المحدودة<br>
-                                التفاصيل: ...
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    html += `<div class="msg error">كود غير صحيح: ${code}</div>`;
+        
+        // تهيئة Supabase وFirebase
+        async function initApp() {
+            try {
+                // تحميل Supabase
+                if (!window.supabase) {
+                    await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js');
                 }
+                
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ تم تهيئة Supabase بنجاح');
+                
+                // تحميل Firebase
+                await loadScript('https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js');
+                await loadScript('https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js');
+                
+                // تهيئة Firebase
+                if (firebase.apps.length === 0) {
+                    firebase.initializeApp(FIREBASE_CONFIG);
+                }
+                
+            } catch (error) {
+                console.error('❌ خطأ في التهيئة:', error);
+                showAlert('حدث خطأ في تحميل النظام. يرجى تحديث الصفحة.', 'error');
+            }
+        }
+        
+        // تحميل ملفات JavaScript ديناميكياً
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
             });
-            document.getElementById('results').innerHTML = html;
-            showMsg('تم عرض النتائج', 'success');
-        }, 1000);
-    });
-
-    function showMsg(text, type = '') {
-        const el = document.getElementById('msg');
-        el.textContent = text;
-        el.className = 'msg' + (type ? ` msg-${type}` : '');
-        el.style.display = text ? 'block' : 'none';
-    }
-</script>
+        }
+        
+        // إعداد مستمعي الأحداث
+        function setupEventListeners() {
+            // اختيار وسيلة الإرسال
+            document.querySelectorAll('.method-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedMethod = this.dataset.method;
+                });
+            });
+            
+            // إرسال النموذج
+            document.getElementById('authForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await sendAuthCode();
+            });
+        }
+        
+        // إرسال رمز التحقق
+        async function sendAuthCode() {
+            const identifier = document.getElementById('identifier').value.trim();
+            
+            if (!identifier) {
+                showAlert('يرجى إدخال رقم الهاتف أو البريد الإلكتروني', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                // التحقق من وجود المستخدم في قاعدة البيانات
+                const user = await findUser(identifier);
+                
+                if (!user) {
+                    showAlert('رقم الهاتف أو البريد الإلكتروني غير مسجل لدينا', 'error');
+                    showLoading(false);
+                    return;
+                }
+                
+                // تحديد نوع المعرف
+                const isPhone = /^\+?\d{10,}$/.test(identifier);
+                const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+                
+                if (!isPhone && !isEmail) {
+                    showAlert('يرجى إدخال رقم هاتف أو بريد إلكتروني صحيح', 'error');
+                    showLoading(false);
+                    return;
+                }
+                
+                // إنشاء رمز التحقق أو رابط ماجيك
+                if (selectedMethod === 'sms') {
+                    if (!isPhone) {
+                        showAlert('يرجى إدخال رقم هاتف للإرسال عبر SMS', 'error');
+                        showLoading(false);
+                        return;
+                    }
+                    
+                    await sendSMSVerification(identifier, user.id);
+                } else {
+                    if (!isEmail) {
+                        showAlert('يرجى إدخال بريد إلكتروني للإرسال عبر البريد', 'error');
+                        showLoading(false);
+                        return;
+                    }
+                    
+                    await sendEmailVerification(identifier, user.id);
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert(error.message || 'حدث خطأ أثناء الإرسال', 'error');
+                showLoading(false);
+            }
+        }
+        
+        // البحث عن المستخدم في قاعدة البيانات
+        async function findUser(identifier) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('clients')
+                    .select('*')
+                    .or(`phone.eq.${identifier},email.eq.${identifier}`)
+                    .single();
+                
+                if (error) {
+                    if (error.code === 'PGRST116') {
+                        return null; // المستخدم غير موجود
+                    }
+                    throw error;
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('Error finding user:', error);
+                throw error;
+            }
+        }
+        
+        // إرسال رمز التحقق عبر SMS
+        async function sendSMSVerification(phone, userId) {
+            try {
+                // توليد OTP مكون من 6 أرقام
+                const otp = Math.floor(100000 + Math.random() * 900000).toString();
+                
+                // حفظ OTP في قاعدة البيانات
+                const { data, error } = await supabaseClient
+                    .from('auth_codes')
+                    .insert({
+                        phone: phone,
+                        otp_code: otp,
+                        delivery_method: 'sms',
+                        expires_at: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString()
+                    })
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                // محاكاة إرسال SMS (في النسخة الحقيقية، استخدم Firebase Cloud Functions أو خدمة SMS)
+                await simulateSendSMS(phone, otp);
+                
+                // حفظ البيانات في الجلسة
+                sessionStorage.setItem('authData', JSON.stringify({
+                    userId: userId,
+                    phone: phone,
+                    method: 'sms',
+                    authCodeId: data.id
+                }));
+                
+                // الانتقال إلى صفحة التحقق
+                window.location.href = 'verify-otp.html';
+                
+            } catch (error) {
+                console.error('Error sending SMS:', error);
+                throw error;
+            }
+        }
+        
+        // إرسال رابط ماجيك عبر البريد الإلكتروني
+        async function sendEmailVerification(email, userId) {
+            try {
+                // إنشاء رابط ماجيك
+                const magicToken = crypto.randomUUID();
+                
+                // حفظ الرابط في قاعدة البيانات
+                const { data, error } = await supabaseClient
+                    .from('auth_codes')
+                    .insert({
+                        email: email,
+                        magic_link_token: magicToken,
+                        delivery_method: 'email',
+                        expires_at: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString()
+                    })
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                // إنشاء الرابط الماجيك
+                const magicLink = `${window.location.origin}/verify-magic.html?token=${magicToken}`;
+                
+                // محاكاة إرسال البريد (في النسخة الحقيقية، استخدم Firebase Cloud Functions أو خدمة Email)
+                await simulateSendEmail(email, magicLink);
+                
+                showAlert('تم إرسال رابط الدخول إلى بريدك الإلكتروني. الرابط صالح لمدة 12 ساعة.', 'success');
+                showLoading(false);
+                
+            } catch (error) {
+                console.error('Error sending email:', error);
+                throw error;
+            }
+        }
+        
+        // محاكاة إرسال SMS (تستبدل بخدمة حقيقية)
+        async function simulateSendSMS(phone, otp) {
+            console.log(`📱 تم إرسال رمز التحقق ${otp} إلى ${phone}`);
+            
+            // في النسخة الحقيقية، استخدم:
+            // 1. Firebase Cloud Messaging
+            // 2. أو خدمة SMS مثل Twilio, Vonage, etc.
+            // 3. أو Firebase Cloud Functions مع خدمة SMS
+            
+            return new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
+        // محاكاة إرسال البريد (تستبدل بخدمة حقيقية)
+        async function simulateSendEmail(email, magicLink) {
+            console.log(`📧 تم إرسال الرابط الماجيك إلى ${email}`);
+            console.log(`🔗 الرابط: ${magicLink}`);
+            
+            // في النسخة الحقيقية، استخدم:
+            // 1. Firebase Cloud Functions مع nodemailer
+            // 2. أو خدمة مثل SendGrid, Mailgun, etc.
+            // 3. أو Firebase Extensions للبريد الإلكتروني
+            
+            return new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
+        // عرض رسائل التنبيه
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // التحكم في مؤشر التحميل
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.getElementById('submitBtn').disabled = show;
+        }
+    </script>
 </body>
 </html>

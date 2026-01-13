@@ -4,101 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>استعلام عن القضية - مؤسسة محمود عبد الحميد للمحاماة</title>
-    </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --deep-black: #0a0a0a;
+            --gold-primary: #D4AF37;
+            --gold-gradient: linear-gradient(135deg, #f1d18a 0%, #c3922e 100%);
+            --text-light: #f8fafc;
+        }
+        body {
+            background-color: var(--deep-black);
+            color: var(--text-light);
+            font-family: 'Tajawal', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .inquiry-card {
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h2 { color: var(--gold-primary); margin-bottom: 20px; }
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .btn-primary {
+            background: var(--gold-gradient);
+            border: none;
+            padding: 15px 30px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 8px; display: none; }
+        .alert-error { background: #721c24; color: #f8d7da; }
+        .alert-success { background: #155724; color: #d4edda; }
+        #loading { display: none; color: var(--gold-primary); margin-bottom: 10px; }
+    </style>
+</head>
 <body>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+
+    <div class="inquiry-card">
+        <h2><i class="fas fa-balance-scale"></i> استعلام عن قضية</h2>
+        <div id="alertMessage" class="alert"></div>
+        <div id="loading">جاري المعالجة...</div>
+
+        <form id="inquiryForm">
+            <input type="text" id="caseCode" class="form-control" placeholder="أدخل كود القضية (مثال: MA-2024-12345)" required>
+            
+            <div id="otpSection" style="display:none;">
+                <input type="text" id="otpCode" class="form-control" placeholder="أدخل رمز التحقق (OTP)">
+                <button type="button" onclick="verifyOtp()" class="btn-primary">تأكيد الرمز</button>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-primary">إرسال رمز التحقق</button>
+        </form>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        // 1. إعدادات Firebase (انسخها من الصورة التي كانت لديك 14269.jpg)
+        // 1. إعداد Firebase (مبني على صورك السابقة)
         const firebaseConfig = {
-            apiKey: "AIzaSy...", 
+            apiKey: "AIzaSyDE7...", // استبدل هذا بالكامل من صفحة Firebase عندك
             authDomain: "lawofficeotp.firebaseapp.com",
             projectId: "lawofficeotp",
-            // ... باقي البيانات من صورتك
+            storageBucket: "lawofficeotp.appspot.com",
+            messagingSenderId: "1055536417532",
+            appId: "1:1055536417532:web:..." 
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // 2. إعدادات Supabase
+        // 2. إعداد Supabase
         const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // كودك الموجود بالملف
-        const supabase = sacrament.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // كود الـ Anon Key الخاص بك
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // إعداد Recaptcha (ضروري لـ Firebase)
+        // إعداد أداة التحقق من الروبوتات
         window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('submitBtn', {
             'size': 'invisible'
         });
 
-        // معالجة إرسال النموذج
-        document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
+        const inquiryForm = document.getElementById('inquiryForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const otpSection = document.getElementById('otpSection');
+
+        // وظيفة إرسال الـ OTP
+        inquiryForm.onsubmit = async (e) => {
             e.preventDefault();
-            const caseCode = document.getElementById('caseCode').value.trim();
+            const caseCode = document.getElementById('caseCode').value;
             
-            showLoading();
+            showLoading(true);
             hideAlert();
 
             try {
-                // الخطوة الأولى: التأكد من وجود الكود في Supabase وجلب رقم الهاتف
-                const { data: caseData, error: caseError } = await supabase
+                // البحث عن القضية في Supabase
+                const { data, error } = await supabaseClient
                     .from('cases')
                     .select('client_phone')
                     .eq('case_code', caseCode)
                     .single();
 
-                if (caseError || !caseData) {
-                    throw new Error('كود القضية هذا غير مسجل لدينا. يرجى مراجعة المكتب.');
-                }
+                if (error || !data) throw new Error("كود القضية غير موجود بسجلاتنا.");
 
-                const phoneNumber = caseData.client_phone;
+                const phone = data.client_phone;
 
-                // الخطوة الثانية: إرسال الـ OTP عبر Firebase
-                // ملاحظة: تأكد أن رقم الهاتف في Supabase يبدأ بـ + كود الدولة
-                const confirmationResult = await auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier);
-                
-                // حفظ البيانات مؤقتاً للانتقال لصفحة التحقق
+                // إرسال OTP عبر Firebase
+                const confirmationResult = await auth.signInWithPhoneNumber(phone, window.recaptchaVerifier);
                 window.confirmationResult = confirmationResult;
-                sessionStorage.setItem('pendingPhone', phoneNumber);
-                sessionStorage.setItem('pendingCaseCode', caseCode);
 
-                showAlert('تم إرسال رمز التحقق إلى هاتفك المسجل لدينا', 'success');
+                // إخفاء زر الإرسال وإظهار خانة الـ OTP
+                submitBtn.style.display = 'none';
+                otpSection.style.display = 'block';
+                showAlert("تم إرسال الرمز لهاتفك المسجل", "success");
 
-                // الانتقال لصفحة إدخال الرمز (Verify) بعد ثانيتين
-                setTimeout(() => {
-                    // هنا نفتح نافذة تطلب الرمز أو ننتقل لصفحة أخرى
-                    const code = prompt("أدخل رمز التحقق الذي وصلك:");
-                    if (code) verifyCode(code);
-                }, 2000);
-
-            } catch (error) {
-                showAlert(error.message);
+            } catch (err) {
+                showAlert(err.message, "error");
             } finally {
-                hideLoading();
+                showLoading(false);
             }
-        });
+        };
 
-        async function verifyCode(code) {
+        // وظيفة التحقق من الرمز
+        async function verifyOtp() {
+            const code = document.getElementById('otpCode').value;
+            showLoading(true);
             try {
-                const result = await window.confirmationResult.confirm(code);
-                // إذا نجح التحقق
-                showAlert('تم التحقق بنجاح، جاري جلب بيانات القضية...', 'success');
-                // توجيه العميل لصفحة عرض النتائج مع كود القضية
-                window.location.href = `case_details.html?code=${sessionStorage.getItem('pendingCaseCode')}`;
-            } catch (error) {
-                showAlert('رمز التحقق غير صحيح، حاول مجدداً');
+                await window.confirmationResult.confirm(code);
+                showAlert("تم التحقق! جاري تحويلك لتفاصيل القضية...", "success");
+                // الانتقال لصفحة عرض البيانات
+                window.location.href = "case_details.html?case=" + document.getElementById('caseCode').value;
+            } catch (err) {
+                showAlert("كود التحقق خطأ، حاول مرة أخرى", "error");
+            } finally {
+                showLoading(false);
             }
         }
 
-        // دالة المساعدة لإظهار التنبيهات (الموجودة في كودك الأصلي)
-        function showAlert(msg, type='error') {
-            const alertDiv = document.getElementById('alertMessage');
-            alertDiv.style.display = 'block';
-            alertDiv.className = `alert alert-${type}`;
-            alertDiv.textContent = msg;
+        function showAlert(msg, type) {
+            const div = document.getElementById('alertMessage');
+            div.className = `alert alert-${type}`;
+            div.textContent = msg;
+            div.style.display = 'block';
         }
-        function showLoading() { document.getElementById('loading').style.display = 'block'; }
-        function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+        function hideAlert() { document.getElementById('alertMessage').style.display = 'none'; }
+        function showLoading(status) { document.getElementById('loading').style.display = status ? 'block' : 'none'; }
     </script>
 </body>
 </html>

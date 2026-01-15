@@ -13,7 +13,13 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-        window.firebaseInit = { initializeApp, getAuth, RecaptchaVerifier, signInWithPhoneNumber };
+        // تعريف المتغيرات بشكل صحيح
+        window.firebaseInit = {
+            initializeApp,
+            getAuth,
+            RecaptchaVerifier,
+            signInWithPhoneNumber
+        };
     </script>
 
     <style>
@@ -894,7 +900,7 @@
             showSuccess('تم العثور على القضية بنجاح');
         });
 
-        // الدوال الأصلية للواتساب والطباعة وحجز الموعد (نفسها بالكامل)
+        // دالة فتح الواتساب
         function openWhatsApp(event) {
             event.preventDefault();
             if (!currentCaseCode) return showError('يرجى البحث عن القضية أولاً');
@@ -902,31 +908,224 @@
             window.open(`https://wa.me/201101076000?text=${encodeURIComponent(message)}`, '_blank');
         }
 
+        // دالة فتح البريد الإلكتروني (مصححة)
         function openEmail(event) {
             event.preventDefault();
             if (!currentCaseCode) return showError('يرجى البحث عن القضية أولاً');
             const subject = `استفسار عن القضية ${currentCaseCode}`;
             const body = `السلام عليكم،\n\nأود الاستفسار عن قضيتي التي تحمل الكود: ${currentCaseCode}\n\nمع الشكر`;
-            window.location.href = `mailto:ma.legaleg@outlook.com?subject=\( {encodeURIComponent(subject)}&body= \){encodeURIComponent(body)}`;
+            window.location.href = `mailto:ma.legaleg@outlook.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
+        // دالة حجز موعد مقابلة (مكتملة)
         function bookAppointment(event) {
             event.preventDefault();
             if (!currentCaseCode) return showError('يرجى البحث عن القضية أولاً');
 
+            const today = new Date().toISOString().split('T')[0];
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth() + 3);
+            const maxDateStr = maxDate.toISOString().split('T')[0];
+
             Swal.fire({
                 title: 'حجز موعد مقابلة',
-                html: `/* نفس الـHTML الأصلي للحجز */`,
-                // باقي الكود الأصلي كامل
+                html: `
+                    <div style="text-align: right; direction: rtl;">
+                        <p>سيتم حجز موعد للمقابلة في المكتب للقضية ذات الكود: <strong>${currentCaseCode}</strong></p>
+                        <div class="form-group" style="margin: 20px 0;">
+                            <label for="appointment-date" style="display: block; margin-bottom: 8px; color: #bf953f; font-weight: bold;">
+                                <i class="fas fa-calendar"></i> التاريخ المفضل
+                            </label>
+                            <input type="date" id="appointment-date" 
+                                   class="form-control" 
+                                   style="width: 100%; padding: 10px; border: 2px solid #bf953f; border-radius: 5px;"
+                                   min="${today}" 
+                                   max="${maxDateStr}" 
+                                   required>
+                        </div>
+                        <div class="form-group" style="margin: 20px 0;">
+                            <label for="appointment-time" style="display: block; margin-bottom: 8px; color: #bf953f; font-weight: bold;">
+                                <i class="fas fa-clock"></i> الوقت المفضل
+                            </label>
+                            <select id="appointment-time" 
+                                    class="form-control" 
+                                    style="width: 100%; padding: 10px; border: 2px solid #bf953f; border-radius: 5px;" 
+                                    required>
+                                <option value="">اختر الوقت</option>
+                                <option value="10:00">10:00 صباحاً</option>
+                                <option value="11:00">11:00 صباحاً</option>
+                                <option value="12:00">12:00 ظهراً</option>
+                                <option value="13:00">01:00 مساءً</option>
+                                <option value="14:00">02:00 مساءً</option>
+                                <option value="15:00">03:00 مساءً</option>
+                                <option value="16:00">04:00 مساءً</option>
+                            </select>
+                        </div>
+                        <div style="background: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 15px;">
+                            <p style="margin: 0; color: #666; font-size: 14px;">
+                                <i class="fas fa-info-circle"></i>
+                                سيتم التواصل معك لتأكيد الموعد عبر الواتساب
+                            </p>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'تأكيد الحجز',
+                cancelButtonText: 'إلغاء',
+                confirmButtonColor: '#bf953f',
+                cancelButtonColor: '#dc3545',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const date = document.getElementById('appointment-date').value;
+                    const time = document.getElementById('appointment-time').value;
+                    
+                    if (!date || !time) {
+                        Swal.showValidationMessage('الرجاء ملء جميع الحقول');
+                        return false;
+                    }
+                    
+                    return { date, time };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const { date, time } = result.value;
+                    const formattedDate = new Date(date).toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    const message = `أود حجز موعد مقابلة في المكتب\n` +
+                                   `كود القضية: ${currentCaseCode}\n` +
+                                   `التاريخ: ${formattedDate}\n` +
+                                   `الوقت: ${time}\n` +
+                                   `الاسم: ${document.getElementById('resultClientName').textContent}`;
+                    
+                    window.open(`https://wa.me/201101076000?text=${encodeURIComponent(message)}`, '_blank');
+                    
+                    Swal.fire({
+                        title: 'تم إرسال طلب الحجز',
+                        text: 'سيتم التواصل معك قريباً لتأكيد الموعد',
+                        icon: 'success',
+                        confirmButtonColor: '#bf953f'
+                    });
+                }
             });
         }
 
+        // دالة طباعة تفاصيل القضية (مكتملة)
         function printCaseDetails() {
-            /* نفس كود الطباعة الأصلي كامل */
+            if (!currentCaseData) {
+                showError('لا توجد بيانات للطباعة');
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            
+            const printContent = `
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>تفاصيل القضية - مؤسسة محمود عبد الحميد</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+                        body { padding: 20px; color: #000; }
+                        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #bf953f; padding-bottom: 20px; }
+                        .header h1 { color: #bf953f; margin-bottom: 10px; font-size: 24px; }
+                        .header p { color: #666; font-size: 14px; }
+                        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 25px 0; }
+                        .info-item { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+                        .info-label { color: #555; font-size: 12px; margin-bottom: 5px; }
+                        .info-value { color: #000; font-weight: bold; font-size: 14px; }
+                        .session-info { background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0; border-right: 4px solid #bf953f; }
+                        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #777; font-size: 12px; }
+                        @media print {
+                            .no-print { display: none !important; }
+                            body { padding: 10px; }
+                        }
+                        @page { margin: 0.5cm; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>مؤسسة محمود عبد الحميد للمحاماة</h1>
+                        <p>المحامي بالنقض و الدستورية العليا</p>
+                        <p style="margin-top: 10px;">تفاصيل القضية - ${new Date().toLocaleDateString('ar-EG')}</p>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">كود القضية</div>
+                            <div class="info-value">${currentCaseData.case_code || '-'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">اسم العميل</div>
+                            <div class="info-value">${currentCaseData.client_name || '-'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">اسم الخصم</div>
+                            <div class="info-value">${currentCaseData.opponent_name || '-'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">رقم القضية</div>
+                            <div class="info-value">${currentCaseData.case_number || '-'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">سنة القضية</div>
+                            <div class="info-value">${currentCaseData.case_year || '-'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">المحكمة</div>
+                            <div class="info-value">${currentCaseData.court_name || '-'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">رقم هاتف العميل</div>
+                            <div class="info-value">${verifiedPhone || '-'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">تاريخ الاستعلام</div>
+                            <div class="info-value">${new Date().toLocaleDateString('ar-EG')}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="session-info">
+                        <h3 style="color: #bf953f; margin-bottom: 10px;">آخر تحديث للقضية</h3>
+                        <p>تم استخراج هذه المعلومات بتاريخ: ${new Date().toLocaleString('ar-EG')}</p>
+                        <p style="margin-top: 10px; color: #555;">
+                            للحصول على أحدث التحديثات، يرجى التواصل مع المكتب
+                        </p>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>© ${new Date().getFullYear()} مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
+                        <p style="margin-top: 10px;">للاستفسار: 01101076000 - ma.legaleg@outlook.com</p>
+                        <p style="margin-top: 5px; color: #999; font-size: 11px;">
+                            هذه وثيقة خاصة ويحظر تداولها مع أي شخص غير صاحب العلاقة
+                        </p>
+                    </div>
+                    
+                    <div class="no-print" style="margin-top: 30px; text-align: center;">
+                        <button onclick="window.print()" style="background: #bf953f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                            طباعة الوثيقة
+                        </button>
+                        <button onclick="window.close()" style="background: #666; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+                            إغلاق النافذة
+                        </button>
+                    </div>
+                    
+                    <script>
+                        window.onload = function() {
+                            setTimeout(() => {
+                                window.print();
+                                setTimeout(() => window.close(), 1000);
+                            }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(printContent);
+            printWindow.document.close();
         }
 
         checkSession();
     </script>
 </body>
 </html>
-هل في هذا أخطاء ؟

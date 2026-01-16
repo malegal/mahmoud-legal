@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>استعلام العميل - نظام إدارة القضايا</title>
-    <!-- لا نحتاج EmailJS SDK في الإنتاج لأنه سيتم إرسال البريد من الخادم -->
     <style>
         * {
             box-sizing: border-box;
@@ -68,6 +67,10 @@
             transition: all 0.3s ease;
         }
         
+        .step:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
         .step h2 {
             color: #2c3e50;
             margin-bottom: 20px;
@@ -76,6 +79,10 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+        
+        .step h2 i {
+            color: #3498db;
         }
         
         .form-group {
@@ -126,6 +133,10 @@
             box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
         }
         
+        .btn:active {
+            transform: translateY(0);
+        }
+        
         .btn:disabled {
             background: #95a5a6;
             cursor: not-allowed;
@@ -135,6 +146,19 @@
         
         .btn-full {
             width: 100%;
+        }
+        
+        .otp-display {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 24px;
+            letter-spacing: 5px;
+            margin: 15px 0;
+            font-weight: bold;
+            display: none;
         }
         
         .message {
@@ -156,6 +180,12 @@
             border: 1px solid #f5c6cb;
         }
         
+        .message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
         .hidden {
             display: none;
         }
@@ -166,6 +196,11 @@
             border-radius: 10px;
             margin-top: 20px;
             border-right: 4px solid #3498db;
+        }
+        
+        .user-info h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
         }
         
         .info-grid {
@@ -227,6 +262,20 @@
             font-weight: bold;
         }
         
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .step {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+        
         .timer {
             color: #e74c3c;
             font-weight: bold;
@@ -234,18 +283,9 @@
             margin: 10px 0;
             font-size: 18px;
         }
-        
-        .security-note {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
     </style>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -264,17 +304,12 @@
                 <div class="form-group">
                     <label for="identifier">البريد الإلكتروني أو رقم الهاتف</label>
                     <input type="text" id="identifier" class="form-control" 
-                           placeholder="مثال: example@email.com أو 0512345678"
-                           autocomplete="off">
+                           placeholder="مثال: example@email.com أو 0512345678">
                 </div>
                 
                 <button id="request-otp-btn" class="btn btn-full">
                     <span>إرسال رمز التحقق</span>
                 </button>
-                
-                <div class="security-note">
-                    <i>سيتم إرسال رمز تحقق مكون من 6 أرقام إلى بريدك الإلكتروني المسجل</i>
-                </div>
             </div>
             
             <!-- Step 2: Verify OTP -->
@@ -285,8 +320,7 @@
                 <div class="form-group">
                     <label for="otp-code">رمز التحقق</label>
                     <input type="text" id="otp-code" class="form-control" 
-                           placeholder="أدخل الرمز المكون من 6 أرقام" maxlength="6"
-                           autocomplete="off">
+                           placeholder="أدخل الرمز المكون من 6 أرقام" maxlength="6">
                 </div>
                 
                 <div class="timer" id="otp-timer">الصلاحية: 10:00</div>
@@ -304,6 +338,11 @@
             
             <!-- Messages -->
             <div id="message" class="message"></div>
+            
+            <!-- OTP Display (for testing) -->
+            <div id="otp-display" class="otp-display">
+                رمز التحقق: <span id="otp-value"></span>
+            </div>
             
             <!-- User Info Display -->
             <div id="user-info" class="user-info hidden">
@@ -327,32 +366,17 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">حالة القضية</div>
-                        <div class="info-value" id="info-case-status"></div>
+                        <div class="info-value" id="info-case-status">قيد المراجعة</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">تاريخ الإنشاء</div>
-                        <div class="info-value" id="info-created-date"></div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">آخر تحديث</div>
-                        <div class="info-value" id="info-updated-date"></div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">المحامي المسؤول</div>
-                        <div class="info-value" id="info-lawyer"></div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">المرحلة الحالية</div>
-                        <div class="info-value" id="info-stage"></div>
+                        <div class="info-value" id="info-created-date">2024-01-15</div>
                     </div>
                 </div>
                 
                 <div style="margin-top: 20px; text-align: center;">
                     <button id="new-inquiry-btn" class="btn">
                         <span>استعلام جديد</span>
-                    </button>
-                    <button id="download-report-btn" class="btn" style="background: #27ae60; margin-right: 10px;">
-                        <span>تحميل التقرير</span>
                     </button>
                 </div>
             </div>
@@ -365,6 +389,9 @@
     </div>
 
     <script>
+        // تهيئة EmailJS
+        emailjs.init('RCaH1Upo_Fep1Rorw'); // Public Key
+        
         // عناصر DOM
         const step1 = document.getElementById('step1');
         const step2 = document.getElementById('step2');
@@ -372,10 +399,11 @@
         const verifyOtpBtn = document.getElementById('verify-otp-btn');
         const resendOtpBtn = document.getElementById('resend-otp-btn');
         const newInquiryBtn = document.getElementById('new-inquiry-btn');
-        const downloadReportBtn = document.getElementById('download-report-btn');
         const identifierInput = document.getElementById('identifier');
         const otpCodeInput = document.getElementById('otp-code');
         const messageDiv = document.getElementById('message');
+        const otpDisplay = document.getElementById('otp-display');
+        const otpValue = document.getElementById('otp-value');
         const userInfoDiv = document.getElementById('user-info');
         const otpTimer = document.getElementById('otp-timer');
         
@@ -384,42 +412,44 @@
         const infoCaseCode = document.getElementById('info-case-code');
         const infoEmail = document.getElementById('info-email');
         const infoPhone = document.getElementById('info-phone');
-        const infoCaseStatus = document.getElementById('info-case-status');
-        const infoCreatedDate = document.getElementById('info-created-date');
-        const infoUpdatedDate = document.getElementById('info-updated-date');
-        const infoLawyer = document.getElementById('info-lawyer');
-        const infoStage = document.getElementById('info-stage');
         
         // متغيرات عامة
-        let currentIdentifier = '';
-        let currentEmail = '';
-        let currentPhone = '';
+        let currentUser = null;
         let otpExpiryTime = null;
         let otpInterval = null;
+        let generatedOTP = '';
         
-        // إعدادات API
-        const API_BASE_URL = 'https://api.yourdomain.com'; // استبدل بعنوان API الحقيقي
-        const API_ENDPOINTS = {
-            requestOTP: `${API_BASE_URL}/api/otp/request`,
-            verifyOTP: `${API_BASE_URL}/api/otp/verify`,
-            resendOTP: `${API_BASE_URL}/api/otp/resend`,
-            caseDetails: `${API_BASE_URL}/api/cases/details`
-        };
-        
-        // CSRF Token (ستتم معالجته من الخادم في الإنتاج)
-        let csrfToken = '';
+        // نموذج بيانات وهمي (استبدل هذا بالاتصال بقاعدة البيانات الحقيقية)
+        const mockCases = [
+            {
+                client_email: "mahmoud.abdelhamyd@gmail.com",
+                client_phone: "0512345678",
+                client_name: "محمود عبد الحميد",
+                case_code: "CASE-2024-001",
+                case_status: "قيد المراجعة",
+                created_date: "2024-01-15"
+            },
+            {
+                client_email: "ahmed@gmail.com",
+                client_phone: "0511111111",
+                client_name: "أحمد محمد",
+                case_code: "CASE-2024-002",
+                case_status: "مكتمل",
+                created_date: "2024-01-10"
+            }
+        ];
         
         // دالة لعرض الرسائل
-        function showMessage(text, type = 'info', duration = 5000) {
+        function showMessage(text, type = 'info') {
             messageDiv.textContent = text;
             messageDiv.className = `message ${type}`;
             messageDiv.style.display = 'block';
             
-            // إخفاء الرسالة بعد مدة محددة
-            if (duration > 0) {
+            // إخفاء الرسالة بعد 5 ثواني
+            if (type !== 'error') {
                 setTimeout(() => {
                     messageDiv.style.display = 'none';
-                }, duration);
+                }, 5000);
             }
         }
         
@@ -428,44 +458,52 @@
             messageDiv.style.display = 'none';
         }
         
-        // دالة لإظهار/إخفاء حالة التحميل على الأزرار
-        function setButtonLoading(button, isLoading) {
-            if (isLoading) {
-                button.disabled = true;
-                const originalText = button.innerHTML;
-                button.setAttribute('data-original-text', originalText);
-                button.innerHTML = '<span class="loading"></span> جاري المعالجة...';
-            } else {
-                button.disabled = false;
-                const originalText = button.getAttribute('data-original-text');
-                if (originalText) {
-                    button.innerHTML = originalText;
-                }
-            }
+        // دالة للبحث عن المستخدم
+        function findUserInCases(identifier) {
+            // البحث عن المستخدم باستخدام البريد أو الهاتف
+            return mockCases.find(user => 
+                user.client_email === identifier || 
+                user.client_phone === identifier
+            );
         }
         
-        // دالة التحقق من صحة الإدخال
-        function validateIdentifier(identifier) {
-            if (!identifier) {
-                return { valid: false, message: 'يرجى إدخال البريد الإلكتروني أو رقم الهاتف' };
+        // دالة إنشاء OTP
+        function generateOTP(length = 6) {
+            const digits = '0123456789';
+            let otp = '';
+            
+            for (let i = 0; i < length; i++) {
+                otp += digits[Math.floor(Math.random() * 10)];
             }
             
-            // تحقق من البريد الإلكتروني
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            // تحقق من رقم الهاتف (10 أرقام على الأقل)
-            const phoneRegex = /^[0-9]{10,15}$/;
-            
-            const isEmail = emailRegex.test(identifier);
-            const isPhone = phoneRegex.test(identifier.replace(/\D/g, ''));
-            
-            if (!isEmail && !isPhone) {
+            return otp;
+        }
+        
+        // دالة إرسال OTP عبر EmailJS
+        async function sendEmailOTP(email, otpCode) {
+            try {
+                const templateParams = {
+                    to_email: email,
+                    otp_code: otpCode,
+                    timestamp: new Date().toLocaleString('ar-SA'),
+                    app_name: 'نظام إدارة القضايا'
+                };
+                
+                const response = await emailjs.send(
+                    'service_kpadqtp', // Service ID
+                    'template_tawyvln', // Template ID
+                    templateParams
+                );
+                
+                console.log('Email sent successfully:', response);
+                return { success: true, message: 'تم إرسال البريد بنجاح' };
+            } catch (error) {
+                console.error('Error sending email:', error);
                 return { 
-                    valid: false, 
-                    message: 'يرجى إدخال بريد إلكتروني صالح أو رقم هاتف يتكون من 10 أرقام على الأقل' 
+                    success: false, 
+                    message: `فشل إرسال البريد: ${error.text || error.message}` 
                 };
             }
-            
-            return { valid: true, type: isEmail ? 'email' : 'phone' };
         }
         
         // دالة بدء المؤقت
@@ -489,7 +527,6 @@
                 clearInterval(otpInterval);
                 otpTimer.textContent = 'انتهت صلاحية الرمز';
                 otpTimer.style.color = '#e74c3c';
-                otpCodeInput.disabled = true;
                 return;
             }
             
@@ -497,136 +534,21 @@
             const seconds = Math.floor((diff / 1000) % 60);
             
             otpTimer.textContent = `الصلاحية: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            // تغيير اللون عند اقتراب الانتهاء
-            if (minutes < 2) {
-                otpTimer.style.color = '#e74c3c';
-            } else if (minutes < 5) {
-                otpTimer.style.color = '#f39c12';
-            }
         }
         
-        // دالة إعادة تعيين النموذج
+        // دالة لإعادة تعيين النموذج
         function resetForm() {
             identifierInput.value = '';
             otpCodeInput.value = '';
             hideMessage();
+            otpDisplay.style.display = 'none';
             userInfoDiv.classList.add('hidden');
             step2.classList.add('hidden');
             step1.classList.remove('hidden');
-            otpCodeInput.disabled = false;
             
             if (otpInterval) {
                 clearInterval(otpInterval);
                 otpInterval = null;
-            }
-            
-            // إعادة تعيين متغيرات المستخدم
-            currentIdentifier = '';
-            currentEmail = '';
-            currentPhone = '';
-        }
-        
-        // دالة طلب OTP من الخادم
-        async function requestOTP(identifier) {
-            try {
-                const response = await fetch(API_ENDPOINTS.requestOTP, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken
-                    },
-                    body: JSON.stringify({ identifier }),
-                    credentials: 'include' // لإرسال الكوكيز إذا لزم الأمر
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.message || 'حدث خطأ في الخادم');
-                }
-                
-                return data;
-            } catch (error) {
-                console.error('Error requesting OTP:', error);
-                throw error;
-            }
-        }
-        
-        // دالة التحقق من OTP
-        async function verifyOTP(identifier, otpCode) {
-            try {
-                const response = await fetch(API_ENDPOINTS.verifyOTP, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken
-                    },
-                    body: JSON.stringify({ identifier, otp_code: otpCode }),
-                    credentials: 'include'
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.message || 'فشل التحقق من الرمز');
-                }
-                
-                return data;
-            } catch (error) {
-                console.error('Error verifying OTP:', error);
-                throw error;
-            }
-        }
-        
-        // دالة إعادة إرسال OTP
-        async function resendOTP(identifier) {
-            try {
-                const response = await fetch(API_ENDPOINTS.resendOTP, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken
-                    },
-                    body: JSON.stringify({ identifier }),
-                    credentials: 'include'
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.message || 'فشل إعادة إرسال الرمز');
-                }
-                
-                return data;
-            } catch (error) {
-                console.error('Error resending OTP:', error);
-                throw error;
-            }
-        }
-        
-        // دالة جلب تفاصيل القضية
-        async function fetchCaseDetails(identifier) {
-            try {
-                const response = await fetch(`${API_ENDPOINTS.caseDetails}?identifier=${encodeURIComponent(identifier)}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken
-                    },
-                    credentials: 'include'
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.message || 'فشل جلب تفاصيل القضية');
-                }
-                
-                return data;
-            } catch (error) {
-                console.error('Error fetching case details:', error);
-                throw error;
             }
         }
         
@@ -634,28 +556,36 @@
         requestOtpBtn.addEventListener('click', async function() {
             const identifier = identifierInput.value.trim();
             
-            // التحقق من صحة المدخلات
-            const validation = validateIdentifier(identifier);
-            if (!validation.valid) {
-                showMessage(validation.message, 'error');
+            if (!identifier) {
+                showMessage('يرجى إدخال البريد الإلكتروني أو رقم الهاتف', 'error');
                 return;
             }
             
-            // تعيين المعرف الحالي
-            currentIdentifier = identifier;
+            // البحث عن المستخدم
+            currentUser = findUserInCases(identifier);
             
-            // إظهار حالة التحميل
-            setButtonLoading(requestOtpBtn, true);
+            if (!currentUser) {
+                showMessage('المستخدم غير موجود في النظام', 'error');
+                return;
+            }
+            
+            // تغيير حالة الزر
+            const originalText = requestOtpBtn.innerHTML;
+            requestOtpBtn.disabled = true;
+            requestOtpBtn.innerHTML = '<span class="loading"></span> جاري الإرسال...';
+            
+            // إنشاء OTP
+            generatedOTP = generateOTP();
+            
+            // عرض OTP للتطوير فقط (إزالة في الإنتاج)
+            otpValue.textContent = generatedOTP;
+            otpDisplay.style.display = 'block';
             
             try {
-                // طلب OTP من الخادم
-                const result = await requestOTP(identifier);
+                // إرسال OTP عبر البريد الإلكتروني
+                const emailResult = await sendEmailOTP(currentUser.client_email, generatedOTP);
                 
-                if (result.success) {
-                    // حفظ بيانات المستخدم
-                    currentEmail = result.email || '';
-                    currentPhone = result.phone || '';
-                    
+                if (emailResult.success) {
                     // الانتقال إلى الخطوة 2
                     step1.classList.add('hidden');
                     step2.classList.remove('hidden');
@@ -663,33 +593,37 @@
                     // بدء المؤقت
                     startOTPTimer();
                     
-                    // إظهار رسالة نجاح
-                    showMessage(
-                        result.message || `تم إرسال رمز التحقق إلى ${result.email || 'بريدك الإلكتروني'}`,
-                        'success'
-                    );
+                    showMessage(`تم إرسال رمز التحقق إلى ${currentUser.client_email}`, 'success');
                     
                     // التركيز على حقل إدخال OTP
                     setTimeout(() => {
                         otpCodeInput.focus();
                     }, 300);
                 } else {
-                    showMessage(result.message || 'فشل إرسال رمز التحقق', 'error');
+                    showMessage(emailResult.message, 'error');
+                    otpDisplay.style.display = 'none';
                 }
             } catch (error) {
-                showMessage(error.message || 'حدث خطأ في الاتصال بالخادم', 'error', 10000);
+                showMessage('حدث خطأ أثناء إرسال رمز التحقق', 'error');
+                console.error(error);
             } finally {
-                // إخفاء حالة التحميل
-                setButtonLoading(requestOtpBtn, false);
+                // إعادة حالة الزر
+                requestOtpBtn.disabled = false;
+                requestOtpBtn.innerHTML = originalText;
             }
         });
         
         // حدث: تحقق من OTP
         verifyOtpBtn.addEventListener('click', async function() {
-            const otpCode = otpCodeInput.value.trim();
+            const enteredOTP = otpCodeInput.value.trim();
             
-            if (!otpCode || otpCode.length !== 6) {
-                showMessage('يرجى إدخال رمز تحقق صالح مكون من 6 أرقام', 'error');
+            if (!enteredOTP) {
+                showMessage('يرجى إدخال رمز التحقق', 'error');
+                return;
+            }
+            
+            if (enteredOTP.length !== 6) {
+                showMessage('رمز التحقق يجب أن يتكون من 6 أرقام', 'error');
                 return;
             }
             
@@ -699,126 +633,88 @@
                 return;
             }
             
-            // إظهار حالة التحميل
-            setButtonLoading(verifyOtpBtn, true);
-            
-            try {
-                // التحقق من OTP مع الخادم
-                const result = await verifyOTP(currentIdentifier, otpCode);
-                
-                if (result.success) {
-                    // إيقاف المؤقت
-                    if (otpInterval) {
-                        clearInterval(otpInterval);
-                        otpInterval = null;
-                    }
-                    
-                    // جلب تفاصيل القضية
-                    const caseDetails = await fetchCaseDetails(currentIdentifier);
-                    
-                    // عرض معلومات المستخدم
-                    infoClientName.textContent = caseDetails.client_name || 'غير متوفر';
-                    infoCaseCode.textContent = caseDetails.case_code || 'غير متوفر';
-                    infoEmail.textContent = caseDetails.client_email || 'غير متوفر';
-                    infoPhone.textContent = caseDetails.client_phone || 'غير متوفر';
-                    infoCaseStatus.textContent = caseDetails.case_status || 'غير متوفر';
-                    infoCreatedDate.textContent = caseDetails.created_date || 'غير متوفر';
-                    infoUpdatedDate.textContent = caseDetails.updated_date || 'غير متوفر';
-                    infoLawyer.textContent = caseDetails.lawyer_name || 'غير متوفر';
-                    infoStage.textContent = caseDetails.current_stage || 'غير متوفر';
-                    
-                    // إضافة فئة للحالة
-                    const statusClass = getStatusClass(caseDetails.case_status);
-                    infoCaseStatus.className = `info-value ${statusClass}`;
-                    
-                    // إخفاء الخطوة 2 وإظهار المعلومات
-                    step2.classList.add('hidden');
-                    userInfoDiv.classList.remove('hidden');
-                    
-                    showMessage('تم التحقق بنجاح! يمكنك الآن رؤية تفاصيل قضيتك', 'success');
-                } else {
-                    showMessage(result.message || 'فشل التحقق من الرمز', 'error');
-                }
-            } catch (error) {
-                showMessage(error.message || 'حدث خطأ أثناء التحقق من الرمز', 'error');
-            } finally {
-                // إخفاء حالة التحميل
-                setButtonLoading(verifyOtpBtn, false);
-            }
-        });
-        
-        // دالة مساعدة لإضافة فئة للحالة
-        function getStatusClass(status) {
-            if (!status) return '';
-            
-            const statusMap = {
-                'قيد المراجعة': 'status-pending',
-                'قيد المعالجة': 'status-processing',
-                'مكتمل': 'status-completed',
-                'ملغي': 'status-cancelled',
-                'معلق': 'status-onhold'
-            };
-            
-            return statusMap[status] || '';
-        }
-        
-        // حدث: إعادة إرسال OTP
-        resendOtpBtn.addEventListener('click', async function() {
-            if (!currentIdentifier) {
-                showMessage('يرجى إعادة طلب رمز التحقق أولاً', 'error');
+            // التحقق من صحة OTP
+            if (enteredOTP !== generatedOTP) {
+                showMessage('رمز التحقق غير صحيح', 'error');
                 return;
             }
             
-            // إظهار حالة التحميل
-            setButtonLoading(resendOtpBtn, true);
+            // تغيير حالة الزر
+            const originalText = verifyOtpBtn.innerHTML;
+            verifyOtpBtn.disabled = true;
+            verifyOtpBtn.innerHTML = '<span class="loading"></span> جاري التحقق...';
+            
+            // محاكاة اتصال بالخادم
+            setTimeout(() => {
+                // عرض معلومات المستخدم
+                infoClientName.textContent = currentUser.client_name;
+                infoCaseCode.textContent = currentUser.case_code;
+                infoEmail.textContent = currentUser.client_email;
+                infoPhone.textContent = currentUser.client_phone;
+                
+                // إخفاء الخطوة 2 وإظهار المعلومات
+                step2.classList.add('hidden');
+                userInfoDiv.classList.remove('hidden');
+                
+                // إيقاف المؤقت
+                if (otpInterval) {
+                    clearInterval(otpInterval);
+                    otpInterval = null;
+                }
+                
+                showMessage('تم التحقق بنجاح!', 'success');
+                
+                // إعادة حالة الزر
+                verifyOtpBtn.disabled = false;
+                verifyOtpBtn.innerHTML = originalText;
+            }, 1000);
+        });
+        
+        // حدث: إعادة إرسال OTP
+        resendOtpBtn.addEventListener('click', async function() {
+            if (!currentUser) return;
+            
+            const originalText = resendOtpBtn.innerHTML;
+            resendOtpBtn.disabled = true;
+            resendOtpBtn.innerHTML = '<span class="loading"></span> جاري الإرسال...';
+            
+            // إنشاء OTP جديد
+            generatedOTP = generateOTP();
+            
+            // عرض OTP للتطوير فقط
+            otpValue.textContent = generatedOTP;
+            otpDisplay.style.display = 'block';
             
             try {
-                // إعادة إرسال OTP
-                const result = await resendOTP(currentIdentifier);
+                // إرسال OTP جديد
+                const emailResult = await sendEmailOTP(currentUser.client_email, generatedOTP);
                 
-                if (result.success) {
+                if (emailResult.success) {
                     // إعادة ضبط المؤقت
                     if (otpInterval) {
                         clearInterval(otpInterval);
                     }
                     startOTPTimer();
                     
-                    // تمكين حقل إدخال OTP
-                    otpCodeInput.disabled = false;
-                    otpCodeInput.value = '';
-                    
                     showMessage('تم إعادة إرسال رمز التحقق بنجاح', 'success');
-                    
-                    // التركيز على حقل إدخال OTP
-                    otpCodeInput.focus();
                 } else {
-                    showMessage(result.message || 'فشل إعادة إرسال الرمز', 'error');
+                    showMessage(emailResult.message, 'error');
                 }
             } catch (error) {
-                showMessage(error.message || 'حدث خطأ أثناء إعادة الإرسال', 'error');
+                showMessage('حدث خطأ أثناء إعادة الإرسال', 'error');
+                console.error(error);
             } finally {
-                // إخفاء حالة التحميل
-                setButtonLoading(resendOtpBtn, false);
+                resendOtpBtn.disabled = false;
+                resendOtpBtn.innerHTML = originalText;
             }
         });
         
         // حدث: استعلام جديد
         newInquiryBtn.addEventListener('click', function() {
             resetForm();
+            currentUser = null;
+            generatedOTP = '';
             showMessage('يمكنك الآن إجراء استعلام جديد', 'info');
-        });
-        
-        // حدث: تحميل التقرير
-        downloadReportBtn.addEventListener('click', function() {
-            if (!currentIdentifier) {
-                showMessage('يرجى إجراء استعلام أولاً', 'error');
-                return;
-            }
-            
-            // توجيه المستخدم لتحميل التقرير
-            window.open(`${API_BASE_URL}/api/cases/report?identifier=${encodeURIComponent(currentIdentifier)}`, '_blank');
-            
-            showMessage('جاري تحميل التقرير...', 'info');
         });
         
         // السماح بإدخال OTP باستخدام Enter
@@ -837,36 +733,14 @@
         
         // تهيئة الصفحة
         document.addEventListener('DOMContentLoaded', function() {
-            // جلب CSRF Token من الخادم (إذا كان مستخدمًا)
-            fetch(`${API_BASE_URL}/api/csrf-token`, {
-                credentials: 'include'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    csrfToken = data.token;
-                }
-            })
-            .catch(error => {
-                console.warn('Could not fetch CSRF token:', error);
-            });
+            // اختبار اتصال EmailJS
+            console.log('EmailJS initialized');
             
             // عرض رسالة ترحيب
             setTimeout(() => {
                 showMessage('مرحباً بك في نظام استعلام القضايا. أدخل بياناتك للبدء.', 'info');
             }, 1000);
         });
-        
-        // إضافة CSS للحالات
-        const style = document.createElement('style');
-        style.textContent = `
-            .status-pending { color: #f39c12; font-weight: bold; }
-            .status-processing { color: #3498db; font-weight: bold; }
-            .status-completed { color: #27ae60; font-weight: bold; }
-            .status-cancelled { color: #e74c3c; font-weight: bold; }
-            .status-onhold { color: #95a5a6; font-weight: bold; }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>

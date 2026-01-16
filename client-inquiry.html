@@ -915,11 +915,11 @@
 
     <script>
         // ============================================
-        // تكوين النظام (محدث)
+        // تكوين النظام (محدث مع القيم الصحيحة)
         // ============================================
         const EMAILJS_CONFIG = {
             SERVICE_ID: 'service_kpadqtp',
-            TEMPLATE_ID: 'template_kx2gh3f',
+            TEMPLATE_ID: 'template_tawyvln', // Template ID الجديد
             PUBLIC_KEY: 'RCaH1Upo_Fep1Rorw'
         };
 
@@ -995,15 +995,24 @@
             // تهيئة Supabase
             if (window.supabase) {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✅ Supabase initialized');
+                console.log('✅ Supabase initialized successfully');
+                console.log('Supabase URL:', SUPABASE_URL);
             } else {
                 console.error('❌ Supabase library not loaded');
+                showError('مكتبة قاعدة البيانات لم يتم تحميلها. يرجى تحديث الصفحة.');
             }
             
             // تهيئة EmailJS
             if (window.emailjs) {
-                emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-                console.log('✅ EmailJS initialized');
+                try {
+                    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                    console.log('✅ EmailJS initialized successfully');
+                    console.log('Service ID:', EMAILJS_CONFIG.SERVICE_ID);
+                    console.log('Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
+                    console.log('Public Key:', EMAILJS_CONFIG.PUBLIC_KEY);
+                } catch (error) {
+                    console.error('❌ EmailJS initialization failed:', error);
+                }
             } else {
                 console.error('❌ EmailJS library not loaded');
             }
@@ -1105,7 +1114,7 @@
         }
 
         // ============================================
-        // إرسال OTP (محدث ليتناسب مع جدول otp_codes الجديد)
+        // إرسال OTP
         // ============================================
         async function sendOTP(method) {
             let identifier, buttonId;
@@ -1142,6 +1151,7 @@
             
             try {
                 // البحث عن العميل في جدول cases
+                console.log('🔍 Searching for client with identifier:', identifier);
                 const { data: casesData, error: casesError } = await supabaseClient
                     .from('cases')
                     .select('client_name, client_email, client_phone, case_code')
@@ -1150,13 +1160,15 @@
                 
                 if (casesError) {
                     console.error('Error searching for client:', casesError);
-                    showError('حدث خطأ في البحث عن بيانات العميل');
+                    showError('حدث خطأ في البحث عن بيانات العميل: ' + casesError.message);
                     setLoading(buttonId, false);
                     return;
                 }
                 
+                console.log('📋 Found cases:', casesData);
+                
                 if (!casesData || casesData.length === 0) {
-                    showError('لم يتم العثور على قضايا مرتبطة بهذه البيانات');
+                    showError('لم يتم العثور على قضايا مرتبطة بهذه البيانات. يرجى التأكد من البريد الإلكتروني أو رقم الهاتف المسجل.');
                     setLoading(buttonId, false);
                     return;
                 }
@@ -1182,8 +1194,9 @@
                 // توليد OTP
                 const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
                 currentOTP = otpCode;
+                console.log('🔐 Generated OTP:', otpCode);
                 
-                // حفظ OTP في جدول otp_codes (باستخدام الهيكل الجديد)
+                // حفظ OTP في جدول otp_codes
                 const otpRecord = {
                     email: method === 'email' ? identifier : null,
                     phone_number: method === 'telegram' ? identifier.replace(/\D/g, '') : null,
@@ -1193,6 +1206,7 @@
                     created_at: new Date().toISOString()
                 };
                 
+                console.log('💾 Saving OTP to database:', otpRecord);
                 const { data: insertedOTP, error: otpError } = await supabaseClient
                     .from('otp_codes')
                     .insert([otpRecord])
@@ -1201,21 +1215,25 @@
                 
                 if (otpError) {
                     console.error('Error saving OTP:', otpError);
-                    // نستمر في العملية حتى لو فشل حفظ OTP
+                    console.warn('⚠️ OTP not saved to database, but continuing with local OTP');
                 } else {
                     currentOTPId = insertedOTP.id;
+                    console.log('✅ OTP saved successfully with ID:', currentOTPId);
                 }
                 
                 // إرسال OTP
                 let sendResult;
                 if (method === 'email') {
+                    console.log('📧 Sending email to:', identifier);
                     sendResult = await sendEmailOTP(identifier, otpCode, clientData.client_name);
                 } else {
+                    console.log('📱 Sending Telegram to:', identifier);
                     sendResult = await sendTelegramOTP(identifier, otpCode, clientData.client_name);
                 }
                 
                 // التحقق من الإرسال الناجح
                 if (sendResult && sendResult.success) {
+                    console.log('✅ OTP sent successfully');
                     // الانتقال لخطوة إدخال OTP
                     document.getElementById('method-step').style.display = 'none';
                     document.getElementById('email-step').style.display = 'none';
@@ -1226,8 +1244,9 @@
                         method === 'email' ? `تم إرسال الكود إلى ${identifier}` : `تم إرسال الكود عبر Telegram إلى ${identifier}`;
                     
                     startResendTimer();
-                    showSuccess('تم إرسال كود التحقق بنجاح');
+                    showSuccess('تم إرسال كود التحقق بنجاح. يرجى التحقق من بريدك الإلكتروني أو محادثة Telegram.');
                 } else {
+                    console.log('⚠️ OTP sending failed, displaying for testing');
                     // إذا فشل إرسال OTP، عرضه للمستخدم
                     displayOTPForTesting(otpCode, identifier, method, sendResult?.message || 'فشل الإرسال');
                     
@@ -1238,7 +1257,9 @@
                     document.getElementById('otp-step').style.display = 'block';
                     
                     startResendTimer();
-                    showInfo('كود التحقق (للاختبار)', 'تم عرض كود التحقق على الشاشة بسبب مشكلة في الإرسال.');
+                    showInfo('تم إنشاء كود التحقق', 
+                        'تم عرض كود التحقق على الشاشة. يمكنك استخدامه للتحقق.<br><br>' +
+                        '<strong>ملاحظة:</strong> في الإنتاج الحقيقي، سيتم إرسال هذا الكود تلقائياً إلى المستلم.');
                 }
                 
             } catch (error) {
@@ -1263,8 +1284,16 @@
                     office_name: "مؤسسة محمود عبد الحميد للمحاماة",
                     office_email: OFFICE_EMAIL,
                     office_phone: OFFICE_PHONE,
-                    year: new Date().getFullYear()
+                    year: new Date().getFullYear(),
+                    current_time: new Date().toLocaleTimeString('ar-EG'),
+                    current_date: new Date().toLocaleDateString('ar-EG')
                 };
+                
+                console.log('📨 EmailJS Parameters:', {
+                    service_id: EMAILJS_CONFIG.SERVICE_ID,
+                    template_id: EMAILJS_CONFIG.TEMPLATE_ID,
+                    template_params: templateParams
+                });
                 
                 const response = await emailjs.send(
                     EMAILJS_CONFIG.SERVICE_ID,
@@ -1273,13 +1302,40 @@
                 );
                 
                 console.log('✅ Email sent successfully:', response);
-                return { success: true, message: 'تم إرسال البريد بنجاح' };
+                console.log('📧 Email sent to:', email);
+                console.log('🔢 OTP Code:', code);
+                
+                return { 
+                    success: true, 
+                    message: 'تم إرسال البريد بنجاح',
+                    status: response.status,
+                    text: response.text
+                };
                 
             } catch (error) {
                 console.error('❌ Email sending failed:', error);
+                console.error('Error details:', {
+                    status: error.status,
+                    text: error.text,
+                    message: error.message
+                });
+                
+                // معلومات إضافية للمساعدة في تصحيح الأخطاء
+                let errorMessage = 'فشل إرسال البريد: ';
+                if (error.status === 400) {
+                    errorMessage += 'معلمات غير صحيحة. ';
+                } else if (error.status === 404) {
+                    errorMessage += 'الخدمة أو القالب غير موجود. ';
+                } else if (error.status === 429) {
+                    errorMessage += 'تم تجاوز عدد المحاولات المسموح بها. ';
+                }
+                
+                errorMessage += error.text || error.message || 'خطأ غير معروف';
+                
                 return { 
                     success: false, 
-                    message: 'فشل إرسال البريد: ' + (error.text || error.message) 
+                    message: errorMessage,
+                    error: error
                 };
             }
         }
@@ -1303,7 +1359,12 @@
 🏛️ مؤسسة محمود عبد الحميد للمحاماة
 📧 ${OFFICE_EMAIL}
 📞 ${OFFICE_PHONE}
+
+🕒 ${new Date().toLocaleTimeString('ar-EG')}
+📅 ${new Date().toLocaleDateString('ar-EG')}
                 `;
+                
+                console.log('📱 Sending Telegram to chat_id:', chatId);
                 
                 const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
@@ -1316,15 +1377,35 @@
                 });
                 
                 const data = await response.json();
+                console.log('📱 Telegram API response:', data);
                 
                 if (data.ok) {
-                    console.log('✅ Telegram message sent:', data);
-                    return { success: true, message: 'تم إرسال الرسالة عبر Telegram' };
+                    console.log('✅ Telegram message sent successfully');
+                    return { 
+                        success: true, 
+                        message: 'تم إرسال الرسالة عبر Telegram',
+                        data: data
+                    };
                 } else {
-                    console.error('❌ Telegram error:', data);
+                    console.error('❌ Telegram API error:', data);
+                    
+                    let errorMessage = 'فشل إرسال Telegram: ';
+                    if (data.description) {
+                        if (data.description.includes('chat not found')) {
+                            errorMessage = 'الرقم غير مسجل في البوت. يرجى بدء محادثة مع @Lawyer_OTP_Bot أولاً';
+                        } else if (data.description.includes('bot was blocked')) {
+                            errorMessage = 'تم حظر البوت من قبل المستخدم';
+                        } else {
+                            errorMessage += data.description;
+                        }
+                    } else {
+                        errorMessage += 'خطأ غير معروف';
+                    }
+                    
                     return { 
                         success: false, 
-                        message: 'فشل إرسال Telegram: ' + (data.description || 'Unknown error') 
+                        message: errorMessage,
+                        data: data
                     };
                 }
                 
@@ -1341,18 +1422,40 @@
             const container = document.getElementById('otp-display-container');
             container.innerHTML = `
                 <div class="otp-display">
-                    <h3><i class="fas fa-exclamation-triangle"></i> كود التحقق (اختبار)</h3>
-                    <p>السبب: <strong>${reason}</strong></p>
-                    <p>المستلم: <strong>${identifier}</strong></p>
-                    <p>الطريقة: <strong>${method === 'email' ? 'البريد الإلكتروني' : 'Telegram'}</strong></p>
+                    <h3><i class="fas fa-exclamation-triangle"></i> كود التحقق (للاختبار)</h3>
+                    <p style="color: #fcf6ba; margin: 10px 0;">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>السبب:</strong> ${reason}
+                    </p>
+                    <p style="color: #cbd5e1;">
+                        <i class="fas fa-user"></i> 
+                        <strong>المستلم:</strong> ${identifier}
+                    </p>
+                    <p style="color: #cbd5e1; margin-bottom: 20px;">
+                        <i class="fas fa-${method === 'email' ? 'envelope' : 'telegram'}"></i> 
+                        <strong>الطريقة:</strong> ${method === 'email' ? 'البريد الإلكتروني' : 'Telegram'}
+                    </p>
                     <div class="code">${code}</div>
-                    <p style="color: #94a3b8; font-size: 14px;">
-                        <i class="fas fa-info-circle"></i>
-                        في الإنتاج الحقيقي، سيتم إرسال هذا الكود تلقائياً
+                    <p style="color: #bf953f; font-size: 14px; margin-top: 15px;">
+                        <i class="fas fa-lightbulb"></i>
+                        يمكنك استخدام هذا الكود للتحقق في الخطوة التالية
+                    </p>
+                    <p style="color: #94a3b8; font-size: 12px; margin-top: 10px;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        في الإنتاج الحقيقي، سيتم إرسال هذا الكود تلقائياً إلى المستلم
                     </p>
                 </div>
             `;
             container.style.display = 'block';
+            
+            // تمرير التركيز إلى حقل إدخال OTP
+            setTimeout(() => {
+                const otpInput = document.getElementById('otp');
+                if (otpInput) {
+                    otpInput.focus();
+                    otpInput.value = code; // تعبئة الكود تلقائياً
+                }
+            }, 500);
         }
 
         async function resendOTP() {
@@ -1398,9 +1501,11 @@
                     startResendTimer();
                     showSuccess('تم إعادة إرسال كود التحقق بنجاح');
                 } else {
-                    displayOTPForTesting(otpCode, userIdentifier, currentVerificationMethod, 'فشل إعادة الإرسال');
+                    displayOTPForTesting(otpCode, userIdentifier, currentVerificationMethod, 'فشل إعادة الإرسال: ' + (sendResult?.message || ''));
                     startResendTimer();
-                    showInfo('تم إعادة إنشاء كود التحقق', 'تم عرض الكود على الشاشة بسبب مشكلة في الإرسال.');
+                    showInfo('تم إعادة إنشاء كود التحقق', 
+                        'تم عرض الكود على الشاشة بسبب مشكلة في الإرسال.<br><br>' +
+                        'يمكنك استخدام الكود المعروض للتحقق.');
                 }
                 
             } catch (error) {
@@ -1410,7 +1515,7 @@
         }
 
         // ============================================
-        // التحقق من OTP (محدث ليتناسب مع جدول otp_codes الجديد)
+        // التحقق من OTP
         // ============================================
         async function verifyOTP() {
             const enteredCode = document.getElementById('otp').value.trim();
@@ -1423,6 +1528,10 @@
             setLoading('verify-otp-btn', true);
             
             try {
+                console.log('🔍 Verifying OTP:', enteredCode);
+                console.log('👤 User identifier:', userIdentifier);
+                console.log('📱 Method:', currentVerificationMethod);
+                
                 // بناء استعلام البحث حسب طريقة التحقق
                 let query = supabaseClient
                     .from('otp_codes')
@@ -1442,24 +1551,30 @@
                 const { data: otpData, error: otpError } = await query.single();
                 
                 if (otpError || !otpData) {
-                    // التحقق من OTP المحلي كبديل
+                    console.log('⚠️ No valid OTP found in database, checking local OTP');
+                    // التحقق من OTP المحلي كبديل (للاستخدام أثناء الاختبار)
                     if (enteredCode === currentOTP) {
-                        console.log('✅ OTP verified locally');
+                        console.log('✅ OTP verified locally (testing mode)');
+                        // في حالة الاختبار، لا نحتاج لتحديث حالة OTP في قاعدة البيانات
                     } else {
-                        showError('كود التحقق غير صحيح أو منتهي الصلاحية');
+                        console.error('❌ Invalid OTP');
+                        showError('كود التحقق غير صحيح أو منتهي الصلاحية. يرجى إعادة المحاولة.');
                         setLoading('verify-otp-btn', false);
                         return;
                     }
                 } else {
+                    console.log('✅ Valid OTP found in database:', otpData);
                     // تحديث حالة OTP كمستخدم
                     await supabaseClient
                         .from('otp_codes')
                         .update({ is_used: true })
                         .eq('id', otpData.id);
+                    console.log('✅ OTP marked as used');
                 }
                 
                 // إنشاء جلسة جديدة
                 createSession(userIdentifier, currentVerificationMethod, userDataCache);
+                console.log('✅ Session created');
                 
                 // الانتقال لخطوة كود القضية
                 document.getElementById('otp-step').style.display = 'none';
@@ -1497,6 +1612,8 @@
             setLoading('search-case-btn', true);
             
             try {
+                console.log('🔍 Searching for case with code:', caseCode);
+                
                 // البحث عن القضية في جدول cases مع الجلسات
                 const { data: caseData, error: caseError } = await supabaseClient
                     .from('cases')
@@ -1508,10 +1625,13 @@
                     .single();
                 
                 if (caseError || !caseData) {
-                    showError('لم يتم العثور على قضية بهذا الكود');
+                    console.error('Case not found:', caseError);
+                    showError('لم يتم العثور على قضية بهذا الكود. يرجى التأكد من كود القضية.');
                     setLoading('search-case-btn', false);
                     return;
                 }
+                
+                console.log('✅ Case found:', caseData.case_code, '-', caseData.client_name);
                 
                 // التحقق من أن القضية مرتبطة بالمستخدم
                 const isEmailMatch = caseData.client_email && 
@@ -1519,8 +1639,16 @@
                 const isPhoneMatch = caseData.client_phone && 
                     caseData.client_phone.includes(userIdentifier.replace(/\D/g, ''));
                 
+                console.log('🔍 User verification:', {
+                    userIdentifier: userIdentifier,
+                    caseEmail: caseData.client_email,
+                    casePhone: caseData.client_phone,
+                    isEmailMatch: isEmailMatch,
+                    isPhoneMatch: isPhoneMatch
+                });
+                
                 if (!isEmailMatch && !isPhoneMatch) {
-                    showError('هذه القضية غير مرتبطة بحسابك');
+                    showError('هذه القضية غير مرتبطة بحسابك. يرجى التأكد من أنك تستخدم نفس البريد الإلكتروني أو رقم الهاتف المسجل مع القضية.');
                     setLoading('search-case-btn', false);
                     return;
                 }
@@ -1824,14 +1952,17 @@
         // ============================================
         console.log(`
 ╔══════════════════════════════════════════════════╗
-║      نظام استعلام القضايا - الإصدار 2.0         ║
+║      نظام استعلام القضايا - الإصدار 3.0         ║
 ║      مؤسسة محمود عبد الحميد للمحاماة           ║
 ║══════════════════════════════════════════════════║
 ║ ✅ Supabase: ${SUPABASE_URL ? 'متصل' : 'غير متصل'}          ║
 ║ ✅ EmailJS: ${EMAILJS_CONFIG.PUBLIC_KEY ? 'مهيأ' : 'غير مهيأ'}        ║
 ║ ✅ Telegram Bot: ${TELEGRAM_BOT_TOKEN ? 'جاهز' : 'غير جاهز'}        ║
-║ ✅ جدول otp_codes: متوافق مع الهيكل الجديد      ║
-║ ✅ جدول cases: متوافق مع الهيكل الجديد          ║
+║ ✅ Service ID: ${EMAILJS_CONFIG.SERVICE_ID}       ║
+║ ✅ Template ID: ${EMAILJS_CONFIG.TEMPLATE_ID}     ║
+║ ✅ Public Key: ${EMAILJS_CONFIG.PUBLIC_KEY}       ║
+║ 🔧 نظام عرض OTP للاختبار: مفعل                  ║
+║ 📊 تفاصيل التصحيح: مفعلة                        ║
 ╚══════════════════════════════════════════════════╝
         `);
     </script>

@@ -17,7 +17,6 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.min.js"></script>
     
     <style>
-        /* كل CSS السابق يبقى كما هو */
         * {
             margin: 0;
             padding: 0;
@@ -916,7 +915,7 @@
 
     <script>
         // ============================================
-        // تكوين النظام
+        // تكوين النظام (محدث)
         // ============================================
         const EMAILJS_CONFIG = {
             SERVICE_ID: 'service_kpadqtp',
@@ -943,7 +942,8 @@
         let currentCase = null;
         let resendTimer = null;
         let resendTimeLeft = 60;
-        let userDataCache = null; // لتخزين بيانات المستخدم
+        let userDataCache = null;
+        let currentOTPId = null; // لحفظ ID الـOTP في قاعدة البيانات
 
         // ============================================
         // دوال المساعدة
@@ -1004,9 +1004,6 @@
             if (window.emailjs) {
                 emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
                 console.log('✅ EmailJS initialized');
-                console.log('Service ID:', EMAILJS_CONFIG.SERVICE_ID);
-                console.log('Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
-                console.log('Public Key:', EMAILJS_CONFIG.PUBLIC_KEY);
             } else {
                 console.error('❌ EmailJS library not loaded');
             }
@@ -1108,7 +1105,7 @@
         }
 
         // ============================================
-        // إرسال OTP (معدل ليتناسب مع جدول otp_codes)
+        // إرسال OTP (محدث ليتناسب مع جدول otp_codes الجديد)
         // ============================================
         async function sendOTP(method) {
             let identifier, buttonId;
@@ -1144,12 +1141,12 @@
             userIdentifier = identifier;
             
             try {
-                // البحث عن العميل في جدول cases باستخدام البريد الإلكتروني أو رقم الهاتف
+                // البحث عن العميل في جدول cases
                 const { data: casesData, error: casesError } = await supabaseClient
                     .from('cases')
-                    .select('client_name, client_email, client_phone')
+                    .select('client_name, client_email, client_phone, case_code')
                     .or(`client_email.ilike.%${identifier}%, client_phone.ilike.%${identifier}%`)
-                    .limit(1);
+                    .limit(5);
                 
                 if (casesError) {
                     console.error('Error searching for client:', casesError);
@@ -1164,6 +1161,21 @@
                     return;
                 }
                 
+                // عرض اختيار القضايا المتاحة للمستخدم
+                if (casesData.length > 1) {
+                    const casesList = casesData.map(c => `• ${c.case_code} - ${c.client_name}`).join('\n');
+                    Swal.fire({
+                        title: 'تم العثور على عدة قضايا',
+                        html: `<div style="text-align: right; direction: rtl;">
+                            <p>تم العثور على ${casesData.length} قضايا مرتبطة بهذه البيانات:</p>
+                            <pre style="background: #f0f0f0; padding: 10px; border-radius: 5px; text-align: right; direction: rtl;">${casesList}</pre>
+                            <p>يمكنك استخدام كود التحقق للاستعلام عن أي منها</p>
+                        </div>`,
+                        icon: 'info',
+                        confirmButtonText: 'متابعة'
+                    });
+                }
+                
                 const clientData = casesData[0];
                 userDataCache = clientData;
                 
@@ -1171,29 +1183,27 @@
                 const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
                 currentOTP = otpCode;
                 
-                // حفظ OTP في جدول otp_codes
+                // حفظ OTP في جدول otp_codes (باستخدام الهيكل الجديد)
                 const otpRecord = {
-                    phone_number: method === 'telegram' ? identifier : null,
+                    email: method === 'email' ? identifier : null,
+                    phone_number: method === 'telegram' ? identifier.replace(/\D/g, '') : null,
                     otp_code: otpCode,
                     expires_at: new Date(Date.now() + 15 * 60000).toISOString(),
                     is_used: false,
                     created_at: new Date().toISOString()
                 };
                 
-                // إذا كانت الطريقة email، نحتاج لإضافة حقل email
-                if (method === 'email') {
-                    // في جدول otp_codes الحالي لا يوجد حقل email
-                    // سنستخدم حقل phone_number لتخزين البريد الإلكتروني مؤقتاً
-                    otpRecord.phone_number = identifier;
-                }
-                
-                const { error: otpError } = await supabaseClient
+                const { data: insertedOTP, error: otpError } = await supabaseClient
                     .from('otp_codes')
-                    .insert([otpRecord]);
+                    .insert([otpRecord])
+                    .select()
+                    .single();
                 
                 if (otpError) {
                     console.error('Error saving OTP:', otpError);
                     // نستمر في العملية حتى لو فشل حفظ OTP
+                } else {
+                    currentOTPId = insertedOTP.id;
                 }
                 
                 // إرسال OTP
@@ -1252,7 +1262,8 @@
                     }),
                     office_name: "مؤسسة محمود عبد الحميد للمحاماة",
                     office_email: OFFICE_EMAIL,
-                    office_phone: OFFICE_PHONE
+                    office_phone: OFFICE_PHONE,
+                    year: new Date().getFullYear()
                 };
                 
                 const response = await emailjs.send(
@@ -1357,16 +1368,23 @@
                 
                 // حفظ OTP في جدول otp_codes
                 const otpRecord = {
-                    phone_number: currentVerificationMethod === 'telegram' ? userIdentifier : userIdentifier,
+                    email: currentVerificationMethod === 'email' ? userIdentifier : null,
+                    phone_number: currentVerificationMethod === 'telegram' ? userIdentifier.replace(/\D/g, '') : null,
                     otp_code: otpCode,
                     expires_at: new Date(Date.now() + 15 * 60000).toISOString(),
                     is_used: false,
                     created_at: new Date().toISOString()
                 };
                 
-                const { error: otpError } = await supabaseClient
+                const { data: insertedOTP, error: otpError } = await supabaseClient
                     .from('otp_codes')
-                    .insert([otpRecord]);
+                    .insert([otpRecord])
+                    .select()
+                    .single();
+                
+                if (!otpError) {
+                    currentOTPId = insertedOTP.id;
+                }
                 
                 // إرسال OTP
                 let sendResult;
@@ -1392,7 +1410,7 @@
         }
 
         // ============================================
-        // التحقق من OTP (معدل ليتناسب مع جدول otp_codes)
+        // التحقق من OTP (محدث ليتناسب مع جدول otp_codes الجديد)
         // ============================================
         async function verifyOTP() {
             const enteredCode = document.getElementById('otp').value.trim();
@@ -1405,17 +1423,23 @@
             setLoading('verify-otp-btn', true);
             
             try {
-                // التحقق من OTP في جدول otp_codes
-                const { data: otpData, error: otpError } = await supabaseClient
+                // بناء استعلام البحث حسب طريقة التحقق
+                let query = supabaseClient
                     .from('otp_codes')
                     .select('*')
                     .eq('otp_code', enteredCode)
-                    .eq('phone_number', userIdentifier)
-                    .gt('expires_at', new Date().toISOString())
                     .eq('is_used', false)
+                    .gt('expires_at', new Date().toISOString())
                     .order('created_at', { ascending: false })
-                    .limit(1)
-                    .single();
+                    .limit(1);
+                
+                if (currentVerificationMethod === 'email') {
+                    query = query.eq('email', userIdentifier);
+                } else {
+                    query = query.eq('phone_number', userIdentifier.replace(/\D/g, ''));
+                }
+                
+                const { data: otpData, error: otpError } = await query.single();
                 
                 if (otpError || !otpData) {
                     // التحقق من OTP المحلي كبديل
@@ -1427,7 +1451,7 @@
                         return;
                     }
                 } else {
-                    // تحديث حالة OTP كمستخدم في جدول otp_codes
+                    // تحديث حالة OTP كمستخدم
                     await supabaseClient
                         .from('otp_codes')
                         .update({ is_used: true })
@@ -1473,7 +1497,7 @@
             setLoading('search-case-btn', true);
             
             try {
-                // البحث عن القضية في جدول cases
+                // البحث عن القضية في جدول cases مع الجلسات
                 const { data: caseData, error: caseError } = await supabaseClient
                     .from('cases')
                     .select(`
@@ -1490,8 +1514,10 @@
                 }
                 
                 // التحقق من أن القضية مرتبطة بالمستخدم
-                const isEmailMatch = caseData.client_email && caseData.client_email.includes(userIdentifier);
-                const isPhoneMatch = caseData.client_phone && caseData.client_phone.includes(userIdentifier);
+                const isEmailMatch = caseData.client_email && 
+                    caseData.client_email.toLowerCase().includes(userIdentifier.toLowerCase());
+                const isPhoneMatch = caseData.client_phone && 
+                    caseData.client_phone.includes(userIdentifier.replace(/\D/g, ''));
                 
                 if (!isEmailMatch && !isPhoneMatch) {
                     showError('هذه القضية غير مرتبطة بحسابك');
@@ -1542,6 +1568,7 @@
                         <tbody>
                 `;
                 
+                // ترتيب الجلسات من الأحدث إلى الأقدم
                 caseData.sessions.sort((a, b) => new Date(b.session_date) - new Date(a.session_date));
                 
                 caseData.sessions.forEach(session => {
@@ -1764,6 +1791,7 @@
             currentOTP = null;
             currentCase = null;
             userDataCache = null;
+            currentOTPId = null;
             
             localStorage.removeItem('sessionToken');
             localStorage.removeItem('sessionExpires');
@@ -1796,13 +1824,14 @@
         // ============================================
         console.log(`
 ╔══════════════════════════════════════════════════╗
-║      نظام استعلام القضايا - الإصدار 1.0         ║
+║      نظام استعلام القضايا - الإصدار 2.0         ║
 ║      مؤسسة محمود عبد الحميد للمحاماة           ║
 ║══════════════════════════════════════════════════║
 ║ ✅ Supabase: ${SUPABASE_URL ? 'متصل' : 'غير متصل'}          ║
 ║ ✅ EmailJS: ${EMAILJS_CONFIG.PUBLIC_KEY ? 'مهيأ' : 'غير مهيأ'}        ║
 ║ ✅ Telegram Bot: ${TELEGRAM_BOT_TOKEN ? 'جاهز' : 'غير جاهز'}        ║
-║ ✅ جدول otp_codes: معدل للتكامل                 ║
+║ ✅ جدول otp_codes: متوافق مع الهيكل الجديد      ║
+║ ✅ جدول cases: متوافق مع الهيكل الجديد          ║
 ╚══════════════════════════════════════════════════╝
         `);
     </script>

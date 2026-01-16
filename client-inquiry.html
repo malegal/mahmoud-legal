@@ -2,745 +2,1809 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استعلام العميل - نظام إدارة القضايا</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>استعلام عن القضية - مؤسسة محمود عبد الحميد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <!-- jsPDF للطباعة -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.min.js"></script>
+    
     <style>
+        /* كل CSS السابق يبقى كما هو */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
         }
         
         body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #020617;
+            color: #f8fafc;
             min-height: 100vh;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            padding: 0 20px;
         }
         
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid #bf953f;
+            padding: 8px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            opacity: 0.9;
-            font-size: 16px;
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
         
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #3498db;
-        }
-        
-        .content {
-            padding: 30px;
-        }
-        
-        .step {
-            margin-bottom: 40px;
-            padding: 25px;
-            border-radius: 10px;
-            background-color: #f8f9fa;
-            border-right: 5px solid #3498db;
-            transition: all 0.3s ease;
-        }
-        
-        .step:hover {
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .step h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
+            color: #bf953f;
+            flex: 1;
+            min-width: 250px;
         }
         
-        .step h2 i {
-            color: #3498db;
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .logo-text {
+            text-align: right;
+            line-height: 1.2;
+        }
+        
+        .logo-text h1 {
+            font-family: 'Amiri', serif;
+            font-size: 20px;
+            color: #fcf6ba;
+            margin: 0;
+        }
+        
+        .logo-text h2 {
+            font-family: 'Amiri', serif;
+            font-size: 14px;
+            color: #bf953f;
+            margin: 0;
+            font-weight: normal;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
+            color: #020617;
+            padding: 8px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
+        }
+        
+        .inquiry-container {
+            min-height: calc(100vh - 150px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 15px;
+        }
+        
+        .inquiry-box {
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(191, 149, 63, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
+        }
+        
+        .inquiry-box h1 {
+            font-size: 28px;
+            color: #bf953f;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .inquiry-box p {
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            text-align: right;
         }
         
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
+            color: #bf953f;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
         }
         
         .form-control {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(191, 149, 63, 0.3);
+            border-radius: 10px;
+            color: white;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
         
         .form-control:focus {
-            border-color: #3498db;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-color: #bf953f;
+            box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
         }
         
-        .btn {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
+        .btn-inquiry {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
+            color: #020617;
+            padding: 16px 40px;
+            font-size: 18px;
+            border-radius: 10px;
             border: none;
-            padding: 14px 25px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn:hover {
-            background: linear-gradient(135deg, #2980b9 0%, #1f639e 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .btn-full {
-            width: 100%;
-        }
-        
-        .otp-display {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 24px;
-            letter-spacing: 5px;
-            margin: 15px 0;
+            gap: 10px;
+            margin-top: 10px;
             font-weight: bold;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .btn-inquiry:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(191, 149, 63, 0.3);
+        }
+        
+        .result-box {
             display: none;
-        }
-        
-        .message {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            display: none;
-        }
-        
-        .message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .message.info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .user-info {
-            background-color: #e8f4fc;
+            text-align: right;
+            margin-top: 30px;
             padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            border-right: 4px solid #3498db;
-        }
-        
-        .user-info h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 3px solid #bf953f;
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
+            animation: fadeIn 0.5s ease;
         }
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+            margin-bottom: 25px;
         }
         
         .info-item {
-            background-color: white;
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(191, 149, 63, 0.2);
         }
         
         .info-label {
-            font-weight: 600;
-            color: #3498db;
+            color: #94a3b8;
+            font-size: 13px;
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .info-value {
+            color: #fcf6ba;
             font-size: 16px;
-            color: #2c3e50;
+            font-weight: bold;
+            word-break: break-word;
+        }
+        
+        .session-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-right: 3px solid #bf953f;
+        }
+        
+        .session-date {
+            color: #bf953f;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+        
+        .contact-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(191, 149, 63, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            text-align: center;
+        }
+        
+        .contact-section h3 {
+            color: #bf953f;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 18px;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(191, 149, 63, 0.2);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-3px);
+            background: rgba(191, 149, 63, 0.15);
+            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.2);
+        }
+        
+        .contact-item i {
+            font-size: 20px;
+            color: #bf953f;
+            margin-bottom: 8px;
+        }
+        
+        .contact-item span {
+            color: #cbd5e1;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+        
+        .contact-link {
+            color: #fcf6ba;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
         }
         
         .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 25px 0;
             text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
+            border-top: 1px solid rgba(191, 149, 63, 0.2);
+        }
+        
+        .footer p {
+            color: #94a3b8;
             font-size: 14px;
-            border-top: 1px solid #eee;
-            background-color: #f8f9fa;
         }
         
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .step-number {
-            background-color: #3498db;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+        .whatsapp-link {
+            color: #bf953f;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
             font-weight: bold;
+        }
+        
+        .whatsapp-link:hover {
+            color: #fcf6ba;
+        }
+        
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 2px solid #f87171;
+        }
+        
+        .message.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 2px solid #4ade80;
+        }
+        
+        .instructions {
+            background: rgba(191, 149, 63, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: right;
+            border-right: 3px solid #bf953f;
+        }
+        
+        .instructions h3 {
+            color: #bf953f;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+            font-size: 18px;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .instructions li {
+            padding: 8px 0;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+            font-size: 14px;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #bf953f;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .print-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid #bf953f;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .print-btn:hover {
+            background: #bf953f;
+            color: #020617;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .result-header h2 {
+            color: #bf953f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+        }
+        
+        .verification-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .verification-method {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(191, 149, 63, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .verification-method:hover {
+            border-color: #bf953f;
+            background: rgba(191, 149, 63, 0.1);
+        }
+        
+        .verification-method.active {
+            border-color: #bf953f;
+            background: rgba(191, 149, 63, 0.15);
+        }
+        
+        .verification-method i {
+            font-size: 24px;
+            color: #bf953f;
+            margin-bottom: 10px;
+        }
+        
+        .verification-method span {
+            display: block;
+            color: #fcf6ba;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .verification-method small {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         @media (max-width: 768px) {
-            .content {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .logo {
+                justify-content: center;
+                min-width: auto;
+            }
+            
+            .inquiry-box {
                 padding: 20px;
             }
             
-            .step {
-                padding: 20px;
+            .info-grid {
+                grid-template-columns: 1fr;
             }
             
-            .header h1 {
-                font-size: 24px;
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .verification-methods {
+                grid-template-columns: 1fr;
             }
         }
         
-        .timer {
-            color: #e74c3c;
+        .loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .loading:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #bf953f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .new-case-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid #4ade80;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .new-case-btn:hover {
+            background: #4ade80;
+            color: #020617;
+        }
+        
+        .sessions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .sessions-table th {
+            background: rgba(191, 149, 63, 0.3);
+            color: #fcf6ba;
+            padding: 12px;
+            text-align: right;
             font-weight: bold;
+        }
+        
+        .sessions-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(191, 149, 63, 0.1);
+            color: #cbd5e1;
+        }
+        
+        .sessions-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .case-subject {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 3px solid #bf953f;
+        }
+        
+        .otp-display {
+            background: rgba(191, 149, 63, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
             text-align: center;
-            margin: 10px 0;
-            font-size: 18px;
+            border: 2px dashed #bf953f;
+        }
+        
+        .otp-display h3 {
+            color: #bf953f;
+            margin-bottom: 10px;
+        }
+        
+        .otp-display .code {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fcf6ba;
+            letter-spacing: 10px;
+            font-family: monospace;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            direction: ltr;
         }
     </style>
-    <!-- EmailJS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">نظام إدارة القضايا</div>
-            <h1>استعلام العميل</h1>
-            <p>أدخل بياناتك للتحقق من حالة قضيتك</p>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'">
+                    <div class="logo-text">
+                        <h1>مؤسسة محمود عبد الحميد للمحاماة</h1>
+                        <h2>المحامي بالنقض والدستورية العليا</h2>
+                    </div>
+                </a>
+                <div class="nav-buttons">
+                    <a href="index.html" target="_blank" class="nav-btn">
+                        <i class="fas fa-home"></i> الصفحة الرئيسية
+                    </a>
+                </div>
+            </nav>
         </div>
-        
-        <div class="content">
-            <!-- Step 1: Request OTP -->
-            <div class="step" id="step1">
-                <h2><span class="step-number">1</span> التحقق من الهوية</h2>
-                <p>أدخل بريدك الإلكتروني أو رقم هاتفك المسجل في النظام</p>
-                
-                <div class="form-group">
-                    <label for="identifier">البريد الإلكتروني أو رقم الهاتف</label>
-                    <input type="text" id="identifier" class="form-control" 
-                           placeholder="مثال: example@email.com أو 0512345678">
+    </header>
+
+    <main>
+        <div class="inquiry-container">
+            <div class="inquiry-box">
+                <h1><i class="fas fa-search"></i> استعلام عن القضية</h1>
+                <p>أدخل بياناتك للاطلاع على آخر تطورات قضيتك بكل خصوصية وأمان</p>
+
+                <!-- خطوة 1: اختيار طريقة التحقق -->
+                <div id="method-step">
+                    <h3 style="color: #bf953f; margin-bottom: 20px; text-align: right;">
+                        <i class="fas fa-shield-alt"></i> اختر طريقة التحقق
+                    </h3>
+                    
+                    <div class="verification-methods">
+                        <div class="verification-method active" data-method="email" onclick="selectMethod('email')">
+                            <i class="fas fa-envelope"></i>
+                            <span>البريد الإلكتروني</span>
+                            <small>سيرسل رمز التحقق إلى بريدك</small>
+                        </div>
+                        
+                        <div class="verification-method" data-method="telegram" onclick="selectMethod('telegram')">
+                            <i class="fab fa-telegram"></i>
+                            <span>Telegram</span>
+                            <small>سيرسل رمز التحقق عبر بوت Telegram</small>
+                        </div>
+                    </div>
                 </div>
-                
-                <button id="request-otp-btn" class="btn btn-full">
-                    <span>إرسال رمز التحقق</span>
-                </button>
-            </div>
-            
-            <!-- Step 2: Verify OTP -->
-            <div class="step hidden" id="step2">
-                <h2><span class="step-number">2</span> تأكيد الرمز</h2>
-                <p>تم إرسال رمز تحقق مكون من 6 أرقام إلى بريدك الإلكتروني المسجل</p>
-                
-                <div class="form-group">
-                    <label for="otp-code">رمز التحقق</label>
-                    <input type="text" id="otp-code" class="form-control" 
-                           placeholder="أدخل الرمز المكون من 6 أرقام" maxlength="6">
-                </div>
-                
-                <div class="timer" id="otp-timer">الصلاحية: 10:00</div>
-                
-                <button id="verify-otp-btn" class="btn btn-full">
-                    <span>تحقق من الرمز</span>
-                </button>
-                
-                <div style="text-align: center; margin-top: 15px;">
-                    <button id="resend-otp-btn" class="btn" style="background: #7f8c8d;">
-                        <span>إعادة إرسال الرمز</span>
+
+                <!-- خطوة 2: إدخال البريد الإلكتروني -->
+                <div id="email-step" style="display:block;">
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                        <input type="email" id="email" class="form-control" placeholder="أدخل بريدك الإلكتروني المسجل مع المكتب" required>
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
+                            سيتم التحقق من وجود بريدك في قاعدة البيانات ثم إرسال كود التحقق
+                        </small>
+                    </div>
+                    <button id="send-email-otp-btn" class="btn-inquiry" onclick="sendOTP('email')">
+                        <i class="fas fa-paper-plane"></i> احصل على كود التحقق
                     </button>
                 </div>
-            </div>
-            
-            <!-- Messages -->
-            <div id="message" class="message"></div>
-            
-            <!-- OTP Display (for testing) -->
-            <div id="otp-display" class="otp-display">
-                رمز التحقق: <span id="otp-value"></span>
-            </div>
-            
-            <!-- User Info Display -->
-            <div id="user-info" class="user-info hidden">
-                <h3>معلومات القضية</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">اسم العميل</div>
-                        <div class="info-value" id="info-client-name"></div>
+
+                <!-- خطوة 2: إدخال Telegram -->
+                <div id="telegram-step" style="display:none;">
+                    <div class="form-group">
+                        <label for="telegram"><i class="fab fa-telegram"></i> رقم هاتفك المسجل في Telegram</label>
+                        <input type="text" id="telegram" class="form-control" placeholder="أدخل رقم هاتفك الذي تستخدمه في Telegram (مثال: 201112345678)" required>
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
+                            تأكد من أنك بدأت محادثة مع بوتنا: @Lawyer_OTP_Bot
+                        </small>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">رقم القضية</div>
-                        <div class="info-value" id="info-case-code"></div>
+                    <div style="background: rgba(191, 149, 63, 0.1); padding: 15px; border-radius: 10px; margin: 15px 0; text-align: right;">
+                        <p style="color: #fcf6ba; margin-bottom: 8px; font-size: 14px;">
+                            <i class="fas fa-info-circle"></i> إذا لم تبدأ محادثة مع البوت بعد:
+                        </p>
+                        <a href="https://t.me/Lawyer_OTP_Bot" target="_blank" style="color: #bf953f; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;">
+                            <i class="fab fa-telegram"></i> اضغط هنا لبدء محادثة مع البوت
+                        </a>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">البريد الإلكتروني</div>
-                        <div class="info-value" id="info-email"></div>
+                    <button id="send-telegram-otp-btn" class="btn-inquiry" onclick="sendOTP('telegram')">
+                        <i class="fab fa-telegram"></i> احصل على كود التحقق
+                    </button>
+                </div>
+
+                <!-- خطوة 3: إدخال الكود -->
+                <div id="otp-step" style="display:none;">
+                    <div class="form-group">
+                        <label for="otp"><i class="fas fa-key"></i> كود التحقق</label>
+                        <input type="text" id="otp" class="form-control" placeholder="ادخل الكود الـ6 أرقام الذي وصلتك" maxlength="6" inputmode="numeric" required>
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
+                            <span id="verification-method-text">تم إرسال الكود إلى بريدك الإلكتروني</span>
+                            <br>
+                            <a href="#" id="resend-code" style="color: #bf953f; text-decoration: none;" onclick="resendOTP()">
+                                <i class="fas fa-redo"></i> إعادة إرسال الكود (يمكنك إعادة الإرسال بعد <span id="countdown">60</span> ثانية)
+                            </a>
+                        </small>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">رقم الهاتف</div>
-                        <div class="info-value" id="info-phone"></div>
+                    <button id="verify-otp-btn" class="btn-inquiry" onclick="verifyOTP()">
+                        <i class="fas fa-check"></i> تحقق من الكود
+                    </button>
+                </div>
+
+                <!-- خطوة 4: كود القضية -->
+                <div id="case-step" style="display:none;">
+                    <div class="form-group">
+                        <label for="caseCode"><i class="fas fa-file-contract"></i> كود القضية</label>
+                        <input type="text" id="caseCode" class="form-control" placeholder="أدخل الكود المكون من 8 أحرف وأرقام (مثال: MA-123456)" autocapitalize="characters" required>
+                        <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
+                            كود القضية الذي استلمته من المحامي
+                        </small>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">حالة القضية</div>
-                        <div class="info-value" id="info-case-status">قيد المراجعة</div>
+                    <button id="search-case-btn" class="btn-inquiry" onclick="searchCase()">
+                        <i class="fas fa-search"></i> استعلام عن القضية
+                    </button>
+                    
+                    <!-- زر الاستعلام عن قضية أخرى -->
+                    <button id="another-case-btn" class="new-case-btn" onclick="showNewCaseForm()" style="display:none; width: 100%; margin-top: 15px;">
+                        <i class="fas fa-plus"></i> الاستعلام عن قضية أخرى
+                    </button>
+                </div>
+
+                <!-- عرض OTP للاختبار -->
+                <div id="otp-display-container" style="display:none;">
+                    <!-- سيتم تعبئته ديناميكياً -->
+                </div>
+
+                <div id="errorMessage" class="message error"></div>
+                <div id="successMessage" class="message success"></div>
+
+                <!-- نتائج القضية -->
+                <div id="inquiryResult" class="result-box">
+                    <div class="result-header">
+                        <h2><i class="fas fa-file-contract"></i> تفاصيل القضية</h2>
+                        <div>
+                            <button class="print-btn" onclick="printPDF()">
+                                <i class="fas fa-file-pdf"></i> طباعة PDF
+                            </button>
+                            <button class="new-case-btn" onclick="showNewCaseForm()">
+                                <i class="fas fa-plus"></i> قضية أخرى
+                            </button>
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">تاريخ الإنشاء</div>
-                        <div class="info-value" id="info-created-date">2024-01-15</div>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-hashtag"></i> كود القضية</div>
+                            <div class="info-value" id="resultCaseCode">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-hashtag"></i> رقم القضية</div>
+                            <div class="info-value" id="resultCaseNumber">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-calendar"></i> سنة القضية</div>
+                            <div class="info-value" id="resultCaseYear">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-user"></i> اسم العميل</div>
+                            <div class="info-value" id="resultClientName">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-user-tag"></i> صفة العميل</div>
+                            <div class="info-value" id="resultClientRole">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-user-friends"></i> اسم الخصم</div>
+                            <div class="info-value" id="resultOpponentName">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-gavel"></i> المحكمة</div>
+                            <div class="info-value" id="resultCourt">-</div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-label"><i class="fas fa-balance-scale"></i> الحالة</div>
+                            <div class="info-value" id="resultStatus">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="case-subject">
+                        <div class="info-label"><i class="fas fa-file-alt"></i> موضوع القضية</div>
+                        <div class="info-value" id="resultCaseSubject">-</div>
+                    </div>
+                    
+                    <h3 style="color: #bf953f; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 18px;">
+                        <i class="fas fa-calendar-alt"></i> تاريخ الجلسات
+                    </h3>
+                    
+                    <div id="sessionsContainer">
+                        <!-- يتم تعبئته ديناميكياً -->
+                    </div>
+                    
+                    <h3 style="color: #bf953f; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 18px;">
+                        <i class="fas fa-gavel"></i> آخر قرار
+                    </h3>
+                    
+                    <div id="lastDecisionInfo">
+                        <!-- يتم تعبئته ديناميكياً -->
+                    </div>
+                    
+                    <div class="contact-section">
+                        <h3><i class="fas fa-headset"></i> للاستفسار يرجى التواصل عبر:</h3>
+                        
+                        <div class="contact-info">
+                            <a href="#" class="contact-item" onclick="openWhatsApp()">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>الواتساب</span>
+                                <span class="contact-link">01101076000</span>
+                            </a>
+                            
+                            <a href="#" class="contact-item" onclick="openEmail()">
+                                <i class="fas fa-envelope"></i>
+                                <span>البريد الإلكتروني</span>
+                                <span class="contact-link">ma.law.firm@outlook.com</span>
+                            </a>
+                            
+                            <a href="#" class="contact-item" onclick="openTelegramBot()">
+                                <i class="fab fa-telegram"></i>
+                                <span>Telegram Bot</span>
+                                <span class="contact-link">@Lawyer_OTP_Bot</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
-                <div style="margin-top: 20px; text-align: center;">
-                    <button id="new-inquiry-btn" class="btn">
-                        <span>استعلام جديد</span>
-                    </button>
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> ملاحظات هامة</h3>
+                    <ul>
+                        <li>اختر طريقة التحقق المناسبة لك (البريد الإلكتروني أو Telegram)</li>
+                        <li>سيتم التحقق من وجودك في قاعدة البيانات أولاً</li>
+                        <li>سيتم إرسال كود تحقق مكون من 6 أرقام من قاعدة البيانات</li>
+                        <li>الكود صالح لمدة 15 دقيقة فقط</li>
+                        <li>بعد التحقق، يمكنك الاستعلام عن عدة قضايا بنفس الكود</li>
+                        <li>الجلسة صالحة لمدة 24 ساعة بعد التحقق</li>
+                        <li>إذا لم تصلك الرسالة، تحقق من صندوق البريد المهمل أو محادثة البوت في Telegram</li>
+                    </ul>
                 </div>
             </div>
         </div>
-        
-        <div class="footer">
-            <p>© 2024 نظام إدارة القضايا. جميع الحقوق محفوظة.</p>
-            <p>للدعم الفني: support@casesystem.com | هاتف: 920012345</p>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
+            <p>للاستفسار: 
+                <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-link">
+                    <i class="fab fa-whatsapp"></i> 01101076000
+                </a> | 
+                <a href="https://t.me/Lawyer_OTP_Bot" target="_blank" class="whatsapp-link">
+                    <i class="fab fa-telegram"></i> @Lawyer_OTP_Bot
+                </a> |
+                <a href="mailto:ma.law.firm@outlook.com" class="whatsapp-link">
+                    <i class="fas fa-envelope"></i> ma.law.firm@outlook.com
+                </a>
+            </p>
         </div>
-    </div>
+    </footer>
 
     <script>
-        // تهيئة EmailJS
-        emailjs.init('RCaH1Upo_Fep1Rorw'); // Public Key
-        
-        // عناصر DOM
-        const step1 = document.getElementById('step1');
-        const step2 = document.getElementById('step2');
-        const requestOtpBtn = document.getElementById('request-otp-btn');
-        const verifyOtpBtn = document.getElementById('verify-otp-btn');
-        const resendOtpBtn = document.getElementById('resend-otp-btn');
-        const newInquiryBtn = document.getElementById('new-inquiry-btn');
-        const identifierInput = document.getElementById('identifier');
-        const otpCodeInput = document.getElementById('otp-code');
-        const messageDiv = document.getElementById('message');
-        const otpDisplay = document.getElementById('otp-display');
-        const otpValue = document.getElementById('otp-value');
-        const userInfoDiv = document.getElementById('user-info');
-        const otpTimer = document.getElementById('otp-timer');
-        
-        // عناصر معلومات المستخدم
-        const infoClientName = document.getElementById('info-client-name');
-        const infoCaseCode = document.getElementById('info-case-code');
-        const infoEmail = document.getElementById('info-email');
-        const infoPhone = document.getElementById('info-phone');
-        
-        // متغيرات عامة
-        let currentUser = null;
-        let otpExpiryTime = null;
-        let otpInterval = null;
-        let generatedOTP = '';
-        
-        // نموذج بيانات وهمي (استبدل هذا بالاتصال بقاعدة البيانات الحقيقية)
-        const mockCases = [
-            {
-                client_email: "mahmoud.abdelhamyd@gmail.com",
-                client_phone: "0512345678",
-                client_name: "محمود عبد الحميد",
-                case_code: "CASE-2024-001",
-                case_status: "قيد المراجعة",
-                created_date: "2024-01-15"
-            },
-            {
-                client_email: "ahmed@gmail.com",
-                client_phone: "0511111111",
-                client_name: "أحمد محمد",
-                case_code: "CASE-2024-002",
-                case_status: "مكتمل",
-                created_date: "2024-01-10"
-            }
-        ];
-        
-        // دالة لعرض الرسائل
-        function showMessage(text, type = 'info') {
-            messageDiv.textContent = text;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
+        // ============================================
+        // تكوين النظام
+        // ============================================
+        const EMAILJS_CONFIG = {
+            SERVICE_ID: 'service_kpadqtp',
+            TEMPLATE_ID: 'template_kx2gh3f',
+            PUBLIC_KEY: 'RCaH1Upo_Fep1Rorw'
+        };
+
+        const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
+
+        const TELEGRAM_BOT_TOKEN = '8540084389:AAF3nRVjtzFwhGgLz0qryp-WCstGkeU1ORU';
+        const TELEGRAM_BOT_USERNAME = '@Lawyer_OTP_Bot';
+        const OFFICE_EMAIL = 'ma.law.firm@outlook.com';
+        const OFFICE_PHONE = '01101076000';
+
+        // ============================================
+        // متغيرات النظام
+        // ============================================
+        let supabaseClient = null;
+        let currentVerificationMethod = 'email';
+        let userIdentifier = '';
+        let sessionToken = null;
+        let currentOTP = null;
+        let currentCase = null;
+        let resendTimer = null;
+        let resendTimeLeft = 60;
+        let userDataCache = null; // لتخزين بيانات المستخدم
+
+        // ============================================
+        // دوال المساعدة
+        // ============================================
+        function showError(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'خطأ',
+                text: message,
+                confirmButtonColor: '#dc3545'
+            });
+        }
+
+        function showSuccess(message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'نجاح',
+                text: message,
+                confirmButtonColor: '#28a745'
+            });
+        }
+
+        function showInfo(title, html) {
+            Swal.fire({
+                title: title,
+                html: html,
+                icon: 'info',
+                confirmButtonColor: '#bf953f'
+            });
+        }
+
+        function setLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            if (!button) return;
             
-            // إخفاء الرسالة بعد 5 ثواني
-            if (type !== 'error') {
-                setTimeout(() => {
-                    messageDiv.style.display = 'none';
-                }, 5000);
+            if (isLoading) {
+                button.classList.add('loading');
+                button.disabled = true;
+            } else {
+                button.classList.remove('loading');
+                button.disabled = false;
             }
         }
-        
-        // دالة لإخفاء الرسائل
-        function hideMessage() {
-            messageDiv.style.display = 'none';
-        }
-        
-        // دالة للبحث عن المستخدم
-        function findUserInCases(identifier) {
-            // البحث عن المستخدم باستخدام البريد أو الهاتف
-            return mockCases.find(user => 
-                user.client_email === identifier || 
-                user.client_phone === identifier
-            );
-        }
-        
-        // دالة إنشاء OTP
-        function generateOTP(length = 6) {
-            const digits = '0123456789';
-            let otp = '';
-            
-            for (let i = 0; i < length; i++) {
-                otp += digits[Math.floor(Math.random() * 10)];
+
+        // ============================================
+        // تهيئة النظام
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // تهيئة Supabase
+            if (window.supabase) {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase initialized');
+            } else {
+                console.error('❌ Supabase library not loaded');
             }
             
-            return otp;
+            // تهيئة EmailJS
+            if (window.emailjs) {
+                emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+                console.log('✅ EmailJS initialized');
+                console.log('Service ID:', EMAILJS_CONFIG.SERVICE_ID);
+                console.log('Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
+                console.log('Public Key:', EMAILJS_CONFIG.PUBLIC_KEY);
+            } else {
+                console.error('❌ EmailJS library not loaded');
+            }
+            
+            // التحقق من جلسة سابقة
+            checkExistingSession();
+        });
+
+        // ============================================
+        // إدارة الجلسات
+        // ============================================
+        function checkExistingSession() {
+            const expires = localStorage.getItem('sessionExpires');
+            const identifier = localStorage.getItem('userIdentifier');
+            const method = localStorage.getItem('verificationMethod');
+            const userDataStr = localStorage.getItem('userData');
+            
+            if (identifier && expires && Date.now() < parseInt(expires) && method) {
+                currentVerificationMethod = method;
+                userIdentifier = identifier;
+                if (userDataStr) {
+                    userDataCache = JSON.parse(userDataStr);
+                }
+                
+                document.getElementById('method-step').style.display = 'none';
+                document.getElementById('email-step').style.display = 'none';
+                document.getElementById('telegram-step').style.display = 'none';
+                document.getElementById('otp-step').style.display = 'none';
+                document.getElementById('case-step').style.display = 'block';
+                document.getElementById('another-case-btn').style.display = 'block';
+                
+                showInfo('جلسة نشطة', 'جلسة سابقة نشطة موجودة. يمكنك الاستعلام عن قضية جديدة.');
+            }
         }
-        
-        // دالة إرسال OTP عبر EmailJS
-        async function sendEmailOTP(email, otpCode) {
+
+        function createSession(identifier, method, userData) {
+            sessionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+            const expires = Date.now() + 24 * 60 * 60 * 1000; // 24 ساعة
+            
+            localStorage.setItem('sessionToken', sessionToken);
+            localStorage.setItem('sessionExpires', expires);
+            localStorage.setItem('userIdentifier', identifier);
+            localStorage.setItem('verificationMethod', method);
+            if (userData) {
+                localStorage.setItem('userData', JSON.stringify(userData));
+                userDataCache = userData;
+            }
+            
+            return sessionToken;
+        }
+
+        function isValidSession() {
+            const expires = localStorage.getItem('sessionExpires');
+            const token = localStorage.getItem('sessionToken');
+            return token && expires && Date.now() < parseInt(expires);
+        }
+
+        // ============================================
+        // دوال التحقق
+        // ============================================
+        function selectMethod(method) {
+            currentVerificationMethod = method;
+            
+            document.querySelectorAll('.verification-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelector(`.verification-method[data-method="${method}"]`).classList.add('active');
+            
+            if (method === 'email') {
+                document.getElementById('email-step').style.display = 'block';
+                document.getElementById('telegram-step').style.display = 'none';
+            } else {
+                document.getElementById('email-step').style.display = 'none';
+                document.getElementById('telegram-step').style.display = 'block';
+            }
+        }
+
+        function startResendTimer() {
+            const countdownElement = document.getElementById('countdown');
+            const resendLink = document.getElementById('resend-code');
+            
+            resendLink.style.pointerEvents = 'none';
+            resendLink.style.opacity = '0.6';
+            resendTimeLeft = 60;
+            
+            if (resendTimer) clearInterval(resendTimer);
+            
+            resendTimer = setInterval(() => {
+                resendTimeLeft--;
+                countdownElement.textContent = resendTimeLeft;
+                
+                if (resendTimeLeft <= 0) {
+                    clearInterval(resendTimer);
+                    resendLink.style.pointerEvents = 'auto';
+                    resendLink.style.opacity = '1';
+                    countdownElement.textContent = '0';
+                }
+            }, 1000);
+        }
+
+        // ============================================
+        // إرسال OTP (معدل ليتناسب مع جدول otp_codes)
+        // ============================================
+        async function sendOTP(method) {
+            let identifier, buttonId;
+            
+            if (method === 'email') {
+                identifier = document.getElementById('email').value.trim();
+                buttonId = 'send-email-otp-btn';
+            } else {
+                identifier = document.getElementById('telegram').value.trim();
+                buttonId = 'send-telegram-otp-btn';
+            }
+            
+            if (!identifier) {
+                showError('يرجى إدخال البيانات المطلوبة');
+                return;
+            }
+            
+            if (method === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) {
+                showError('يرجى إدخال بريد إلكتروني صحيح');
+                return;
+            }
+            
+            if (method === 'telegram') {
+                const phoneRegex = /^[0-9]{11,14}$/;
+                const cleanPhone = identifier.replace(/\D/g, '');
+                if (!phoneRegex.test(cleanPhone)) {
+                    showError('يرجى إدخال رقم هاتف صحيح (11-14 رقم)');
+                    return;
+                }
+            }
+            
+            setLoading(buttonId, true);
+            userIdentifier = identifier;
+            
+            try {
+                // البحث عن العميل في جدول cases باستخدام البريد الإلكتروني أو رقم الهاتف
+                const { data: casesData, error: casesError } = await supabaseClient
+                    .from('cases')
+                    .select('client_name, client_email, client_phone')
+                    .or(`client_email.ilike.%${identifier}%, client_phone.ilike.%${identifier}%`)
+                    .limit(1);
+                
+                if (casesError) {
+                    console.error('Error searching for client:', casesError);
+                    showError('حدث خطأ في البحث عن بيانات العميل');
+                    setLoading(buttonId, false);
+                    return;
+                }
+                
+                if (!casesData || casesData.length === 0) {
+                    showError('لم يتم العثور على قضايا مرتبطة بهذه البيانات');
+                    setLoading(buttonId, false);
+                    return;
+                }
+                
+                const clientData = casesData[0];
+                userDataCache = clientData;
+                
+                // توليد OTP
+                const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+                currentOTP = otpCode;
+                
+                // حفظ OTP في جدول otp_codes
+                const otpRecord = {
+                    phone_number: method === 'telegram' ? identifier : null,
+                    otp_code: otpCode,
+                    expires_at: new Date(Date.now() + 15 * 60000).toISOString(),
+                    is_used: false,
+                    created_at: new Date().toISOString()
+                };
+                
+                // إذا كانت الطريقة email، نحتاج لإضافة حقل email
+                if (method === 'email') {
+                    // في جدول otp_codes الحالي لا يوجد حقل email
+                    // سنستخدم حقل phone_number لتخزين البريد الإلكتروني مؤقتاً
+                    otpRecord.phone_number = identifier;
+                }
+                
+                const { error: otpError } = await supabaseClient
+                    .from('otp_codes')
+                    .insert([otpRecord]);
+                
+                if (otpError) {
+                    console.error('Error saving OTP:', otpError);
+                    // نستمر في العملية حتى لو فشل حفظ OTP
+                }
+                
+                // إرسال OTP
+                let sendResult;
+                if (method === 'email') {
+                    sendResult = await sendEmailOTP(identifier, otpCode, clientData.client_name);
+                } else {
+                    sendResult = await sendTelegramOTP(identifier, otpCode, clientData.client_name);
+                }
+                
+                // التحقق من الإرسال الناجح
+                if (sendResult && sendResult.success) {
+                    // الانتقال لخطوة إدخال OTP
+                    document.getElementById('method-step').style.display = 'none';
+                    document.getElementById('email-step').style.display = 'none';
+                    document.getElementById('telegram-step').style.display = 'none';
+                    document.getElementById('otp-step').style.display = 'block';
+                    
+                    document.getElementById('verification-method-text').textContent = 
+                        method === 'email' ? `تم إرسال الكود إلى ${identifier}` : `تم إرسال الكود عبر Telegram إلى ${identifier}`;
+                    
+                    startResendTimer();
+                    showSuccess('تم إرسال كود التحقق بنجاح');
+                } else {
+                    // إذا فشل إرسال OTP، عرضه للمستخدم
+                    displayOTPForTesting(otpCode, identifier, method, sendResult?.message || 'فشل الإرسال');
+                    
+                    // مع ذلك، نستمر في العملية
+                    document.getElementById('method-step').style.display = 'none';
+                    document.getElementById('email-step').style.display = 'none';
+                    document.getElementById('telegram-step').style.display = 'none';
+                    document.getElementById('otp-step').style.display = 'block';
+                    
+                    startResendTimer();
+                    showInfo('كود التحقق (للاختبار)', 'تم عرض كود التحقق على الشاشة بسبب مشكلة في الإرسال.');
+                }
+                
+            } catch (error) {
+                console.error('Error in sendOTP:', error);
+                showError('حدث خطأ غير متوقع: ' + error.message);
+            } finally {
+                setLoading(buttonId, false);
+            }
+        }
+
+        async function sendEmailOTP(email, code, clientName) {
             try {
                 const templateParams = {
                     to_email: email,
-                    otp_code: otpCode,
-                    timestamp: new Date().toLocaleString('ar-SA'),
-                    app_name: 'نظام إدارة القضايا'
+                    client_name: clientName || 'عميلنا الكريم',
+                    verification_code: code,
+                    expiry_time: new Date(Date.now() + 15 * 60000).toLocaleTimeString('ar-EG', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    }),
+                    office_name: "مؤسسة محمود عبد الحميد للمحاماة",
+                    office_email: OFFICE_EMAIL,
+                    office_phone: OFFICE_PHONE
                 };
                 
                 const response = await emailjs.send(
-                    'service_kpadqtp', // Service ID
-                    'template_tawyvln', // Template ID
+                    EMAILJS_CONFIG.SERVICE_ID,
+                    EMAILJS_CONFIG.TEMPLATE_ID,
                     templateParams
                 );
                 
-                console.log('Email sent successfully:', response);
+                console.log('✅ Email sent successfully:', response);
                 return { success: true, message: 'تم إرسال البريد بنجاح' };
+                
             } catch (error) {
-                console.error('Error sending email:', error);
+                console.error('❌ Email sending failed:', error);
                 return { 
                     success: false, 
-                    message: `فشل إرسال البريد: ${error.text || error.message}` 
+                    message: 'فشل إرسال البريد: ' + (error.text || error.message) 
                 };
             }
         }
-        
-        // دالة بدء المؤقت
-        function startOTPTimer() {
-            const expiryTime = new Date(Date.now() + 10 * 60 * 1000); // 10 دقائق
-            otpExpiryTime = expiryTime;
-            
-            // تحديث المؤقت كل ثانية
-            otpInterval = setInterval(updateTimer, 1000);
-            updateTimer();
-        }
-        
-        // دالة تحديث المؤقت
-        function updateTimer() {
-            if (!otpExpiryTime) return;
-            
-            const now = new Date();
-            const diff = otpExpiryTime - now;
-            
-            if (diff <= 0) {
-                clearInterval(otpInterval);
-                otpTimer.textContent = 'انتهت صلاحية الرمز';
-                otpTimer.style.color = '#e74c3c';
-                return;
-            }
-            
-            const minutes = Math.floor(diff / 1000 / 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            
-            otpTimer.textContent = `الصلاحية: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-        
-        // دالة لإعادة تعيين النموذج
-        function resetForm() {
-            identifierInput.value = '';
-            otpCodeInput.value = '';
-            hideMessage();
-            otpDisplay.style.display = 'none';
-            userInfoDiv.classList.add('hidden');
-            step2.classList.add('hidden');
-            step1.classList.remove('hidden');
-            
-            if (otpInterval) {
-                clearInterval(otpInterval);
-                otpInterval = null;
-            }
-        }
-        
-        // حدث: طلب OTP
-        requestOtpBtn.addEventListener('click', async function() {
-            const identifier = identifierInput.value.trim();
-            
-            if (!identifier) {
-                showMessage('يرجى إدخال البريد الإلكتروني أو رقم الهاتف', 'error');
-                return;
-            }
-            
-            // البحث عن المستخدم
-            currentUser = findUserInCases(identifier);
-            
-            if (!currentUser) {
-                showMessage('المستخدم غير موجود في النظام', 'error');
-                return;
-            }
-            
-            // تغيير حالة الزر
-            const originalText = requestOtpBtn.innerHTML;
-            requestOtpBtn.disabled = true;
-            requestOtpBtn.innerHTML = '<span class="loading"></span> جاري الإرسال...';
-            
-            // إنشاء OTP
-            generatedOTP = generateOTP();
-            
-            // عرض OTP للتطوير فقط (إزالة في الإنتاج)
-            otpValue.textContent = generatedOTP;
-            otpDisplay.style.display = 'block';
-            
+
+        async function sendTelegramOTP(phone, code, clientName) {
             try {
-                // إرسال OTP عبر البريد الإلكتروني
-                const emailResult = await sendEmailOTP(currentUser.client_email, generatedOTP);
+                const cleanPhone = phone.replace(/\D/g, '');
+                const chatId = cleanPhone.startsWith('20') ? cleanPhone : `20${cleanPhone}`;
                 
-                if (emailResult.success) {
-                    // الانتقال إلى الخطوة 2
-                    step1.classList.add('hidden');
-                    step2.classList.remove('hidden');
-                    
-                    // بدء المؤقت
-                    startOTPTimer();
-                    
-                    showMessage(`تم إرسال رمز التحقق إلى ${currentUser.client_email}`, 'success');
-                    
-                    // التركيز على حقل إدخال OTP
-                    setTimeout(() => {
-                        otpCodeInput.focus();
-                    }, 300);
+                const message = `
+🔐 *رمز التحقق - مؤسسة محمود عبد الحميد للمحاماة*
+
+مرحباً ${clientName || 'عميلنا الكريم'}،
+
+رمز التحقق الخاص بك هو:
+*${code}*
+
+⏰ صالح لمدة 15 دقيقة
+🔒 لا تشارك هذا الرمز مع أي أحد
+
+🏛️ مؤسسة محمود عبد الحميد للمحاماة
+📧 ${OFFICE_EMAIL}
+📞 ${OFFICE_PHONE}
+                `;
+                
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.ok) {
+                    console.log('✅ Telegram message sent:', data);
+                    return { success: true, message: 'تم إرسال الرسالة عبر Telegram' };
                 } else {
-                    showMessage(emailResult.message, 'error');
-                    otpDisplay.style.display = 'none';
+                    console.error('❌ Telegram error:', data);
+                    return { 
+                        success: false, 
+                        message: 'فشل إرسال Telegram: ' + (data.description || 'Unknown error') 
+                    };
                 }
+                
             } catch (error) {
-                showMessage('حدث خطأ أثناء إرسال رمز التحقق', 'error');
-                console.error(error);
-            } finally {
-                // إعادة حالة الزر
-                requestOtpBtn.disabled = false;
-                requestOtpBtn.innerHTML = originalText;
+                console.error('❌ Telegram sending failed:', error);
+                return { 
+                    success: false, 
+                    message: 'فشل إرسال Telegram: ' + error.message 
+                };
             }
-        });
-        
-        // حدث: تحقق من OTP
-        verifyOtpBtn.addEventListener('click', async function() {
-            const enteredOTP = otpCodeInput.value.trim();
-            
-            if (!enteredOTP) {
-                showMessage('يرجى إدخال رمز التحقق', 'error');
+        }
+
+        function displayOTPForTesting(code, identifier, method, reason) {
+            const container = document.getElementById('otp-display-container');
+            container.innerHTML = `
+                <div class="otp-display">
+                    <h3><i class="fas fa-exclamation-triangle"></i> كود التحقق (اختبار)</h3>
+                    <p>السبب: <strong>${reason}</strong></p>
+                    <p>المستلم: <strong>${identifier}</strong></p>
+                    <p>الطريقة: <strong>${method === 'email' ? 'البريد الإلكتروني' : 'Telegram'}</strong></p>
+                    <div class="code">${code}</div>
+                    <p style="color: #94a3b8; font-size: 14px;">
+                        <i class="fas fa-info-circle"></i>
+                        في الإنتاج الحقيقي، سيتم إرسال هذا الكود تلقائياً
+                    </p>
+                </div>
+            `;
+            container.style.display = 'block';
+        }
+
+        async function resendOTP() {
+            if (resendTimeLeft > 0) {
+                showError(`يرجى الانتظار ${resendTimeLeft} ثانية قبل إعادة الإرسال`);
                 return;
             }
-            
-            if (enteredOTP.length !== 6) {
-                showMessage('رمز التحقق يجب أن يتكون من 6 أرقام', 'error');
-                return;
-            }
-            
-            // التحقق من انتهاء الصلاحية
-            if (new Date() > otpExpiryTime) {
-                showMessage('انتهت صلاحية رمز التحقق، يرجى طلب رمز جديد', 'error');
-                return;
-            }
-            
-            // التحقق من صحة OTP
-            if (enteredOTP !== generatedOTP) {
-                showMessage('رمز التحقق غير صحيح', 'error');
-                return;
-            }
-            
-            // تغيير حالة الزر
-            const originalText = verifyOtpBtn.innerHTML;
-            verifyOtpBtn.disabled = true;
-            verifyOtpBtn.innerHTML = '<span class="loading"></span> جاري التحقق...';
-            
-            // محاكاة اتصال بالخادم
-            setTimeout(() => {
-                // عرض معلومات المستخدم
-                infoClientName.textContent = currentUser.client_name;
-                infoCaseCode.textContent = currentUser.case_code;
-                infoEmail.textContent = currentUser.client_email;
-                infoPhone.textContent = currentUser.client_phone;
-                
-                // إخفاء الخطوة 2 وإظهار المعلومات
-                step2.classList.add('hidden');
-                userInfoDiv.classList.remove('hidden');
-                
-                // إيقاف المؤقت
-                if (otpInterval) {
-                    clearInterval(otpInterval);
-                    otpInterval = null;
-                }
-                
-                showMessage('تم التحقق بنجاح!', 'success');
-                
-                // إعادة حالة الزر
-                verifyOtpBtn.disabled = false;
-                verifyOtpBtn.innerHTML = originalText;
-            }, 1000);
-        });
-        
-        // حدث: إعادة إرسال OTP
-        resendOtpBtn.addEventListener('click', async function() {
-            if (!currentUser) return;
-            
-            const originalText = resendOtpBtn.innerHTML;
-            resendOtpBtn.disabled = true;
-            resendOtpBtn.innerHTML = '<span class="loading"></span> جاري الإرسال...';
-            
-            // إنشاء OTP جديد
-            generatedOTP = generateOTP();
-            
-            // عرض OTP للتطوير فقط
-            otpValue.textContent = generatedOTP;
-            otpDisplay.style.display = 'block';
             
             try {
-                // إرسال OTP جديد
-                const emailResult = await sendEmailOTP(currentUser.client_email, generatedOTP);
+                // توليد OTP جديد
+                const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+                currentOTP = otpCode;
                 
-                if (emailResult.success) {
-                    // إعادة ضبط المؤقت
-                    if (otpInterval) {
-                        clearInterval(otpInterval);
+                // حفظ OTP في جدول otp_codes
+                const otpRecord = {
+                    phone_number: currentVerificationMethod === 'telegram' ? userIdentifier : userIdentifier,
+                    otp_code: otpCode,
+                    expires_at: new Date(Date.now() + 15 * 60000).toISOString(),
+                    is_used: false,
+                    created_at: new Date().toISOString()
+                };
+                
+                const { error: otpError } = await supabaseClient
+                    .from('otp_codes')
+                    .insert([otpRecord]);
+                
+                // إرسال OTP
+                let sendResult;
+                if (currentVerificationMethod === 'email') {
+                    sendResult = await sendEmailOTP(userIdentifier, otpCode, userDataCache?.client_name);
+                } else {
+                    sendResult = await sendTelegramOTP(userIdentifier, otpCode, userDataCache?.client_name);
+                }
+                
+                if (sendResult && sendResult.success) {
+                    startResendTimer();
+                    showSuccess('تم إعادة إرسال كود التحقق بنجاح');
+                } else {
+                    displayOTPForTesting(otpCode, userIdentifier, currentVerificationMethod, 'فشل إعادة الإرسال');
+                    startResendTimer();
+                    showInfo('تم إعادة إنشاء كود التحقق', 'تم عرض الكود على الشاشة بسبب مشكلة في الإرسال.');
+                }
+                
+            } catch (error) {
+                console.error('Error in resendOTP:', error);
+                showError('حدث خطأ أثناء إعادة الإرسال: ' + error.message);
+            }
+        }
+
+        // ============================================
+        // التحقق من OTP (معدل ليتناسب مع جدول otp_codes)
+        // ============================================
+        async function verifyOTP() {
+            const enteredCode = document.getElementById('otp').value.trim();
+            
+            if (!enteredCode || enteredCode.length !== 6) {
+                showError('يرجى إدخال كود التحقق المكون من 6 أرقام');
+                return;
+            }
+            
+            setLoading('verify-otp-btn', true);
+            
+            try {
+                // التحقق من OTP في جدول otp_codes
+                const { data: otpData, error: otpError } = await supabaseClient
+                    .from('otp_codes')
+                    .select('*')
+                    .eq('otp_code', enteredCode)
+                    .eq('phone_number', userIdentifier)
+                    .gt('expires_at', new Date().toISOString())
+                    .eq('is_used', false)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+                
+                if (otpError || !otpData) {
+                    // التحقق من OTP المحلي كبديل
+                    if (enteredCode === currentOTP) {
+                        console.log('✅ OTP verified locally');
+                    } else {
+                        showError('كود التحقق غير صحيح أو منتهي الصلاحية');
+                        setLoading('verify-otp-btn', false);
+                        return;
                     }
-                    startOTPTimer();
-                    
-                    showMessage('تم إعادة إرسال رمز التحقق بنجاح', 'success');
                 } else {
-                    showMessage(emailResult.message, 'error');
+                    // تحديث حالة OTP كمستخدم في جدول otp_codes
+                    await supabaseClient
+                        .from('otp_codes')
+                        .update({ is_used: true })
+                        .eq('id', otpData.id);
                 }
+                
+                // إنشاء جلسة جديدة
+                createSession(userIdentifier, currentVerificationMethod, userDataCache);
+                
+                // الانتقال لخطوة كود القضية
+                document.getElementById('otp-step').style.display = 'none';
+                document.getElementById('case-step').style.display = 'block';
+                document.getElementById('another-case-btn').style.display = 'block';
+                document.getElementById('otp-display-container').style.display = 'none';
+                
+                showSuccess('تم التحقق بنجاح! يمكنك الآن الاستعلام عن قضيتك');
+                
             } catch (error) {
-                showMessage('حدث خطأ أثناء إعادة الإرسال', 'error');
-                console.error(error);
+                console.error('Error in verifyOTP:', error);
+                showError('حدث خطأ أثناء التحقق: ' + error.message);
             } finally {
-                resendOtpBtn.disabled = false;
-                resendOtpBtn.innerHTML = originalText;
+                setLoading('verify-otp-btn', false);
             }
-        });
-        
-        // حدث: استعلام جديد
-        newInquiryBtn.addEventListener('click', function() {
-            resetForm();
-            currentUser = null;
-            generatedOTP = '';
-            showMessage('يمكنك الآن إجراء استعلام جديد', 'info');
-        });
-        
-        // السماح بإدخال OTP باستخدام Enter
-        otpCodeInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                verifyOtpBtn.click();
+        }
+
+        // ============================================
+        // البحث عن القضية
+        // ============================================
+        async function searchCase() {
+            if (!isValidSession()) {
+                showError('انتهت الجلسة. يرجى التحقق مرة أخرى');
+                resetToFirstStep();
+                return;
             }
-        });
-        
-        // السماح بإدخال المعرف باستخدام Enter
-        identifierInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                requestOtpBtn.click();
-            }
-        });
-        
-        // تهيئة الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            // اختبار اتصال EmailJS
-            console.log('EmailJS initialized');
             
-            // عرض رسالة ترحيب
-            setTimeout(() => {
-                showMessage('مرحباً بك في نظام استعلام القضايا. أدخل بياناتك للبدء.', 'info');
-            }, 1000);
-        });
+            const caseCode = document.getElementById('caseCode').value.trim().toUpperCase();
+            
+            if (!caseCode) {
+                showError('يرجى إدخال كود القضية');
+                return;
+            }
+            
+            setLoading('search-case-btn', true);
+            
+            try {
+                // البحث عن القضية في جدول cases
+                const { data: caseData, error: caseError } = await supabaseClient
+                    .from('cases')
+                    .select(`
+                        *,
+                        sessions (*)
+                    `)
+                    .eq('case_code', caseCode)
+                    .single();
+                
+                if (caseError || !caseData) {
+                    showError('لم يتم العثور على قضية بهذا الكود');
+                    setLoading('search-case-btn', false);
+                    return;
+                }
+                
+                // التحقق من أن القضية مرتبطة بالمستخدم
+                const isEmailMatch = caseData.client_email && caseData.client_email.includes(userIdentifier);
+                const isPhoneMatch = caseData.client_phone && caseData.client_phone.includes(userIdentifier);
+                
+                if (!isEmailMatch && !isPhoneMatch) {
+                    showError('هذه القضية غير مرتبطة بحسابك');
+                    setLoading('search-case-btn', false);
+                    return;
+                }
+                
+                currentCase = caseData;
+                displayCaseDetails(caseData);
+                document.getElementById('another-case-btn').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error in searchCase:', error);
+                showError('حدث خطأ أثناء البحث عن القضية: ' + error.message);
+            } finally {
+                setLoading('search-case-btn', false);
+            }
+        }
+
+        // ============================================
+        // عرض تفاصيل القضية
+        // ============================================
+        function displayCaseDetails(caseData) {
+            // تفاصيل القضية الأساسية
+            document.getElementById('resultCaseCode').textContent = caseData.case_code || '-';
+            document.getElementById('resultCaseNumber').textContent = caseData.case_number || '-';
+            document.getElementById('resultCaseYear').textContent = caseData.case_year || '-';
+            document.getElementById('resultClientName').textContent = caseData.client_name || '-';
+            document.getElementById('resultClientRole').textContent = caseData.client_role || '-';
+            document.getElementById('resultOpponentName').textContent = caseData.opponent_name || '-';
+            document.getElementById('resultCourt').textContent = caseData.court || '-';
+            document.getElementById('resultStatus').textContent = caseData.status || '-';
+            document.getElementById('resultCaseSubject').textContent = caseData.subject || '-';
+            
+            // الجلسات
+            const sessionsContainer = document.getElementById('sessionsContainer');
+            if (caseData.sessions && caseData.sessions.length > 0) {
+                let sessionsHTML = `
+                    <table class="sessions-table">
+                        <thead>
+                            <tr>
+                                <th>تاريخ الجلسة</th>
+                                <th>نوع الجلسة</th>
+                                <th>القرار / المقرر</th>
+                                <th>ملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                caseData.sessions.sort((a, b) => new Date(b.session_date) - new Date(a.session_date));
+                
+                caseData.sessions.forEach(session => {
+                    const sessionDate = new Date(session.session_date).toLocaleDateString('ar-EG', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    sessionsHTML += `
+                        <tr>
+                            <td>${sessionDate}</td>
+                            <td>${session.session_type || '-'}</td>
+                            <td>${session.decision || '-'}</td>
+                            <td>${session.notes || '-'}</td>
+                        </tr>
+                    `;
+                });
+                
+                sessionsHTML += '</tbody></table>';
+                sessionsContainer.innerHTML = sessionsHTML;
+            } else {
+                sessionsContainer.innerHTML = `
+                    <div class="session-item">
+                        <div style="color: #94a3b8; text-align: center; padding: 15px;">
+                            <i class="fas fa-calendar-times"></i>
+                            لا توجد جلسات مسجلة لهذه القضية بعد
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // آخر قرار
+            const lastDecision = document.getElementById('lastDecisionInfo');
+            if (caseData.sessions && caseData.sessions.length > 0) {
+                const lastSession = caseData.sessions.reduce((latest, session) => {
+                    return new Date(session.session_date) > new Date(latest.session_date) ? session : latest;
+                }, caseData.sessions[0]);
+                
+                lastDecision.innerHTML = `
+                    <div class="session-item">
+                        <div class="session-date">
+                            <i class="fas fa-calendar-day"></i>
+                            تاريخ آخر جلسة: ${new Date(lastSession.session_date).toLocaleDateString('ar-EG')}
+                        </div>
+                        <div style="color: #cbd5e1; margin-bottom: 5px;">
+                            <i class="fas fa-info-circle"></i> القرار: ${lastSession.decision || 'لم يتم تسجيل قرار'}
+                        </div>
+                        ${lastSession.notes ? `<div style="color: #94a3b8; font-size: 14px;">ملاحظات: ${lastSession.notes}</div>` : ''}
+                    </div>
+                `;
+            } else {
+                lastDecision.innerHTML = `
+                    <div class="session-item">
+                        <div style="color: #94a3b8; text-align: center; padding: 15px;">
+                            <i class="fas fa-info-circle"></i>
+                            لا توجد قرارات مسجلة لهذه القضية بعد
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // إظهار نتائج القضية
+            document.getElementById('inquiryResult').style.display = 'block';
+            document.getElementById('inquiryResult').scrollIntoView({ behavior: 'smooth' });
+            showSuccess('تم العثور على القضية بنجاح');
+        }
+
+        // ============================================
+        // طباعة PDF
+        // ============================================
+        function printPDF() {
+            if (!currentCase) {
+                showError('لا توجد بيانات للطباعة');
+                return;
+            }
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                
+                // إضافة خط عربي (افتراضي)
+                doc.setFont('helvetica');
+                
+                // العنوان
+                doc.setFontSize(20);
+                doc.setTextColor(191, 149, 63);
+                doc.text('مؤسسة محمود عبد الحميد للمحاماة', 105, 20, null, null, 'center');
+                
+                doc.setFontSize(16);
+                doc.setTextColor(100, 100, 100);
+                doc.text('المحامي بالنقض والدستورية العليا', 105, 30, null, null, 'center');
+                
+                doc.setFontSize(18);
+                doc.setTextColor(0, 0, 0);
+                doc.text('تفاصيل القضية', 105, 40, null, null, 'center');
+                
+                doc.setFontSize(12);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}`, 105, 50, null, null, 'center');
+                
+                // خط فاصل
+                doc.setDrawColor(191, 149, 63);
+                doc.setLineWidth(0.5);
+                doc.line(20, 55, 190, 55);
+                
+                // تفاصيل القضية
+                let y = 65;
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text('معلومات القضية:', 20, y);
+                y += 10;
+                
+                const details = [
+                    ['كود القضية', currentCase.case_code || '-'],
+                    ['رقم القضية', currentCase.case_number || '-'],
+                    ['سنة القضية', currentCase.case_year || '-'],
+                    ['اسم العميل', currentCase.client_name || '-'],
+                    ['صفة العميل', currentCase.client_role || '-'],
+                    ['اسم الخصم', currentCase.opponent_name || '-'],
+                    ['المحكمة', currentCase.court || '-'],
+                    ['الحالة', currentCase.status || '-'],
+                    ['موضوع القضية', currentCase.subject || '-']
+                ];
+                
+                doc.setFontSize(12);
+                details.forEach(([label, value]) => {
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`${label}:`, 25, y);
+                    doc.setTextColor(100, 100, 100);
+                    
+                    // تقسيم النص الطويل
+                    const lines = doc.splitTextToSize(value.toString(), 120);
+                    doc.text(lines, 80, y);
+                    y += lines.length * 7;
+                });
+                
+                // الجلسات
+                y += 10;
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text('الجلسات:', 20, y);
+                y += 10;
+                
+                if (currentCase.sessions && currentCase.sessions.length > 0) {
+                    const sessionsData = currentCase.sessions.map(session => [
+                        new Date(session.session_date).toLocaleDateString('ar-EG'),
+                        session.session_type || '-',
+                        session.decision || '-',
+                        session.notes || '-'
+                    ]);
+                    
+                    doc.autoTable({
+                        startY: y,
+                        head: [['التاريخ', 'النوع', 'القرار', 'ملاحظات']],
+                        body: sessionsData,
+                        theme: 'grid',
+                        headStyles: { fillColor: [191, 149, 63] },
+                        margin: { left: 20, right: 20 },
+                        styles: { fontSize: 10, cellPadding: 3 },
+                        columnStyles: {
+                            0: { cellWidth: 30 },
+                            1: { cellWidth: 25 },
+                            2: { cellWidth: 40 },
+                            3: { cellWidth: 75 }
+                        }
+                    });
+                } else {
+                    doc.setFontSize(12);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text('لا توجد جلسات مسجلة', 25, y);
+                }
+                
+                // تذييل الصفحة
+                const pageHeight = doc.internal.pageSize.height;
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text('© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.', 105, pageHeight - 20, null, null, 'center');
+                doc.text(`تم إنشاء هذا التقرير لـ: ${userIdentifier}`, 105, pageHeight - 15, null, null, 'center');
+                
+                // حفظ الملف
+                const fileName = `قضية_${currentCase.case_code}_${new Date().toISOString().split('T')[0]}.pdf`;
+                doc.save(fileName);
+                
+                showSuccess('تم إنشاء ملف PDF بنجاح');
+                
+            } catch (error) {
+                console.error('Error creating PDF:', error);
+                showError('حدث خطأ أثناء إنشاء ملف PDF: ' + error.message);
+            }
+        }
+
+        // ============================================
+        // دوال إضافية
+        // ============================================
+        function showNewCaseForm() {
+            document.getElementById('caseCode').value = '';
+            document.getElementById('inquiryResult').style.display = 'none';
+            document.getElementById('case-step').style.display = 'block';
+            document.getElementById('caseCode').focus();
+            document.getElementById('another-case-btn').style.display = 'block';
+        }
+
+        function resetToFirstStep() {
+            document.getElementById('method-step').style.display = 'block';
+            document.getElementById('email-step').style.display = 'block';
+            document.getElementById('telegram-step').style.display = 'none';
+            document.getElementById('otp-step').style.display = 'none';
+            document.getElementById('case-step').style.display = 'none';
+            document.getElementById('inquiryResult').style.display = 'none';
+            document.getElementById('otp-display-container').style.display = 'none';
+            
+            document.getElementById('email').value = '';
+            document.getElementById('telegram').value = '';
+            document.getElementById('otp').value = '';
+            document.getElementById('caseCode').value = '';
+            
+            userIdentifier = '';
+            currentOTP = null;
+            currentCase = null;
+            userDataCache = null;
+            
+            localStorage.removeItem('sessionToken');
+            localStorage.removeItem('sessionExpires');
+            localStorage.removeItem('userIdentifier');
+            localStorage.removeItem('verificationMethod');
+            localStorage.removeItem('userData');
+        }
+
+        function openWhatsApp() {
+            const message = currentCase ? 
+                `السلام عليكم، أود الاستفسار عن قضيتي التي تحمل الكود: ${currentCase.case_code}` :
+                'السلام عليكم، أود الاستفسار عن قضية';
+            window.open(`https://wa.me/201101076000?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function openEmail() {
+            const subject = currentCase ? 
+                `استفسار عن القضية ${currentCase.case_code}` :
+                'استفسار عن قضية';
+            const body = `السلام عليكم،\n\nأود الاستفسار عن قضية\n\nمع الشكر`;
+            window.location.href = `mailto:${OFFICE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        function openTelegramBot() {
+            window.open('https://t.me/Lawyer_OTP_Bot', '_blank');
+        }
+
+        // ============================================
+        // إظهار معلومات الإصدار
+        // ============================================
+        console.log(`
+╔══════════════════════════════════════════════════╗
+║      نظام استعلام القضايا - الإصدار 1.0         ║
+║      مؤسسة محمود عبد الحميد للمحاماة           ║
+║══════════════════════════════════════════════════║
+║ ✅ Supabase: ${SUPABASE_URL ? 'متصل' : 'غير متصل'}          ║
+║ ✅ EmailJS: ${EMAILJS_CONFIG.PUBLIC_KEY ? 'مهيأ' : 'غير مهيأ'}        ║
+║ ✅ Telegram Bot: ${TELEGRAM_BOT_TOKEN ? 'جاهز' : 'غير جاهز'}        ║
+║ ✅ جدول otp_codes: معدل للتكامل                 ║
+╚══════════════════════════════════════════════════╝
+        `);
     </script>
 </body>
 </html>

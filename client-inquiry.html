@@ -222,6 +222,34 @@
             direction: ltr;
         }
 
+        .client-select {
+            background: rgba(191,149,63,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid rgba(191,149,63,0.3);
+        }
+
+        .client-option {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .client-option:hover {
+            background: rgba(191,149,63,0.2);
+            border-color: var(--gold);
+        }
+
+        .client-option.selected {
+            background: rgba(191,149,63,0.3);
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(191,149,63,0.2);
+        }
+
         .contact-section {
             margin-top: 25px;
             padding: 20px;
@@ -319,39 +347,24 @@
             </div>
         </div>
 
-        <!-- خطوة البريد الإلكتروني -->
-        <div id="step-email" class="method-step" style="display:block;">
+        <!-- خطوة البحث عن العميل -->
+        <div id="step-search" style="display:block;">
             <div class="form-group">
-                <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني المسجل</label>
-                <input type="email" id="email" class="form-control" placeholder="example@domain.com">
-                <small style="color:var(--gray); display:block; margin-top:5px;">سيتم التحقق من البريد ثم إرسال كود التحقق</small>
+                <label for="search-input"><i class="fas fa-search"></i> ابحث عن بياناتك</label>
+                <input type="text" id="search-input" class="form-control" placeholder="أدخل اسمك، البريد الإلكتروني، أو رقم الهاتف">
+                <small style="color:var(--gray); display:block; margin-top:5px;">سيتم البحث في قاعدة البيانات للعثور على بياناتك</small>
             </div>
-            <button type="button" id="btn-send-email" class="btn btn-primary">
-                <i class="fas fa-paper-plane"></i> إرسال كود التحقق
+            <button type="button" id="btn-search-client" class="btn btn-primary">
+                <i class="fas fa-search"></i> بحث عن بياناتي
             </button>
-        </div>
 
-        <!-- خطوة Telegram -->
-        <div id="step-telegram" class="method-step" style="display:none;">
-            <div class="form-group">
-                <label for="telegram"><i class="fab fa-telegram-plane"></i> معرف Telegram (رقم الهاتف أو Chat ID)</label>
-                <input type="text" id="telegram" class="form-control" placeholder="أدخل رقم هاتفك أو Chat ID">
-                <small style="color:var(--gray); display:block; margin-top:5px;">
-                    يمكنك استخدام:<br>
-                    • رقم الهاتف (مثال: 201112345678)<br>
-                    • أو Chat ID (احصل عليه من @userinfobot)
-                </small>
+            <!-- نتائج البحث -->
+            <div id="client-results" class="client-select" style="display:none; margin-top:20px;">
+                <h4 style="color:var(--gold); margin-bottom:10px;">اختر بياناتك:</h4>
+                <div id="clients-list">
+                    <!-- سيتم تعبئته ديناميكياً -->
+                </div>
             </div>
-            <div style="background:rgba(191,149,63,0.12); padding:1rem; border-radius:10px; margin:1.2rem 0; font-size:0.95rem;">
-                <p><strong><i class="fas fa-info-circle"></i> مهم:</strong> تأكد من بدء محادثة مع @Lawyer_OTP_Bot أولاً</p>
-                <a href="https://t.me/Lawyer_OTP_Bot" target="_blank" 
-                   style="color:var(--gold); font-weight:600; display:inline-flex; align-items:center; gap:8px; margin-top:0.6rem;">
-                    <i class="fab fa-telegram-plane"></i> اضغط هنا لبدء المحادثة مع البوت
-                </a>
-            </div>
-            <button type="button" id="btn-send-telegram" class="btn btn-primary">
-                <i class="fab fa-telegram-plane"></i> إرسال كود التحقق
-            </button>
         </div>
 
         <!-- خطوة إدخال OTP -->
@@ -458,10 +471,10 @@
             </h3>
             <ul style="list-style:none; padding:0;">
                 <li style="padding:8px 0; color:var(--light); display:flex; align-items:center; gap:8px; justify-content:flex-end; font-size:14px;">
-                    اختر طريقة التحقق المناسبة لك (البريد الإلكتروني أو Telegram)
+                    ابحث عن بياناتك باستخدام الاسم، البريد الإلكتروني، أو رقم الهاتف
                 </li>
                 <li style="padding:8px 0; color:var(--light); display:flex; align-items:center; gap:8px; justify-content:flex-end; font-size:14px;">
-                    سيتم التحقق من وجودك في قاعدة البيانات أولاً
+                    اختر بياناتك من القائمة، سيتم إرسال OTP تلقائياً إلى وسيلة الاتصال الخاصة بك
                 </li>
                 <li style="padding:8px 0; color:var(--light); display:flex; align-items:center; gap:8px; justify-content:flex-end; font-size:14px;">
                     كود التحقق صالح لمدة 15 دقيقة فقط
@@ -519,6 +532,7 @@ let currentCase = null;
 let resendTimer = null;
 let resendTimeLeft = 60;
 let currentOTPId = null;
+let selectedClient = null;
 
 // ============================================
 // تهيئة النظام
@@ -560,9 +574,15 @@ function bindEvents() {
     document.getElementById('method-email').addEventListener('click', () => switchMethod('email'));
     document.getElementById('method-telegram').addEventListener('click', () => switchMethod('telegram'));
     
-    // أزرار إرسال OTP
-    document.getElementById('btn-send-email').addEventListener('click', () => sendOTP('email'));
-    document.getElementById('btn-send-telegram').addEventListener('click', () => sendOTP('telegram'));
+    // زر البحث عن العميل
+    document.getElementById('btn-search-client').addEventListener('click', searchClients);
+    
+    // تفعيل البحث عند الضغط على Enter
+    document.getElementById('search-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchClients();
+        }
+    });
     
     // زر التحقق من OTP
     document.getElementById('btn-verify-otp').addEventListener('click', verifyOTP);
@@ -611,10 +631,6 @@ function switchMethod(method) {
     // تحديث أزرار الطريقة
     document.getElementById('method-email').classList.toggle('active', method === 'email');
     document.getElementById('method-telegram').classList.toggle('active', method === 'telegram');
-    
-    // إظهار/إخفاء الحقول
-    document.getElementById('step-email').style.display = method === 'email' ? 'block' : 'none';
-    document.getElementById('step-telegram').style.display = method === 'telegram' ? 'block' : 'none';
     
     // إخفاء الخطوات الأخرى
     document.getElementById('step-otp').style.display = 'none';
@@ -689,111 +705,154 @@ function startResendCountdown() {
 }
 
 // ============================================
-// دوال الجلسة
+// البحث عن العملاء في قاعدة البيانات
 // ============================================
-function checkExistingSession() {
+async function searchClients() {
+    const searchTerm = document.getElementById('search-input').value.trim();
+    
+    if (!searchTerm || searchTerm.length < 2) {
+        showMessage('error', 'يرجى إدخال مصطلح بحث مكون من حرفين على الأقل');
+        return;
+    }
+    
+    setLoading('btn-search-client', true);
+    hideMessages();
+    
     try {
-        const expires = localStorage.getItem('sessionExpires');
-        const identifier = localStorage.getItem('userIdentifier');
-        const method = localStorage.getItem('verificationMethod');
+        console.log('🔍 البحث عن عملاء بمصطلح:', searchTerm);
         
-        if (identifier && expires && Date.now() < parseInt(expires) && method) {
-            currentMethod = method;
-            userIdentifier = identifier;
-            userDataCache = JSON.parse(localStorage.getItem('userData') || '{}');
-            
-            document.getElementById('step-method').style.display = 'none';
-            document.getElementById('step-email').style.display = 'none';
-            document.getElementById('step-telegram').style.display = 'none';
-            document.getElementById('step-otp').style.display = 'none';
-            document.getElementById('step-case').style.display = 'block';
-            document.getElementById('btn-another-case').style.display = 'block';
-            
-            showMessage('success', 'جلسة نشطة موجودة. يمكنك الاستعلام عن قضية جديدة.');
-            console.log('✅ جلسة سابقة تم استعادتها');
+        // البحث في قاعدة البيانات
+        const { data: clients, error } = await supabaseClient
+            .from('cases')
+            .select('client_name, client_email, client_phone, case_code, client_role')
+            .or(`client_name.ilike.%${searchTerm}%,client_email.ilike.%${searchTerm}%,client_phone.ilike.%${searchTerm}%`)
+            .order('client_name')
+            .limit(10);
+        
+        if (error) {
+            console.error('❌ خطأ في البحث:', error);
+            throw new Error('خطأ في الاتصال بقاعدة البيانات');
+        }
+        
+        if (!clients || clients.length === 0) {
+            showMessage('error', 'لم يتم العثور على بيانات مطابقة للبحث');
+            document.getElementById('client-results').style.display = 'none';
+            return;
+        }
+        
+        console.log(`✅ تم العثور على ${clients.length} عميل`);
+        
+        // عرض النتائج
+        displayClientResults(clients);
+        
+    } catch (error) {
+        console.error('❌ خطأ في searchClients:', error);
+        showMessage('error', error.message);
+    } finally {
+        setLoading('btn-search-client', false);
+    }
+}
+
+function displayClientResults(clients) {
+    const clientsList = document.getElementById('clients-list');
+    const resultsContainer = document.getElementById('client-results');
+    
+    clientsList.innerHTML = '';
+    
+    clients.forEach(client => {
+        const hasEmail = client.client_email && client.client_email.trim() !== '';
+        const hasPhone = client.client_phone && client.client_phone.trim() !== '';
+        
+        const clientDiv = document.createElement('div');
+        clientDiv.className = 'client-option';
+        clientDiv.innerHTML = `
+            <div style="font-weight:bold; color:var(--gold-light); margin-bottom:5px;">
+                ${client.client_name || 'غير معروف'}
+            </div>
+            <div style="font-size:0.9rem; color:var(--gray);">
+                ${client.client_role ? `الصفة: ${client.client_role} | ` : ''}
+                ${client.case_code ? `كود القضية: ${client.case_code}` : ''}
+            </div>
+            <div style="font-size:0.85rem; color:var(--light); margin-top:8px;">
+                ${hasEmail ? `<i class="fas fa-envelope"></i> ${client.client_email}` : ''}
+                ${hasEmail && hasPhone ? '<br>' : ''}
+                ${hasPhone ? `<i class="fas fa-phone"></i> ${client.client_phone}` : ''}
+            </div>
+            <div style="margin-top:10px; display:flex; gap:10px;">
+                ${hasEmail ? `<button class="btn" style="padding:5px 10px; font-size:0.85rem;" onclick="selectClient('email', '${client.client_email}', '${client.client_name}')">
+                    <i class="fas fa-envelope"></i> إرسال OTP عبر البريد
+                </button>` : ''}
+                ${hasPhone ? `<button class="btn" style="padding:5px 10px; font-size:0.85rem;" onclick="selectClient('telegram', '${client.client_phone}', '${client.client_name}')">
+                    <i class="fab fa-telegram"></i> إرسال OTP عبر Telegram
+                </button>` : ''}
+            </div>
+        `;
+        
+        clientsList.appendChild(clientDiv);
+    });
+    
+    resultsContainer.style.display = 'block';
+    
+    // التمرير إلى النتائج
+    setTimeout(() => {
+        resultsContainer.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }, 300);
+}
+
+// ============================================
+// اختيار العميل وإرسال OTP
+// ============================================
+async function selectClient(method, identifier, clientName) {
+    console.log('👤 اختيار العميل:', { method, identifier, clientName });
+    
+    currentMethod = method;
+    userIdentifier = identifier;
+    selectedClient = { identifier, name: clientName };
+    
+    // تحديث أزرار الطريقة
+    document.getElementById('method-email').classList.toggle('active', method === 'email');
+    document.getElementById('method-telegram').classList.toggle('active', method === 'telegram');
+    
+    // البحث عن جميع قضايا هذا العميل
+    try {
+        const { data: clientCases, error } = await supabaseClient
+            .from('cases')
+            .select('*')
+            .or(`client_email.ilike.%${identifier}%,client_phone.ilike.%${identifier}%`);
+        
+        if (!error && clientCases && clientCases.length > 0) {
+            userDataCache = clientCases[0];
+            console.log('✅ بيانات العميل محفوظة:', userDataCache.client_name);
         }
     } catch (error) {
-        console.error('Error checking session:', error);
+        console.warn('⚠️ لم يتم حفظ بيانات العميل:', error);
     }
-}
-
-function createSession(identifier, method, userData) {
-    try {
-        const expires = Date.now() + (24 * 60 * 60 * 1000); // 24 ساعة
-        
-        localStorage.setItem('sessionExpires', expires);
-        localStorage.setItem('userIdentifier', identifier);
-        localStorage.setItem('verificationMethod', method);
-        localStorage.setItem('userData', JSON.stringify(userData || {}));
-        
-        userDataCache = userData;
-        console.log('✅ جلسة جديدة تم إنشاؤها');
-    } catch (error) {
-        console.error('Error creating session:', error);
-    }
-}
-
-function isValidSession() {
-    try {
-        const expires = localStorage.getItem('sessionExpires');
-        const identifier = localStorage.getItem('userIdentifier');
-        return identifier && expires && Date.now() < parseInt(expires);
-    } catch (error) {
-        return false;
-    }
+    
+    // إرسال OTP
+    await sendOTP();
 }
 
 // ============================================
 // إرسال OTP
 // ============================================
-async function sendOTP(method) {
-    console.log('📤 بدء إرسال OTP عبر:', method);
-    
-    let identifier, buttonId;
-    
-    if (method === 'email') {
-        identifier = document.getElementById('email').value.trim();
-        buttonId = 'btn-send-email';
-        
-        if (!identifier || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) {
-            showMessage('error', 'يرجى إدخال بريد إلكتروني صحيح');
-            return;
-        }
-    } else {
-        identifier = document.getElementById('telegram').value.trim();
-        buttonId = 'btn-send-telegram';
-        
-        if (!identifier) {
-            showMessage('error', 'يرجى إدخال رقم هاتف أو Chat ID');
-            return;
-        }
+async function sendOTP() {
+    if (!userIdentifier || !selectedClient) {
+        showMessage('error', 'لم يتم تحديد عميل');
+        return;
     }
     
-    setLoading(buttonId, true);
+    const method = currentMethod;
+    const identifier = userIdentifier;
+    const clientName = selectedClient.name;
+    
+    console.log('📤 بدء إرسال OTP عبر:', method, 'إلى:', identifier);
+    
     hideMessages();
-    userIdentifier = identifier;
     
     try {
-        // البحث عن العميل في قاعدة البيانات
-        console.log('🔍 البحث عن العميل:', identifier);
-        const { data: casesData, error: casesError } = await supabaseClient
-            .from('cases')
-            .select('client_name, client_email, client_phone, case_code')
-            .or(`client_email.ilike.%${identifier}%, client_phone.ilike.%${identifier}%`)
-            .limit(5);
-        
-        if (casesError) {
-            console.error('Database error:', casesError);
-            throw new Error('خطأ في الاتصال بقاعدة البيانات');
-        }
-        
-        if (!casesData || casesData.length === 0) {
-            throw new Error('لم يتم العثور على قضايا مرتبطة بهذه البيانات');
-        }
-        
-        console.log('✅ وجد:', casesData.length, 'قضايا');
-        userDataCache = casesData[0];
-        
         // توليد OTP
         const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
         currentOTP = otpCode;
@@ -827,17 +886,17 @@ async function sendOTP(method) {
         let sendResult;
         if (method === 'email') {
             console.log('📧 محاولة إرسال البريد إلى:', identifier);
-            sendResult = await sendEmailOTP(identifier, otpCode, userDataCache.client_name);
+            sendResult = await sendEmailOTP(identifier, otpCode, clientName);
         } else {
             console.log('📱 محاولة إرسال Telegram إلى:', identifier);
-            sendResult = await sendTelegramOTP(identifier, otpCode, userDataCache.client_name);
+            sendResult = await sendTelegramOTP(identifier, otpCode, clientName);
         }
         
         if (sendResult.success) {
             console.log('✅ OTP تم إرساله بنجاح');
             
-            document.getElementById('step-email').style.display = 'none';
-            document.getElementById('step-telegram').style.display = 'none';
+            // إخفاء خطوة البحث وإظهار خطوة OTP
+            document.getElementById('step-search').style.display = 'none';
             document.getElementById('step-otp').style.display = 'block';
             
             const methodText = method === 'email' ? 
@@ -852,8 +911,7 @@ async function sendOTP(method) {
             console.log('⚠️ فشل إرسال OTP، عرض للاختبار');
             displayOTPForTesting(otpCode, identifier, method, sendResult.message);
             
-            document.getElementById('step-email').style.display = 'none';
-            document.getElementById('step-telegram').style.display = 'none';
+            document.getElementById('step-search').style.display = 'none';
             document.getElementById('step-otp').style.display = 'block';
             
             const methodText = method === 'email' ? 
@@ -870,26 +928,48 @@ async function sendOTP(method) {
     } catch (error) {
         console.error('❌ خطأ في sendOTP:', error);
         showMessage('error', error.message);
-    } finally {
-        setLoading(buttonId, false);
     }
 }
 
 async function sendEmailOTP(email, code, clientName) {
     try {
+        // استخراج البريد الإلكتروني من جدول cases إذا كان فارغاً
+        let recipientEmail = email;
+        
+        if (!recipientEmail || recipientEmail.trim() === '') {
+            console.log('🔍 البحث عن بريد العميل في قاعدة البيانات...');
+            
+            const { data: clientData, error } = await supabaseClient
+                .from('cases')
+                .select('client_email')
+                .eq('client_name', clientName)
+                .not('client_email', 'is', null)
+                .limit(1);
+            
+            if (!error && clientData && clientData.length > 0 && clientData[0].client_email) {
+                recipientEmail = clientData[0].client_email;
+                console.log('✅ تم العثور على البريد في قاعدة البيانات:', recipientEmail);
+            } else {
+                throw new Error('لم يتم العثور على بريد إلكتروني للعميل في قاعدة البيانات');
+            }
+        }
+        
         const templateParams = {
-            to_email: email,
+            to_email: recipientEmail,  // ⬅️ هذا هو حقل المرسل إليه
             client_name: clientName || 'عميلنا الكريم',
             verification_code: code,
             expiry_time: CONFIG.OTP_EXPIRY_MIN,
             office_name: "مؤسسة محمود عبد الحميد للمحاماة",
             office_email: CONFIG.OFFICE_EMAIL,
-            office_phone: CONFIG.OFFICE_PHONE
+            office_phone: CONFIG.OFFICE_PHONE,
+            current_date: new Date().toLocaleDateString('ar-EG'),
+            current_time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })
         };
         
         console.log('📨 إرسال البريد باستخدام:', {
             service: CONFIG.EMAILJS_SERVICE,
             template: CONFIG.EMAILJS_TEMPLATE,
+            recipient: recipientEmail,
             params: templateParams
         });
         
@@ -900,7 +980,11 @@ async function sendEmailOTP(email, code, clientName) {
         );
         
         console.log('✅ البريد أرسل بنجاح:', response);
-        return { success: true, message: 'تم إرسال البريد' };
+        return { 
+            success: true, 
+            message: `تم إرسال البريد إلى ${recipientEmail}`,
+            recipient: recipientEmail
+        };
         
     } catch (error) {
         console.error('❌ فشل إرسال البريد:', error);
@@ -911,30 +995,44 @@ async function sendEmailOTP(email, code, clientName) {
     }
 }
 
-async function sendTelegramOTP(identifier, code, clientName) {
+async function sendTelegramOTP(phone, code, clientName) {
     try {
-        let chatId;
+        // تنظيف رقم الهاتف واستخراجه من قاعدة البيانات إذا لزم الأمر
+        let recipientPhone = phone;
         
-        // تنظيف المعرف
-        const cleanId = identifier.replace(/\D/g, '');
-        
-        // إذا كان رقم هاتف
-        if (cleanId.length >= 10) {
-            if (cleanId.startsWith('0')) {
-                chatId = '20' + cleanId.substring(1);
-            } else if (cleanId.startsWith('1') && !cleanId.startsWith('20')) {
-                chatId = '20' + cleanId;
-            } else if (cleanId.startsWith('20')) {
-                chatId = cleanId;
+        if (!recipientPhone || recipientPhone.trim() === '') {
+            console.log('🔍 البحث عن رقم هاتف العميل في قاعدة البيانات...');
+            
+            const { data: clientData, error } = await supabaseClient
+                .from('cases')
+                .select('client_phone')
+                .eq('client_name', clientName)
+                .not('client_phone', 'is', null)
+                .limit(1);
+            
+            if (!error && clientData && clientData.length > 0 && clientData[0].client_phone) {
+                recipientPhone = clientData[0].client_phone;
+                console.log('✅ تم العثور على رقم الهاتف في قاعدة البيانات:', recipientPhone);
             } else {
-                chatId = '20' + cleanId;
+                throw new Error('لم يتم العثور على رقم هاتف للعميل في قاعدة البيانات');
             }
-        } else {
-            // إذا كان User ID
-            chatId = identifier;
         }
         
-        console.log('📱 إرسال Telegram إلى chat_id:', chatId);
+        let chatId;
+        const cleanPhone = recipientPhone.replace(/\D/g, '');
+        
+        // تحويل رقم الهاتف إلى تنسيق chat_id
+        if (cleanPhone.startsWith('0')) {
+            chatId = '20' + cleanPhone.substring(1);
+        } else if (cleanPhone.startsWith('1') && !cleanPhone.startsWith('20')) {
+            chatId = '20' + cleanPhone;
+        } else if (cleanPhone.startsWith('20')) {
+            chatId = cleanPhone;
+        } else {
+            chatId = '20' + cleanPhone;
+        }
+        
+        console.log('📱 إرسال Telegram إلى chat_id:', chatId, 'الرقم الأصلي:', recipientPhone);
         
         const message = `
 🔐 *رمز التحقق - مؤسسة محمود عبد الحميد*
@@ -965,7 +1063,11 @@ async function sendTelegramOTP(identifier, code, clientName) {
         console.log('📱 رد Telegram API:', data);
         
         if (data.ok) {
-            return { success: true, message: 'تم الإرسال' };
+            return { 
+                success: true, 
+                message: `تم الإرسال إلى ${recipientPhone}`,
+                recipient: recipientPhone
+            };
         } else {
             let errorMsg = 'فشل إرسال Telegram: ';
             if (data.description) {
@@ -1032,8 +1134,8 @@ async function resendOTP() {
         return;
     }
     
-    if (!userIdentifier) {
-        showMessage('error', 'لم يتم تحديد مستخدم');
+    if (!userIdentifier || !selectedClient) {
+        showMessage('error', 'لم يتم تحديد عميل');
         return;
     }
     
@@ -1062,9 +1164,9 @@ async function resendOTP() {
         
         let sendResult;
         if (currentMethod === 'email') {
-            sendResult = await sendEmailOTP(userIdentifier, otpCode, userDataCache?.client_name);
+            sendResult = await sendEmailOTP(userIdentifier, otpCode, selectedClient.name);
         } else {
-            sendResult = await sendTelegramOTP(userIdentifier, otpCode, userDataCache?.client_name);
+            sendResult = await sendTelegramOTP(userIdentifier, otpCode, selectedClient.name);
         }
         
         if (sendResult.success) {
@@ -1135,8 +1237,10 @@ async function verifyOTP() {
                 .eq('id', otpData.id);
         }
         
+        // حفظ الجلسة
         createSession(userIdentifier, currentMethod, userDataCache);
         
+        // الانتقال لخطوة كود القضية
         document.getElementById('step-otp').style.display = 'none';
         document.getElementById('step-case').style.display = 'block';
         document.getElementById('btn-another-case').style.display = 'block';
@@ -1156,7 +1260,7 @@ async function verifyOTP() {
 // البحث عن القضية
 // ============================================
 async function searchCase() {
-    if (!isValidSession()) {
+    if (!userIdentifier) {
         showMessage('error', 'انتهت الجلسة. يرجى التحقق مرة أخرى');
         resetToFirstStep();
         return;
@@ -1312,6 +1416,49 @@ function displayCaseDetails(caseData) {
 }
 
 // ============================================
+// دوال الجلسة
+// ============================================
+function checkExistingSession() {
+    try {
+        const expires = localStorage.getItem('sessionExpires');
+        const identifier = localStorage.getItem('userIdentifier');
+        const method = localStorage.getItem('verificationMethod');
+        
+        if (identifier && expires && Date.now() < parseInt(expires) && method) {
+            currentMethod = method;
+            userIdentifier = identifier;
+            userDataCache = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            document.getElementById('step-search').style.display = 'none';
+            document.getElementById('step-otp').style.display = 'none';
+            document.getElementById('step-case').style.display = 'block';
+            document.getElementById('btn-another-case').style.display = 'block';
+            
+            showMessage('success', 'جلسة نشطة موجودة. يمكنك الاستعلام عن قضية جديدة.');
+            console.log('✅ جلسة سابقة تم استعادتها');
+        }
+    } catch (error) {
+        console.error('Error checking session:', error);
+    }
+}
+
+function createSession(identifier, method, userData) {
+    try {
+        const expires = Date.now() + (24 * 60 * 60 * 1000); // 24 ساعة
+        
+        localStorage.setItem('sessionExpires', expires);
+        localStorage.setItem('userIdentifier', identifier);
+        localStorage.setItem('verificationMethod', method);
+        localStorage.setItem('userData', JSON.stringify(userData || {}));
+        
+        userDataCache = userData;
+        console.log('✅ جلسة جديدة تم إنشاؤها');
+    } catch (error) {
+        console.error('Error creating session:', error);
+    }
+}
+
+// ============================================
 // دوال إضافية
 // ============================================
 function showNewCaseForm() {
@@ -1324,17 +1471,15 @@ function showNewCaseForm() {
 }
 
 function resetToFirstStep() {
-    document.getElementById('step-method').style.display = 'block';
-    document.getElementById('step-email').style.display = 'block';
-    document.getElementById('step-telegram').style.display = 'none';
+    document.getElementById('step-search').style.display = 'block';
     document.getElementById('step-otp').style.display = 'none';
     document.getElementById('step-case').style.display = 'none';
     document.getElementById('result-box').style.display = 'none';
     document.getElementById('otp-display-container').style.display = 'none';
+    document.getElementById('client-results').style.display = 'none';
     document.getElementById('btn-another-case').style.display = 'none';
     
-    document.getElementById('email').value = '';
-    document.getElementById('telegram').value = '';
+    document.getElementById('search-input').value = '';
     document.getElementById('otp').value = '';
     document.getElementById('caseCode').value = '';
     
@@ -1343,6 +1488,7 @@ function resetToFirstStep() {
     currentCase = null;
     userDataCache = null;
     currentOTPId = null;
+    selectedClient = null;
     
     localStorage.removeItem('sessionExpires');
     localStorage.removeItem('userIdentifier');

@@ -156,8 +156,9 @@
 
         .loading {
             pointer-events: none;
-            opacity: 0.75;
+            opacity: 0.7;
             position: relative;
+            color: transparent !important;
         }
 
         .loading::after {
@@ -165,18 +166,24 @@
             position: absolute;
             inset: 0;
             margin: auto;
-            width: 24px; height: 24px;
+            width: 20px; height: 20px;
             border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: var(--gold);
+            border-top-color: var(--dark);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        .verification-btn {
+            opacity: 0.6;
+            border: 1px solid transparent;
+        }
+
         .verification-btn.active {
+            opacity: 1;
             border: 2px solid var(--gold-light);
-            box-shadow: 0 0 10px var(--gold);
+            box-shadow: 0 0 15px rgba(191,149,63,0.4);
         }
 
         @media (max-width: 640px) {
@@ -211,10 +218,10 @@
                 <i class="fas fa-shield-halved"></i> اختر وسيلة التحقق
             </h3>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:2rem;">
-                <button class="btn verification-btn active" data-method="email">
+                <button type="button" class="btn verification-btn active" id="method-email" onclick="switchMethod('email')">
                     <i class="fas fa-envelope"></i> البريد الإلكتروني
                 </button>
-                <button class="btn verification-btn" data-method="telegram">
+                <button type="button" class="btn verification-btn" id="method-telegram" onclick="switchMethod('telegram')">
                     <i class="fab fa-telegram-plane"></i> Telegram
                 </button>
             </div>
@@ -225,7 +232,9 @@
                 <label for="email">البريد الإلكتروني المسجل</label>
                 <input type="email" id="email" class="form-control" placeholder="example@domain.com">
             </div>
-            <button id="btn-send-email" class="btn btn-primary"><i class="fas fa-paper-plane"></i> إرسال كود التحقق</button>
+            <button type="button" id="btn-send-email" class="btn btn-primary" onclick="sendOTP('email')">
+                <i class="fas fa-paper-plane"></i> إرسال كود التحقق
+            </button>
         </div>
 
         <div id="step-telegram" style="display:none;">
@@ -239,7 +248,9 @@
                     <i class="fab fa-telegram-plane"></i> اضغط هنا لبدء المحادثة مع البوت
                 </a>
             </div>
-            <button id="btn-send-telegram" class="btn btn-primary"><i class="fab fa-telegram-plane"></i> إرسال كود التحقق</button>
+            <button type="button" id="btn-send-telegram" class="btn btn-primary" onclick="sendOTP('telegram')">
+                <i class="fab fa-telegram-plane"></i> إرسال كود التحقق
+            </button>
         </div>
 
         <div id="step-otp" style="display:none;">
@@ -247,9 +258,11 @@
                 <label for="otp">كود التحقق (6 أرقام)</label>
                 <input type="text" id="otp" class="form-control" maxlength="6" inputmode="numeric" placeholder="______">
             </div>
-            <button id="btn-verify-otp" class="btn btn-primary"><i class="fas fa-check-circle"></i> التحقق من الكود</button>
+            <button type="button" id="btn-verify-otp" class="btn btn-primary" onclick="verifyOTP()">
+                <i class="fas fa-check-circle"></i> التحقق من الكود
+            </button>
             <div style="margin-top:1.2rem; font-size:0.9rem; color:var(--gray); text-align:center;">
-                <a href="#" id="link-resend" style="color:var(--gold);">إعادة إرسال الكود</a>
+                <a href="#" id="link-resend" style="color:var(--gold);" onclick="resendOTP(event)">إعادة إرسال الكود</a>
                 <span id="resend-countdown"></span>
             </div>
         </div>
@@ -259,7 +272,9 @@
                 <label for="caseCode">كود القضية (مثال: MA-123456)</label>
                 <input type="text" id="caseCode" class="form-control" placeholder="MA-123456" style="text-transform:uppercase;">
             </div>
-            <button id="btn-search-case" class="btn btn-primary"><i class="fas fa-search"></i> استعلام عن القضية</button>
+            <button type="button" id="btn-search-case" class="btn btn-primary" onclick="searchCase()">
+                <i class="fas fa-search"></i> استعلام عن القضية
+            </button>
         </div>
 
         <div id="msg-error" class="message error"></div>
@@ -288,25 +303,38 @@ let currentMethod = 'email';
 let userIdentifier = '';
 let resendTimer = null;
 
-function showStep(id) {
-    document.querySelectorAll('[id^="step-"]').forEach(el => {
-        if (el.id !== 'step-method') el.style.display = 'none';
-    });
-    document.getElementById(id).style.display = 'block';
+function switchMethod(method) {
+    currentMethod = method;
+    
+    // Update buttons UI
+    document.getElementById('method-email').classList.toggle('active', method === 'email');
+    document.getElementById('method-telegram').classList.toggle('active', method === 'telegram');
+    
+    // Show/Hide steps
+    document.getElementById('step-email').style.display = (method === 'email' ? 'block' : 'none');
+    document.getElementById('step-telegram').style.display = (method === 'telegram' ? 'block' : 'none');
+    document.getElementById('step-otp').style.display = 'none';
+    document.getElementById('step-case').style.display = 'none';
+    document.getElementById('result-box').style.display = 'none';
 }
 
 function showMessage(type, text) {
     const el = document.getElementById(`msg-${type}`);
     el.textContent = text;
     el.style.display = 'block';
-    setTimeout(() => el.style.display = 'none', 5000);
+    setTimeout(() => el.style.display = 'none', 6000);
 }
 
 function setLoading(btnId, loading = true) {
     const btn = document.getElementById(btnId);
     if (!btn) return;
-    btn.classList.toggle('loading', loading);
-    btn.disabled = loading;
+    if (loading) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+    } else {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
 }
 
 function startResendCountdown() {
@@ -334,7 +362,7 @@ async function sendOTP(method) {
     const value = document.getElementById(inputId).value.trim();
     
     if (!value) {
-        showMessage('error', 'يرجى إدخال البيانات المطلوبة');
+        showMessage('error', 'يرجى إدخال ' + (method === 'email' ? 'البريد الإلكتروني' : 'Chat ID'));
         return;
     }
 
@@ -342,49 +370,67 @@ async function sendOTP(method) {
     try {
         const code = String(Math.floor(100000 + Math.random() * 900000));
         
-        await supabase.from('otp_codes').insert({
+        // Save to Supabase
+        const { error: dbError } = await supabase.from('otp_codes').insert({
             [method === 'email' ? 'email' : 'phone_number']: value,
             otp_code: code,
             expires_at: new Date(Date.now() + CONFIG.OTP_EXPIRY_MIN * 60000).toISOString(),
             is_used: false
         });
 
+        if (dbError) console.error('Supabase Error:', dbError);
+
         let success = false;
         if (method === 'email') {
-            const res = await emailjs.send(CONFIG.EMAILJS_SERVICE, CONFIG.EMAILJS_TEMPLATE, {
-                to_email: value,
-                verification_code: code,
-                expiry_time: CONFIG.OTP_EXPIRY_MIN
-            });
-            success = res.status === 200;
+            try {
+                const res = await emailjs.send(CONFIG.EMAILJS_SERVICE, CONFIG.EMAILJS_TEMPLATE, {
+                    to_email: value,
+                    verification_code: code,
+                    expiry_time: CONFIG.OTP_EXPIRY_MIN
+                });
+                success = (res.status === 200);
+            } catch (e) {
+                console.error('EmailJS Error:', e);
+            }
         } else {
-            const res = await fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    chat_id: value,
-                    text: `🔐 كود التحقق الخاص بك هو: ${code}\nصالح لمدة ${CONFIG.OTP_EXPIRY_MIN} دقيقة.`,
-                    parse_mode: 'Markdown'
-                })
-            });
-            const data = await res.json();
-            success = data.ok;
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        chat_id: value,
+                        text: `🔐 كود التحقق الخاص بك هو: ${code}\nصالح لمدة ${CONFIG.OTP_EXPIRY_MIN} دقيقة.`,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                const data = await res.json();
+                success = data.ok;
+            } catch (e) {
+                console.error('Telegram Error:', e);
+            }
         }
 
         if (success) {
             userIdentifier = value;
             currentMethod = method;
-            showStep('step-otp');
-            showMessage('success', 'تم إرسال الكود بنجاح');
+            document.getElementById('step-email').style.display = 'none';
+            document.getElementById('step-telegram').style.display = 'none';
+            document.getElementById('step-otp').style.display = 'block';
+            showMessage('success', 'تم إرسال الكود بنجاح، يرجى التحقق');
             startResendCountdown();
         } else {
-            showMessage('error', 'فشل إرسال الكود، تأكد من البيانات');
+            showMessage('error', 'فشل إرسال الكود. تأكد من صحة البيانات أو حاول لاحقاً');
         }
     } catch (err) {
-        showMessage('error', 'حدث خطأ: ' + err.message);
+        showMessage('error', 'حدث خطأ غير متوقع: ' + err.message);
     } finally {
         setLoading(btnId, false);
     }
+}
+
+function resendOTP(e) {
+    e.preventDefault();
+    sendOTP(currentMethod);
 }
 
 async function verifyOTP() {
@@ -406,15 +452,16 @@ async function verifyOTP() {
             .maybeSingle();
 
         if (error || !data) {
-            showMessage('error', 'الكود غير صحيح أو منتهي');
+            showMessage('error', 'الكود غير صحيح أو منتهي الصلاحية');
             return;
         }
 
         await supabase.from('otp_codes').update({ is_used: true }).eq('id', data.id);
-        showStep('step-case');
-        showMessage('success', 'تم التحقق بنجاح');
+        document.getElementById('step-otp').style.display = 'none';
+        document.getElementById('step-case').style.display = 'block';
+        showMessage('success', 'تم التحقق بنجاح، يمكنك الآن الاستعلام');
     } catch (err) {
-        showMessage('error', 'خطأ في التحقق');
+        showMessage('error', 'خطأ في عملية التحقق');
     } finally {
         setLoading('btn-verify-otp', false);
     }
@@ -422,7 +469,10 @@ async function verifyOTP() {
 
 async function searchCase() {
     const code = document.getElementById('caseCode').value.trim().toUpperCase();
-    if (!code) return;
+    if (!code) {
+        showMessage('error', 'يرجى إدخال كود القضية');
+        return;
+    }
 
     setLoading('btn-search-case', true);
     try {
@@ -433,12 +483,12 @@ async function searchCase() {
             .maybeSingle();
 
         if (error || !data) {
-            showMessage('error', 'لم يتم العثور على القضية');
+            showMessage('error', 'لم يتم العثور على القضية، تأكد من الكود');
             return;
         }
 
         document.getElementById('result-box').innerHTML = `
-            <h2 style="color:var(--gold); margin-bottom:15px;">تفاصيل القضية: ${data.case_code}</h2>
+            <h2 style="color:var(--gold); margin-bottom:15px; text-align:center;">تفاصيل القضية: ${data.case_code}</h2>
             <div class="info-grid">
                 <div class="info-item"><div class="info-label">العميل</div><div class="info-value">${data.client_name || '-'}</div></div>
                 <div class="info-item"><div class="info-label">المحكمة</div><div class="info-value">${data.court || '-'}</div></div>
@@ -447,31 +497,11 @@ async function searchCase() {
         `;
         document.getElementById('result-box').style.display = 'block';
     } catch (err) {
-        showMessage('error', 'خطأ في البحث');
+        showMessage('error', 'خطأ في عملية البحث');
     } finally {
         setLoading('btn-search-case', false);
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.verification-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            currentMethod = btn.dataset.method;
-            document.querySelectorAll('.verification-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            showStep(`step-${currentMethod}`);
-        });
-    });
-
-    document.getElementById('btn-send-email').onclick    = () => sendOTP('email');
-    document.getElementById('btn-send-telegram').onclick = () => sendOTP('telegram');
-    document.getElementById('btn-verify-otp').onclick    = verifyOTP;
-    document.getElementById('btn-search-case').onclick   = searchCase;
-    document.getElementById('link-resend').onclick = (e) => {
-        e.preventDefault();
-        sendOTP(currentMethod);
-    };
-});
 </script>
 </body>
 </html>

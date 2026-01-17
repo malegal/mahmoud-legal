@@ -527,7 +527,7 @@ function login(){
         });  
         loadUpcoming('week');  
         requestNotificationPermission();  
-        testSupabaseConnection(); // اختبار الاتصال
+        testSupabaseConnection();
     } else {  
         Swal.fire("خطأ","كلمة المرور غير صحيحة","error");  
     }  
@@ -551,7 +551,7 @@ async function searchCasesForSession(query) {
         const { data, error } = await db  
             .from('cases')  
             .select('*')  
-            .or(`case_code.ilike.%${query}%,case_number.ilike.%${query}%,client_name.ilike.%${query}%`)  
+            .or(`case_number.ilike.%${query}%,client_name.ilike.%${query}%`)  
             .limit(5);  
     
         if (error) {
@@ -564,7 +564,7 @@ async function searchCasesForSession(query) {
             resultsDiv.innerHTML = data.map(caseItem => `  
                 <div class="case-card p-2 mb-1" onclick="selectCaseForSession('${caseItem.id}')">  
                     <div class="d-flex justify-content-between">  
-                        <strong>${caseItem.case_code || 'بدون كود'}</strong>  
+                        <strong>${caseItem.case_number}/${caseItem.case_year || 'بدون كود'}</strong>  
                         <small>${caseItem.court_name}</small>  
                     </div>  
                     <div>${caseItem.client_name} - ${caseItem.case_number}/${caseItem.case_year}</div>  
@@ -573,12 +573,12 @@ async function searchCasesForSession(query) {
             resultsDiv.style.display = 'block';  
         } else {  
             document.getElementById('caseSearchResults').innerHTML = '<div class="text-center p-2">لا توجد نتائج</div>';  
-            resultsDiv.style.display = 'block';  
+            document.getElementById('caseSearchResults').style.display = 'block';  
         }  
     } catch (err) {
         console.error('خطأ في البحث:', err);
         document.getElementById('caseSearchResults').innerHTML = '<div class="text-center p-2 text-danger">خطأ في الاتصال</div>';  
-        resultsDiv.style.display = 'block';  
+        document.getElementById('caseSearchResults').style.display = 'block';  
     }
 }  
   
@@ -626,7 +626,7 @@ async function selectCaseForSession(caseId) {
             }
               
             document.getElementById('caseSearchResults').style.display = 'none';  
-            document.getElementById('s_search').value = data.case_code || `${data.case_number}/${data.case_year}`;  
+            document.getElementById('s_search').value = `${data.case_number}/${data.case_year}`;  
             document.getElementById('calendarBtn').disabled = false;  
               
             // تعيين التاريخ الافتراضي للجلسة (بعد 7 أيام من اليوم)  
@@ -658,6 +658,9 @@ caseForm.onsubmit = async e => {
             return;
         }
         
+        // إنشاء كود القضية
+        const caseCode = `CASE-${Date.now().toString().slice(-6)}`;
+        
         const caseData = {
             client_name: client_name.value,  
             client_phone: client_phone.value,  
@@ -671,7 +674,7 @@ caseForm.onsubmit = async e => {
             case_type: case_type.value,
             case_subject: case_subject.value,  
             notes: notes.value,
-            created_at: new Date().toISOString()
+            case_code: caseCode
         };
         
         console.log('بيانات القضية المرسلة:', caseData);
@@ -748,38 +751,54 @@ async function saveSession() {
             case_id: currentCaseId,  
             session_date: s_date.value,  
             decision: s_decision.value,  
-            case_status: document.getElementById('s_case_status').value,
-            created_at: new Date().toISOString()
+            case_status: document.getElementById('s_case_status').value
         }]).select();  
         
         if (error) {
             console.error('خطأ في حفظ الجلسة:', error);
-            Swal.fire("خطأ", error.message, "error");  
+            
+            // محاولة بديلة بدون select
+            const { error: retryError } = await db.from('sessions').insert([{  
+                case_id: currentCaseId,  
+                session_date: s_date.value,  
+                decision: s_decision.value,  
+                case_status: document.getElementById('s_case_status').value
+            }]);
+            
+            if (retryError) {
+                Swal.fire("خطأ", retryError.message, "error");  
+            } else {
+                showSessionSuccess();
+            }
         } else {  
-            Swal.fire({
-                title: "تم الحفظ بنجاح",
-                text: "تم إضافة الجلسة إلى القضية",
-                icon: "success",
-                timer: 2000
-            });  
-            loadUpcoming('week');  
-            sendNotification('تم تسجيل جلسة جديدة', 'تم إضافة جلسة جديدة إلى القضية');  
-            
-            // مسح الحقول
-            document.getElementById('s_decision').value = '';
-            document.getElementById('s_case_status').value = 'جديدة';
-            
-            // تعيين تاريخ جديد بعد 7 أيام
-            const nextWeek = new Date();  
-            nextWeek.setDate(nextWeek.getDate() + 7);  
-            const localDateTime = nextWeek.toISOString().slice(0, 16);  
-            document.getElementById('s_date').value = localDateTime;  
+            showSessionSuccess();
         }  
     } catch (err) {
         console.error('خطأ غير متوقع في حفظ الجلسة:', err);
-        Swal.fire("خطأ", "حدث خطأ غير متوقع أثناء حفظ الجلسة", "error");
+        Swal.fire("خطأ", "حدث خطأ غير متوقع أثناء حفظ الجلسة: " + err.message, "error");
     }
-}  
+}
+
+function showSessionSuccess() {
+    Swal.fire({
+        title: "تم الحفظ بنجاح",
+        text: "تم إضافة الجلسة إلى القضية",
+        icon: "success",
+        timer: 2000
+    });  
+    loadUpcoming('week');  
+    sendNotification('تم تسجيل جلسة جديدة', 'تم إضافة جلسة جديدة إلى القضية');  
+    
+    // مسح الحقول
+    document.getElementById('s_decision').value = '';
+    document.getElementById('s_case_status').value = 'جديدة';
+    
+    // تعيين تاريخ جديد بعد 7 أيام
+    const nextWeek = new Date();  
+    nextWeek.setDate(nextWeek.getDate() + 7);  
+    const localDateTime = nextWeek.toISOString().slice(0, 16);  
+    document.getElementById('s_date').value = localDateTime;  
+}
   
 // إضافة إلى تقويم Google  
 function addToGoogleCalendar() {  
@@ -1044,7 +1063,7 @@ function renderSearchResults(data, type) {
             <div class="case-card">  
                 <div class="d-flex justify-content-between align-items-start">  
                     <div onclick="openCaseDetails('${item.id}')" style="cursor:pointer; flex-grow:1;">  
-                        <b class="case-code">${item.case_code || 'بدون كود'}</b>  
+                        <b class="case-code">${item.case_code || `${item.case_number}/${item.case_year}`}</b>  
                         <div class="text-muted small">${item.court_name}</div>  
                     </div>  
                     <div class="d-flex align-items-center gap-2">  
@@ -1126,7 +1145,7 @@ async function openCaseDetails(caseId) {
             <div class="case-details">  
                 <div class="d-flex justify-content-between align-items-start mb-3">  
                     <div>  
-                        <h4 class="case-code">${caseData.case_code || 'بدون كود'}</h4>  
+                        <h4 class="case-code">${caseData.case_code || `${caseData.case_number}/${caseData.case_year}`}</h4>  
                         <h5>${caseData.client_name} ضد ${caseData.opponent_name || 'غير محدد'}</h5>  
                     </div>  
                     <span class="case-status ${statusClass}">${lastCaseStatus}</span>  
@@ -1300,8 +1319,7 @@ async function updateCase() {
         circle: document.getElementById('edit_circle').value,  
         case_type: document.getElementById('edit_case_type').value,  
         case_subject: document.getElementById('edit_case_subject').value,  
-        notes: document.getElementById('edit_notes').value,  
-        updated_at: new Date().toISOString()  
+        notes: document.getElementById('edit_notes').value
     };  
 
     try {
@@ -1449,9 +1467,10 @@ async function updateSession() {
     const updatedData = {  
         session_date: document.getElementById('edit_session_date').value,  
         decision: document.getElementById('edit_decision').value,  
-        case_status: document.getElementById('edit_session_case_status').value,  
-        updated_at: new Date().toISOString()  
+        case_status: document.getElementById('edit_session_case_status').value
     };  
+    
+    console.log('بيانات تحديث الجلسة:', updatedData);
     
     try {
         const { error } = await db  
@@ -1460,6 +1479,7 @@ async function updateSession() {
             .eq('id', window.editingSessionId);  
     
         if (error) {  
+            console.error('خطأ في تحديث الجلسة:', error);
             Swal.fire("خطأ", error.message, "error");  
         } else {  
             Swal.fire("تم", "تم تحديث الجلسة بنجاح", "success");  
@@ -1469,7 +1489,8 @@ async function updateSession() {
             loadUpcoming('week');  
         }  
     } catch (err) {
-        Swal.fire("خطأ", "حدث خطأ أثناء تحديث الجلسة", "error");
+        console.error('خطأ غير متوقع في تحديث الجلسة:', err);
+        Swal.fire("خطأ", "حدث خطأ أثناء تحديث الجلسة: " + err.message, "error");
     }
 }  
   
@@ -1557,7 +1578,7 @@ async function printCasePDF() {
     let y = 40;  
       
     // معلومات القضية  
-    doc.text(`كود القضية: ${caseData.case_code || 'بدون كود'}`, 20, y);  
+    doc.text(`كود القضية: ${caseData.case_code || `${caseData.case_number}/${caseData.case_year}`}`, 20, y);  
     y += 10;  
     doc.text(`رقم القضية: ${caseData.case_number}/${caseData.case_year}`, 20, y);  
     y += 10;  
@@ -1737,7 +1758,7 @@ async function loadUpcoming(range, btn){
                     ${caseData.client_name || 'غير معروف'} -   
                     قضية ${caseData.case_number || 'غير محدد'}/${caseData.case_year || 'غير محدد'}  
                 </div>  
-                <div><small>كود القضية: ${caseData.case_code || 'بدون كود'}</small></div>  
+                <div><small>كود القضية: ${caseData.case_code || `${caseData.case_number}/${caseData.case_year}`}</small></div>  
                 ${caseData.opponent_name ? `<div><small>ضد: ${caseData.opponent_name}</small></div>` : ''}  
                 <div class="mt-2 d-flex gap-2">  
                     <button class="btn btn-sm btn-outline-success" onclick="event.stopPropagation(); addToGoogleCalendarFromSession('${s.id}')">  

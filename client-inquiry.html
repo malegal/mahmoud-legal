@@ -3,318 +3,1154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استعلام عن القضية - مؤسسة محمود عبد الحميد</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+    <title>استعلام عن القضية - مؤسسة محمود عبد الحميد للمحاماة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #bf953f;
-            --gold-light: #fcf6ba;
-            --dark: #020617;
-            --dark-2: #0f172a;
-            --gray: #94a3b8;
-            --light: #f8fafc;
-            --red: #ef4444;
+            --primary-color: #bf953f; /* اللون الذهبي */
+            --primary-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
+            --secondary-color: #020617;
+            --accent-color: #25D366;
+            --text-color: #f8fafc;
+            --muted-text: #94a3b8;
+            --card-bg: rgba(0, 0, 0, 0.85);
+            --border-color: rgba(191, 149, 63, 0.2);
         }
-
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
-            color: var(--light);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* العلامة المائية */
-        .watermark {
-            position: fixed;
-            pointer-events: none;
-            opacity: 0.03;
-            z-index: 9999;
-            color: var(--gold);
-            font-size: 20px;
-            transform: rotate(-45deg);
-            display: none; /* تظهر فقط عند وجود نتيجة */
-        }
-        .wm-1 { top: 20%; left: 10%; }
-        .wm-2 { top: 50%; left: 40%; }
-        .wm-3 { top: 80%; left: 70%; }
-
-        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-
-        .header {
-            background: rgba(0,0,0,0.95);
-            border-bottom: 2px solid var(--gold);
-            padding: 10px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar { display: flex; justify-content: space-between; align-items: center; }
         
-        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .logo-img { width: 50px; height: 50px; border-radius: 5px; }
-        .logo-text h1 { font-family: 'Amiri', serif; font-size: 20px; color: var(--gold-light); margin: 0; }
-        .logo-text h2 { font-size: 13px; color: var(--gold); margin: 0; }
-
-        .inquiry-box {
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(191, 149, 63, 0.2);
-            padding: 30px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('images/hero-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* الهيدر المعدل مع اللوجو على اليمين */
+        .header {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 2px solid var(--primary-color);
+            padding: 12px 0; /* تصغير ارتفاع الهيدر */
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            flex-direction: row-reverse; /* اللوجو على اليمين */
+        }
+        
+        .logo-img {
+            height: 100px; /* تكبير حجم اللوجو */
+            width: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            color: var(--primary-color);
+            text-align: right; /* النص على اليمين */
+            font-family: 'Amiri', serif; /* خط Amiri */
+        }
+        
+        .logo-main {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #fcf6ba;
+            white-space: nowrap;
+        }
+        
+        .logo-sub {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--primary-color);
+            margin-top: 3px;
+            white-space: nowrap;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-home {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .btn-home:hover {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+        }
+        
+        /* محتوى الصفحة */
+        .inquiry-container {
+            min-height: 70vh;
+            padding: 50px 0; /* تقليل الحشوة لتلائم الهيدر الأصغر */
+            display: flex;
+            align-items: center;
+        }
+        
+        .inquiry-form {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            padding: 40px;
             border-radius: 20px;
-            margin: 40px auto;
-            max-width: 800px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
         }
-
-        h1 { color: var(--gold); text-align: center; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-
-        .form-group { margin-bottom: 20px; text-align: right; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--gold); font-weight: bold; }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .form-header p {
+            color: var(--muted-text);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .form-control {
-            width: 100%; padding: 15px; background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(191,149,63,0.3); border-radius: 10px;
-            color: white; font-size: 16px; transition: 0.3s;
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            border-radius: 10px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s;
         }
-        .form-control:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 10px rgba(191,149,63,0.2); }
-
-        .btn-inquiry {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-            color: var(--dark); width: 100%; padding: 16px; border-radius: 10px;
-            border: none; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(191, 149, 63, 0.2);
         }
-        .btn-inquiry:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(191,149,63,0.3); }
-
-        /* نتائج الاستعلام */
-        .result-box {
-            display: none; margin-top: 30px; animation: fadeIn 0.5s ease;
+        
+        .help-text {
+            font-size: 14px;
+            color: var(--muted-text);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-
-        .session-timer-box {
-            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--red);
-            padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 20px;
-            color: var(--red); font-weight: bold;
+        
+        /* قسم اختيار وسيلة الإرسال */
+        .delivery-methods {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(191, 149, 63, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(191, 149, 63, 0.1);
         }
-
-        .info-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px; margin-bottom: 25px;
+        
+        .delivery-methods h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
         }
-        .info-item {
-            background: rgba(255, 255, 255, 0.03); padding: 15px;
-            border-radius: 10px; border: 1px solid rgba(191, 149, 63, 0.2);
+        
+        .method-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .info-label { color: var(--gray); font-size: 13px; margin-bottom: 5px; }
-        .info-value { color: var(--gold-light); font-weight: bold; }
-
-        .session-item {
-            background: rgba(191, 149, 63, 0.05); padding: 15px;
-            border-radius: 10px; margin-bottom: 10px; border-right: 4px solid var(--gold);
+        
+        .method-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
         }
-
-        .legal-notice {
-            background: rgba(191, 149, 63, 0.05); border: 1px dashed var(--gold);
-            padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 13px; color: var(--gray);
+        
+        .method-option:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
-
-        .loading-spinner { display: none; margin-left: 10px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 600px) {
-            .inquiry-box { padding: 20px; }
-            .info-grid { grid-template-columns: 1fr; }
+        
+        .method-option.selected {
+            background: rgba(191, 149, 63, 0.1);
+            border-color: var(--primary-color);
+        }
+        
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .telegram-icon {
+            background: #0088cc;
+            color: white;
+        }
+        
+        .email-icon {
+            background: #ea4335;
+            color: white;
+        }
+        
+        .whatsapp-icon {
+            background: #25D366;
+            color: white;
+        }
+        
+        .method-info {
+            flex: 1;
+        }
+        
+        .method-name {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .method-desc {
+            font-size: 13px;
+            color: var(--muted-text);
+            margin-top: 2px;
+        }
+        
+        .method-check {
+            color: var(--primary-color);
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .method-option.selected .method-check {
+            opacity: 1;
+        }
+        
+        /* الأزرار */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: var(--secondary-color);
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(191, 149, 63, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-resend {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-resend:hover {
+            background: rgba(191, 149, 63, 0.1);
+        }
+        
+        .btn-resend:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .resend-timer {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* التنبيهات */
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid #22c55e;
+            color: #86efac;
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+        
+        .alert-info {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid #3b82f6;
+            color: #93c5fd;
+        }
+        
+        /* التحميل */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            border: 3px solid rgba(191, 149, 63, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .otp-display {
+            background: rgba(191, 149, 63, 0.1);
+            border: 1px dashed var(--primary-color);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+        
+        .otp-code {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #fcf6ba;
+            margin: 10px 0;
+        }
+        
+        .otp-note {
+            font-size: 13px;
+            color: var(--muted-text);
+        }
+        
+        /* الفوتر */
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer p {
+            color: var(--muted-text);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        /* التجاوب */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo-container {
+                flex-direction: row-reverse; /* الحفاظ على الترتيب على الجوال */
+                gap: 12px;
+            }
+            
+            .logo-img {
+                height: 85px; /* تصغير اللوجو على الجوال */
+            }
+            
+            .logo-text {
+                text-align: right;
+            }
+            
+            .logo-main {
+                font-size: 20px;
+                white-space: normal; /* السماح بتقسيم النص على الجوال */
+            }
+            
+            .logo-sub {
+                font-size: 15px;
+                white-space: normal; /* السماح بتقسيم النص على الجوال */
+            }
+            
+            .inquiry-form {
+                padding: 25px;
+            }
+            
+            .form-header h2 {
+                font-size: 24px;
+            }
+            
+            .method-option {
+                padding: 10px;
+            }
+            
+            .method-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            
+            .btn-primary, .btn-resend {
+                padding: 14px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .logo-main {
+                font-size: 18px;
+                max-width: 200px;
+            }
+            
+            .logo-sub {
+                font-size: 14px;
+                max-width: 200px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .logo-img {
+                height: 80px;
+            }
+            
+            .logo-text {
+                text-align: center;
+            }
+            
+            .logo-main {
+                font-size: 18px;
+                white-space: normal;
+                max-width: none;
+            }
+            
+            .logo-sub {
+                font-size: 14px;
+                white-space: normal;
+                max-width: none;
+            }
+            
+            .inquiry-form {
+                padding: 20px;
+            }
+            
+            .form-header h2 {
+                font-size: 22px;
+            }
+            
+            .delivery-methods {
+                padding: 15px;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .btn-home {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .logo-main {
+                font-size: 16px;
+            }
+            
+            .logo-sub {
+                font-size: 13px;
+            }
+            
+            .logo-img {
+                height: 70px;
+            }
+            
+            .form-header h2 {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
-
-<div class="watermark wm-1">مؤسسة محمود عبد الحميد</div>
-<div class="watermark wm-2">مؤسسة محمود عبد الحميد</div>
-<div class="watermark wm-3">مؤسسة محمود عبد الحميد</div>
-
-<header class="header">
-    <div class="container navbar">
-        <a href="#" class="logo">
-            <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="Logo" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚖️</text></svg>'">
-            <div class="logo-text">
-                <h1>محمود عبد الحميد</h1>
-                <h2>المحامي بالنقض والدستورية العليا</h2>
-            </div>
-        </a>
-        <button onclick="location.reload()" class="btn-inquiry" style="width: auto; padding: 8px 15px; font-size: 14px;">
-            <i class="fas fa-sync"></i> تحديث
-        </button>
-    </div>
-</header>
-
-<main class="container">
-    <div class="inquiry-box" id="mainContainer">
-        <div id="searchSection">
-            <h1><i class="fas fa-search"></i> استعلام عن القضية</h1>
-            <p style="text-align: center; color: var(--gray); margin-bottom: 25px;">أدخل البيانات المسجلة لتتبع حالة قضيتك</p>
-            
-            <form id="inquiryForm">
-                <div class="form-group">
-                    <label><i class="fas fa-phone"></i> رقم الهاتف المسجل</label>
-                    <input type="tel" id="phone" class="form-control" placeholder="01xxxxxxxxx" required>
+    <!-- الهيدر المعدل مع اللوجو على اليمين -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo-container">
+                    <!-- اللوجو على اليمين -->
+                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img">
+                    <!-- النص على اليسار -->
+                    <div class="logo-text">
+                        <div class="logo-main">محمود عبد الحميد</div>
+                        <div class="logo-sub">المحامي بالنقض و الدستورية العليا</div>
+                    </div>
+                </a>
+                
+                <div class="nav-buttons">
+                    <a href="index.html" class="btn-home">
+                        <i class="fas fa-home"></i>
+                        الصفحة الرئيسية
+                    </a>
                 </div>
-                <div class="form-group">
-                    <label><i class="fas fa-key"></i> كود القضية</label>
-                    <input type="text" id="caseCode" class="form-control" placeholder="MA-XXXXXX" required style="text-transform: uppercase;">
-                </div>
-                <button type="submit" class="btn-inquiry" id="submitBtn">
-                    <span>اطلع على القضية</span>
-                    <i class="fas fa-spinner fa-spin loading-spinner" id="spinner"></i>
-                </button>
-            </form>
+            </nav>
         </div>
+    </header>
 
-        <div id="resultSection" class="result-box">
-            <div class="session-timer-box">
-                <i class="fas fa-clock"></i> تنتهي هذه الجلسة وتُمسح البيانات خلال: <span id="timer">15:00</span>
-            </div>
-
-            <h2 style="color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid rgba(191,149,63,0.3); padding-bottom: 10px;">
-                <i class="fas fa-file-invoice"></i> تفاصيل القضية
-            </h2>
-
-            <div class="info-grid" id="caseDetails">
+    <!-- محتوى الصفحة -->
+    <main>
+        <div class="container">
+            <div class="inquiry-container">
+                <div class="inquiry-form">
+                    <div class="form-header">
+                        <h2><i class="fas fa-search"></i> استعلام عن حالة القضية</h2>
+                        <p>أدخل رقم هاتفك وكود القضية للتحقق واختر وسيلة استلام رمز التحقق</p>
+                    </div>
+                    
+                    <div id="alertMessage" class="alert"></div>
+                    
+                    <div class="loading" id="loading">
+                        <div class="loading-spinner"></div>
+                        <p>جاري الإرسال...</p>
+                    </div>
+                    
+                    <!-- قسم عرض OTP للتجربة -->
+                    <div class="otp-display" id="otpDisplay">
+                        <p><i class="fas fa-info-circle"></i> لاستخدام الوضع التجريبي، استخدم هذا الرمز:</p>
+                        <div class="otp-code" id="demoOtpCode"></div>
+                        <p class="otp-note">سيتم عرض الرمز هنا فقط في الوضع التجريبي</p>
+                    </div>
+                    
+                    <form id="inquiryForm">
+                        <div class="form-group">
+                            <label for="phone"><i class="fas fa-phone"></i> رقم الهاتف</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                class="form-control" 
+                                placeholder="مثال: 20123456789" 
+                                required
+                                pattern="^[0-9+]{10,15}$"
+                                value=""
+                            >
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                أدخل رقم الهاتف المسجل في القضية
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="caseCode"><i class="fas fa-file-code"></i> كود القضية</label>
+                            <input 
+                                type="text" 
+                                id="caseCode" 
+                                class="form-control" 
+                                placeholder="مثال: MA-26101-8X9j3B" 
+                                required
+                                pattern="^MA-\d{5}-[A-Za-z0-9]{6}$"
+                                value=""
+                            >
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                تنسيق الكود: MA-سنةرقمإداري-كودعشوائي
+                            </div>
+                        </div>
+                        
+                        <!-- قسم اختيار وسيلة الإرسال -->
+                        <div class="delivery-methods">
+                            <h4><i class="fas fa-paper-plane"></i> اختر وسيلة استلام رمز التحقق</h4>
+                            <div class="method-options">
+                                <!-- خيار Telegram -->
+                                <div class="method-option" data-method="telegram">
+                                    <div class="method-icon telegram-icon">
+                                        <i class="fab fa-telegram"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <div class="method-name">Telegram</div>
+                                        <div class="method-desc">إرسال الرمز عبر بوت Telegram (سريع وآمن)</div>
+                                    </div>
+                                    <div class="method-check">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- خيار البريد الإلكتروني -->
+                                <div class="method-option" data-method="email">
+                                    <div class="method-icon email-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <div class="method-name">البريد الإلكتروني</div>
+                                        <div class="method-desc">إرسال الرمز إلى بريدك الإلكتروني</div>
+                                    </div>
+                                    <div class="method-check">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- خيار WhatsApp -->
+                                <div class="method-option selected" data-method="whatsapp">
+                                    <div class="method-icon whatsapp-icon">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <div class="method-name">WhatsApp</div>
+                                        <div class="method-desc">إرسال الرمز عبر رسالة WhatsApp</div>
+                                    </div>
+                                    <div class="method-check">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button type="submit" class="btn-primary" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i> إرسال رمز التحقق
+                            </button>
+                            
+                            <button type="button" class="btn-resend" id="resendBtn" disabled>
+                                <i class="fas fa-redo"></i>
+                                <span id="resendText">إعادة الإرسال</span>
+                                <span class="resend-timer" id="resendTimer" style="display: none;">(60)</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-            <h3 style="color: var(--gold); margin: 20px 0 15px 0;"><i class="fas fa-gavel"></i> آخر الجلسات والقرارات</h3>
-            <div id="sessionsList">
-                </div>
-
-            <div class="legal-notice">
-                <i class="fas fa-shield-alt"></i> <b>تنبيه أمني:</b> سيتم مسح هذه البيانات فوراً إذا قمت بتحديث الصفحة أو إغلاقها أو عند انتهاء العداد. المعلومات المعروضة سرية وللاستخدام الشخصي فقط.
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<script>
-    // إعدادات Supabase
-    const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <!-- الفوتر -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
+            <p>أسوان - أمام مجمع المحاكم | هاتف: 01101076000</p>
+            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">
+                <i class="fas fa-shield-alt"></i> نضمن سرية بياناتك ولا نشاركها مع أي طرف ثالث
+            </p>
+        </div>
+    </footer>
 
-    let countdownInterval;
+    <!-- Supabase Configuration Script -->
+    <script>
+        // ==================== إعداد Supabase ====================
+        const SUPABASE_URL = 'https://iyhfafodhptcdwrjywek.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
 
-    // منع التحديث العشوائي
-    window.addEventListener('beforeunload', (event) => {
-        if (document.getElementById('resultSection').style.display === 'block') {
-            event.preventDefault();
-            event.returnValue = '';
-        }
-    });
+        // متغيرات التطبيق
+        let selectedMethod = 'whatsapp'; // وسيلة الإرسال الافتراضية
+        let resendTimer = null;
+        let resendSeconds = 60;
+        let currentOtp = '';
 
-    // دالة بدء العداد
-    function startTimer(durationInSeconds) {
-        let timer = durationInSeconds;
-        const display = document.getElementById('timer');
+        // ==================== دوال التهيئة ====================
         
-        countdownInterval = setInterval(() => {
-            let minutes = Math.floor(timer / 60);
-            let seconds = timer % 60;
-
-            display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-            if (--timer < 0) {
-                clearInterval(countdownInterval);
-                location.reload(); // مسح كل شيء
+        // تحميل مكتبة Supabase
+        async function loadSupabase() {
+            if (!window.supabase) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js';
+                    script.onload = () => {
+                        try {
+                            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                            console.log('✅ تم تهيئة Supabase بنجاح');
+                            resolve();
+                        } catch (error) {
+                            console.error('❌ خطأ في تهيئة Supabase:', error);
+                            reject(error);
+                        }
+                    };
+                    script.onerror = () => {
+                        reject(new Error('فشل تحميل مكتبة Supabase'));
+                    };
+                    document.head.appendChild(script);
+                });
             }
-        }, 1000);
-    }
+            return Promise.resolve();
+        }
 
-    // فورم الاستعلام
-    document.getElementById('inquiryForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+        // ==================== دوال التحقق ====================
         
-        const phone = document.getElementById('phone').value.trim();
-        const code = document.getElementById('caseCode').value.trim().toUpperCase();
-        const submitBtn = document.getElementById('submitBtn');
-        const spinner = document.getElementById('spinner');
+        // التحقق من صحة كود القضية
+        function validateCaseCode(caseCode) {
+            // تنسيق: MA-سنةرقمإداري-كودعشوائي
+            const pattern = /^MA-\d{5}-[A-Za-z0-9]{6}$/;
+            return pattern.test(caseCode);
+        }
 
-        // حالة التحميل
-        submitBtn.disabled = true;
-        spinner.style.display = 'inline-block';
+        // التحقق من صحة رقم الهاتف
+        function validatePhone(phone) {
+            const pattern = /^[0-9+]{10,15}$/;
+            return pattern.test(phone);
+        }
 
-        try {
-            // 1. البحث عن القضية
-            const { data: caseData, error: caseError } = await supabase
-                .from('cases')
-                .select('*')
-                .eq('client_phone', phone)
-                .eq('case_code', code)
-                .single();
+        // ==================== دوال واجهة المستخدم ====================
+        
+        // عرض رسالة تنبيه
+        function showAlert(message, type = 'error', duration = 5000) {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            
+            // إخفاء الرسالة بعد مدة محددة
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, duration);
+            }
+        }
 
-            if (caseError || !caseData) {
-                Swal.fire({ icon: 'error', title: 'عذراً', text: 'بيانات غير مطابقة. تأكد من الكود ورقم الهاتف.', confirmButtonColor: '#bf953f' });
+        // إخفاء رسالة التنبيه
+        function hideAlert() {
+            document.getElementById('alertMessage').style.display = 'none';
+        }
+
+        // إظهار مؤشر التحميل
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        // إخفاء مؤشر التحميل
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // عرض OTP للتجربة
+        function showDemoOtp(otp) {
+            const otpDisplay = document.getElementById('otpDisplay');
+            const demoOtpCode = document.getElementById('demoOtpCode');
+            
+            demoOtpCode.textContent = otp;
+            otpDisplay.style.display = 'block';
+            currentOtp = otp;
+            
+            // توجيه الانتباه إلى OTP
+            showAlert(`تم إنشاء رمز OTP: ${otp} (للتجربة فقط)`, 'info', 10000);
+        }
+
+        // إخفاء OTP التجريبي
+        function hideDemoOtp() {
+            document.getElementById('otpDisplay').style.display = 'none';
+        }
+
+        // بدء مؤقت إعادة الإرسال
+        function startResendTimer() {
+            const resendBtn = document.getElementById('resendBtn');
+            const resendText = document.getElementById('resendText');
+            const resendTimerSpan = document.getElementById('resendTimer');
+            
+            resendBtn.disabled = true;
+            resendSeconds = 60;
+            
+            resendText.style.display = 'none';
+            resendTimerSpan.style.display = 'inline';
+            resendTimerSpan.textContent = `(${resendSeconds})`;
+            
+            resendTimer = setInterval(() => {
+                resendSeconds--;
+                resendTimerSpan.textContent = `(${resendSeconds})`;
+                
+                if (resendSeconds <= 0) {
+                    clearInterval(resendTimer);
+                    resendBtn.disabled = false;
+                    resendText.style.display = 'inline';
+                    resendTimerSpan.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        // إيقاف مؤقت إعادة الإرسال
+        function stopResendTimer() {
+            if (resendTimer) {
+                clearInterval(resendTimer);
+                resendTimer = null;
+            }
+            
+            const resendBtn = document.getElementById('resendBtn');
+            const resendText = document.getElementById('resendText');
+            const resendTimerSpan = document.getElementById('resendTimer');
+            
+            resendBtn.disabled = false;
+            resendText.style.display = 'inline';
+            resendTimerSpan.style.display = 'none';
+        }
+
+        // ==================== إدارة وسائل الإرسال ====================
+        
+        // اختيار وسيلة الإرسال
+        function selectDeliveryMethod(method) {
+            // إلغاء تحديد جميع الوسائل
+            document.querySelectorAll('.method-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // تحديد الوسيلة المختارة
+            document.querySelector(`.method-option[data-method="${method}"]`).classList.add('selected');
+            selectedMethod = method;
+            
+            console.log(`✅ وسيلة الإرسال المختارة: ${method}`);
+        }
+
+        // ==================== دوال الاتصال بالخادم ====================
+        
+        // إرسال طلب OTP
+        async function sendOTPRequest(phone, caseCode) {
+            try {
+                // اختبار الوضع التجريبي: إذا كان رقم الهاتف يبدأ بـ 010
+                if (phone.startsWith('010') || phone === '1234567890') {
+                    // توليد OTP تجريبي
+                    const demoOtp = Math.floor(100000 + Math.random() * 900000).toString();
+                    
+                    // حفظ البيانات مؤقتاً للخطوة التالية
+                    sessionStorage.setItem('pendingPhone', phone);
+                    sessionStorage.setItem('pendingCaseCode', caseCode);
+                    sessionStorage.setItem('demoOtp', demoOtp);
+                    
+                    // عرض OTP للتجربة
+                    showDemoOtp(demoOtp);
+                    
+                    // بدء مؤقت إعادة الإرسال
+                    startResendTimer();
+                    
+                    showAlert('تم إرسال رمز التحقق تجريبياً. استخدم الرمز المعروض أدناه.', 'success');
+                    
+                    // الانتقال إلى صفحة التحقق بعد تأخير
+                    setTimeout(() => {
+                        window.location.href = 'verify-otp.html';
+                    }, 3000);
+                    
+                    return { success: true, demo: true };
+                }
+                
+                // الإرسال الحقيقي عبر API
+                const response = await fetch('/api/send-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        phone: phone,
+                        caseCode: caseCode,
+                        method: selectedMethod
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // حفظ البيانات مؤقتاً للخطوة التالية
+                    sessionStorage.setItem('pendingPhone', phone);
+                    sessionStorage.setItem('pendingCaseCode', caseCode);
+                    
+                    // بدء مؤقت إعادة الإرسال
+                    startResendTimer();
+                    
+                    // الانتقال إلى صفحة التحقق
+                    window.location.href = 'verify-otp.html';
+                    
+                    return data;
+                } else {
+                    throw new Error(data.error || 'حدث خطأ في الإرسال');
+                }
+            } catch (error) {
+                console.error('Error sending OTP:', error);
+                throw error;
+            }
+        }
+
+        // إعادة إرسال OTP
+        async function resendOTP() {
+            const phone = document.getElementById('phone').value.trim();
+            const caseCode = document.getElementById('caseCode').value.trim();
+            
+            if (!phone || !caseCode) {
+                showAlert('يرجى إدخال رقم الهاتف وكود القضية أولاً');
                 return;
             }
-
-            // 2. جلب الجلسات
-            const { data: sessions, error: sessionError } = await supabase
-                .from('sessions')
-                .select('*')
-                .eq('case_id', caseData.id)
-                .order('session_date', { ascending: false });
-
-            // 3. عرض النتائج
-            showResults(caseData, sessions);
-
-        } catch (err) {
-            Swal.fire({ icon: 'error', title: 'خطأ', text: 'حدث خطأ في الاتصال بالنظام.' });
-        } finally {
-            submitBtn.disabled = false;
-            spinner.style.display = 'none';
-        }
-    });
-
-    function showResults(caseData, sessions) {
-        document.getElementById('searchSection').style.display = 'none';
-        document.getElementById('resultSection').style.display = 'block';
-        document.querySelectorAll('.watermark').forEach(w => w.style.display = 'block');
-
-        // تفاصيل القضية
-        const detailsContainer = document.getElementById('caseDetails');
-        detailsContainer.innerHTML = `
-            <div class="info-item"><div class="info-label">اسم العميل</div><div class="info-value">${caseData.client_name}</div></div>
-            <div class="info-item"><div class="info-label">رقم القضية</div><div class="info-value">${caseData.case_number || 'غير متوفر'}</div></div>
-            <div class="info-item"><div class="info-label">السنة</div><div class="info-value">${caseData.case_year || '-'}</div></div>
-            <div class="info-item"><div class="info-label">المحكمة</div><div class="info-value">${caseData.court_name || '-'}</div></div>
-            <div class="info-item"><div class="info-label">اسم الخصم</div><div class="info-value">${caseData.opponent_name || '-'}</div></div>
-            <div class="info-item"><div class="info-label">كود القضية</div><div class="info-value" style="color:var(--gold)">${caseData.case_code}</div></div>
-        `;
-
-        // الجلسات
-        const sessionContainer = document.getElementById('sessionsList');
-        if (sessions && sessions.length > 0) {
-            sessionContainer.innerHTML = sessions.map(s => `
-                <div class="session-item">
-                    <div style="font-weight: bold; color: var(--gold-light); margin-bottom: 5px;">
-                        <i class="far fa-calendar-alt"></i> تاريخ الجلسة: ${new Date(s.session_date).toLocaleDateString('ar-EG')}
-                    </div>
-                    <div style="font-size: 15px;">
-                        <i class="fas fa-info-circle"></i> القرار: ${s.decision || 'بانتظار القرار'}
-                    </div>
-                </div>
-            `).join('');
-        } else {
-            sessionContainer.innerHTML = '<p style="color:var(--gray)">لا توجد جلسات مسجلة حالياً.</p>';
+            
+            // التحقق من المدخلات
+            if (!validatePhone(phone)) {
+                showAlert('يرجى إدخال رقم هاتف صحيح (10-15 رقم)');
+                return;
+            }
+            
+            if (!validateCaseCode(caseCode)) {
+                showAlert('يرجى إدخال كود قضية صحيح (مثال: MA-26101-8X9j3B)');
+                return;
+            }
+            
+            // عرض التحميل
+            showLoading();
+            
+            try {
+                // إرسال OTP مرة أخرى
+                await sendOTPRequest(phone, caseCode);
+                
+                showAlert(`تم إعادة إرسال رمز التحقق عبر ${getMethodName(selectedMethod)}`, 'success');
+                
+            } catch (error) {
+                console.error('Error resending OTP:', error);
+                showAlert(error.message || 'فشل في إعادة إرسال رمز التحقق');
+            } finally {
+                hideLoading();
+            }
         }
 
-        // بدء عداد الـ 15 دقيقة (900 ثانية)
-        startTimer(900);
-    }
-</script>
+        // الحصول على اسم الوسيلة بالعربية
+        function getMethodName(method) {
+            const methods = {
+                'telegram': 'Telegram',
+                'email': 'البريد الإلكتروني',
+                'whatsapp': 'WhatsApp'
+            };
+            return methods[method] || method;
+        }
 
+        // ==================== معالجة الأحداث ====================
+        
+        // تحميل Supabase عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await loadSupabase();
+                
+                // تهيئة اختيار وسائل الإرسال
+                document.querySelectorAll('.method-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        const method = this.getAttribute('data-method');
+                        selectDeliveryMethod(method);
+                    });
+                });
+                
+                // التحقق من وجود جلسة نشطة
+                const sessionPhone = sessionStorage.getItem('sessionPhone');
+                const sessionCaseCode = sessionStorage.getItem('sessionCaseCode');
+                
+                if (sessionPhone && sessionCaseCode) {
+                    // تعبئة الحقول تلقائياً
+                    document.getElementById('phone').value = sessionPhone;
+                    document.getElementById('caseCode').value = sessionCaseCode;
+                    
+                    showAlert('لديك جلسة نشطة. يمكنك تغيير وسيلة الإرسال إذا أردت.', 'info', 5000);
+                }
+                
+                // التحقق من وجود بيانات مؤقتة
+                const pendingPhone = sessionStorage.getItem('pendingPhone');
+                const pendingCaseCode = sessionStorage.getItem('pendingCaseCode');
+                
+                if (pendingPhone && pendingCaseCode) {
+                    // تعبئة الحقول التلقائية
+                    document.getElementById('phone').value = pendingPhone;
+                    document.getElementById('caseCode').value = pendingCaseCode;
+                }
+                
+            } catch (error) {
+                console.error('Failed to load Supabase:', error);
+                showAlert('حدث خطأ في تحميل النظام. يرجى تحديث الصفحة.', 'error');
+            }
+        });
+
+        // معالجة تقديم النموذج
+        document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value.trim();
+            const caseCode = document.getElementById('caseCode').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // إخفاء أي رسائل سابقة
+            hideAlert();
+            hideDemoOtp();
+            
+            // التحقق من المدخلات
+            if (!validatePhone(phone)) {
+                showAlert('يرجى إدخال رقم هاتف صحيح (10-15 رقم)');
+                return;
+            }
+            
+            if (!validateCaseCode(caseCode)) {
+                showAlert('يرجى إدخال كود قضية صحيح (مثال: MA-26101-8X9j3B)');
+                return;
+            }
+            
+            // عرض التحميل
+            submitBtn.disabled = true;
+            showLoading();
+            
+            try {
+                // التحقق أولاً من وجود القضية في Supabase
+                await loadSupabase();
+                
+                const { data: caseData, error: caseError } = await window.supabaseClient
+                    .from('cases')
+                    .select('client_phone, client_email')
+                    .eq('case_code', caseCode)
+                    .single();
+                
+                if (caseError || !caseData) {
+                    throw new Error('كود القضية غير صحيح أو غير مسجل');
+                }
+                
+                // التحقق من مطابقة رقم الهاتف
+                if (caseData.client_phone !== phone) {
+                    throw new Error('رقم الهاتف لا يتطابق مع المسجل في القضية');
+                }
+                
+                // إظهار رسالة حول وسيلة الإرسال المختارة
+                showAlert(`جارٍ إرسال رمز التحقق عبر ${getMethodName(selectedMethod)}...`, 'info');
+                
+                // إرسال طلب OTP
+                await sendOTPRequest(phone, caseCode);
+                
+                // عرض رسالة نجاح
+                showAlert(`تم إرسال رمز التحقق عبر ${getMethodName(selectedMethod)}`, 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert(error.message || 'حدث خطأ في التحقق من البيانات');
+            } finally {
+                // إخفاء التحميل
+                submitBtn.disabled = false;
+                hideLoading();
+            }
+        });
+
+        // زر إعادة الإرسال
+        document.getElementById('resendBtn').addEventListener('click', function() {
+            if (!this.disabled) {
+                resendOTP();
+            }
+        });
+
+        // اختصار لوحة المفاتيح: Ctrl+Enter لإرسال النموذج
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                document.getElementById('submitBtn').click();
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1166,7 +1166,7 @@
             }
         }
 
-        // البحث عن القضية
+        // البحث عن القضية - نسخة معدلة مع إصلاحات
         async function searchCase(phone, caseCode) {
             try {
                 // التحقق من قبول التحذير أولاً
@@ -1182,35 +1182,107 @@
                     await initSupabase();
                 }
                 
-                console.log('🔍 جاري البحث عن:', { phone, caseCode });
+                console.log('🔍 جاري البحث عن:', { 
+                    phone: phone, 
+                    caseCode: caseCode 
+                });
                 
-                // البحث في جدول cases
-                const { data: caseData, error: caseError } = await supabaseClient
+                // تنظيف البيانات المدخلة
+                const cleanPhone = phone.trim();
+                const cleanCaseCode = caseCode.toUpperCase().trim();
+                
+                // محاولة البحث الأولى - تطابق تام
+                let { data: caseData, error: caseError } = await supabaseClient
                     .from('cases')
                     .select('*')
-                    .eq('client_phone', phone)
-                    .eq('case_code', caseCode.toUpperCase())
+                    .eq('client_phone', cleanPhone)
+                    .eq('case_code', cleanCaseCode)
                     .single();
+
+                // إذا لم نجد القضية، جرب البحث بطرق مختلفة
+                if (caseError || !caseData) {
+                    console.log('⚠️ لم يتم العثور بالمطابقة التامة، جرب طرق بحث أخرى...');
+                    
+                    // المحاولة الثانية: البحث بدون أي تنظيف
+                    const { data: retryData, error: retryError } = await supabaseClient
+                        .from('cases')
+                        .select('*')
+                        .eq('client_phone', phone)
+                        .eq('case_code', caseCode)
+                        .single();
+                        
+                    if (!retryError && retryData) {
+                        caseData = retryData;
+                        caseError = null;
+                        console.log('✅ تم العثور على القضية بالمحاولة الثانية');
+                    } else {
+                        // المحاولة الثالثة: البحث برقم الهاتف فقط لمعرفة ما هي الأكواد المتاحة
+                        const { data: casesByPhone, error: phoneError } = await supabaseClient
+                            .from('cases')
+                            .select('case_code, client_name, case_number, case_year, created_at')
+                            .eq('client_phone', cleanPhone)
+                            .order('created_at', { ascending: false });
+                            
+                        if (!phoneError && casesByPhone && casesByPhone.length > 0) {
+                            console.log('📋 القضايا الموجودة لهذا الرقم:', casesByPhone);
+                            
+                            // اقتراح الأكواد المتاحة للمستخدم
+                            const availableCodes = casesByPhone.map(c => c.case_code).filter(Boolean);
+                            if (availableCodes.length > 0) {
+                                return { 
+                                    success: false, 
+                                    message: `❌ كود القضية غير صحيح. الأكواد المتاحة لرقم الهاتف هذا: ${availableCodes.join(', ')}` 
+                                };
+                            }
+                        }
+                        
+                        // المحاولة الرابعة: البحث بإضافة +20 لرقم الهاتف (إذا كان المستخدم لم يضفه)
+                        if (!cleanPhone.startsWith('+20') && !cleanPhone.startsWith('20')) {
+                            const phoneWithCountryCode = `+20${cleanPhone.startsWith('0') ? cleanPhone.substring(1) : cleanPhone}`;
+                            const { data: casesWithCountryCode, error: countryCodeError } = await supabaseClient
+                                .from('cases')
+                                .select('*')
+                                .eq('client_phone', phoneWithCountryCode)
+                                .eq('case_code', cleanCaseCode)
+                                .single();
+                                
+                            if (!countryCodeError && casesWithCountryCode) {
+                                caseData = casesWithCountryCode;
+                                caseError = null;
+                                console.log('✅ تم العثور على القضية بإضافة كود الدولة');
+                            }
+                        }
+                    }
+                }
 
                 if (caseError) {
                     console.error('❌ خطأ في البحث عن القضية:', caseError);
-                    return { 
-                        success: false, 
-                        message: '❌ لم يتم العثور على القضية. يرجى التحقق من رقم الهاتف وكود القضية.' 
-                    };
+                    
+                    // تحقق من نوع الخطأ
+                    if (caseError.code === 'PGRST116') {
+                        return { 
+                            success: false, 
+                            message: '❌ لم يتم العثور على قضية تطابق البيانات المدخلة. يرجى التحقق من رقم الهاتف وكود القضية.' 
+                        };
+                    } else {
+                        return { 
+                            success: false, 
+                            message: `❌ خطأ في النظام: ${caseError.message}. يرجى المحاولة مرة أخرى لاحقاً.` 
+                        };
+                    }
                 }
                 
                 if (!caseData) {
                     return { 
                         success: false, 
-                        message: '❌ لا توجد قضية مطابقة للبيانات المدخلة.' 
+                        message: '❌ لا توجد قضية مطابقة للبيانات المدخلة. تأكد من صحة البيانات وحاول مرة أخرى.' 
                     };
                 }
                 
                 console.log('✅ تم العثور على القضية:', caseData);
                 
                 // تسجيل عملية الوصول في السجل (يمكن تطوير هذا الجزء)
-                logAccess(caseData.id, phone, caseCode);
+                logAccess(caseData.id, cleanPhone, cleanCaseCode);
                 
                 // جلب آخر جلسة لهذه القضية
                 const { data: lastSession, error: sessionError } = await supabaseClient
@@ -1234,7 +1306,7 @@
                 console.error('❌ خطأ غير متوقع:', error);
                 return { 
                     success: false, 
-                    message: '⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.' 
+                    message: '⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى. إذا استمرت المشكلة، يرجى التواصل مع المكتب.' 
                 };
             }
         }
@@ -1266,9 +1338,17 @@
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
             
+            // التمرير إلى رسالة الخطأ
+            setTimeout(() => {
+                errorDiv.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 100);
+            
             setTimeout(() => {
                 errorDiv.style.display = 'none';
-            }, 5000);
+            }, 8000);
         }
 
         // عرض رسائل النجاح
@@ -1764,12 +1844,6 @@
             
             // التركيز على حقل الهاتف عند التحميل
             document.getElementById('phone').focus();
-            
-            // إضافة أمثلة للاختبار (للتطوير فقط)
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                document.getElementById('phone').value = '01115821523';
-                document.getElementById('caseCode').value = 'MA-916174';
-            }
             
             // تحسين تجربة المستخدم على الهواتف
             if ('ontouchstart' in window) {

@@ -952,7 +952,9 @@ function showSessionSuccess() {
         timer: 2000
     });  
     loadUpcoming('week');  
-    sendNotification('تم تسجيل جلسة جديدة', 'تم إضافة جلسة جديدة إلى القضية');  
+    
+    // إزالة استدعاء sendNotification الذي يسبب المشكلة
+    // sendNotification('تم تسجيل جلسة جديدة', 'تم إضافة جلسة جديدة إلى القضية');  
     
     // مسح الحقول
     document.getElementById('s_decision').value = '';
@@ -1866,28 +1868,49 @@ async function loadUpcoming(range, btn){
     const endDateStr = endDate.toISOString().split('T')[0];  
     
     try {
-        // استخدام JOIN لجلب بيانات القضايا مع الجلسات
-        const { data, error } = await db  
+        // نستخدم استعلام منفصل لجلب البيانات
+        // أولاً: جلب الجلسات في النطاق الزمني
+        const { data: sessions, error: sessionsError } = await db  
             .from('sessions')  
-            .select(`
-                *,
-                cases (*)
-            `)  
+            .select('*')  
             .gte('session_date', startDate)  
             .lte('session_date', endDateStr)  
             .order('session_date', { ascending: true });  
           
-        if(error) {   
-            upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل: " + error.message + "</div>";   
+        if(sessionsError) {   
+            upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل: " + sessionsError.message + "</div>";   
             return;   
         }  
           
-        if(!data || data.length === 0) {  
+        if(!sessions || sessions.length === 0) {  
             upcomingSessions.innerHTML = "<p class='text-center text-muted'>لا توجد جلسات قادمة</p>";  
             return;  
         }  
+        
+        // ثانياً: جلب بيانات القضايا لكل جلسة
+        const sessionsWithCases = [];
+        
+        for(let session of sessions) {
+            const { data: caseData, error: caseError } = await db
+                .from('cases')
+                .select('*')
+                .eq('id', session.case_id)
+                .single();
+            
+            if (!caseError && caseData) {
+                sessionsWithCases.push({
+                    ...session,
+                    cases: caseData
+                });
+            } else {
+                sessionsWithCases.push({
+                    ...session,
+                    cases: {}
+                });
+            }
+        }
           
-        upcomingSessions.innerHTML = data.map(s => {  
+        upcomingSessions.innerHTML = sessionsWithCases.map(s => {  
             const caseData = s.cases || {};  
             const sessionDate = new Date(s.session_date);  
             const formattedDate = sessionDate.toLocaleDateString('ar-EG', {  
@@ -1941,7 +1964,7 @@ async function loadUpcoming(range, btn){
     }
 }  
   
-// الإشعارات  
+// الإشعارات - نسخة معدلة لا تسبب أخطاء
 function requestNotificationPermission() {  
     if ("Notification" in window && Notification.permission === "default") {  
         Notification.requestPermission().then(permission => {  
@@ -1953,12 +1976,35 @@ function requestNotificationPermission() {
 }  
   
 function sendNotification(title, body) {  
-    if ("Notification" in window && Notification.permission === "granted") {  
-        new Notification(title, {   
-            body: body,  
-            icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'  
-        });  
-    }  
+    try {
+        // تحقق من أن المتصفح يدعم الإشعارات
+        if (!("Notification" in window)) {
+            console.log("هذا المتصفح لا يدعم الإشعارات");
+            return;
+        }
+        
+        // تحقق من صلاحية إنشاء إشعار
+        if (Notification.permission === "granted") {
+            // استخدم ServiceWorkerRegistration إذا كان متاحاً
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.ready.then(function(registration) {
+                    registration.showNotification(title, {
+                        body: body,
+                        icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'
+                    });
+                });
+            } else {
+                // استخدم Notification العادي
+                new Notification(title, {   
+                    body: body,  
+                    icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'  
+                });
+            }
+        }
+    } catch (err) {
+        console.log('خطأ في إرسال الإشعار:', err);
+        // لا تظهر خطأ للمستخدم
+    }
 }  
   
 function enableNotifications() {  
@@ -1966,8 +2012,12 @@ function enableNotifications() {
         Notification.requestPermission().then(permission => {  
             if (permission === "granted") {  
                 Swal.fire("تم", "تم تفعيل الإشعارات بنجاح", "success");  
-                // يمكن إضافة إشعار اختباري  
-                sendNotification('نظام القضايا', 'تم تفعيل الإشعارات بنجاح');  
+                // إشعار اختباري آمن
+                try {
+                    sendNotification('نظام القضايا', 'تم تفعيل الإشعارات بنجاح');
+                } catch (err) {
+                    console.log('تعذر إرسال الإشعار الاختباري:', err);
+                }
             } else {  
                 Swal.fire("تم", "يمكنك تفعيل الإشعارات لاحقاً من إعدادات المتصفح", "info");  
             }  

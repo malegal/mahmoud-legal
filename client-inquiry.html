@@ -462,6 +462,55 @@
             font-size: 20px;
         }
         
+        /* تحذير البيانات الحساسة */
+        .data-warning {
+            background: linear-gradient(135deg, rgba(191, 149, 63, 0.15) 0%, rgba(252, 246, 186, 0.05) 100%);
+            border: 2px solid #bf953f;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-warning:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #bf953f 100%);
+        }
+        
+        .data-warning h3 {
+            color: #fcf6ba;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+        
+        .data-warning p {
+            color: #ffcc00;
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        
+        .data-warning .legal-note {
+            color: #f87171;
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(248, 113, 113, 0.1);
+            border-radius: 5px;
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -537,6 +586,18 @@
             .instructions li {
                 font-size: 13px;
             }
+            
+            .data-warning {
+                padding: 15px;
+            }
+            
+            .data-warning h3 {
+                font-size: 16px;
+            }
+            
+            .data-warning p {
+                font-size: 14px;
+            }
         }
         
         /* تحسينات إضافية للشاشات الصغيرة جداً */
@@ -607,6 +668,18 @@
             .instructions h3 {
                 font-size: 16px;
             }
+            
+            .data-warning {
+                padding: 12px;
+            }
+            
+            .data-warning h3 {
+                font-size: 15px;
+            }
+            
+            .data-warning p {
+                font-size: 13px;
+            }
         }
         
         /* تحسينات للشاشات الكبيرة */
@@ -655,6 +728,23 @@
             .info-value, .session-date {
                 color: black;
             }
+            
+            .data-warning {
+                background: #fff9e6;
+                border: 2px solid #ffcc00;
+                color: #856404;
+                page-break-inside: avoid;
+            }
+            
+            .data-warning p {
+                color: #856404;
+            }
+            
+            .data-warning .legal-note {
+                background: #ffe6e6;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
         }
         
         /* إصلاحات للـ IOS */
@@ -698,6 +788,88 @@
         /* تحسينات للظهور */
         .fade-in {
             animation: fadeIn 0.5s ease;
+        }
+        
+        /* تحذير النقر */
+        .click-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        
+        .click-warning-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #bf953f;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .click-warning-content h2 {
+            color: #fcf6ba;
+            margin-bottom: 20px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .click-warning-content p {
+            color: #cbd5e1;
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .click-warning-content .warning-text {
+            color: #ffcc00;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 204, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+        
+        .click-warning-content .legal-text {
+            color: #f87171;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(248, 113, 113, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(248, 113, 113, 0.3);
+        }
+        
+        .warning-btn {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
+            color: #020617;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .warning-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
         }
     </style>
 </head>
@@ -771,6 +943,19 @@
                         <button class="print-btn" onclick="printCaseDetails()">
                             <i class="fas fa-print"></i> طباعة
                         </button>
+                    </div>
+                    
+                    <!-- تحذير البيانات الحساسة -->
+                    <div class="data-warning">
+                        <h3><i class="fas fa-exclamation-triangle"></i> تنبيه هام: سرية البيانات</h3>
+                        <p>
+                            هذه البيانات للاطلاع الشخصي فقط وليست للتداول أو النشر.<br>
+                            المعلومات المعروضة تخص العميل فقط وتخضع للسرية المهنية والقانونية.
+                        </p>
+                        <div class="legal-note">
+                            <i class="fas fa-gavel"></i>
+                            أي محاولة لاستخدام هذه البيانات من غير صاحبها الشرعي يعرض المخالف للمساءلة القانونية وفقاً لقانون حماية البيانات الشخصية والقوانين النافذة.
+                        </div>
                     </div>
                     
                     <div class="info-grid">
@@ -859,8 +1044,39 @@
                         <li>إذا نسيت الكود، يرجى التواصل مع المكتب على الواتساب</li>
                         <li>جميع البيانات محمية بسرية تامة وفقاً للقوانين</li>
                         <li>يظهر فقط بيانات آخر جلسة بدون تفاصيل القرار</li>
+                        <li>البيانات المعروضة للاطلاع الشخصي فقط وليس للتداول</li>
                     </ul>
                 </div>
+            </div>
+        </div>
+        
+        <!-- نافذة التحذير -->
+        <div id="dataWarningModal" class="click-warning" style="display: none;">
+            <div class="click-warning-content">
+                <h2><i class="fas fa-exclamation-triangle"></i> تنبيه قانوني هام</h2>
+                <p>
+                    أنت على وشك الوصول إلى بيانات قضائية سرية ومحمية قانونياً.
+                </p>
+                <div class="warning-text">
+                    هذه البيانات للاطلاع الشخصي فقط وليست للتداول أو النشر.<br>
+                    المعلومات المعروضة تخص العميل فقط وتخضع للسرية المهنية والقانونية.
+                </div>
+                <p>
+                    بتصفحك لهذه الصفحة، فإنك تقر وتوافق على أن:
+                </p>
+                <ul style="text-align: right; color: #cbd5e1; margin: 15px 0; padding-right: 20px;">
+                    <li style="margin-bottom: 8px;">هذه المعلومات للاستخدام الشخصي فقط</li>
+                    <li style="margin-bottom: 8px;">يمنع مشاركة أو تداول هذه المعلومات مع أي طرف ثالث</li>
+                    <li style="margin-bottom: 8px;">يمنع استخدام المعلومات لأي غرض غير الاطلاع على حالة القضية</li>
+                </ul>
+                <div class="legal-text">
+                    <i class="fas fa-gavel"></i>
+                    أي محاولة لاستخدام هذه البيانات من غير صاحبها الشرعي يعرض المخالف للمساءلة القانونية
+                    وفقاً لقانون حماية البيانات الشخصية والقوانين النافذة.
+                </div>
+                <button class="warning-btn" onclick="acceptWarning()">
+                    <i class="fas fa-check-circle"></i> أوافق وأواصل
+                </button>
             </div>
         </div>
     </main>
@@ -872,6 +1088,9 @@
             <p>للاستفسار: <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-link">
                 <i class="fab fa-whatsapp"></i> 01101076000
             </a></p>
+            <p style="color: #666; font-size: 12px; margin-top: 10px;">
+                <i class="fas fa-shield-alt"></i> جميع البيانات محمية بموجب قوانين حماية البيانات الشخصية
+            </p>
         </div>
     </footer>
 
@@ -884,6 +1103,47 @@
         let currentCaseCode = '';
         let currentCaseData = null;
         let supabaseClient = null;
+        let warningAccepted = false;
+
+        // التحقق من قبول التحذير
+        function checkWarning() {
+            const accepted = localStorage.getItem('legalWarningAccepted');
+            if (!accepted) {
+                showDataWarning();
+                return false;
+            }
+            return true;
+        }
+
+        // عرض تحذير البيانات
+        function showDataWarning() {
+            const warningModal = document.getElementById('dataWarningModal');
+            warningModal.style.display = 'flex';
+            
+            // منع التمرير عند ظهور التحذير
+            document.body.style.overflow = 'hidden';
+        }
+
+        // قبول التحذير
+        function acceptWarning() {
+            localStorage.setItem('legalWarningAccepted', 'true');
+            warningAccepted = true;
+            
+            const warningModal = document.getElementById('dataWarningModal');
+            warningModal.style.display = 'none';
+            
+            // إعادة تمكين التمرير
+            document.body.style.overflow = 'auto';
+            
+            // عرض رسالة تأكيد
+            Swal.fire({
+                title: 'شكراً لتعاونك',
+                text: 'يمكنك الآن استخدام نظام الاستعلام بمسؤولية',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
 
         // دالة تهيئة Supabase
         async function initSupabase() {
@@ -909,6 +1169,14 @@
         // البحث عن القضية
         async function searchCase(phone, caseCode) {
             try {
+                // التحقق من قبول التحذير أولاً
+                if (!warningAccepted && !checkWarning()) {
+                    return { 
+                        success: false, 
+                        message: '⚠️ يرجى قبول شروط وأحكام استخدام النظام أولاً.' 
+                    };
+                }
+                
                 // الانتظار حتى يتم تحميل Supabase
                 if (!supabaseClient) {
                     await initSupabase();
@@ -941,6 +1209,9 @@
                 
                 console.log('✅ تم العثور على القضية:', caseData);
                 
+                // تسجيل عملية الوصول في السجل (يمكن تطوير هذا الجزء)
+                logAccess(caseData.id, phone, caseCode);
+                
                 // جلب آخر جلسة لهذه القضية
                 const { data: lastSession, error: sessionError } = await supabaseClient
                     .from('sessions')
@@ -966,6 +1237,24 @@
                     message: '⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى.' 
                 };
             }
+        }
+
+        // تسجيل عملية الوصول (دالة مساعدة)
+        function logAccess(caseId, phone, caseCode) {
+            // يمكن حفظ هذه البيانات في جدول منفصل لمراقبة الوصول
+            const accessLog = {
+                case_id: caseId,
+                phone: phone,
+                case_code: caseCode,
+                accessed_at: new Date().toISOString(),
+                user_agent: navigator.userAgent,
+                ip_address: 'unknown' // في تطبيق حقيقي، سيتم جلب الـ IP من الخادم
+            };
+            
+            console.log('📝 سجل الوصول:', accessLog);
+            
+            // يمكن إرسال هذه البيانات إلى Supabase إذا رغبت
+            // saveAccessLog(accessLog);
         }
 
         // عرض الأخطاء
@@ -996,8 +1285,14 @@
             }, 3000);
         }
 
-        // عرض نتائج البحث
+        // عرض نتائج البحث مع التحذير
         function displayResults(caseData, lastSession) {
+            // التحقق مرة أخرى من قبول التحذير
+            if (!warningAccepted && !localStorage.getItem('legalWarningAccepted')) {
+                showDataWarning();
+                return;
+            }
+            
             // حفظ البيانات الحالية
             currentCaseCode = caseData.case_code;
             currentCaseData = caseData;
@@ -1059,7 +1354,19 @@
                 });
             }, 100);
             
-            showSuccess('✅ تم العثور على القضية بنجاح');
+            // عرض رسالة تأكيد مع تذكير بالسرية
+            showSuccess('✅ تم العثور على القضية بنجاح - يرجى الحفاظ على سرية المعلومات');
+            
+            // إضافة تأكيد مرئي على السرية
+            setTimeout(() => {
+                const warningElement = document.querySelector('.data-warning');
+                if (warningElement) {
+                    warningElement.style.animation = 'pulse 2s infinite';
+                    setTimeout(() => {
+                        warningElement.style.animation = '';
+                    }, 2000);
+                }
+            }, 500);
         }
 
         // فتح الواتساب للتواصل
@@ -1224,6 +1531,44 @@
 
         // طباعة تفاصيل القضية
         function printCaseDetails() {
+            if (!currentCaseCode) {
+                showError('⚠️ لا توجد بيانات قضية للطباعة');
+                return;
+            }
+            
+            // عرض تحذير قبل الطباعة
+            Swal.fire({
+                title: 'تنبيه قبل الطباعة',
+                html: `
+                    <div style="text-align: right;">
+                        <p style="color: #bf953f; margin-bottom: 15px;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            تنبيه: المستند المطبوع سيحتوي على معلومات سرية
+                        </p>
+                        <div style="background: rgba(255, 204, 0, 0.1); padding: 10px; border-radius: 5px; border: 1px solid rgba(255, 204, 0, 0.3); margin-bottom: 15px;">
+                            <p style="color: #ffcc00; font-size: 14px;">
+                                يرجى الحفاظ على سرية المستند المطبوع وعدم تركه في أماكن يمكن الوصول إليها من قبل الآخرين.
+                            </p>
+                        </div>
+                        <p style="color: #cbd5e1; font-size: 14px;">
+                            هل تريد المتابعة للطباعة؟
+                        </p>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'نعم، اطبع',
+                cancelButtonText: 'إلغاء',
+                confirmButtonColor: '#bf953f',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    printCaseContent();
+                }
+            });
+        }
+
+        // محتوى الطباعة
+        function printCaseContent() {
             const printContent = document.getElementById('inquiryResult').innerHTML;
             const originalContent = document.body.innerHTML;
             
@@ -1283,6 +1628,26 @@
                             .contact-section, .print-btn, .nav-btn, button, a {
                                 display: none !important;
                             }
+                            .data-warning {
+                                background: #fff9e6;
+                                border: 2px solid #ffcc00;
+                                color: #856404;
+                                padding: 15px;
+                                margin-bottom: 20px;
+                                border-radius: 5px;
+                                page-break-inside: avoid;
+                            }
+                            .data-warning h3 {
+                                color: #856404;
+                            }
+                            .data-warning .legal-note {
+                                background: #ffe6e6;
+                                color: #721c24;
+                                border: 1px solid #f5c6cb;
+                                padding: 10px;
+                                margin-top: 10px;
+                                border-radius: 5px;
+                            }
                             @page {
                                 margin: 1cm;
                             }
@@ -1293,11 +1658,17 @@
                     <div class="print-header">
                         <h2>استعلام عن القضية - مؤسسة محمود عبد الحميد للمحاماة</h2>
                         <p>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')} ${new Date().toLocaleTimeString('ar-EG')}</p>
+                        <p style="color: #721c24; font-size: 12px; margin-top: 10px;">
+                            <strong>تنبيه:</strong> هذا المستند سري وغير مخصص للتداول
+                        </p>
                     </div>
                     ${printContent}
                     <div class="footer">
                         <p>© 2024 مؤسسة محمود عبد الحميد للمحاماة. جميع الحقوق محفوظة.</p>
                         <p>للاستفسار: 01101076000</p>
+                        <p style="color: #721c24; font-size: 11px; margin-top: 10px;">
+                            هذه نسخة شخصية للعميل فقط - يحظر تداولها مع أي طرف ثالث
+                        </p>
                     </div>
                 </body>
                 </html>
@@ -1316,6 +1687,16 @@
 
         // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', async function() {
+            // التحقق من قبول التحذير عند التحميل
+            const accepted = localStorage.getItem('legalWarningAccepted');
+            if (!accepted) {
+                setTimeout(() => {
+                    showDataWarning();
+                }, 1000);
+            } else {
+                warningAccepted = true;
+            }
+            
             // تهيئة Supabase
             await initSupabase();
             
@@ -1326,6 +1707,12 @@
                 const phone = document.getElementById('phone').value.trim();
                 const caseCode = document.getElementById('caseCode').value.trim();
                 
+                // التحقق من قبول التحذير
+                if (!warningAccepted && !localStorage.getItem('legalWarningAccepted')) {
+                    showDataWarning();
+                    return;
+                }
+                
                 // التحقق من المدخلات
                 if (!phone) {
                     showError('⚠️ يرجى إدخال رقم الهاتف');
@@ -1334,6 +1721,12 @@
                 
                 if (!caseCode) {
                     showError('⚠️ يرجى إدخال كود القضية');
+                    return;
+                }
+                
+                // التحقق من تنسيق كود القضية
+                if (!caseCode.match(/^MA-\d{6}$/i)) {
+                    showError('⚠️ تنسيق كود القضية غير صحيح. يجب أن يكون بالشكل: MA-123456');
                     return;
                 }
                 
@@ -1378,6 +1771,10 @@
                     element.style.minHeight = '44px';
                 });
             }
+            
+            // إضافة رسالة ترحيبية
+            console.log('🚀 نظام استعلام القضايا جاهز للاستخدام');
+            console.log('🔒 تم تفعيل نظام حماية البيانات والتحذيرات القانونية');
         });
     </script>
 </body>

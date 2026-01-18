@@ -47,6 +47,8 @@
     .status-suspended{background:#e2e3e5;color:#383d41;}  
     .status-reserved{background:#cce5ff;color:#004085;}  
     .status-judged{background:#d1ecf1;color:#0c5460;}  
+    .admin-search-input { border-color: var(--gold); }  
+    .admin-code-display { background: #f8f9fa; padding: 8px; border-radius: 5px; border-right: 3px solid var(--gold); }  
     </style>  
 </head>  
   
@@ -164,16 +166,39 @@
                     <h5>تسجيل جلسة <span class="auto-fill-badge">الجلب تلقائي</span></h5>  
                     <hr>  
                     <div class="row g-3">  
-                        <div class="col-md-4">  
-                            <label>كود أو رقم القضية</label>  
+                        <div class="col-md-12 mb-3">
+                            <div class="admin-code-display">
+                                <strong>تنسيق كود القضية:</strong> MA-26-001-H7G4D9
+                                <small class="text-muted d-block">(001 هو الرقم الإداري)</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">  
+                            <label>الرقم الإداري (مثل: 001)</label>  
                             <div class="input-group">  
-                                <input id="s_search" class="form-control" placeholder="أدخل كود أو رقم القضية" onkeyup="searchCasesForSession(this.value)">  
+                                <input id="admin_search" class="form-control admin-search-input" placeholder="أدخل الرقم الإداري (001)" onkeyup="searchByAdminNumber(this.value)">  
+                                <button class="btn btn-gold" type="button" onclick="searchByAdminNumber(admin_search.value)">  
+                                    <i class="bi bi-search"></i>  
+                                </button>  
+                            </div>  
+                        </div>
+                        
+                        <div class="col-md-6">  
+                            <label>بحث بالرقم أو الاسم</label>  
+                            <div class="input-group">  
+                                <input id="s_search" class="form-control" placeholder="رقم القضية أو اسم العميل" onkeyup="searchCasesForSession(this.value)">  
                                 <button class="btn btn-outline-secondary" type="button" onclick="searchCasesForSession(s_search.value)">  
                                     <i class="bi bi-search"></i>  
                                 </button>  
                             </div>  
-                            <div id="caseSearchResults" class="mt-2" style="max-height:150px;overflow-y:auto;display:none;"></div>  
-                        </div>  
+                        </div>
+                        
+                        <div id="caseSearchResults" class="col-md-12 mt-2" style="max-height:200px;overflow-y:auto;display:none;"></div>  
+                        
+                        <div class="col-md-4">
+                            <label>كود القضية الكامل</label>
+                            <input id="s_case_code" class="form-control" readonly>
+                        </div>
                         <div class="col-md-4">
                             <label>رقم القضية</label>
                             <input id="s_case_number" class="form-control" readonly>
@@ -261,9 +286,17 @@
                     <h5>البحث المتقدم</h5>  
                     <hr>  
                     <div class="row g-2 mb-3">  
-                        <div class="col-md-8"><input id="searchInput" class="form-control" placeholder="رقم قضية، اسم، أو هاتف"></div>  
+                        <div class="col-md-8"><input id="searchInput" class="form-control" placeholder="كود القضية، الرقم الإداري، اسم العميل، رقم الهاتف"></div>  
                         <div class="col-md-4"><button class="btn btn-gold w-100" onclick="searchCases()">بحث</button></div>  
                     </div>  
+                    
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <strong>ملاحظة:</strong> للبحث بالرقم الإداري فقط، استخدم الزر المخصص للبحث بالرقم الإداري
+                            </div>
+                        </div>
+                    </div>
                       
                     <div class="row g-3 mb-3">  
                         <div class="col-md-5"><label>من تاريخ</label><input type="date" id="searchFrom" class="form-control"></div>  
@@ -276,6 +309,7 @@
                     <div class="d-flex flex-wrap gap-2">  
                         <button class="btn btn-sm btn-outline-dark" onclick="filterSessions('week')">جلسات الأسبوع</button>  
                         <button class="btn btn-sm btn-outline-dark" onclick="filterSessions('month')">جلسات الشهر</button>  
+                        <button class="btn btn-sm btn-outline-dark" onclick="searchByAdminNumberInSearch()">بحث بالرقم الإداري</button>  
                         <button class="btn btn-sm btn-outline-dark" onclick="searchByPhone()">بحث برقم الهاتف</button>  
                         <button class="btn btn-sm btn-outline-dark" onclick="exportToPDF()">تصدير PDF</button>  
                     </div>  
@@ -539,19 +573,30 @@ function clearForm() {
     document.getElementById('caseCodeResult').innerHTML = '';  
     currentCaseId = null;  
 }  
+
+// دالة استخراج الرقم الإداري من كود القضية
+function extractAdminNumber(caseCode) {
+    if (!caseCode) return null;
+    const parts = caseCode.split('-');
+    if (parts.length >= 3) {
+        return parts[2]; // الجزء الثالث هو الرقم الإداري (مثال: MA-26-001-H7G4D9 -> 001)
+    }
+    return null;
+}
   
-// البحث عن قضايا لتسجيل الجلسة  
-async function searchCasesForSession(query) {  
-    if (!query || query.length < 2) {  
+// البحث عن قضايا بالرقم الإداري  
+async function searchByAdminNumber(query) {  
+    if (!query || query.length < 1) {  
         document.getElementById('caseSearchResults').style.display = 'none';  
         return;  
     }  
   
     try {
+        // البحث في كود القضية بالرقم الإداري (الجزء الثالث)
         const { data, error } = await db  
             .from('cases')  
             .select('*')  
-            .or(`case_number.ilike.%${query}%,client_name.ilike.%${query}%`)  
+            .like('case_code', `%-${query}-%`)  
             .limit(5);  
     
         if (error) {
@@ -564,10 +609,112 @@ async function searchCasesForSession(query) {
             resultsDiv.innerHTML = data.map(caseItem => `  
                 <div class="case-card p-2 mb-1" onclick="selectCaseForSession('${caseItem.id}')">  
                     <div class="d-flex justify-content-between">  
-                        <strong>${caseItem.case_number}/${caseItem.case_year || 'بدون كود'}</strong>  
+                        <strong class="case-code">${caseItem.case_code || 'بدون كود'}</strong>  
                         <small>${caseItem.court_name}</small>  
                     </div>  
-                    <div>${caseItem.client_name} - ${caseItem.case_number}/${caseItem.case_year}</div>  
+                    <div>${caseItem.client_name} - ${caseItem.case_number}/${caseItem.case_year}</div>
+                    <small class="text-muted">الرقم الإداري: ${extractAdminNumber(caseItem.case_code) || 'غير محدد'}</small>
+                </div>  
+            `).join('');  
+            resultsDiv.style.display = 'block';  
+        } else {  
+            document.getElementById('caseSearchResults').innerHTML = '<div class="text-center p-2">لا توجد نتائج</div>';  
+            document.getElementById('caseSearchResults').style.display = 'block';  
+        }  
+    } catch (err) {
+        console.error('خطأ في البحث:', err);
+        document.getElementById('caseSearchResults').innerHTML = '<div class="text-center p-2 text-danger">خطأ في الاتصال</div>';  
+        document.getElementById('caseSearchResults').style.display = 'block';  
+    }
+}
+
+// البحث عن قضايا بالرقم الإداري في تبويب البحث
+async function searchByAdminNumberInSearch() {
+    const { value: adminNumber } = await Swal.fire({
+        title: 'البحث بالرقم الإداري',
+        input: 'text',
+        inputPlaceholder: 'أدخل الرقم الإداري (مثل: 001)',
+        showCancelButton: true,
+        confirmButtonText: 'بحث',
+        cancelButtonText: 'إلغاء'
+    });
+    
+    if (adminNumber) {
+        searchInput.value = adminNumber;
+        searchCasesByAdminNumber(adminNumber);
+    }
+}
+
+async function searchCasesByAdminNumber(adminNumber) {
+    Swal.fire({title: 'جاري البحث...', didOpen: () => Swal.showLoading()});
+    
+    try {
+        // البحث في كود القضية بالرقم الإداري
+        const { data, error } = await db
+            .from('cases')
+            .select('*')
+            .like('case_code', `%-${adminNumber}-%`);
+        
+        Swal.close();
+        if (error) {
+            return Swal.fire("خطأ", "فشل البحث: " + error.message, "error");
+        }
+        
+        // جلب الجلسات واخر حالة لكل قضية
+        if (data && data.length > 0) {
+            for (let caseItem of data) {
+                const { data: sessions } = await db
+                    .from('sessions')
+                    .select('*')
+                    .eq('case_id', caseItem.id)
+                    .order('session_date', { ascending: false });
+                caseItem.sessions = sessions || [];
+                
+                // الحصول على آخر حالة للقضية من آخر جلسة
+                if (sessions && sessions.length > 0) {
+                    caseItem.last_case_status = sessions[0].case_status;
+                } else {
+                    caseItem.last_case_status = 'جديدة';
+                }
+            }
+        }
+        
+        renderSearchResults(data, "cases");
+    } catch (err) {
+        Swal.close();
+        Swal.fire("خطأ", "حدث خطأ أثناء البحث: " + err.message, "error");
+    }
+}
+  
+// البحث عن قضايا لتسجيل الجلسة  
+async function searchCasesForSession(query) {  
+    if (!query || query.length < 2) {  
+        document.getElementById('caseSearchResults').style.display = 'none';  
+        return;  
+    }  
+  
+    try {
+        const { data, error } = await db  
+            .from('cases')  
+            .select('*')  
+            .or(`case_number.ilike.%${query}%,client_name.ilike.%${query}%,case_code.ilike.%${query}%`)  
+            .limit(5);  
+    
+        if (error) {
+            console.error('خطأ في البحث:', error);
+            return;
+        }
+        
+        if (data && data.length > 0) {  
+            const resultsDiv = document.getElementById('caseSearchResults');  
+            resultsDiv.innerHTML = data.map(caseItem => `  
+                <div class="case-card p-2 mb-1" onclick="selectCaseForSession('${caseItem.id}')">  
+                    <div class="d-flex justify-content-between">  
+                        <strong class="case-code">${caseItem.case_code || 'بدون كود'}</strong>  
+                        <small>${caseItem.court_name}</small>  
+                    </div>  
+                    <div>${caseItem.client_name} - ${caseItem.case_number}/${caseItem.case_year}</div>
+                    <small class="text-muted">الرقم الإداري: ${extractAdminNumber(caseItem.case_code) || 'غير محدد'}</small>
                 </div>  
             `).join('');  
             resultsDiv.style.display = 'block';  
@@ -600,6 +747,7 @@ async function selectCaseForSession(caseId) {
             selectedCaseForCalendar = data;  
               
             // تعبئة جميع بيانات القضية  
+            document.getElementById('s_case_code').value = data.case_code || '';  
             document.getElementById('s_case_number').value = data.case_number;  
             document.getElementById('s_case_year').value = data.case_year;  
             document.getElementById('s_court').value = data.court_name;  
@@ -626,7 +774,14 @@ async function selectCaseForSession(caseId) {
             }
               
             document.getElementById('caseSearchResults').style.display = 'none';  
+            
+            // تعبئة حقول البحث
+            if (data.case_code) {
+                const adminNumber = extractAdminNumber(data.case_code);
+                document.getElementById('admin_search').value = adminNumber || '';
+            }
             document.getElementById('s_search').value = `${data.case_number}/${data.case_year}`;  
+            
             document.getElementById('calendarBtn').disabled = false;  
               
             // تعيين التاريخ الافتراضي للجلسة (بعد 7 أيام من اليوم)  
@@ -658,9 +813,6 @@ caseForm.onsubmit = async e => {
             return;
         }
         
-        // إنشاء كود القضية
-        const caseCode = `CASE-${Date.now().toString().slice(-6)}`;
-        
         const caseData = {
             client_name: client_name.value,  
             client_phone: client_phone.value,  
@@ -673,8 +825,8 @@ caseForm.onsubmit = async e => {
             circle: circle.value,  
             case_type: case_type.value,
             case_subject: case_subject.value,  
-            notes: notes.value,
-            case_code: caseCode
+            notes: notes.value
+            // لا نرسل case_code، قاعدة البيانات ستنشئه تلقائياً
         };
         
         console.log('بيانات القضية المرسلة:', caseData);
@@ -719,23 +871,36 @@ caseForm.onsubmit = async e => {
 
 // دالة لعرض رسالة النجاح
 function showSuccessMessage(savedCase) {
+    const adminNumber = extractAdminNumber(savedCase.case_code);
+    
     Swal.fire({  
         title: "تم الحفظ بنجاح",  
         html: `<div class="text-center">
                   <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
                   <h4 class="mt-3">تم تسجيل القضية</h4>
                   <p class="case-code mt-2">${savedCase.case_code || `${savedCase.case_number}/${savedCase.case_year}`}</p>
+                  ${adminNumber ? `<p><strong>الرقم الإداري:</strong> ${adminNumber}</p>` : ''}
                   <small class="text-muted">يمكنك الآن تسجيل جلسات للقضية</small>
                </div>`,  
         icon: "success",
         confirmButtonText: "تم"
     });  
     caseForm.reset();  
-    document.getElementById('caseCodeResult').innerHTML = `
+    
+    let resultHtml = `
         <div class="alert alert-success">
-            <strong>كود القضية:</strong> ${savedCase.case_code || `${savedCase.case_number}/${savedCase.case_year}`}
-        </div>
+            <strong>تم حفظ القضية بنجاح</strong>
+            <div class="mt-2">
+                <strong>كود القضية:</strong> ${savedCase.case_code || `${savedCase.case_number}/${savedCase.case_year}`}
+            </div>
     `;
+    
+    if (adminNumber) {
+        resultHtml += `<div><strong>الرقم الإداري:</strong> ${adminNumber}</div>`;
+    }
+    
+    resultHtml += `</div>`;
+    document.getElementById('caseCodeResult').innerHTML = resultHtml;
 }
   
 // حفظ الجلسة  
@@ -1046,7 +1211,8 @@ function renderSearchResults(data, type) {
                     </div>  
                 </div>  
                 <div class="mt-2">  
-                    <div><strong>كود القضية:</strong> ${caseData.case_code || 'بدون كود'}</div>  
+                    <div><strong>كود القضية:</strong> ${caseData.case_code || 'بدون كود'}</div>
+                    ${caseData.case_code ? `<div><strong>الرقم الإداري:</strong> ${extractAdminNumber(caseData.case_code) || 'غير محدد'}</div>` : ''}
                     <div><strong>العميل:</strong> ${caseData.client_name}</div>  
                     <div><strong>الخصم:</strong> ${caseData.opponent_name || 'غير محدد'}</div>  
                     <div><strong>القضية:</strong> ${caseData.case_number}/${caseData.case_year}</div>  
@@ -1058,6 +1224,7 @@ function renderSearchResults(data, type) {
     } else {  
         data.forEach(item => {  
             const statusClass = getStatusClass(item.last_case_status);  
+            const adminNumber = extractAdminNumber(item.case_code);
               
             html += `  
             <div class="case-card">  
@@ -1079,6 +1246,7 @@ function renderSearchResults(data, type) {
                     </div>  
                 </div>  
                 <div class="mt-2">  
+                    ${item.case_code ? `<div><strong>الرقم الإداري:</strong> ${adminNumber || 'غير محدد'}</div>` : ''}
                     <div><strong>العميل:</strong> ${item.client_name} (${item.client_phone})</div>  
                     <div><strong>الإيميل:</strong> ${item.client_email || 'غير محدد'}</div>  
                     <div><strong>الخصم:</strong> ${item.opponent_name || 'غير محدد'}</div>  
@@ -1140,12 +1308,14 @@ async function openCaseDetails(caseId) {
         }
         
         const statusClass = getStatusClass(lastCaseStatus);  
+        const adminNumber = extractAdminNumber(caseData.case_code);
           
         let detailsHTML = `  
             <div class="case-details">  
                 <div class="d-flex justify-content-between align-items-start mb-3">  
                     <div>  
                         <h4 class="case-code">${caseData.case_code || `${caseData.case_number}/${caseData.case_year}`}</h4>  
+                        ${adminNumber ? `<p class="text-muted"><strong>الرقم الإداري:</strong> ${adminNumber}</p>` : ''}
                         <h5>${caseData.client_name} ضد ${caseData.opponent_name || 'غير محدد'}</h5>  
                     </div>  
                     <span class="case-status ${statusClass}">${lastCaseStatus}</span>  
@@ -1696,27 +1866,20 @@ async function loadUpcoming(range, btn){
     const endDateStr = endDate.toISOString().split('T')[0];  
     
     try {
+        // استخدام JOIN لجلب بيانات القضايا مع الجلسات
         const { data, error } = await db  
             .from('sessions')  
-            .select('*')  
+            .select(`
+                *,
+                cases (*)
+            `)  
             .gte('session_date', startDate)  
             .lte('session_date', endDateStr)  
             .order('session_date', { ascending: true });  
           
         if(error) {   
-            upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل</div>";   
+            upcomingSessions.innerHTML = "<div class='alert alert-danger'>خطأ في التحميل: " + error.message + "</div>";   
             return;   
-        }  
-          
-        if(data && data.length > 0) {  
-            for(let session of data) {  
-                const { data: caseData } = await db  
-                    .from('cases')  
-                    .select('*')  
-                    .eq('id', session.case_id)  
-                    .single();  
-                session.cases = caseData || {};  
-            }  
         }  
           
         if(!data || data.length === 0) {  
@@ -1737,6 +1900,7 @@ async function loadUpcoming(range, btn){
             });  
               
             const statusClass = getStatusClass(s.case_status);  
+            const adminNumber = extractAdminNumber(caseData.case_code);
               
             return `  
             <div class="session-card">  
@@ -1759,6 +1923,7 @@ async function loadUpcoming(range, btn){
                     قضية ${caseData.case_number || 'غير محدد'}/${caseData.case_year || 'غير محدد'}  
                 </div>  
                 <div><small>كود القضية: ${caseData.case_code || `${caseData.case_number}/${caseData.case_year}`}</small></div>  
+                ${adminNumber ? `<div><small>الرقم الإداري: ${adminNumber}</small></div>` : ''}
                 ${caseData.opponent_name ? `<div><small>ضد: ${caseData.opponent_name}</small></div>` : ''}  
                 <div class="mt-2 d-flex gap-2">  
                     <button class="btn btn-sm btn-outline-success" onclick="event.stopPropagation(); addToGoogleCalendarFromSession('${s.id}')">  

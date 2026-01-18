@@ -128,6 +128,23 @@
             max-width: 800px;
             text-align: center;
             box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
+            position: relative;
+        }
+        
+        .session-timer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(191, 149, 63, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #ffcc00;
+            display: none;
+        }
+        
+        .session-timer i {
+            margin-right: 5px;
         }
         
         .inquiry-box h1 {
@@ -219,6 +236,30 @@
             border: 3px solid #bf953f;
             box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
             animation: fadeIn 0.5s ease;
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 2px solid #f87171;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #f87171;
+            color: #020617;
         }
         
         .info-grid {
@@ -598,6 +639,22 @@
             .data-warning p {
                 font-size: 14px;
             }
+            
+            .logout-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 10px;
+                align-self: flex-start;
+            }
+            
+            .session-timer {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 10px;
+                display: inline-block;
+            }
         }
         
         /* تحسينات إضافية للشاشات الصغيرة جداً */
@@ -745,6 +802,10 @@
                 color: #721c24;
                 border: 1px solid #f5c6cb;
             }
+            
+            .logout-btn, .session-timer {
+                display: none !important;
+            }
         }
         
         /* إصلاحات للـ IOS */
@@ -878,7 +939,7 @@
     <header class="header">
         <div class="container">
             <nav class="navbar">
-                <a href="#" class="logo">
+                <a href="index.html" class="logo">
                     <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'">
                     <div class="logo-text">
                         <h1>محمود عبد الحميد</h1>
@@ -886,7 +947,7 @@
                     </div>
                 </a>
                 <div class="nav-buttons">
-                    <a href="index.html" target="_blank" class="nav-btn">
+                    <a href="index.html" class="nav-btn">
                         <i class="fas fa-home"></i> الصفحة الرئيسية
                     </a>
                 </div>
@@ -898,6 +959,10 @@
     <main>
         <div class="inquiry-container">
             <div class="inquiry-box">
+                <div class="session-timer" id="sessionTimer">
+                    <i class="fas fa-clock"></i> تنتهي الجلسة بعد: <span id="timerDisplay">15:00</span>
+                </div>
+                
                 <h1><i class="fas fa-search"></i> استعلام عن القضية</h1>
                 <p>أدخل بياناتك للاطلاع على آخر تطورات قضيتك بكل خصوصية وأمان</p>
                 
@@ -938,6 +1003,10 @@
                 </form>
                 
                 <div id="inquiryResult" class="result-box">
+                    <button class="logout-btn" onclick="logoutSession()">
+                        <i class="fas fa-sign-out-alt"></i> خروج
+                    </button>
+                    
                     <div class="result-header">
                         <h2><i class="fas fa-file-contract"></i> تفاصيل القضية</h2>
                         <button class="print-btn" onclick="printCaseDetails()">
@@ -1034,6 +1103,12 @@
                             ملاحظة: هذه المعلومات خاصة بك فقط. يرجى عدم مشاركة كود القضية مع أي شخص.
                         </p>
                     </div>
+                    
+                    <div class="text-center mt-3">
+                        <button class="logout-btn" onclick="logoutSession()" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #60a5fa;">
+                            <i class="fas fa-redo"></i> بحث جديد
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="instructions">
@@ -1045,6 +1120,7 @@
                         <li>جميع البيانات محمية بسرية تامة وفقاً للقوانين</li>
                         <li>يظهر فقط بيانات آخر جلسة بدون تفاصيل القرار</li>
                         <li>البيانات المعروضة للاطلاع الشخصي فقط وليس للتداول</li>
+                        <li>تنتهي جلسة الاستعلام تلقائياً بعد 15 دقيقة</li>
                     </ul>
                 </div>
             </div>
@@ -1104,6 +1180,10 @@
         let currentCaseData = null;
         let supabaseClient = null;
         let warningAccepted = false;
+        let sessionTimer = null;
+        let sessionTimeout = null;
+        let sessionStartTime = null;
+        const SESSION_DURATION = 15 * 60 * 1000; // 15 دقيقة بالمللي ثانية
 
         // التحقق من قبول التحذير
         function checkWarning() {
@@ -1166,7 +1246,7 @@
             }
         }
 
-        // البحث عن القضية - نسخة معدلة مع إصلاحات
+        // البحث عن القضية - نسخة آمنة
         async function searchCase(phone, caseCode) {
             try {
                 // التحقق من قبول التحذير أولاً
@@ -1191,88 +1271,26 @@
                 const cleanPhone = phone.trim();
                 const cleanCaseCode = caseCode.toUpperCase().trim();
                 
-                // محاولة البحث الأولى - تطابق تام
-                let { data: caseData, error: caseError } = await supabaseClient
+                // البحث في جدول cases
+                const { data: caseData, error: caseError } = await supabaseClient
                     .from('cases')
                     .select('*')
                     .eq('client_phone', cleanPhone)
                     .eq('case_code', cleanCaseCode)
                     .single();
 
-                // إذا لم نجد القضية، جرب البحث بطرق مختلفة
-                if (caseError || !caseData) {
-                    console.log('⚠️ لم يتم العثور بالمطابقة التامة، جرب طرق بحث أخرى...');
-                    
-                    // المحاولة الثانية: البحث بدون أي تنظيف
-                    const { data: retryData, error: retryError } = await supabaseClient
-                        .from('cases')
-                        .select('*')
-                        .eq('client_phone', phone)
-                        .eq('case_code', caseCode)
-                        .single();
-                        
-                    if (!retryError && retryData) {
-                        caseData = retryData;
-                        caseError = null;
-                        console.log('✅ تم العثور على القضية بالمحاولة الثانية');
-                    } else {
-                        // المحاولة الثالثة: البحث برقم الهاتف فقط لمعرفة ما هي الأكواد المتاحة
-                        const { data: casesByPhone, error: phoneError } = await supabaseClient
-                            .from('cases')
-                            .select('case_code, client_name, case_number, case_year, created_at')
-                            .eq('client_phone', cleanPhone)
-                            .order('created_at', { ascending: false });
-                            
-                        if (!phoneError && casesByPhone && casesByPhone.length > 0) {
-                            console.log('📋 القضايا الموجودة لهذا الرقم:', casesByPhone);
-                            
-                            // اقتراح الأكواد المتاحة للمستخدم
-                            const availableCodes = casesByPhone.map(c => c.case_code).filter(Boolean);
-                            if (availableCodes.length > 0) {
-                                return { 
-                                    success: false, 
-                                    message: `❌ كود القضية غير صحيح. الأكواد المتاحة لرقم الهاتف هذا: ${availableCodes.join(', ')}` 
-                                };
-                            }
-                        }
-                        
-                        // المحاولة الرابعة: البحث بإضافة +20 لرقم الهاتف (إذا كان المستخدم لم يضفه)
-                        if (!cleanPhone.startsWith('+20') && !cleanPhone.startsWith('20')) {
-                            const phoneWithCountryCode = `+20${cleanPhone.startsWith('0') ? cleanPhone.substring(1) : cleanPhone}`;
-                            const { data: casesWithCountryCode, error: countryCodeError } = await supabaseClient
-                                .from('cases')
-                                .select('*')
-                                .eq('client_phone', phoneWithCountryCode)
-                                .eq('case_code', cleanCaseCode)
-                                .single();
-                                
-                            if (!countryCodeError && casesWithCountryCode) {
-                                caseData = casesWithCountryCode;
-                                caseError = null;
-                                console.log('✅ تم العثور على القضية بإضافة كود الدولة');
-                            }
-                        }
-                    }
-                }
-
                 if (caseError) {
                     console.error('❌ خطأ في البحث عن القضية:', caseError);
                     
-                    // تحقق من نوع الخطأ
-                    if (caseError.code === 'PGRST116') {
-                        return { 
-                            success: false, 
-                            message: '❌ لم يتم العثور على قضية تطابق البيانات المدخلة. يرجى التحقق من رقم الهاتف وكود القضية.' 
-                        };
-                    } else {
-                        return { 
-                            success: false, 
-                            message: `❌ خطأ في النظام: ${caseError.message}. يرجى المحاولة مرة أخرى لاحقاً.` 
-                        };
-                    }
+                    // رسالة عامة دون تفاصيل - إصلاح المشكلة الأمنية
+                    return { 
+                        success: false, 
+                        message: '❌ لم يتم العثور على قضية تطابق البيانات المدخلة. يرجى التحقق من رقم الهاتف وكود القضية.' 
+                    };
                 }
                 
                 if (!caseData) {
+                    // رسالة عامة دون تفاصيل - إصلاح المشكلة الأمنية
                     return { 
                         success: false, 
                         message: '❌ لا توجد قضية مطابقة للبيانات المدخلة. تأكد من صحة البيانات وحاول مرة أخرى.' 
@@ -1280,9 +1298,6 @@
                 }
                 
                 console.log('✅ تم العثور على القضية:', caseData);
-                
-                // تسجيل عملية الوصول في السجل (يمكن تطوير هذا الجزء)
-                logAccess(caseData.id, cleanPhone, cleanCaseCode);
                 
                 // جلب آخر جلسة لهذه القضية
                 const { data: lastSession, error: sessionError } = await supabaseClient
@@ -1309,24 +1324,6 @@
                     message: '⚠️ حدث خطأ في النظام. يرجى المحاولة مرة أخرى. إذا استمرت المشكلة، يرجى التواصل مع المكتب.' 
                 };
             }
-        }
-
-        // تسجيل عملية الوصول (دالة مساعدة)
-        function logAccess(caseId, phone, caseCode) {
-            // يمكن حفظ هذه البيانات في جدول منفصل لمراقبة الوصول
-            const accessLog = {
-                case_id: caseId,
-                phone: phone,
-                case_code: caseCode,
-                accessed_at: new Date().toISOString(),
-                user_agent: navigator.userAgent,
-                ip_address: 'unknown' // في تطبيق حقيقي، سيتم جلب الـ IP من الخادم
-            };
-            
-            console.log('📝 سجل الوصول:', accessLog);
-            
-            // يمكن إرسال هذه البيانات إلى Supabase إذا رغبت
-            // saveAccessLog(accessLog);
         }
 
         // عرض الأخطاء
@@ -1363,6 +1360,115 @@
             setTimeout(() => {
                 successDiv.style.display = 'none';
             }, 3000);
+        }
+
+        // بدء مؤقت الجلسة
+        function startSessionTimer() {
+            clearSessionTimer(); // مسح أي مؤقت سابق
+            
+            const timerDisplay = document.getElementById('timerDisplay');
+            const sessionTimerElement = document.getElementById('sessionTimer');
+            sessionTimerElement.style.display = 'block';
+            
+            sessionStartTime = Date.now();
+            let timeLeft = SESSION_DURATION;
+            
+            // تحديث العداد كل ثانية
+            sessionTimer = setInterval(() => {
+                timeLeft -= 1000;
+                
+                if (timeLeft <= 0) {
+                    endSession();
+                    return;
+                }
+                
+                // تحويل الوقت إلى دقائق وثواني
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                
+                // عرض الوقت المتبقي
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // تغيير اللون عندما يقل الوقت عن 5 دقائق
+                if (minutes < 5) {
+                    timerDisplay.style.color = '#f87171';
+                    sessionTimerElement.style.background = 'rgba(248, 113, 113, 0.2)';
+                }
+            }, 1000);
+            
+            // تعيين وقت انتهاء الجلسة
+            sessionTimeout = setTimeout(() => {
+                endSession();
+            }, SESSION_DURATION);
+        }
+
+        // مسح مؤقت الجلسة
+        function clearSessionTimer() {
+            if (sessionTimer) {
+                clearInterval(sessionTimer);
+                sessionTimer = null;
+            }
+            
+            if (sessionTimeout) {
+                clearTimeout(sessionTimeout);
+                sessionTimeout = null;
+            }
+            
+            const sessionTimerElement = document.getElementById('sessionTimer');
+            sessionTimerElement.style.display = 'none';
+        }
+
+        // إنهاء الجلسة تلقائياً
+        function endSession() {
+            clearSessionTimer();
+            
+            // عرض رسالة للمستخدم
+            Swal.fire({
+                title: 'انتهت جلسة الاستعلام',
+                html: `
+                    <div style="text-align: center;">
+                        <i class="fas fa-clock" style="color: #bf953f; font-size: 40px; margin-bottom: 20px;"></i>
+                        <p style="color: #cbd5e1; font-size: 14px;">
+                            انتهت مدة جلسة الاستعلام (15 دقيقة)<br>
+                            تم مسح جميع البيانات من الشاشة لحماية خصوصيتك
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: 'حسناً',
+                confirmButtonColor: '#bf953f',
+                timer: 5000,
+                timerProgressBar: true
+            });
+            
+            // مسح البيانات من الشاشة
+            logoutSession();
+        }
+
+        // تسجيل الخروج من الجلسة
+        function logoutSession() {
+            // مسح المتغيرات المحلية
+            currentCaseCode = '';
+            currentCaseData = null;
+            
+            // مسح مؤقت الجلسة
+            clearSessionTimer();
+            
+            // إخفاء نتائج البحث
+            document.getElementById('inquiryResult').style.display = 'none';
+            
+            // مسح البيانات من الحقول
+            document.getElementById('phone').value = '';
+            document.getElementById('caseCode').value = '';
+            
+            // إخفاء أي رسائل
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            
+            // التركيز على حقل الهاتف
+            document.getElementById('phone').focus();
+            
+            // عرض رسالة تأكيد
+            showSuccess('✓ تم مسح بيانات الجلسة. يمكنك الآن إدخال بيانات جديدة.');
         }
 
         // عرض نتائج البحث مع التحذير
@@ -1425,6 +1531,9 @@
             const resultBox = document.getElementById('inquiryResult');
             resultBox.style.display = 'block';
             resultBox.classList.add('fade-in');
+            
+            // بدء مؤقت الجلسة
+            startSessionTimer();
             
             // التمرير إلى النتائج
             setTimeout(() => {
@@ -1855,6 +1964,7 @@
             // إضافة رسالة ترحيبية
             console.log('🚀 نظام استعلام القضايا جاهز للاستخدام');
             console.log('🔒 تم تفعيل نظام حماية البيانات والتحذيرات القانونية');
+            console.log('⏱️  تم تفعيل نظام المؤقت الآمن (15 دقيقة)');
         });
     </script>
 </body>

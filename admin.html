@@ -157,7 +157,6 @@
         <div class="tab-content">  
             <!-- تبويب القضايا -->  
             <div class="tab-pane fade show active" id="cases">  
-                <!-- نفس محتوى تبويب القضايا الموجود -->  
                 <form id="caseForm" class="form-section">  
                     <h5>تسجيل قضية جديدة</h5>  
                     <hr>  
@@ -197,7 +196,7 @@
                             <label>المحكمة</label>  
                             <select id="court_name" class="form-select" required>  
                                 <option value="">اختر المحكمة...</option>  
-                                <option>محكمة الأسرة</option>و<option>المحكمة الجزئية</option><option>المحكمة الابتدائية</option>  
+                                <option>محكمة الأسرة</option><option>المحكمة الجزئية</option><option>المحكمة الابتدائية</option>  
                                 <option>محكمة الاستئناف</option><option>المحكمة العمالية</option><option>المحكمة الاقتصادية</option><option>المحكمة الادارية</option><option>محكمة القضاء الاداري</option><option>المحكمة الادارية العليا</option><option>محكمة النقض</option>  
                             </select>  
                         </div>  
@@ -238,7 +237,6 @@
   
             <!-- تبويب الجلسات -->  
             <div class="tab-pane fade" id="sessions">  
-                <!-- نفس محتوى تبويب الجلسات الموجود -->  
                 <div class="form-section">  
                     <h5>تسجيل جلسة <span class="auto-fill-badge">الجلب تلقائي</span></h5>  
                     <hr>  
@@ -359,7 +357,6 @@
   
             <!-- تبويب البحث والتقارير -->  
             <div class="tab-pane fade" id="search">  
-                <!-- نفس محتوى تبويب البحث والتقارير الموجود -->  
                 <div class="form-section">  
                     <h5>البحث المتقدم</h5>  
                     <hr>  
@@ -487,6 +484,9 @@
                         <button class="btn btn-sm btn-outline-info" onclick="refreshSecurityStats()">  
                             <i class="bi bi-arrow-clockwise"></i> تحديث الإحصائيات  
                         </button>  
+                        <button class="btn btn-sm btn-outline-primary" onclick="testSecurityLogsDirect()">  
+                            <i class="bi bi-bug"></i> اختبار الاتصال  
+                        </button>  
                     </div>  
                       
                     <!-- نتائج البحث -->  
@@ -494,6 +494,9 @@
                         <div class="text-center text-muted py-4">  
                             <i class="bi bi-search" style="font-size: 2rem;"></i>  
                             <p class="mt-2">استخدم أدوات البحث لعرض سجلات الاستعلامات</p>  
+                            <button class="btn btn-sm btn-outline-primary mt-2" onclick="loadSecurityLogs()">  
+                                <i class="bi bi-arrow-clockwise"></i> تحميل السجلات  
+                            </button>  
                         </div>  
                     </div>  
                 </div>  
@@ -768,10 +771,26 @@ function login(){
         requestNotificationPermission();  
         testSupabaseConnection();
         refreshSecurityStats(); // تحميل الإحصائيات الأمنية عند الدخول
+        
+        // إضافة مستمع لتبويب سجل الاستعلامات
+        setupSecurityLogsTab();
     } else {  
         Swal.fire("خطأ","كلمة المرور غير صحيحة","error");  
     }  
-}  
+}
+
+// إعداد مستمع لتبويب سجل الاستعلامات
+function setupSecurityLogsTab() {
+    const securityTab = document.querySelector('[data-bs-target="#securityLogs"]');
+    if (securityTab) {
+        securityTab.addEventListener('shown.bs.tab', function() {
+            console.log('تم فتح تبويب سجل الاستعلامات');
+            setTimeout(() => {
+                loadSecurityLogs();
+            }, 300);
+        });
+    }
+}
   
 // دالة مسح النموذج  
 function clearForm() {  
@@ -796,86 +815,246 @@ function extractAdminNumber(caseCode) {
 
 // تحميل سجلات الأمان
 async function loadSecurityLogs() {
-    Swal.fire({title: 'جاري تحميل السجلات...', didOpen: () => Swal.showLoading()});
+    console.log('بدء تحميل سجلات الأمان...');
     
     try {
-        let query = db
+        // اختبار بسيط أولاً: جلب عدد السجلات فقط
+        const { count, error: countError } = await db
             .from('security_logs')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(100); // تحديد عدد النتائج
+            .select('*', { count: 'exact', head: true });
         
-        // تطبيق الفلاتر
-        const phone = document.getElementById('logPhoneSearch').value;
-        const ip = document.getElementById('logIPSearch').value;
-        const actionType = document.getElementById('logActionFilter').value;
-        const dateFrom = document.getElementById('logDateFrom').value;
-        const dateTo = document.getElementById('logDateTo').value;
-        
-        if (phone) {
-            query = query.ilike('phone', `%${phone}%`);
-        }
-        
-        if (ip) {
-            query = query.ilike('ip_address', `%${ip}%`);
-        }
-        
-        if (actionType) {
-            query = query.eq('action_type', actionType);
-        }
-        
-        if (dateFrom) {
-            query = query.gte('created_at', dateFrom + 'T00:00:00');
-        }
-        
-        if (dateTo) {
-            query = query.lte('created_at', dateTo + 'T23:59:59');
-        }
-        
-        const { data, error } = await query;
-        
-        Swal.close();
-        
-        if (error) {
-            console.error('خطأ في تحميل السجلات:', error);
-            Swal.fire("خطأ", "فشل تحميل السجلات: " + error.message, "error");
+        if (countError) {
+            console.error('❌ خطأ في العد:', countError);
+            showError(countError.message);
             return;
         }
         
+        console.log(`✅ عدد السجلات في الجدول: ${count}`);
+        
+        if (count === 0) {
+            document.getElementById('securityLogsResults').innerHTML = `
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> لا توجد سجلات استعلام في قاعدة البيانات
+                </div>
+            `;
+            return;
+        }
+        
+        // جلب البيانات مع جميع الأعمدة
+        const { data, error } = await db
+            .from('security_logs')
+            .select(`
+                id,
+                phone,
+                case_code,
+                case_id,
+                ip_address,
+                user_agent,
+                action_type,
+                is_success,
+                error_message,
+                country,
+                city,
+                details,
+                created_at,
+                updated_at
+            `)
+            .order('created_at', { ascending: false })
+            .limit(50);
+        
+        if (error) {
+            console.error('❌ خطأ في جلب البيانات:', error);
+            showError(error.message);
+            return;
+        }
+        
+        console.log(`✅ تم جلب ${data.length} سجل`);
+        
         displaySecurityLogs(data);
-        checkForBlockedIPs(data); // التحقق من عناوين IP المحظورة
+        refreshSecurityStats(); // تحديث الإحصائيات
+        
     } catch (err) {
-        Swal.close();
-        console.error('خطأ غير متوقع:', err);
-        Swal.fire("خطأ", "حدث خطأ غير متوقع أثناء تحميل السجلات", "error");
+        console.error('❌ خطأ غير متوقع:', err);
+        showError(err.message);
+    }
+}
+
+function showError(message) {
+    document.getElementById('securityLogsResults').innerHTML = `
+        <div class="alert alert-danger">
+            <h6><i class="bi bi-exclamation-triangle"></i> خطأ في تحميل البيانات</h6>
+            <p>${message}</p>
+            <button class="btn btn-sm btn-primary mt-2" onclick="testSecurityLogsDirect()">
+                <i class="bi bi-bug"></i> اختبار الاتصال المباشر
+            </button>
+        </div>
+    `;
+}
+
+// اختبار اتصال مباشر
+async function testSecurityLogsDirect() {
+    console.clear();
+    console.log('=== اختبار اتصال مباشر بـ security_logs ===');
+    
+    try {
+        // محاولة 1: جلب 5 سجلات بسيطة
+        console.log('1. محاولة جلب 5 سجلات...');
+        const { data, error } = await db
+            .from('security_logs')
+            .select('id, phone, action_type, created_at')
+            .limit(5)
+            .order('created_at', { ascending: false });
+        
+        if (error) {
+            console.error('❌ فشل الاستعلام:', error);
+            
+            // محاولة 2: جلب بدون ترتيب
+            console.log('2. محاولة استعلام أبسط...');
+            const { data: data2, error: error2 } = await db
+                .from('security_logs')
+                .select('id, phone')
+                .limit(3);
+            
+            if (error2) {
+                console.error('❌ فشل الاستعلام البسيط:', error2);
+                
+                // عرض تفاصيل الخطأ للمستخدم
+                Swal.fire({
+                    title: 'خطأ في الاتصال',
+                    html: `
+                        <div class="text-right">
+                            <p>فشل الاتصال بجدول security_logs:</p>
+                            <pre class="text-left bg-dark text-light p-2">${JSON.stringify(error2, null, 2)}</pre>
+                            <p class="mt-2">الرجاء التحقق من:</p>
+                            <ol>
+                                <li>سياسات RLS للجدول</li>
+                                <li>اسم الجدول وتهجئته</li>
+                                <li>صلاحيات المفتاح Anon</li>
+                            </ol>
+                        </div>
+                    `,
+                    width: 700
+                });
+                return;
+            }
+            
+            console.log('✅ نجاح الاستعلام البسيط:', data2);
+        } else {
+            console.log('✅ نجاح الاستعلام:', data);
+        }
+        
+        // عرض النتائج
+        if (data && data.length > 0) {
+            let html = `<div class="alert alert-success">
+                <h6>✅ تم الاتصال بنجاح</h6>
+                <p>تم العثور على ${data.length} سجل:</p>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الهاتف</th>
+                            <th>النشاط</th>
+                            <th>التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            
+            data.forEach((item, i) => {
+                html += `<tr>
+                    <td>${i+1}</td>
+                    <td>${item.phone || 'بدون'}</td>
+                    <td>${item.action_type || 'غير محدد'}</td>
+                    <td>${new Date(item.created_at).toLocaleString('ar-EG')}</td>
+                </tr>`;
+            });
+            
+            html += `</tbody></table></div>`;
+            
+            document.getElementById('securityLogsResults').innerHTML = html;
+            
+            // تحميل كل السجلات
+            setTimeout(() => loadSecurityLogs(), 2000);
+            
+        } else {
+            document.getElementById('securityLogsResults').innerHTML = `
+                <div class="alert alert-warning">
+                    <h6>⚠️ جدول security_logs فارغ</h6>
+                    <p>تم الاتصال بنجاح ولكن الجدول لا يحتوي على بيانات.</p>
+                    <button class="btn btn-sm btn-primary" onclick="addTestLogs()">
+                        <i class="bi bi-plus-circle"></i> إضافة بيانات اختبار
+                    </button>
+                </div>
+            `;
+        }
+        
+    } catch (err) {
+        console.error('❌ خطأ غير متوقع:', err);
+        document.getElementById('securityLogsResults').innerHTML = `
+            <div class="alert alert-danger">
+                <h6>❌ خطأ غير متوقع</h6>
+                <pre>${err.message}</pre>
+            </div>
+        `;
     }
 }
 
 // عرض سجلات الأمان
-function displaySecurityLogs(logs) {
+async function displaySecurityLogs(logs) {
     const container = document.getElementById('securityLogsResults');
     
     if (!logs || logs.length === 0) {
         container.innerHTML = `
-            <div class="text-center text-muted py-4">
-                <i class="bi bi-inbox" style="font-size: 2rem;"></i>
-                <p class="mt-2">لا توجد سجلات استعلام مطابقة لمعايير البحث</p>
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i> لا توجد بيانات لعرضها
             </div>
         `;
         return;
     }
     
+    // جلب أسماء العملاء من جدول cases إذا كان هناك case_id
+    const caseIds = logs.filter(log => log.case_id).map(log => log.case_id);
+    const clientNames = {};
+    
+    if (caseIds.length > 0) {
+        try {
+            const { data: casesData } = await db
+                .from('cases')
+                .select('id, client_name, case_number, case_year')
+                .in('id', [...new Set(caseIds)]);
+            
+            if (casesData) {
+                casesData.forEach(c => {
+                    clientNames[c.id] = {
+                        name: c.client_name,
+                        number: c.case_number,
+                        year: c.case_year
+                    };
+                });
+            }
+        } catch (err) {
+            console.warn('⚠️ لم يتم جلب أسماء العملاء:', err);
+        }
+    }
+    
     let html = `
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6>نتائج البحث (${logs.length} سجل)</h6>
-            <small class="text-muted">آخر تحديث: ${new Date().toLocaleTimeString('ar-EG')}</small>
+            <h6 class="mb-0">
+                <i class="bi bi-shield-lock"></i> سجلات الاستعلامات (${logs.length})
+            </h6>
+            <div>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="loadSecurityLogs()" title="تحديث">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteAllFailedLogs()" title="حذف المحاولات الفاشلة">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
         </div>
     `;
     
-    logs.forEach(log => {
-        const logDate = new Date(log.created_at);
-        const formattedDate = logDate.toLocaleDateString('ar-EG', {
-            weekday: 'long',
+    logs.forEach((log, index) => {
+        const date = new Date(log.created_at);
+        const formattedDate = date.toLocaleDateString('ar-EG', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -883,98 +1062,89 @@ function displaySecurityLogs(logs) {
             minute: '2-digit'
         });
         
-        // تحديد لون وشكل البادج حسب نوع النشاط
-        let actionClass = 'log-action-entry';
-        let actionText = 'قبول تحذير';
-        
-        switch(log.action_type) {
-            case 'entry_warning_accepted':
-                actionClass = 'log-action-success';
-                actionText = 'قبول تحذير';
-                break;
-            case 'entry_warning_rejected':
-                actionClass = 'log-action-warning';
-                actionText = 'رفض تحذير';
-                break;
-            case 'search_attempt':
-                actionClass = 'log-action-search';
-                actionText = 'محاولة بحث';
-                break;
-            case 'search_success':
-                actionClass = 'log-action-success';
-                actionText = 'بحث ناجح';
-                break;
-            case 'search_failed':
-                actionClass = 'log-action-error';
-                actionText = 'بحث فاشل';
-                break;
-            case 'search_error':
-                actionClass = 'log-action-error';
-                actionText = 'خطأ بحث';
-                break;
-            case 'session_started':
-                actionClass = 'log-action-success';
-                actionText = 'بدء جلسة';
-                break;
-            case 'session_ended':
-                actionClass = 'log-action-warning';
-                actionText = 'انتهاء جلسة';
-                break;
-            case 'print_request':
-                actionClass = 'log-action-search';
-                actionText = 'طلب طباعة';
-                break;
-            case 'whatsapp_click':
-                actionClass = 'log-action-success';
-                actionText = 'نقر واتساب';
-                break;
-            case 'email_click':
-                actionClass = 'log-action-success';
-                actionText = 'نقر إيميل';
-                break;
-            case 'appointment_request':
-                actionClass = 'log-action-success';
-                actionText = 'طلب موعد';
-                break;
+        // معلومات العميل إذا كانت متاحة
+        let clientInfo = '';
+        if (log.case_id && clientNames[log.case_id]) {
+            const client = clientNames[log.case_id];
+            clientInfo = `
+                <div class="mb-1">
+                    <strong><i class="bi bi-person"></i> العميل:</strong>
+                    <span class="ms-2">${client.name}</span>
+                </div>
+                <div class="mb-1">
+                    <strong>رقم القضية:</strong>
+                    <span class="ms-2">${client.number}/${client.year}</span>
+                </div>
+            `;
         }
         
-        // التحقق إذا كان IP محظوراً
-        const isBlocked = blockedIPsCache[log.ip_address] || false;
-        const ipBadge = isBlocked ? '<span class="blocked-ip-badge ms-2">محظور</span>' : '';
+        // حالة النجاح/الفشل
+        const statusBadge = log.is_success 
+            ? '<span class="badge bg-success">ناجح</span>' 
+            : '<span class="badge bg-danger">فاشل</span>';
+        
+        // زر حذف المحاولة الفاشلة
+        let deleteBtn = '';
+        if (!log.is_success) {
+            deleteBtn = `
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteSingleFailedLog('${log.id}')" title="حذف هذه المحاولة الفاشلة">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+        }
         
         html += `
-            <div class="security-log-card" onclick="viewSecurityLogDetails('${log.id}')">
+            <div class="security-log-card">
                 <div class="d-flex justify-content-between align-items-start">
                     <div style="flex-grow: 1;">
                         <div class="d-flex align-items-center mb-2">
-                            <span class="log-action-badge ${actionClass}">${actionText}</span>
-                            <span class="ms-2 ${log.is_success ? 'text-success' : 'text-danger'}">
-                                <i class="bi ${log.is_success ? 'bi-check-circle' : 'bi-x-circle'}"></i>
-                                ${log.is_success ? 'ناجح' : 'فاشل'}
+                            <span class="badge ${getActionBadgeClass(log.action_type)} me-2">
+                                ${getActionText(log.action_type)}
                             </span>
+                            ${statusBadge}
+                            ${deleteBtn}
                         </div>
-                        <div class="mb-2">
-                            <strong><i class="bi bi-phone"></i> رقم الهاتف:</strong> 
+                        
+                        <div class="mb-1">
+                            <strong><i class="bi bi-phone"></i> الهاتف:</strong>
                             <span class="ms-2">${log.phone || 'غير محدد'}</span>
                         </div>
-                        <div class="mb-2">
-                            <strong><i class="bi bi-hash"></i> كود القضية:</strong> 
+                        
+                        ${clientInfo}
+                        
+                        <div class="mb-1">
+                            <strong><i class="bi bi-hash"></i> كود القضية:</strong>
                             <span class="ms-2">${log.case_code || 'غير محدد'}</span>
                         </div>
+                        
+                        <div class="mb-1">
+                            <strong><i class="bi bi-globe"></i> IP:</strong>
+                            <span class="ms-2 log-ip-display">${log.ip_address || 'غير معروف'}</span>
+                        </div>
+                        
+                        ${log.country ? `
+                        <div class="mb-1">
+                            <strong><i class="bi bi-geo-alt"></i> الموقع:</strong>
+                            <span class="ms-2">${log.country}${log.city ? ` - ${log.city}` : ''}</span>
+                        </div>
+                        ` : ''}
+                        
+                        ${log.error_message ? `
+                        <div class="alert alert-danger p-2 mt-2 mb-0">
+                            <i class="bi bi-exclamation-triangle"></i> ${log.error_message}
+                        </div>
+                        ` : ''}
                     </div>
-                    <div class="text-left" style="min-width: 150px;">
+                    
+                    <div class="text-left" style="min-width: 200px;">
                         <small class="text-muted d-block">${formattedDate}</small>
                         <div class="mt-2">
-                            <span class="log-ip-display">${log.ip_address || 'غير معروف'}</span>
-                            ${ipBadge}
+                            <button class="btn btn-sm btn-outline-info w-100" onclick="viewLogDetails('${log.id}')">
+                                <i class="bi bi-eye"></i> التفاصيل
+                            </button>
                         </div>
                     </div>
                 </div>
-                ${log.error_message ? `
-                    <div class="alert alert-danger p-2 mt-2 mb-0" style="font-size: 0.8rem;">
-                        <i class="bi bi-exclamation-triangle"></i> ${log.error_message}
-                    </div>
-                ` : ''}
             </div>
         `;
     });
@@ -982,8 +1152,32 @@ function displaySecurityLogs(logs) {
     container.innerHTML = html;
 }
 
-// عرض تفاصيل سجل الأمان
-async function viewSecurityLogDetails(logId) {
+// دوال مساعدة
+function getActionBadgeClass(actionType) {
+    const classes = {
+        'search_success': 'bg-success',
+        'search_failed': 'bg-danger',
+        'search_error': 'bg-warning',
+        'entry_warning_accepted': 'bg-info',
+        'entry_warning_rejected': 'bg-dark'
+    };
+    return classes[actionType] || 'bg-secondary';
+}
+
+function getActionText(actionType) {
+    const texts = {
+        'entry_warning_accepted': 'قبول تحذير',
+        'entry_warning_rejected': 'رفض تحذير',
+        'search_attempt': 'محاولة بحث',
+        'search_success': 'بحث ناجح',
+        'search_failed': 'بحث فاشل',
+        'search_error': 'خطأ في البحث'
+    };
+    return texts[actionType] || actionType;
+}
+
+// عرض تفاصيل سجل
+async function viewLogDetails(logId) {
     try {
         const { data, error } = await db
             .from('security_logs')
@@ -1009,34 +1203,6 @@ async function viewSecurityLogDetails(logId) {
             second: '2-digit'
         });
         
-        const updatedDate = new Date(data.updated_at);
-        const formattedUpdatedDate = updatedDate.toLocaleDateString('ar-EG', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        
-        // ترجمة نوع النشاط
-        let actionText = data.action_type;
-        switch(data.action_type) {
-            case 'entry_warning_accepted': actionText = 'قبول تحذير الدخول'; break;
-            case 'entry_warning_rejected': actionText = 'رفض تحذير الدخول'; break;
-            case 'search_attempt': actionText = 'محاولة بحث'; break;
-            case 'search_success': actionText = 'بحث ناجح'; break;
-            case 'search_failed': actionText = 'بحث فاشل'; break;
-            case 'search_error': actionText = 'خطأ في البحث'; break;
-            case 'session_started': actionText = 'بدء جلسة'; break;
-            case 'session_ended': actionText = 'انتهاء جلسة'; break;
-            case 'print_request': actionText = 'طلب طباعة'; break;
-            case 'whatsapp_click': actionText = 'النقر على واتساب'; break;
-            case 'email_click': actionText = 'النقر على الإيميل'; break;
-            case 'appointment_request': actionText = 'طلب موعد'; break;
-        }
-        
         let detailsHtml = `
             <div class="security-log-details">
                 <div class="row mb-3">
@@ -1047,7 +1213,7 @@ async function viewSecurityLogDetails(logId) {
                     </div>
                     <div class="col-md-6">
                         <div class="alert alert-info">
-                            <strong>نوع النشاط:</strong> ${actionText}
+                            <strong>نوع النشاط:</strong> ${getActionText(data.action_type)}
                         </div>
                     </div>
                 </div>
@@ -1066,30 +1232,14 @@ async function viewSecurityLogDetails(logId) {
                         <div class="p-2 bg-light rounded">${data.ip_address || 'غير معروف'}</div>
                     </div>
                     <div class="col-md-6">
-                        <strong><i class="bi bi-person-badge"></i> وكيل المستخدم:</strong>
-                        <div class="p-2 bg-light rounded" style="font-size: 0.8rem; word-break: break-all;">${data.user_agent || 'غير معروف'}</div>
-                    </div>
-                </div>
-                
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <strong><i class="bi bi-geo-alt"></i> الدولة:</strong>
-                        <div class="p-2 bg-light rounded">${data.country || 'غير معروف'}</div>
-                    </div>
-                    <div class="col-md-6">
-                        <strong><i class="bi bi-geo"></i> المدينة:</strong>
-                        <div class="p-2 bg-light rounded">${data.city || 'غير معروف'}</div>
+                        <strong><i class="bi bi-geo-alt"></i> الموقع:</strong>
+                        <div class="p-2 bg-light rounded">${data.country || 'غير معروف'} ${data.city ? `- ${data.city}` : ''}</div>
                     </div>
                 </div>
                 
                 <div class="mb-3">
                     <strong><i class="bi bi-calendar"></i> وقت الإنشاء:</strong>
                     <div class="p-2 bg-light rounded">${formattedDate}</div>
-                </div>
-                
-                <div class="mb-3">
-                    <strong><i class="bi bi-calendar-check"></i> وقت التحديث:</strong>
-                    <div class="p-2 bg-light rounded">${formattedUpdatedDate}</div>
                 </div>
         `;
         
@@ -1111,14 +1261,11 @@ async function viewSecurityLogDetails(logId) {
             `;
         }
         
-        if (data.case_id) {
+        if (data.user_agent) {
             detailsHtml += `
                 <div class="mb-3">
-                    <strong><i class="bi bi-link"></i> معرف القضية:</strong>
-                    <div class="p-2 bg-light rounded">${data.case_id}</div>
-                    <button class="btn btn-sm btn-outline-primary mt-2" onclick="viewCaseFromLog('${data.case_id}')">
-                        <i class="bi bi-eye"></i> عرض القضية
-                    </button>
+                    <strong><i class="bi bi-person-badge"></i> وكيل المستخدم:</strong>
+                    <div class="log-details">${data.user_agent}</div>
                 </div>
             `;
         }
@@ -1135,31 +1282,6 @@ async function viewSecurityLogDetails(logId) {
     } catch (err) {
         console.error('خطأ في عرض تفاصيل السجل:', err);
         Swal.fire("خطأ", "حدث خطأ في عرض تفاصيل السجل", "error");
-    }
-}
-
-// عرض القضية من السجل
-async function viewCaseFromLog(caseId) {
-    try {
-        const { data, error } = await db
-            .from('cases')
-            .select('*')
-            .eq('id', caseId)
-            .single();
-        
-        if (error || !data) {
-            Swal.fire("خطأ", "لم يتم العثور على القضية", "error");
-            return;
-        }
-        
-        // إغلاق مودال السجل أولاً
-        bootstrap.Modal.getInstance(document.getElementById('securityLogModal')).hide();
-        
-        // فتح تفاصيل القضية
-        openCaseDetails(caseId);
-    } catch (err) {
-        console.error('خطأ في جلب القضية:', err);
-        Swal.fire("خطأ", "حدث خطأ في جلب القضية", "error");
     }
 }
 
@@ -1241,6 +1363,36 @@ async function deleteAllFailedLogs() {
         } catch (err) {
             Swal.close();
             Swal.fire("خطأ", "حدث خطأ أثناء حذف السجلات", "error");
+        }
+    }
+}
+
+// حذف محاولة فاشلة واحدة
+async function deleteSingleFailedLog(logId) {
+    const result = await Swal.fire({
+        title: 'هل أنت متأكد؟',
+        text: 'سيتم حذف هذه المحاولة الفاشلة فقط',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء'
+    });
+    
+    if (result.isConfirmed) {
+        try {
+            const { error } = await db
+                .from('security_logs')
+                .delete()
+                .eq('id', logId);
+            
+            if (error) {
+                Swal.fire('خطأ', error.message, 'error');
+            } else {
+                Swal.fire('تم', 'تم حذف المحاولة الفاشلة', 'success');
+                loadSecurityLogs(); // إعادة التحميل
+            }
+        } catch (err) {
+            Swal.fire('خطأ', err.message, 'error');
         }
     }
 }
@@ -1343,7 +1495,7 @@ async function exportSecurityLogsPDF() {
     }
 }
 
-// التحقق من عناوين IP المحظورة (5 محاولات فاشلة أو أكثر)
+// التحقق من عناوين IP المحظورة
 async function checkForBlockedIPs(logs) {
     if (!logs || logs.length === 0) {
         return [];
@@ -1380,36 +1532,36 @@ async function checkForBlockedIPs(logs) {
 async function refreshSecurityStats() {
     try {
         // إجمالي السجلات
-        const { count: totalLogs, error: totalError } = await db
+        const { count: totalLogs } = await db
             .from('security_logs')
             .select('*', { count: 'exact', head: true });
         
         // السجلات الفاشلة
-        const { count: failedLogs, error: failedError } = await db
+        const { count: failedLogs } = await db
             .from('security_logs')
             .select('*', { count: 'exact', head: true })
             .eq('is_success', false);
         
         // السجلات الناجحة
-        const { count: successfulLogs, error: successError } = await db
+        const { count: successfulLogs } = await db
             .from('security_logs')
             .select('*', { count: 'exact', head: true })
             .eq('is_success', true);
         
-        if (!totalError && !failedError && !successError) {
-            document.getElementById('totalLogs').textContent = totalLogs || 0;
-            document.getElementById('failedAttempts').textContent = failedLogs || 0;
-            document.getElementById('successfulSearches').textContent = successfulLogs || 0;
-            
-            // حساب عناوين IP المحظورة
-            const { data: allLogs } = await db
-                .from('security_logs')
-                .select('ip_address, is_success')
-                .not('ip_address', 'is', null);
-            
-            const blockedIPs = await checkForBlockedIPs(allLogs);
-            document.getElementById('blockedIPs').textContent = blockedIPs.length;
-        }
+        // عناوين IP فريدة
+        const { data: uniqueIPs } = await db
+            .from('security_logs')
+            .select('ip_address')
+            .not('ip_address', 'is', null);
+        
+        const uniqueIPCount = new Set(uniqueIPs.map(ip => ip.ip_address)).size;
+        
+        // تحديث العرض
+        document.getElementById('totalLogs').textContent = totalLogs || 0;
+        document.getElementById('failedAttempts').textContent = failedLogs || 0;
+        document.getElementById('successfulSearches').textContent = successfulLogs || 0;
+        document.getElementById('blockedIPs').textContent = uniqueIPCount;
+        
     } catch (err) {
         console.error('خطأ في تحديث الإحصائيات:', err);
     }
@@ -1798,9 +1950,6 @@ function showSessionSuccess() {
         timer: 2000
     });  
     loadUpcoming('week');  
-    
-    // إزالة استدعاء sendNotification الذي يسبب المشكلة
-    // sendNotification('تم تسجيل جلسة جديدة', 'تم إضافة جلسة جديدة إلى القضية');  
     
     // مسح الحقول
     document.getElementById('s_decision').value = '';

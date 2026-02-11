@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* جميع الأنماط كما هي - غير معدلة */
+        /* جميع الأنماط الأصلية كما هي - لم تتغير */
         * {
             margin: 0;
             padding: 0;
@@ -30,6 +30,7 @@
             padding: 0 20px;
         }
         
+        /* الهيدر - تم تعديل ترتيب العناصر */
         .header {
             background: rgba(0, 0, 0, 0.95);
             border-bottom: 2px solid #bf953f;
@@ -46,6 +47,7 @@
             flex-wrap: wrap;
         }
         
+        /* وضع اللوغو في اليمين */
         .logo {
             display: flex;
             align-items: center;
@@ -83,9 +85,11 @@
             font-weight: normal;
         }
         
+        /* زر الصفحة الرئيسية - في أقصى اليسار */
         .nav-buttons {
             display: flex;
             gap: 10px;
+            margin-right: auto; /* يدفع الزر إلى اليسار في الـ RTL */
         }
         
         .nav-btn {
@@ -110,6 +114,7 @@
             box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
         }
         
+        /* باقي الأنماط كما هي دون تغيير */
         .inquiry-container {
             min-height: calc(100vh - 150px);
             display: flex;
@@ -364,6 +369,12 @@
             margin-bottom: 8px;
         }
         
+        .contact-item span {
+            color: #cbd5e1;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+        
         .contact-link {
             color: #fcf6ba;
             text-decoration: none;
@@ -391,6 +402,10 @@
             gap: 6px;
             margin-top: 8px;
             font-weight: bold;
+        }
+        
+        .whatsapp-link:hover {
+            color: #fcf6ba;
         }
         
         .message {
@@ -661,6 +676,17 @@
         }
         
         @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .logo {
+                justify-content: center;
+                min-width: auto;
+            }
+            .nav-buttons {
+                margin-right: 0; /* إلغاء الدفع لليسار في الشاشات الصغيرة */
+            }
             .inquiry-box { padding: 20px; }
             .inquiry-box h1 { font-size: 24px; }
             .click-warning-content { padding: 20px; }
@@ -719,6 +745,7 @@
         <header class="header">
             <div class="container">
                 <nav class="navbar">
+                    <!-- اللوغو في اليمين (بداية السطر) -->
                     <a href="#" class="logo">
                         <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'">
                         <div class="logo-text">
@@ -726,6 +753,7 @@
                             <h2>المحامي بالنقض والدستورية العليا</h2>
                         </div>
                     </a>
+                    <!-- زر الصفحة الرئيسية في أقصى اليسار (باستخدام margin-right: auto) -->
                     <div class="nav-buttons">
                         <a href="#" class="nav-btn">
                             <i class="fas fa-home"></i> الصفحة الرئيسية
@@ -754,37 +782,39 @@
                         <p style="margin-top: 10px;"><i class="fas fa-clock"></i> الوقت المتبقي: <span id="blockTimeRemaining">15:00</span></p>
                     </div>
                     
-                    <!-- نموذج الاستعلام مع البادئات الثابتة -->
+                    <!-- نموذج الاستعلام مع البادئات في اليسار (تم عكس الترتيب) -->
                     <form id="inquiryForm">
+                        <!-- حقل رقم الهاتف - البادئة 20 في اليسار -->
                         <div class="form-group">
                             <label for="phone"><i class="fas fa-phone"></i> رقم هاتف العميل</label>
                             <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 2px solid rgba(191,149,63,0.3); border-radius: 10px; overflow: hidden;">
-                                <span style="padding: 15px; color: #bf953f; font-weight: bold; border-left: 2px solid rgba(191,149,63,0.3); background: rgba(0,0,0,0.2); white-space: nowrap;">20</span>
                                 <input type="tel" id="phone" class="form-control" 
-                                       style="border: none; background: transparent; padding-right: 0; border-radius: 0;"
+                                       style="border: none; background: transparent; padding-left: 0; border-radius: 0;"
                                        placeholder="أدخل بقية الرقم (مثال: 1101076000)" 
                                        inputmode="numeric"
                                        pattern="[0-9]*"
                                        required
                                        autocomplete="off"
                                        dir="ltr">
+                                <span style="padding: 15px; color: #bf953f; font-weight: bold; border-right: 2px solid rgba(191,149,63,0.3); background: rgba(0,0,0,0.2); white-space: nowrap;">20</span>
                             </div>
                             <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
                                 رقم الهاتف المسجل يبدأ بـ 20 ثم 10 أرقام (مثال: 201101076000)
                             </small>
                         </div>
                         
+                        <!-- حقل كود القضية - البادئة MA- في اليسار -->
                         <div class="form-group">
                             <label for="caseCode"><i class="fas fa-file-contract"></i> كود القضية</label>
                             <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 2px solid rgba(191,149,63,0.3); border-radius: 10px; overflow: hidden;">
-                                <span style="padding: 15px; color: #bf953f; font-weight: bold; border-left: 2px solid rgba(191,149,63,0.3); background: rgba(0,0,0,0.2); white-space: nowrap;">MA-</span>
                                 <input type="text" id="caseCode" class="form-control" 
-                                       style="border: none; background: transparent; padding-right: 0; border-radius: 0;"
+                                       style="border: none; background: transparent; padding-left: 0; border-radius: 0;"
                                        placeholder="أدخل الكود (مثال: 26001H7K8G9)" 
                                        autocapitalize="characters"
                                        required
                                        autocomplete="off"
                                        dir="ltr">
+                                <span style="padding: 15px; color: #bf953f; font-weight: bold; border-right: 2px solid rgba(191,149,63,0.3); background: rgba(0,0,0,0.2); white-space: nowrap;">MA-</span>
                             </div>
                             <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
                                 الكود يبدأ بـ MA- ثم الأرقام والحروف (مثال: MA-26001H7K8G9)
@@ -988,29 +1018,22 @@
             document.getElementById('loadingMessage').style.display = 'block';
 
             try {
-                // تسجيل القبول
                 await logSecurityEvent('entry_warning_accepted', true, null, {
                     user_action: 'accepted',
                     timestamp: new Date().toISOString()
                 });
 
-                // حفظ الموافقة
                 localStorage.setItem('legalWarningAccepted', 'true');
                 localStorage.setItem('warningAcceptedTime', new Date().toISOString());
 
-                // إخفاء نافذة التحذير
                 document.getElementById('dataWarningModal').style.display = 'none';
-                
-                // إظهار المحتوى الرئيسي
                 const mainContent = document.getElementById('mainContent');
                 mainContent.style.display = 'block';
 
-                // إخفاء رسالة التحميل بعد ثانية
                 setTimeout(() => {
                     document.getElementById('loadingMessage').style.display = 'none';
                 }, 1000);
 
-                // تركيز المؤشر على حقل الهاتف
                 setTimeout(() => {
                     document.getElementById('phone')?.focus();
                 }, 1200);
@@ -1047,12 +1070,12 @@
                 confirmButtonText: 'حسناً',
                 confirmButtonColor: '#bf953f'
             }).then(() => {
-                window.location.href = 'about:blank'; // أو أغلق الصفحة
+                window.location.href = 'about:blank';
             });
         };
 
         // ------------------------------------------------------------
-        //             إعداد البادئات الثابتة (MA- و 20)
+        //      إعداد البادئات الثابتة - معكوسة لأن البادئة في اليسار
         // ------------------------------------------------------------
         function setupInputPrefixes() {
             const caseInput = document.getElementById('caseCode');
@@ -1145,7 +1168,6 @@
                     return { success: false, message: '❌ لم يتم العثور على قضية مطابقة.' };
                 }
                 await logSecurityEvent('search_success', true, null, { case_id: data.id, case_code: data.case_code });
-                // جلب آخر جلسة
                 const { data: sessions, error: sessErr } = await supabaseClient
                     .from('sessions')
                     .select('*')
@@ -1282,7 +1304,7 @@
                 cancelButtonText: 'إلغاء'
             }).then((r) => {
                 if (r.isConfirmed) {
-                    window.print(); // طباعة بسيطة (يمكن تحسينها)
+                    window.print();
                 }
             });
         };
@@ -1310,7 +1332,6 @@
         //                      التهيئة عند تحميل الصفحة
         // ------------------------------------------------------------
         document.addEventListener('DOMContentLoaded', async function() {
-            // تفعيل زر الموافقة بناءً على checkbox
             const cb = document.getElementById('understandCheckbox');
             const acceptBtn = document.getElementById('acceptBtn');
             cb.addEventListener('change', function() {
@@ -1330,10 +1351,8 @@
                 return;
             }
 
-            // إعداد البادئات
             setupInputPrefixes();
 
-            // معالجة إرسال النموذج
             document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 if (isIPBlocked) {
@@ -1361,7 +1380,6 @@
                     displayResults(result.data, result.lastSession);
                 } else {
                     showError(result.message);
-                    // تحديث عداد المحاولات الفاشلة
                     await checkIPBlock();
                 }
 

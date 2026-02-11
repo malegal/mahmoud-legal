@@ -243,7 +243,7 @@
                     <div class="row g-3">  
                         <div class="col-md-12 mb-3">
                             <div class="admin-code-display">
-                                <strong>تنسيق كود القضية:</strong> MA-26-001-H7G4D9
+                                <strong>تنسيق كود القضية:</strong> MA-26001Y7U9K5
                                 <small class="text-muted d-block">(001 هو الرقم الإداري)</small>
                             </div>
                         </div>
@@ -799,14 +799,21 @@ function clearForm() {
     currentCaseId = null;  
 }  
 
-// دالة استخراج الرقم الإداري من كود القضية
+// دالة استخراج الرقم الإداري من كود القضية (معدلة)
 function extractAdminNumber(caseCode) {
     if (!caseCode) return null;
-    const parts = caseCode.split('-');
-    if (parts.length >= 3) {
-        return parts[2]; // الجزء الثالث هو الرقم الإداري (مثال: MA-26-001-H7G4D9 -> 001)
-    }
-    return null;
+    
+    // التنسيق القديم: MA-26-001-H7G4D9
+    const oldFormat = caseCode.match(/^[A-Z]+-\d{2}-(\d{3})-/);
+    if (oldFormat) return oldFormat[1];
+    
+    // التنسيق الجديد (الفعلي): MA-26001Y7U9K5
+    const newFormat = caseCode.match(/^[A-Z]+-(\d{2})(\d{3})/);
+    if (newFormat) return newFormat[2]; // الرقم الإداري
+    
+    // fallback: أي ثلاثة أرقام متتالية
+    const digits = caseCode.match(/\d{3}/);
+    return digits ? digits[0] : null;
 }
 
 // ============================
@@ -1579,10 +1586,10 @@ function resetLogFilters() {
 }
 
 // ============================
-// بقية الدوال الأصلية بدون تغيير
+// بقية الدوال الأصلية مع التعديلات المطلوبة
 // ============================
 
-// البحث عن قضايا بالرقم الإداري  
+// البحث عن قضايا بالرقم الإداري (معدلة)
 async function searchByAdminNumber(query) {  
     if (!query || query.length < 1) {  
         document.getElementById('caseSearchResults').style.display = 'none';  
@@ -1590,11 +1597,12 @@ async function searchByAdminNumber(query) {
     }  
   
     try {
-        // البحث في كود القضية بالرقم الإداري (الجزء الثالث)
+        // استخدام نمط: أي رقمين + الرقم الإداري (مثل __001)
+        const searchPattern = `%__${query}%`;
         const { data, error } = await db  
             .from('cases')  
             .select('*')  
-            .like('case_code', `%-${query}-%`)  
+            .ilike('case_code', searchPattern)  
             .limit(5);  
     
         if (error) {
@@ -1626,7 +1634,7 @@ async function searchByAdminNumber(query) {
     }
 }
 
-// البحث عن قضايا بالرقم الإداري في تبويب البحث
+// البحث عن قضايا بالرقم الإداري في تبويب البحث (معدلة)
 async function searchByAdminNumberInSearch() {
     const { value: adminNumber } = await Swal.fire({
         title: 'البحث بالرقم الإداري',
@@ -1647,11 +1655,12 @@ async function searchCasesByAdminNumber(adminNumber) {
     Swal.fire({title: 'جاري البحث...', didOpen: () => Swal.showLoading()});
     
     try {
-        // البحث في كود القضية بالرقم الإداري
+        // استخدام نفس نمط البحث
+        const searchPattern = `%__${adminNumber}%`;
         const { data, error } = await db
             .from('cases')
             .select('*')
-            .like('case_code', `%-${adminNumber}-%`);
+            .ilike('case_code', searchPattern);
         
         Swal.close();
         if (error) {

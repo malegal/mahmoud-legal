@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا | محمود عبد الحميد للمحاماة</title>
+    <!-- نفس المكتبات -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* نفس الأنماط + أنماط التبويبات */
+        .tab-btn.active { background: var(--gold-gradient) !important; color: black !important; }
+        .date-placeholder::placeholder { color: #9ca3af; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+
+<!-- هيدر مطابق مع إبراز رابط تواصل معنا -->
+<header class="fixed w-full z-[100] header-glass">...</header>
+<div id="mobile-menu" class="fixed inset-0 z-[110] p-10 lg:hidden">...</div>
+
+<section class="pt-40 pb-20 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+        <h2 class="text-4xl md:text-5xl font-black serif-font gold-text mb-6">تواصل معنا</h2>
+        <div class="w-32 h-1 bg-gradient-to-r from-transparent via-gold-solid to-transparent mx-auto mb-6"></div>
+        <p class="text-xl text-white/80">نحن على بعد خطوة واحدة منك .. اختر طريقة التواصل المناسبة</p>
+    </div>
+
+    <!-- رموز التواصل الاجتماعي -->
+    <div class="flex justify-center gap-8 my-10 text-3xl">
+        <a href="https://wa.me/201101076000" target="_blank" class="gold-text"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.facebook.com/malegal" target="_blank" class="gold-text"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="gold-text"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="gold-text"><i class="fab fa-twitter"></i></a>
+        <a href="mailto:ma.law.firm@outlook.com" class="gold-text"><i class="fas fa-envelope"></i></a>
+        <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="gold-text"><i class="fas fa-map-marker-alt"></i></a>
+    </div>
+
+    <!-- أزرار التبويب -->
+    <div class="bg-white/5 p-2 rounded-2xl mb-12 flex">
+        <button onclick="switchTab('consult')" id="btn-consult" class="tab-btn active flex-1 py-4 rounded-xl font-bold text-white transition-all">طلب استشارة قانونية</button>
+        <button onclick="switchTab('visit')" id="btn-visit" class="tab-btn flex-1 py-4 rounded-xl font-bold text-white transition-all">حجز موعد مقابلة</button>
+    </div>
+
+    <!-- نموذج الاستشارة -->
+    <div id="consult-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border">
+        <h3 class="text-2xl font-bold gold-text mb-6">نموذج الاستشارة السريعة</h3>
+        <form id="consultForm" class="space-y-6">
+            <input type="text" id="consultName" placeholder="الاسم بالكامل" class="w-full p-4 rounded-xl bg-white/5 text-white outline-none focus:border-gold-solid" required>
+            <input type="tel" id="consultPhone" placeholder="رقم الواتساب" class="w-full p-4 rounded-xl bg-white/5 text-white" required>
+            <textarea id="consultMessage" placeholder="اشرح استشارتك باختصار.." rows="5" class="w-full p-4 rounded-xl bg-white/5 text-white" required></textarea>
+            <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال عبر واتساب</button>
+        </form>
+    </div>
+
+    <!-- نموذج حجز موعد -->
+    <div id="visit-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border hidden">
+        <h3 class="text-2xl font-bold gold-text mb-6">حجز موعد في المكتب</h3>
+        <form id="visitForm" class="space-y-6">
+            <input type="text" id="visitName" placeholder="الاسم بالكامل" class="w-full p-4 rounded-xl bg-white/5 text-white" required>
+            <input type="tel" id="visitPhone" placeholder="رقم الهاتف" class="w-full p-4 rounded-xl bg-white/5 text-white" required>
+            <input type="date" id="visitDate" class="w-full p-4 rounded-xl bg-white/5 text-white date-placeholder" required>
+            <textarea id="visitReason" placeholder="سبب المقابلة" rows="3" class="w-full p-4 rounded-xl bg-white/5 text-white" required></textarea>
+            <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال طلب الحجز</button>
+        </form>
+    </div>
+</section>
+
+<footer>...</footer>
+
+<script>
+    // دوال التبويب
+    function switchTab(tab) {
+        const consultForm = document.getElementById('consult-form');
+        const visitForm = document.getElementById('visit-form');
+        const btnConsult = document.getElementById('btn-consult');
+        const btnVisit = document.getElementById('btn-visit');
+
+        if (tab === 'consult') {
+            consultForm.classList.remove('hidden');
+            visitForm.classList.add('hidden');
+            btnConsult.classList.add('active');
+            btnVisit.classList.remove('active');
+        } else {
+            visitForm.classList.remove('hidden');
+            consultForm.classList.add('hidden');
+            btnVisit.classList.add('active');
+            btnConsult.classList.remove('active');
+        }
+    }
+
+    // تحديد التبويب بناءً على معامل ?tab= في الرابط
+    window.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+        if (tabParam === 'visit') {
+            switchTab('visit');
+        } else {
+            switchTab('consult'); // الافتراضي
+        }
+
+        // تعيين الحد الأدنى للتاريخ
+        const today = new Date().toISOString().split('T')[0];
+        document.querySelectorAll('input[type="date"]').forEach(input => input.min = today);
+    });
+
+    // نماذج واتساب
+    document.getElementById('consultForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('consultName').value;
+        const msg = `طلب استشارة من: ${name}%0A${document.getElementById('consultMessage').value}`;
+        window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
+    });
+
+    document.getElementById('visitForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('visitName').value;
+        const date = document.getElementById('visitDate').value;
+        const msg = `طلب حجز موعد من: ${name}%0Aالتاريخ: ${date}`;
+        window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
+    });
+
+    // دوال القائمة الجانبية
+    function closeMenu() { /* كما في السابق */ }
+    // ... (كود القائمة)
+</script>
+</body>
+</html>

@@ -112,7 +112,7 @@
 
         .admin-toolbar {
             position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between;
-            align-items: center; padding: 12px 20px; background: rgba(0, 0, 0, 0.9);
+            align-items: center; padding: 12px 20px; background: rgba(0,  , 0, 0.9);
             backdrop-filter: blur(10px); border-bottom: 2px solid rgba(191,149,63,0.3);
             z-index: 1100; height: var(--header-height);
         }
@@ -385,8 +385,121 @@
     </div>
 </div>
 
-<!-- مودالات (نفسها بدون تغيير) -->
-<!-- ... (نفس المودالات السابقة) ... -->
+<!-- مودال تفاصيل القضية -->
+<div class="modal fade" id="caseModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-white/10">
+                <h5 class="modal-title gold-text serif-font">ملف القضية الكامل</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="caseDetails"></div>
+            <div class="modal-footer border-white/10">
+                <button class="gold-btn px-4 py-2" onclick="printCasePDF()"><i class="bi bi-printer"></i> طباعة PDF</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال تعديل القضية -->
+<div class="modal fade" id="editCaseModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-white/10">
+                <h5 class="modal-title gold-text serif-font">تعديل القضية</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="editCaseBody">
+                <form id="editCaseForm">
+                    <div class="row g-3">
+                        <div class="col-md-4"><label class="text-xs text-white">اسم العميل</label><input id="edit_client_name" class="form-control" required></div>
+                        <div class="col-md-4"><label class="text-xs text-white">هاتف العميل</label><input id="edit_client_phone" class="form-control" required></div>
+                        <div class="col-md-4"><label class="text-xs text-white">إيميل العميل</label><input type="email" id="edit_client_email" class="form-control"></div>
+                        <div class="col-md-4"><label class="text-xs text-white">صفة العميل</label>
+                            <select id="edit_client_role" class="form-select" required>
+                                <option>مدعي</option><option>مدعى عليه</option><option>مستأنف</option><option>مستأنف ضده</option>
+                                <option>طاعن</option><option>مطعون ضده</option><option>مجني عليه</option><option>متهم</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><label class="text-xs text-white">الخصم</label><input id="edit_opponent_name" class="form-control"></div>
+                        <div class="col-md-4"><label class="text-xs text-white">رقم القضية</label><input id="edit_case_number" class="form-control" required></div>
+                        <div class="col-md-4"><label class="text-xs text-white">سنة القضية</label><input id="edit_case_year" class="form-control" required></div>
+                        <div class="col-md-4"><label class="text-xs text-white">المحكمة</label>
+                            <select id="edit_court_name" class="form-select" required>
+                                <option>محكمة الأسرة</option><option>المحكمة الجزئية</option><option>المحكمة الابتدائية</option>
+                                <option>محكمة الاستئناف</option><option>المحكمة العمالية</option><option>المحكمة الاقتصادية</option>
+                                <option>المحكمة الإدارية</option><option>محكمة القضاء الإداري</option><option>المحكمة الإدارية العليا</option>
+                                <option>محكمة النقض</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><label class="text-xs text-white">الدائرة</label><input id="edit_circle" class="form-control"></div>
+                        <div class="col-md-6"><label class="text-xs text-white">نوع القضية</label>
+                            <select id="edit_case_type" class="form-select" required>
+                                <option value="مدنية">مدنية</option><option value="جنائية">جنائية</option><option value="تجارية">تجارية</option>
+                                <option value="عمالية">عمالية</option><option value="أحوال شخصية">أحوال شخصية</option>
+                                <option value="إدارية">إدارية</option><option value="دستورية">دستورية</option><option value="ضريبية">ضريبية</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12"><label class="text-xs text-white">الموضوع</label><textarea id="edit_case_subject" class="form-control" rows="2"></textarea></div>
+                        <div class="col-md-12"><label class="text-xs text-white">ملاحظات</label><textarea id="edit_notes" class="form-control" rows="2"></textarea></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-white/10">
+                <button class="btn btn-success" onclick="updateCase()">تحديث</button>
+                <button class="btn btn-danger" onclick="confirmDeleteCase()">حذف القضية</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال تعديل الجلسة -->
+<div class="modal fade" id="editSessionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-white/10">
+                <h5 class="modal-title gold-text serif-font">تعديل الجلسة</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editSessionForm">
+                    <div class="mb-3"><label class="text-xs text-white">تاريخ الجلسة</label><input type="datetime-local" id="edit_session_date" class="form-control" required></div>
+                    <div class="mb-3"><label class="text-xs text-white">القرار</label><textarea id="edit_decision" class="form-control" rows="3"></textarea></div>
+                    <div class="mb-3"><label class="text-xs text-white">حالة القضية</label>
+                        <select id="edit_session_case_status" class="form-select">
+                            <option value="جديدة">جديدة</option><option value="مؤجلة">مؤجلة</option><option value="مشطوبة">مشطوبة</option>
+                            <option value="موقوفة">موقوفة</option><option value="محجوزة للحكم">محجوزة للحكم</option><option value="محكوم فيها">محكوم فيها</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-white/10">
+                <button class="btn btn-success" onclick="updateSession()">تحديث</button>
+                <button class="btn btn-danger" onclick="confirmDeleteSession()">حذف الجلسة</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- مودال تفاصيل سجل الأمان -->
+<div class="modal fade" id="securityLogModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-white/10">
+                <h5 class="modal-title gold-text serif-font">تفاصيل سجل الاستعلام</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="securityLogDetails"></div>
+            <div class="modal-footer border-white/10">
+                <button class="btn btn-danger" onclick="deleteSecurityLog()" id="deleteLogBtn">حذف السجل</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     // ========== إعدادات Supabase ==========
@@ -468,24 +581,31 @@
 
     // ========== الإحصائيات (مأخوذة من v1) ==========
     async function loadStats() {
-        const { count: cCount } = await db.from('cases').select('*', { count: 'exact', head: true });
-        document.getElementById('stat-cases').innerText = cCount || 0;
-        const { count: sCount } = await db.from('sessions').select('*', { count: 'exact', head: true });
-        document.getElementById('stat-total-s').innerText = sCount || 0;
-        
-        // عدد العملاء الفريدين (بناءً على اسم العميل - يمكن تحسينه)
-        const { data: clients } = await db.from('cases').select('client_name');
-        const uniqueClients = new Set(clients.map(c => c.client_name)).size;
-        document.getElementById('stat-clients').innerText = uniqueClients || 0;
-        
-        // عدد الجلسات القادمة خلال 7 أيام
-        const now = new Date();
-        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).toISOString();
-        const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 23, 59, 59).toISOString();
-        const { count: upcoming } = await db.from('sessions').select('*', { count: 'exact', head: true })
-            .gte('session_date', startOfDay)
-            .lte('session_date', endOfWeek);
-        document.getElementById('stat-sessions').innerText = upcoming || 0;
+        try {
+            // إجمالي القضايا
+            const { count: cCount } = await db.from('cases').select('*', { count: 'exact', head: true });
+            document.getElementById('stat-cases').innerText = cCount || 0;
+            
+            // إجمالي الجلسات
+            const { count: sCount } = await db.from('sessions').select('*', { count: 'exact', head: true });
+            document.getElementById('stat-total-s').innerText = sCount || 0;
+            
+            // عدد العملاء الفريدين (أسماء فريدة)
+            const { data: clients } = await db.from('cases').select('client_name');
+            const uniqueClients = new Set(clients?.map(c => c.client_name)).size;
+            document.getElementById('stat-clients').innerText = uniqueClients || 0;
+            
+            // عدد الجلسات القادمة خلال 7 أيام
+            const now = new Date();
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).toISOString();
+            const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 23, 59, 59).toISOString();
+            const { count: upcoming } = await db.from('sessions').select('*', { count: 'exact', head: true })
+                .gte('session_date', startOfDay)
+                .lte('session_date', endOfWeek);
+            document.getElementById('stat-sessions').innerText = upcoming || 0;
+        } catch (err) {
+            console.error('خطأ في تحميل الإحصائيات:', err);
+        }
     }
 
     // ========== دوال استخراج الرقم الإداري ==========

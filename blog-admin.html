@@ -5,13 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>إدارة المدونة | محمود عبد الحميد للمحاماة</title>
     
-    <!-- Quill Editor -->
+    <!-- Quill Editor مع الإضافات -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- خطوط إضافية للتحرير -->
+    <style>
+        /* خطوط للمحرر */
+        .ql-font-tajawal { font-family: 'Tajawal', sans-serif; }
+        .ql-font-amiri { font-family: 'Amiri', serif; }
+        .ql-font-arial { font-family: Arial, sans-serif; }
+        .ql-font-traditional { font-family: 'Traditional Arabic', 'Tahoma', sans-serif; }
+        
+        /* أحجام الخطوط */
+        .ql-size-small { font-size: 0.75em; }
+        .ql-size-large { font-size: 1.5em; }
+        .ql-size-huge { font-size: 2.5em; }
+    </style>
     
     <style>
         /* ===== الأنماط الموحدة للموقع ===== */
@@ -20,7 +34,6 @@
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
             --gold-solid: #bf953f;
             --gold-glow: rgba(191, 149, 63, 0.5);
-            --header-height: 90px;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -91,36 +104,6 @@
         
         .whatsapp-float:hover { transform: scale(1.1); }
         
-        #mobile-menu { 
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
-            transform: translateX(100%); 
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.95);
-        }
-        
-        #mobile-menu.active { transform: translateX(0); }
-        
-        .header-glass {
-            background: rgba(0, 0, 0, 0.95) !important;
-            backdrop-filter: blur(20px);
-            border-bottom: 2px solid var(--gold-solid);
-            box-shadow: 0 5px 30px rgba(191, 149, 63, 0.3);
-        }
-        
-        .track-case-btn { 
-            background: transparent; 
-            border: 2px solid var(--gold-solid); 
-            color: white; 
-            font-weight: 600; 
-            transition: all 0.3s ease; 
-        }
-        
-        .track-case-btn:hover { 
-            background: var(--gold-gradient); 
-            color: #1a1a1a; 
-            border-color: transparent; 
-        }
-        
         /* الإطار الذهبي */
         .gold-border {
             position: relative;
@@ -145,16 +128,17 @@
             pointer-events: none;
         }
         
-        /* أنماط Quill Editor */
+        /* أنماط Quill Editor - متطورة */
         .ql-container {
             background: rgba(255,255,255,0.05);
             border-radius: 0 0 1rem 1rem;
-            height: 350px;
+            height: 400px;
             color: white;
             font-size: 16px;
             text-align: right;
             border: 1px solid rgba(191,149,63,0.2);
             border-top: none;
+            direction: rtl;
         }
         
         .ql-toolbar {
@@ -162,6 +146,9 @@
             border: 1px solid rgba(191,149,63,0.3);
             border-radius: 1rem 1rem 0 0;
             border-bottom: none;
+            direction: rtl;
+            display: flex;
+            flex-wrap: wrap;
         }
         
         .ql-toolbar .ql-picker-label,
@@ -175,6 +162,10 @@
             color: var(--gold-solid);
         }
         
+        .ql-toolbar .ql-picker.ql-expanded .ql-picker-label {
+            color: var(--gold-solid);
+        }
+        
         .ql-editor.ql-blank::before {
             color: rgba(255,255,255,0.3);
             right: 15px;
@@ -184,8 +175,20 @@
         
         .ql-editor {
             color: white;
+            direction: rtl;
+            text-align: right;
+            font-family: 'Tajawal', sans-serif;
         }
         
+        /* ألوان النص في المحرر */
+        .ql-editor .ql-color-white { color: white; }
+        .ql-editor .ql-color-red { color: #ef4444; }
+        .ql-editor .ql-color-green { color: #10b981; }
+        .ql-editor .ql-color-blue { color: #3b82f6; }
+        .ql-editor .ql-color-yellow { color: #f59e0b; }
+        .ql-editor .ql-color-gold { color: #bf953f; }
+        
+        /* بطاقات المقالات */
         .article-card {
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
@@ -207,25 +210,100 @@
         }
         
         @media (max-width: 768px) {
-            .header-glass nav { padding: 10px 15px !important; }
-            .logo img { width: 80px !important; height: 80px !important; }
-            .nav-buttons { display: flex !important; flex-direction: column !important; width: 100% !important; }
-            .nav-buttons a { width: 100% !important; text-align: center !important; }
-            .ql-container { height: 250px; }
+            .ql-container { height: 300px; }
         }
         
         .enhanced-image { transition: transform 0.5s ease, filter 0.3s ease; filter: brightness(0.9) contrast(1.1); }
         .enhanced-image:hover { transform: scale(1.02); filter: brightness(1) contrast(1.2); }
         
-        /* ===== حل مشكلة تغطية الهيدر ===== */
-        .admin-main {
-            padding-top: calc(var(--header-height) + 20px);
+        /* ===== شريط الأدوات العلوي البسيط ===== */
+        .admin-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(191,149,63,0.3);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
         
-        @media (max-width: 768px) {
-            .admin-main {
-                padding-top: calc(var(--header-height) + 10px);
-            }
+        .menu-button {
+            background: transparent;
+            border: 1px solid rgba(191,149,63,0.5);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .menu-button:hover {
+            background: rgba(191,149,63,0.2);
+            border-color: var(--gold-solid);
+            color: var(--gold-solid);
+        }
+        
+        .menu-dropdown {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191,149,63,0.3);
+            border-radius: 1rem;
+            padding: 10px 0;
+            width: 220px;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .menu-dropdown.show {
+            display: block;
+        }
+        
+        .menu-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            border-right: 3px solid transparent;
+        }
+        
+        .menu-dropdown a:hover {
+            background: rgba(191,149,63,0.1);
+            border-right-color: var(--gold-solid);
+            color: var(--gold-solid);
+        }
+        
+        .connection-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(239,68,68,0.1);
+            padding: 6px 16px;
+            border-radius: 2rem;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+        
+        .connection-indicator.connected {
+            background: rgba(16,185,129,0.1);
+            border-color: rgba(16,185,129,0.3);
+        }
+        
+        .admin-main {
+            padding-top: 20px;
         }
     </style>
 </head>
@@ -235,69 +313,6 @@
 <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float">
     <i class="fab fa-whatsapp"></i>
 </a>
-
-<!-- ===== الهيدر الموحد (مطابق لباقي الصفحات) ===== -->
-<header class="fixed w-full z-[100] header-glass">
-    <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-            <a href="index.html"><img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-28 h-28 object-contain"></a>
-            <div class="flex flex-col leading-tight">
-                <a href="index.html"><h1 class="font-bold gold-text serif-font whitespace-nowrap text-3xl">محمود عبد الحميد</h1></a>
-                <p class="text-gray-300 font-bold text-xs">المحامي بالنقض والدستورية العليا</p>
-            </div>
-        </div>
-        <div class="hidden lg:flex items-center gap-8 font-bold text-sm">
-            <a href="about.html" class="text-white hover:gold-text transition">عن المؤسسة</a>
-            <a href="index.html#why-us" class="text-white hover:gold-text transition">لماذا تختارنا</a>
-            <a href="specialties.html" class="text-white hover:gold-text transition">تخصصاتنا</a>
-            <a href="about.html#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
-            <a href="contact.html" class="text-white hover:gold-text transition">تواصل معنا</a>
-            <a href="blog.html" class="text-white hover:gold-text transition">المدونة</a>
-            <a href="blog-admin.html" class="gold-text transition">إدارة المدونة</a>
-            <div class="nav-buttons flex items-center gap-2">
-                <a href="client-inquiry.html" class="track-case-btn px-4 py-2.5 rounded-lg text-xs flex items-center gap-2">
-                    <i class="fas fa-search"></i> تابع قضيتك
-                </a>
-                <a href="contact.html?tab=consult" class="gold-btn px-4 py-2.5 rounded-lg text-xs">طلب استشارة فورية</a>
-                <a href="contact.html?tab=visit" class="px-4 py-2.5 border border-white/20 rounded-lg hover:bg-white/10 transition text-white text-xs">
-                    حجز موعد مقابلة
-                </a>
-            </div>
-        </div>
-        <button id="menu-toggle" class="lg:hidden text-2xl gold-text">
-            <i class="fas fa-bars-staggered"></i>
-        </button>
-    </nav>
-</header>
-
-<!-- ===== القائمة الجانبية للموبايل ===== -->
-<div id="mobile-menu" class="fixed inset-0 z-[110] p-10 lg:hidden">
-    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
-        <i class="fas fa-times"></i>
-    </button>
-    <div class="flex flex-col gap-8 mt-20 text-2xl font-bold">
-        <a href="index.html" onclick="closeMenu()" class="gold-text">الرئيسية</a>
-        <a href="about.html" onclick="closeMenu()" class="gold-text">عن المؤسسة</a>
-        <a href="index.html#why-us" onclick="closeMenu()" class="gold-text">لماذا تختارنا</a>
-        <a href="specialties.html" onclick="closeMenu()" class="gold-text">تخصصاتنا</a>
-        <a href="about.html#vision" onclick="closeMenu()" class="gold-text">الرؤية والأهداف</a>
-        <a href="contact.html" onclick="closeMenu()" class="gold-text">تواصل معنا</a>
-        <a href="blog.html" onclick="closeMenu()" class="gold-text">المدونة</a>
-        <a href="blog-admin.html" onclick="closeMenu()" class="gold-text">إدارة المدونة</a>
-        <div class="flex flex-col gap-4 mt-4">
-            <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg text-center">
-                <i class="fas fa-search mr-2"></i> تابع قضيتك
-            </a>
-            <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg text-center">
-                <i class="fas fa-comments mr-2"></i> طلب استشارة فورية
-            </a>
-            <a href="contact.html?tab=visit" onclick="closeMenu()" 
-               class="py-3 border border-white/20 rounded-xl hover:bg-white/10 transition text-white text-lg text-center">
-                <i class="fas fa-calendar-check mr-2"></i> حجز موعد مقابلة
-            </a>
-        </div>
-    </div>
-</div>
 
 <!-- ===== شاشة القفل ===== -->
 <div id="lock-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex items-center justify-center p-6">
@@ -316,7 +331,33 @@
 <!-- ===== محتوى الإدارة (يظهر بعد إدخال كلمة السر الصحيحة) ===== -->
 <div id="admin-content" class="hidden">
 
-    <!-- المحتوى الرئيسي مع مسافة علوية مناسبة -->
+    <!-- ===== شريط الأدوات العلوي: زر القائمة + مؤشر الاتصال ===== -->
+    <div class="admin-toolbar">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="menu-button" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+                <span class="hidden sm:inline">القائمة</span>
+            </div>
+            <!-- القائمة المنسدلة -->
+            <div id="nav-menu" class="menu-dropdown">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="about.html"><i class="fas fa-building"></i> عن المؤسسة</a>
+                <a href="specialties.html"><i class="fas fa-gavel"></i> تخصصاتنا</a>
+                <a href="contact.html"><i class="fas fa-headset"></i> تواصل معنا</a>
+                <a href="blog.html"><i class="fas fa-newspaper"></i> المدونة</a>
+                <a href="blog-admin.html"><i class="fas fa-cog"></i> إدارة المدونة</a>
+            </div>
+            <div class="text-white/70 text-sm hidden md:block">
+                <span class="font-bold gold-text">محمود عبد الحميد</span> - لوحة الإدارة
+            </div>
+        </div>
+        <div id="connection-indicator" class="connection-indicator">
+            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+            <span class="text-xs text-red-500 font-bold uppercase tracking-wider">غير متصل</span>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
     <main class="admin-main max-w-6xl mx-auto p-4 md:p-8">
         
         <!-- رأس لوحة التحكم -->
@@ -324,10 +365,6 @@
             <div>
                 <h1 class="text-3xl md:text-4xl font-black serif-font gold-text">إدارة المدونة</h1>
                 <p class="text-white/60 text-sm">إضافة وتعديل وحذف المقالات القانونية</p>
-            </div>
-            <div id="connection-indicator" class="flex items-center gap-2 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
-                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                <span class="text-xs text-red-500 font-bold uppercase tracking-wider">غير متصل</span>
             </div>
         </div>
 
@@ -367,7 +404,7 @@
                     </div>
                 </div>
                 
-                <!-- محرر النصوص Quill -->
+                <!-- محرر النصوص Quill المتطور -->
                 <div id="editor-container" class="mb-6">
                     <div id="editor"></div>
                 </div>
@@ -387,7 +424,7 @@
             </div>
         </section>
 
-        <!-- قائمة المقالات الحالية (مع أزرار التعديل والحذف) -->
+        <!-- قائمة المقالات الحالية -->
         <section>
             <h3 class="text-2xl font-bold mb-6 flex items-center gap-2 gold-text">
                 <i class="fas fa-folder-open"></i> المقالات المنشورة
@@ -432,29 +469,18 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 <script>
-    // ===== دوال القائمة الجانبية =====
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuToggle = document.getElementById('menu-toggle');
-    const menuClose = document.getElementById('menu-close');
-
-    function closeMenu() {
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = '';
+    // ===== قائمة التنقل =====
+    function toggleMenu() {
+        document.getElementById('nav-menu').classList.toggle('show');
     }
-
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-    }
-
-    if (menuClose) {
-        menuClose.addEventListener('click', closeMenu);
-    }
-
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-        link.addEventListener('click', closeMenu);
+    
+    // إغلاق القائمة عند النقر خارجها
+    window.addEventListener('click', function(e) {
+        const menu = document.getElementById('nav-menu');
+        const button = document.querySelector('.menu-button');
+        if (!button.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove('show');
+        }
     });
 
     // ===== كلمة المرور للدخول =====
@@ -468,17 +494,37 @@
         }
     }
 
-    // ===== إعداد محرر Quill =====
+    // ===== إعداد محرر Quill مع أدوات متقدمة =====
+    var Font = Quill.import('formats/font');
+    Font.whitelist = ['tajawal', 'amiri', 'arial', 'traditional'];
+    Quill.register(Font, true);
+    
+    var Size = Quill.import('attributors/style/size');
+    Size.whitelist = ['0.75em', '1em', '1.5em', '2.5em'];
+    Quill.register(Size, true);
+    
     var quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
-            toolbar: [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'direction': 'rtl' }],
-                ['link', 'image', 'clean']
-            ]
+            toolbar: {
+                container: [
+                    [{ 'direction': 'rtl' }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'font': ['tajawal', 'amiri', 'arial', 'traditional'] }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'color': ['#ffffff', '#ef4444', '#10b981', '#3b82f6', '#f59e0b', '#bf953f', '#000000'] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['link', 'image', 'clean']
+                ],
+                handlers: {
+                    direction: function(value) {
+                        this.quill.format('direction', value);
+                        this.quill.format('align', value === 'rtl' ? 'right' : 'left');
+                    }
+                }
+            }
         },
         placeholder: 'اكتب محتوى المقال القانوني هنا...',
         direction: 'rtl'
@@ -508,7 +554,6 @@
 
         const path = `blog/articles/${name.endsWith('.md') ? name : name + '.md'}`;
         
-        // هيكل ملف Markdown مع صورة مميزة
         const mdContent = `---
 title: ${title}
 image: ${imageUrl}
@@ -551,7 +596,7 @@ ${content}`;
         }
     }
 
-    // ===== تحميل قائمة المقالات الحالية (مع أزرار تعديل وحذف) =====
+    // ===== تحميل قائمة المقالات الحالية =====
     async function loadExistingArticles() {
         const token = document.getElementById('ghToken').value;
         if (!token) return;
@@ -585,7 +630,6 @@ ${content}`;
                 const card = document.createElement('div');
                 card.className = 'article-card p-5 rounded-2xl gold-border';
                 
-                // استخراج عنوان المقال من اسم الملف
                 const titleFromFile = decodeURIComponent(file.name.replace('.md', '').replace(/-/g, ' '));
                 
                 card.innerHTML = `
@@ -612,13 +656,11 @@ ${content}`;
                 list.appendChild(card);
             });
 
-            // تحديث مؤشر الاتصال
             const indicator = document.getElementById('connection-indicator');
-            indicator.className = 'flex items-center gap-2 bg-green-500/10 px-4 py-2 rounded-full border border-green-500/20';
+            indicator.className = 'connection-indicator connected';
             indicator.innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span><span class="text-xs text-green-500 font-bold uppercase">متصل</span>';
         } catch (e) {
             console.error(e);
-            // في حالة الخطأ نترك المؤشر كما هو
         }
     }
 
@@ -637,13 +679,10 @@ ${content}`;
             const data = await res.json();
             const rawContent = decodeURIComponent(escape(atob(data.content)));
             
-            // استخراج البيانات من الـ Front Matter
             const titleMatch = rawContent.match(/^title: (.*)\n/m);
             const imageMatch = rawContent.match(/^image: (.*)\n/m);
             
-            // استخراج المحتوى بعد الـ Front Matter
             let body = rawContent;
-            // إزالة الـ Front Matter
             if (rawContent.startsWith('---')) {
                 const parts = rawContent.split('\n---\n');
                 if (parts.length >= 3) {
@@ -656,7 +695,6 @@ ${content}`;
             document.getElementById('fileName').value = data.name.replace('.md', '');
             document.getElementById('fileName').disabled = true;
             
-            // تنظيف محتوى Quill ثم إدراج المحتوى
             quill.root.innerHTML = body;
             
             isEditing = true;

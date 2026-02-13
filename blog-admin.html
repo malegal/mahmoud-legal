@@ -70,12 +70,6 @@
             box-shadow: 0 10px 30px rgba(191, 149, 63, 0.2);
         }
         
-        .black-border-card { 
-            border: 2px solid #000000; 
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px); 
-        }
-        
         .whatsapp-float { 
             position: fixed; 
             bottom: 30px; 
@@ -205,15 +199,34 @@
             box-shadow: 0 10px 20px rgba(191,149,63,0.15);
         }
         
+        .line-clamp-2 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
         @media (max-width: 768px) {
             .header-glass nav { padding: 10px 15px !important; }
             .logo img { width: 80px !important; height: 80px !important; }
             .nav-buttons { display: flex !important; flex-direction: column !important; width: 100% !important; }
             .nav-buttons a { width: 100% !important; text-align: center !important; }
+            .ql-container { height: 250px; }
         }
         
         .enhanced-image { transition: transform 0.5s ease, filter 0.3s ease; filter: brightness(0.9) contrast(1.1); }
         .enhanced-image:hover { transform: scale(1.02); filter: brightness(1) contrast(1.2); }
+        
+        /* ===== حل مشكلة تغطية الهيدر ===== */
+        .admin-main {
+            padding-top: calc(var(--header-height) + 20px);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-main {
+                padding-top: calc(var(--header-height) + 10px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -286,7 +299,7 @@
     </div>
 </div>
 
-<!-- ===== شاشة القفل (مصممة بشكل أنيق) ===== -->
+<!-- ===== شاشة القفل ===== -->
 <div id="lock-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex items-center justify-center p-6">
     <div class="card-glass gold-border p-8 max-w-md w-full text-center">
         <i class="fas fa-shield-halved text-6xl gold-text mb-6"></i>
@@ -303,10 +316,8 @@
 <!-- ===== محتوى الإدارة (يظهر بعد إدخال كلمة السر الصحيحة) ===== -->
 <div id="admin-content" class="hidden">
 
-    <!-- مساحة بادئة للهيدر الثابت -->
-    <div class="h-24"></div>
-
-    <main class="max-w-6xl mx-auto p-4 md:p-8">
+    <!-- المحتوى الرئيسي مع مسافة علوية مناسبة -->
+    <main class="admin-main max-w-6xl mx-auto p-4 md:p-8">
         
         <!-- رأس لوحة التحكم -->
         <div class="flex flex-wrap justify-between items-center mb-8">
@@ -376,13 +387,17 @@
             </div>
         </section>
 
-        <!-- قائمة المقالات الحالية -->
+        <!-- قائمة المقالات الحالية (مع أزرار التعديل والحذف) -->
         <section>
             <h3 class="text-2xl font-bold mb-6 flex items-center gap-2 gold-text">
                 <i class="fas fa-folder-open"></i> المقالات المنشورة
             </h3>
             <div id="articles-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- سيتم ملؤها عبر JavaScript -->
+                <div class="text-center py-12 col-span-3 text-white/50">
+                    <i class="fas fa-newspaper text-4xl mb-3 opacity-50"></i>
+                    <p>أدخل التوكن أولاً لتحميل المقالات</p>
+                </div>
             </div>
         </section>
     </main>
@@ -536,7 +551,7 @@ ${content}`;
         }
     }
 
-    // ===== تحميل قائمة المقالات الحالية =====
+    // ===== تحميل قائمة المقالات الحالية (مع أزرار تعديل وحذف) =====
     async function loadExistingArticles() {
         const token = document.getElementById('ghToken').value;
         if (!token) return;
@@ -554,22 +569,33 @@ ${content}`;
             const list = document.getElementById('articles-list');
             list.innerHTML = '';
 
-            if (files.length === 0) {
+            if (!Array.isArray(files) || files.length === 0) {
                 list.innerHTML = '<p class="text-white/50 text-center py-12 col-span-3">لا توجد مقالات منشورة بعد.</p>';
                 return;
             }
 
-            files.filter(f => f.name.endsWith('.md')).forEach(file => {
+            const mdFiles = files.filter(f => f.name.endsWith('.md'));
+            
+            if (mdFiles.length === 0) {
+                list.innerHTML = '<p class="text-white/50 text-center py-12 col-span-3">لا توجد مقالات منشورة بعد.</p>';
+                return;
+            }
+
+            mdFiles.forEach(file => {
                 const card = document.createElement('div');
                 card.className = 'article-card p-5 rounded-2xl gold-border';
+                
+                // استخراج عنوان المقال من اسم الملف
+                const titleFromFile = decodeURIComponent(file.name.replace('.md', '').replace(/-/g, ' '));
+                
                 card.innerHTML = `
                     <div class="flex flex-col h-full">
                         <div class="flex items-center gap-2 mb-3">
                             <i class="fas fa-file-alt gold-text"></i>
-                            <span class="text-xs text-gray-400 truncate flex-1">${file.name}</span>
+                            <span class="text-xs text-gray-400 truncate flex-1" title="${file.name}">${file.name}</span>
                         </div>
-                        <p class="text-sm text-white/70 line-clamp-2 mb-4">
-                            ${decodeURIComponent(file.name.replace('.md', '').replace(/-/g, ' '))}
+                        <p class="text-sm text-white/70 line-clamp-2 mb-4 font-bold">
+                            ${titleFromFile}
                         </p>
                         <div class="flex gap-2 mt-auto">
                             <button onclick="editArticle('${file.path}', '${file.sha}')" 
@@ -592,7 +618,7 @@ ${content}`;
             indicator.innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span><span class="text-xs text-green-500 font-bold uppercase">متصل</span>';
         } catch (e) {
             console.error(e);
-            // لا نغير حالة الاتصال لتجنب رسائل خطأ غير ضرورية
+            // في حالة الخطأ نترك المؤشر كما هو
         }
     }
 
@@ -611,11 +637,19 @@ ${content}`;
             const data = await res.json();
             const rawContent = decodeURIComponent(escape(atob(data.content)));
             
-            // استخراج البيانات من الـ Front Matter والـ Markdown
+            // استخراج البيانات من الـ Front Matter
             const titleMatch = rawContent.match(/^title: (.*)\n/m);
             const imageMatch = rawContent.match(/^image: (.*)\n/m);
-            // نأخذ المحتوى بعد السطر الفارغ بعد الـ Front Matter
-            const bodyMatch = rawContent.split('\n\n').slice(2).join('\n\n');
+            
+            // استخراج المحتوى بعد الـ Front Matter
+            let body = rawContent;
+            // إزالة الـ Front Matter
+            if (rawContent.startsWith('---')) {
+                const parts = rawContent.split('\n---\n');
+                if (parts.length >= 3) {
+                    body = parts.slice(2).join('\n---\n');
+                }
+            }
             
             document.getElementById('postTitle').value = titleMatch ? titleMatch[1] : '';
             document.getElementById('postImage').value = imageMatch ? imageMatch[1] : '';
@@ -623,7 +657,7 @@ ${content}`;
             document.getElementById('fileName').disabled = true;
             
             // تنظيف محتوى Quill ثم إدراج المحتوى
-            quill.root.innerHTML = bodyMatch || rawContent;
+            quill.root.innerHTML = body;
             
             isEditing = true;
             currentFileSha = sha;

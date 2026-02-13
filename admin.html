@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام إدارة القضايا | محمود عبد الحميد للمحاماة</title>
+    <title>نظام إدارة القضايا الشامل | محمود عبد الحميد للمحاماة</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#bf953f">
     
@@ -70,7 +70,7 @@
             -webkit-mask-composite: destination-out; mask-composite: exclude; pointer-events: none;
         }
 
-        .case-card, .session-card, .security-log-card {
+        .case-card, .session-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(191, 149, 63, 0.2);
             border-radius: 1rem;
@@ -86,14 +86,15 @@
         .case-status { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 2rem; font-size: 0.75rem; font-weight: bold; }
         .status-new { background: rgba(40, 167, 69, 0.2); color: #a3e0a3; border: 1px solid #28a745; }
         .status-postponed { background: rgba(255, 193, 7, 0.2); color: #ffe083; border: 1px solid #ffc107; }
+        .status-canceled { background: rgba(220, 53, 69, 0.2); color: #f1b0b7; border: 1px solid #dc3545; }
         .status-judged { background: rgba(32, 201, 151, 0.2); color: #a8e6cf; border: 1px solid #20c997; }
 
-        .nav-tabs .nav-link { color: #e2e8f0; border: none; border-bottom: 3px solid transparent; }
+        .nav-tabs .nav-link { color: #e2e8f0; border: none; border-bottom: 3px solid transparent; font-weight: 600; }
         .nav-tabs .nav-link.active { background: transparent; color: var(--gold-solid); border-bottom: 3px solid var(--gold-solid); font-weight: 800; }
 
         .form-control, .form-select {
             background: rgba(255,255,255,0.05); border: 1px solid rgba(191,149,63,0.2);
-            color: white; border-radius: 0.75rem;
+            color: white; border-radius: 0.75rem; padding: 0.6rem 1rem;
         }
         .form-control:focus { background: rgba(255,255,255,0.1); border-color: var(--gold-solid); color: white; box-shadow: none; }
 
@@ -107,8 +108,8 @@
         .stats-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(191,149,63,0.1); border-radius: 1rem; padding: 1rem; text-align: center; }
         .stats-number { font-size: 1.5rem; font-weight: 900; color: var(--gold-solid); }
 
-        #caseSearchResults { background: rgba(0,0,0,0.9); border: 1px solid var(--gold-solid); border-radius: 0.75rem; z-index: 1000; }
-        .search-result-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        #caseSearchResults { background: rgba(0,0,0,0.95); border: 1px solid var(--gold-solid); border-radius: 0.75rem; z-index: 1000; }
+        .search-result-item { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
         .search-result-item:hover { background: rgba(191,149,63,0.2); }
 
         .modal-content { background: #0f172a; border: 1px solid rgba(191,149,63,0.3); border-radius: 1.5rem; color: white; }
@@ -128,9 +129,7 @@
 
 <div id="mainContent" style="display:none">
     <header class="admin-toolbar">
-        <div class="flex items-center gap-4">
-            <h1 class="serif-font gold-text text-xl font-black mb-0">محمود عبد الحميد للمحاماة</h1>
-        </div>
+        <h1 class="serif-font gold-text text-xl font-black mb-0">محمود عبد الحميد للمحاماة</h1>
         <div id="connection-status" class="text-xs font-bold"></div>
         <button class="gold-btn px-4 py-2 rounded-full text-xs" onclick="clearForm()">قضية جديدة +</button>
     </header>
@@ -145,37 +144,48 @@
         </div>
 
         <ul class="nav nav-tabs mb-4 border-white/10" id="mainTabs">
-            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cases">القضايا</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sessions">الجلسات</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#search">البحث</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#security">الأمان</button></li>
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cases">تسجيل القضايا</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sessions">إدارة الجلسات</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#search">البحث والتقارير</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#security">نظام الأمان</button></li>
         </ul>
 
         <div class="tab-content">
             <!-- تبويب القضايا -->
             <div class="tab-pane fade show active" id="cases">
                 <div class="card-glass p-6 gold-border">
-                    <h5 class="serif-font gold-text text-xl mb-4">تسجيل قضية جديدة</h5>
+                    <h5 class="serif-font gold-text text-xl mb-4"><i class="bi bi-file-earmark-plus"></i> تسجيل قضية جديدة</h5>
                     <form id="caseForm">
                         <div class="row g-3">
                             <div class="col-md-4"><label class="text-xs text-white/50">اسم العميل</label><input id="client_name" class="form-control" required></div>
                             <div class="col-md-4"><label class="text-xs text-white/50">هاتف العميل</label><input id="client_phone" class="form-control" required></div>
+                            <div class="col-md-4"><label class="text-xs text-white/50">إيميل العميل</label><input type="email" id="client_email" class="form-control"></div>
+                            <div class="col-md-4">
+                                <label class="text-xs text-white/50">صفة العميل</label>
+                                <select id="client_role" class="form-select" required>
+                                    <option value="">اختر...</option>
+                                    <option>مدعي</option><option>مدعى عليه</option><option>مستأنف</option><option>طاعن</option><option>مجني عليه</option><option>متهم</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4"><label class="text-xs text-white/50">اسم الخصم</label><input id="opponent_name" class="form-control"></div>
                             <div class="col-md-4"><label class="text-xs text-white/50">رقم القضية</label><input id="case_number" class="form-control" required></div>
                             <div class="col-md-4"><label class="text-xs text-white/50">سنة القضية</label><input id="case_year" class="form-control" required></div>
                             <div class="col-md-4">
                                 <label class="text-xs text-white/50">المحكمة</label>
                                 <select id="court_name" class="form-select" required>
                                     <option value="">اختر...</option>
-                                    <option>محكمة الأسرة</option><option>المحكمة الابتدائية</option><option>محكمة الاستئناف</option>
+                                    <option>محكمة الأسرة</option><option>المحكمة الابتدائية</option><option>محكمة الاستئناف</option><option>محكمة النقض</option><option>المحكمة الإدارية</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4"><label class="text-xs text-white/50">الدائرة</label><input id="circle" class="form-control"></div>
+                            <div class="col-md-6">
                                 <label class="text-xs text-white/50">نوع القضية</label>
                                 <select id="case_type" class="form-select" required>
-                                    <option value="مدنية">مدنية</option><option value="جنائية">جنائية</option><option value="أحوال شخصية">أحوال شخصية</option>
+                                    <option value="مدنية">مدنية</option><option value="جنائية">جنائية</option><option value="تجارية">تجارية</option><option value="أحوال شخصية">أحوال شخصية</option>
                                 </select>
                             </div>
-                            <div class="col-12"><label class="text-xs text-white/50">موضوع القضية</label><textarea id="case_subject" class="form-control" rows="2"></textarea></div>
+                            <div class="col-md-12"><label class="text-xs text-white/50">موضوع القضية</label><textarea id="case_subject" class="form-control" rows="2"></textarea></div>
+                            <div class="col-md-12"><label class="text-xs text-white/50">ملاحظات</label><textarea id="notes" class="form-control" rows="2"></textarea></div>
                         </div>
                         <button type="submit" class="gold-btn w-full py-3 mt-4 rounded-xl">حفظ القضية</button>
                     </form>
@@ -185,19 +195,19 @@
             <!-- تبويب الجلسات -->
             <div class="tab-pane fade" id="sessions">
                 <div class="card-glass p-6 gold-border mb-4">
-                    <h5 class="serif-font gold-text text-xl mb-4">إضافة جلسة</h5>
+                    <h5 class="serif-font gold-text text-xl mb-4">إضافة جلسة جديدة</h5>
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="text-xs text-white/50">بحث بالرقم الإداري أو الاسم</label>
+                        <div class="col-md-6 relative">
+                            <label class="text-xs text-white/50">بحث عن قضية</label>
                             <input id="s_search" class="form-control" placeholder="اكتب للبحث..." onkeyup="searchCasesForSession(this.value)">
-                            <div id="caseSearchResults" class="absolute w-full mt-1 hidden max-h-40 overflow-y-auto"></div>
+                            <div id="caseSearchResults" class="absolute w-full mt-1 hidden max-h-60 overflow-y-auto"></div>
                         </div>
                         <div class="col-md-6"><label class="text-xs text-white/50">تاريخ الجلسة</label><input type="datetime-local" id="s_date" class="form-control"></div>
                         <div class="col-12"><label class="text-xs text-white/50">القرار / الإجراء</label><textarea id="s_decision" class="form-control" rows="2"></textarea></div>
                         <div class="col-md-6">
                             <label class="text-xs text-white/50">حالة القضية</label>
                             <select id="s_case_status" class="form-select">
-                                <option>جديدة</option><option>مؤجلة</option><option>محجوزة للحكم</option><option>محكوم فيها</option>
+                                <option>جديدة</option><option>مؤجلة</option><option>مشطوبة</option><option>محجوزة للحكم</option><option>محكوم فيها</option>
                             </select>
                         </div>
                     </div>
@@ -209,9 +219,14 @@
             <!-- تبويب البحث -->
             <div class="tab-pane fade" id="search">
                 <div class="card-glass p-6 gold-border mb-4">
-                    <div class="input-group">
+                    <div class="input-group mb-3">
                         <input id="searchInput" class="form-control" placeholder="ابحث بالاسم، الهاتف، أو الكود...">
                         <button class="gold-btn px-4" onclick="searchCases()">بحث</button>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-5"><input type="date" id="searchFrom" class="form-control"></div>
+                        <div class="col-md-5"><input type="date" id="searchTo" class="form-control"></div>
+                        <div class="col-md-2"><button class="btn btn-outline-light w-full" onclick="searchByDateRange()">بحث زمني</button></div>
                     </div>
                 </div>
                 <div id="searchResults" class="space-y-3"></div>
@@ -233,7 +248,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header border-white/10">
-                <h5 class="modal-title gold-text serif-font">تفاصيل القضية</h5>
+                <h5 class="modal-title gold-text serif-font">ملف القضية الكامل</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="caseDetails"></div>
@@ -262,12 +277,7 @@
 
     async function testConnection() {
         const { error } = await db.from('cases').select('id', { count: 'exact', head: true });
-        const status = document.getElementById('connection-status');
-        if (error) {
-            status.innerHTML = '<span class="text-red-500">● غير متصل</span>';
-        } else {
-            status.innerHTML = '<span class="text-green-500">● متصل بالنظام</span>';
-        }
+        document.getElementById('connection-status').innerHTML = error ? '<span class="text-red-500">● غير متصل</span>' : '<span class="text-green-500">● متصل</span>';
     }
 
     async function loadStats() {
@@ -281,13 +291,13 @@
         if (q.length < 1) return document.getElementById('caseSearchResults').classList.add('hidden');
         const { data } = await db.from('cases').select('*').or(`client_name.ilike.%${q}%,case_code.ilike.%${q}%,case_number.ilike.%${q}%`).limit(5);
         const res = document.getElementById('caseSearchResults');
-        res.innerHTML = data.map(i => `<div class="search-result-item" onclick="selectCase('${i.id}', '${i.client_name}')">${i.case_code || i.case_number} - ${i.client_name}</div>`).join('');
+        res.innerHTML = data.map(i => `<div class="search-result-item" onclick="selectCase('${i.id}', '${i.client_name}', '${i.case_code || i.case_number}')">${i.case_code || i.case_number} - ${i.client_name}</div>`).join('');
         res.classList.remove('hidden');
     }
 
-    function selectCase(id, name) {
+    function selectCase(id, name, code) {
         currentCaseId = id;
-        document.getElementById('s_search').value = name;
+        document.getElementById('s_search').value = `${code} - ${name}`;
         document.getElementById('caseSearchResults').classList.add('hidden');
     }
 
@@ -296,11 +306,16 @@
         const d = {
             client_name: document.getElementById('client_name').value,
             client_phone: document.getElementById('client_phone').value,
+            client_email: document.getElementById('client_email').value,
+            client_role: document.getElementById('client_role').value,
+            opponent_name: document.getElementById('opponent_name').value,
             case_number: document.getElementById('case_number').value,
             case_year: document.getElementById('case_year').value,
             court_name: document.getElementById('court_name').value,
+            circle: document.getElementById('circle').value,
             case_type: document.getElementById('case_type').value,
-            case_subject: document.getElementById('case_subject').value
+            case_subject: document.getElementById('case_subject').value,
+            notes: document.getElementById('notes').value
         };
         const { data, error } = await db.from('cases').insert([d]).select().single();
         if (error) return Swal.fire("خطأ", error.message, "error");
@@ -327,10 +342,7 @@
         const { data } = await db.from('sessions').select('*, cases(*)').gte('session_date', new Date().toISOString()).order('session_date', {ascending: true});
         document.getElementById('upcomingSessions').innerHTML = data.map(s => `
             <div class="session-card">
-                <div class="flex justify-between">
-                    <span class="case-code">${new Date(s.session_date).toLocaleDateString('ar-EG')}</span>
-                    <span class="case-status status-new">${s.case_status}</span>
-                </div>
+                <div class="flex justify-between"><span class="case-code">${new Date(s.session_date).toLocaleString('ar-EG')}</span><span class="case-status status-new">${s.case_status}</span></div>
                 <div class="font-bold mt-1">${s.cases.client_name}</div>
                 <div class="text-xs text-white/50">${s.decision || 'لا يوجد قرار'}</div>
             </div>
@@ -340,12 +352,21 @@
     async function searchCases() {
         const q = document.getElementById('searchInput').value;
         const { data } = await db.from('cases').select('*').or(`client_name.ilike.%${q}%,client_phone.ilike.%${q}%,case_code.ilike.%${q}%`);
+        renderResults(data);
+    }
+
+    async function searchByDateRange() {
+        const from = document.getElementById('searchFrom').value;
+        const to = document.getElementById('searchTo').value;
+        const { data } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', to);
+        const cases = [...new Map(data.map(s => [s.cases.id, s.cases])).values()];
+        renderResults(cases);
+    }
+
+    function renderResults(data) {
         document.getElementById('searchResults').innerHTML = data.map(i => `
             <div class="case-card cursor-pointer" onclick="viewDetails('${i.id}')">
-                <div class="flex justify-between">
-                    <span class="case-code">${i.case_code || i.case_number}</span>
-                    <span class="text-xs">${i.court_name}</span>
-                </div>
+                <div class="flex justify-between"><span class="case-code">${i.case_code || i.case_number}</span><span class="text-xs">${i.court_name}</span></div>
                 <div class="font-black text-lg">${i.client_name}</div>
             </div>
         `).join('');
@@ -357,10 +378,12 @@
             <div class="grid grid-cols-2 gap-2">
                 <div class="bg-white/5 p-2 rounded"><b>العميل:</b> ${data.client_name}</div>
                 <div class="bg-white/5 p-2 rounded"><b>الهاتف:</b> ${data.client_phone}</div>
+                <div class="bg-white/5 p-2 rounded"><b>الصفة:</b> ${data.client_role}</div>
+                <div class="bg-white/5 p-2 rounded"><b>الخصم:</b> ${data.opponent_name || 'N/A'}</div>
             </div>
             <div class="bg-white/5 p-3 rounded"><b>الموضوع:</b><p>${data.case_subject || 'لا يوجد'}</p></div>
             <div><b>الجلسات:</b>
-                ${data.sessions.map(s => `<div class="border-r-2 border-gold-solid p-2 mb-2 bg-white/5 text-xs">${new Date(s.session_date).toLocaleDateString()} - ${s.decision}</div>`).join('')}
+                ${data.sessions.map(s => `<div class="border-r-2 border-gold-solid p-2 mb-2 bg-white/5 text-xs">${new Date(s.session_date).toLocaleString()} - ${s.decision}</div>`).join('')}
             </div>
         </div>`;
         document.getElementById('caseDetails').innerHTML = h;

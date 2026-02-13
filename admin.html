@@ -86,6 +86,7 @@
             padding: 1.25rem;
             margin-bottom: 1rem;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .case-card:hover { border-color: var(--gold-solid); transform: translateX(-5px); }
@@ -188,7 +189,7 @@
         </ul>
 
         <div class="tab-content">
-            <!-- ========== تبويب القضايا (كامل من v1) ========== -->
+            <!-- ========== تبويب القضايا (كامل) ========== -->
             <div class="tab-pane fade show active" id="cases">
                 <div class="card-glass p-6 gold-border">
                     <h5 class="serif-font gold-text text-xl mb-4"><i class="bi bi-file-earmark-plus"></i> تسجيل قضية جديدة</h5>
@@ -243,7 +244,7 @@
                 </div>
             </div>
 
-            <!-- ========== تبويب الجلسات (كامل من v1) ========== -->
+            <!-- ========== تبويب الجلسات (مع إصلاح جلب الجلسات) ========== -->
             <div class="tab-pane fade" id="sessions">
                 <!-- نموذج إضافة جلسة -->
                 <div class="card-glass p-6 gold-border mb-4">
@@ -267,7 +268,7 @@
                         <!-- نتائج البحث -->
                         <div id="caseSearchResults" class="col-md-12 hidden"></div>
                         
-                        <!-- بيانات القضية المختارة (للقراءة فقط) -->
+                        <!-- بيانات القضية المختارة -->
                         <div class="col-md-4"><label class="text-xs text-white">كود القضية</label><input id="s_case_code" class="form-control" readonly></div>
                         <div class="col-md-4"><label class="text-xs text-white">رقم القضية</label><input id="s_case_number" class="form-control" readonly></div>
                         <div class="col-md-4"><label class="text-xs text-white">سنة القضية</label><input id="s_case_year" class="form-control" readonly></div>
@@ -310,7 +311,7 @@
                 </div>
             </div>
 
-            <!-- ========== تبويب البحث والتقارير (كامل مع فتح التفاصيل) ========== -->
+            <!-- ========== تبويب البحث والتقارير (مع تحسين عرض النتائج) ========== -->
             <div class="tab-pane fade" id="search">
                 <div class="card-glass p-6 gold-border mb-4">
                     <h5 class="serif-font gold-text text-xl mb-4">البحث المتقدم</h5>
@@ -334,7 +335,7 @@
                 <div id="searchResults" class="space-y-3"></div>
             </div>
 
-            <!-- ========== تبويب سجل الاستعلامات (الأمان) كامل من v1 ========== -->
+            <!-- ========== تبويب سجل الاستعلامات (الأمان) ========== -->
             <div class="tab-pane fade" id="securityLogs">
                 <div class="card-glass p-6 gold-border">
                     <h5 class="serif-font gold-text text-xl mb-4"><i class="bi bi-shield-lock"></i> نظام المراقبة الأمنية</h5>
@@ -575,9 +576,14 @@
         document.getElementById('stat-total-s').innerText = sCount || 0;
         const { count: clientsCount } = await db.from('cases').select('client_name', { count: 'exact', head: true });
         document.getElementById('stat-clients').innerText = clientsCount || 0;
-        const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);
+        
+        // عدد الجلسات القادمة خلال 7 أيام (محسوب بدقة)
+        const now = new Date();
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).toISOString();
+        const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7, 23, 59, 59).toISOString();
         const { count: upcoming } = await db.from('sessions').select('*', { count: 'exact', head: true })
-            .gte('session_date', new Date().toISOString()).lte('session_date', nextWeek.toISOString());
+            .gte('session_date', startOfDay)
+            .lte('session_date', endOfWeek);
         document.getElementById('stat-sessions').innerText = upcoming || 0;
     }
 
@@ -715,69 +721,90 @@
         Swal.fire({ title: "تم إنشاء رابط التقويم", text: "سيتم فتح نافذة جديدة", icon: "info", timer: 3000, showConfirmButton: false });
     }
 
-    // ========== جلسات قادمة ==========
+    // ========== جلسات قادمة (محدثة لتعمل بشكل صحيح) ==========
     async function loadUpcoming(range, btn) {
         if (btn) {
             document.querySelectorAll('#sessions .btn-group .btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
-        const today = new Date();
-        const startDate = today.toISOString().split('T')[0];
-        const endDate = new Date();
-        if (range === 'week') endDate.setDate(today.getDate() + 7);
-        else endDate.setMonth(today.getMonth() + 1);
-        const endDateStr = endDate.toISOString().split('T')[0];
-
-        const { data: sessions } = await db
-            .from('sessions')
-            .select('*, cases(*)')
-            .gte('session_date', startDate)
-            .lte('session_date', endDateStr)
-            .order('session_date', { ascending: true });
-
-        const container = document.getElementById('upcomingSessions');
-        if (!sessions || sessions.length === 0) {
-            container.innerHTML = '<p class="text-center text-white/50">لا توجد جلسات قادمة</p>';
-            return;
+        
+        const now = new Date();
+        // بداية اليوم الحالي (00:00)
+        const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).toISOString();
+        
+        const endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+        if (range === 'week') {
+            endDate.setDate(now.getDate() + 7);
+        } else {
+            endDate.setMonth(now.getMonth() + 1);
         }
+        const endDateStr = endDate.toISOString();
 
-        container.innerHTML = sessions.map(s => {
-            const caseData = s.cases || {};
-            const sessionDate = new Date(s.session_date);
-            const formattedDate = sessionDate.toLocaleString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            const statusClass = getStatusClass(s.case_status);
-            return `
-            <div class="session-card">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <strong class="case-code">${formattedDate}</strong>
-                        <span class="case-status ${statusClass} mr-2">${s.case_status || 'جديدة'}</span>
+        try {
+            const { data: sessions, error } = await db
+                .from('sessions')
+                .select('*, cases(*)')
+                .gte('session_date', startDate)
+                .lte('session_date', endDateStr)
+                .order('session_date', { ascending: true });
+
+            if (error) {
+                console.error('خطأ في جلب الجلسات:', error);
+                document.getElementById('upcomingSessions').innerHTML = '<div class="alert alert-danger">حدث خطأ في جلب الجلسات</div>';
+                return;
+            }
+
+            const container = document.getElementById('upcomingSessions');
+            if (!sessions || sessions.length === 0) {
+                container.innerHTML = '<p class="text-center text-white/50">لا توجد جلسات قادمة</p>';
+                return;
+            }
+
+            container.innerHTML = sessions.map(s => {
+                const caseData = s.cases || {};
+                const sessionDate = new Date(s.session_date);
+                const formattedDate = sessionDate.toLocaleString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const statusClass = getStatusClass(s.case_status);
+                return `
+                <div class="session-card">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <strong class="case-code">${formattedDate}</strong>
+                            <span class="case-status ${statusClass} mr-2">${s.case_status || 'جديدة'}</span>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-warning btn-sm" onclick="loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="deleteSession('${s.id}')"><i class="bi bi-trash"></i></button>
+                        </div>
                     </div>
-                    <div class="btn-group btn-group-sm">
-                        <button class="btn btn-outline-warning btn-sm" onclick="loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-outline-danger btn-sm" onclick="deleteSession('${s.id}')"><i class="bi bi-trash"></i></button>
+                    <div class="mt-2">
+                        <div><strong>العميل:</strong> ${caseData.client_name}</div>
+                        <div><strong>القضية:</strong> ${caseData.case_number}/${caseData.case_year}</div>
+                        ${caseData.opponent_name ? `<div><strong>ضد:</strong> ${caseData.opponent_name}</div>` : ''}
                     </div>
-                </div>
-                <div class="mt-2">
-                    <div><strong>العميل:</strong> ${caseData.client_name}</div>
-                    <div><strong>القضية:</strong> ${caseData.case_number}/${caseData.case_year}</div>
-                    ${caseData.opponent_name ? `<div><strong>ضد:</strong> ${caseData.opponent_name}</div>` : ''}
-                </div>
-                ${s.decision ? `<div class="mt-2 p-2 bg-white/5 rounded text-sm">${s.decision}</div>` : ''}
-                <div class="mt-2 flex gap-2">
-                    <button class="btn btn-outline-success btn-sm" onclick="addToGoogleCalendarFromSession('${s.id}')"><i class="bi bi-calendar-plus"></i></button>
-                    <button class="btn btn-outline-primary btn-sm" onclick="setReminder('${s.id}')"><i class="bi bi-bell"></i></button>
-                </div>
-            </div>`;
-        }).join('');
+                    ${s.decision ? `<div class="mt-2 p-2 bg-white/5 rounded text-sm">${s.decision}</div>` : ''}
+                    <div class="mt-2 flex gap-2">
+                        <button class="btn btn-outline-success btn-sm" onclick="addToGoogleCalendarFromSession('${s.id}')"><i class="bi bi-calendar-plus"></i></button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="setReminder('${s.id}')"><i class="bi bi-bell"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
+        } catch (err) {
+            console.error('خطأ غير متوقع:', err);
+            document.getElementById('upcomingSessions').innerHTML = '<div class="alert alert-danger">حدث خطأ غير متوقع</div>';
+        }
     }
 
-    // ========== دوال البحث والتقارير ==========
+    // ========== دوال البحث والتقارير (مع تحسين عرض النتائج) ==========
     async function searchCases() {
         const q = document.getElementById('searchInput').value;
         if (!q.trim()) return Swal.fire("تنبيه", "أدخل كلمة للبحث", "warning");
         Swal.fire({ title: 'جاري البحث...', didOpen: () => Swal.showLoading() });
-        const { data } = await db.from('cases').select('*').or(`client_name.ilike.%${q}%,client_phone.ilike.%${q}%,case_code.ilike.%${q}%,client_email.ilike.%${q}%`);
+        const { data, error } = await db.from('cases').select('*').or(`client_name.ilike.%${q}%,client_phone.ilike.%${q}%,case_code.ilike.%${q}%,client_email.ilike.%${q}%`);
+        if (error) {
+            Swal.close();
+            return Swal.fire("خطأ", error.message, "error");
+        }
         // جلب آخر جلسة لكل قضية
         for (let c of data) {
             const { data: sessions } = await db.from('sessions').select('*').eq('case_id', c.id).order('session_date', { ascending: false }).limit(1);
@@ -792,43 +819,69 @@
         const to = document.getElementById('searchTo').value;
         if (!from || !to) return Swal.fire("تنبيه", "أدخل تاريخ البداية والنهاية", "warning");
         Swal.fire({ title: 'جاري البحث...', didOpen: () => Swal.showLoading() });
-        const { data: sessions } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: false });
+        const { data: sessions, error } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: false });
+        if (error) {
+            Swal.close();
+            return Swal.fire("خطأ", error.message, "error");
+        }
         Swal.close();
         renderSearchResults(sessions, 'sessions');
     }
 
+    // دالة عرض النتائج بشكل منظم (حقول أفقية)
     function renderSearchResults(data, type) {
         if (!data || data.length === 0) {
             document.getElementById('searchResults').innerHTML = '<div class="alert alert-info text-center">لا توجد نتائج</div>';
             return;
         }
         let html = `<h6 class="mb-3 text-white">نتائج البحث (${data.length})</h6>`;
+        
         if (type === 'sessions') {
             data.forEach(s => {
                 const caseData = s.cases || {};
                 const sessionDate = new Date(s.session_date).toLocaleString('ar-EG');
+                const statusClass = getStatusClass(s.case_status);
                 html += `
-                <div class="case-card cursor-pointer" onclick="openCaseDetails('${caseData.id}')">
-                    <div class="flex justify-between">
-                        <span class="case-code">${sessionDate}</span>
-                        <span class="case-status ${getStatusClass(s.case_status)}">${s.case_status}</span>
+                <div class="case-card" onclick="openCaseDetails('${caseData.id}')">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">رقم القضية:</span> <strong class="case-code">${caseData.case_number}/${caseData.case_year}</strong></div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">المحكمة:</span> ${caseData.court_name}</div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">كود القضية:</span> ${caseData.case_code || '---'}</div>
                     </div>
-                    <div><strong>العميل:</strong> ${caseData.client_name}</div>
-                    <div><strong>القضية:</strong> ${caseData.case_number}/${caseData.case_year}</div>
-                    <div class="text-sm text-white/50">${s.decision || 'لا يوجد قرار'}</div>
+                    <div class="mb-2 text-lg font-bold">${caseData.client_name}</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">هاتف:</span> ${caseData.client_phone}</div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">صفة العميل:</span> ${caseData.client_role}</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">الخصم:</span> ${caseData.opponent_name || 'غير محدد'}</div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">آخر حالة:</span> <span class="case-status ${statusClass}">${s.case_status}</span></div>
+                    </div>
+                    ${caseData.case_subject ? `<div class="bg-white/5 p-2 rounded mt-2"><span class="text-white/50">الموضوع:</span> ${caseData.case_subject}</div>` : ''}
+                    <div class="text-xs text-white/50 mt-2">تاريخ الجلسة: ${sessionDate}</div>
                 </div>`;
             });
         } else {
             data.forEach(c => {
+                const statusClass = getStatusClass(c.last_session?.case_status);
                 html += `
-                <div class="case-card cursor-pointer" onclick="openCaseDetails('${c.id}')">
-                    <div class="flex justify-between">
-                        <span class="case-code">${c.case_code || c.case_number}</span>
-                        <span class="case-status ${getStatusClass(c.last_session?.case_status)}">${c.last_session?.case_status || 'جديدة'}</span>
+                <div class="case-card" onclick="openCaseDetails('${c.id}')">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">رقم القضية:</span> <strong class="case-code">${c.case_number}/${c.case_year}</strong></div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">المحكمة:</span> ${c.court_name}</div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">كود القضية:</span> ${c.case_code || '---'}</div>
                     </div>
-                    <div><strong>العميل:</strong> ${c.client_name}</div>
-                    <div><strong>المحكمة:</strong> ${c.court_name}</div>
-                    <div class="text-sm text-white/50">الرقم الإداري: ${extractAdminNumber(c.case_code) || 'غير محدد'}</div>
+                    <div class="mb-2 text-lg font-bold">${c.client_name}</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">هاتف:</span> ${c.client_phone}</div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">صفة العميل:</span> ${c.client_role}</div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">الخصم:</span> ${c.opponent_name || 'غير محدد'}</div>
+                        <div class="bg-white/5 p-2 rounded"><span class="text-white/50">آخر حالة:</span> <span class="case-status ${statusClass}">${c.last_session?.case_status || 'جديدة'}</span></div>
+                    </div>
+                    ${c.case_subject ? `<div class="bg-white/5 p-2 rounded mt-2"><span class="text-white/50">الموضوع:</span> ${c.case_subject}</div>` : ''}
+                    <div class="text-xs text-white/50 mt-2">الرقم الإداري: ${extractAdminNumber(c.case_code) || 'غير محدد'}</div>
                 </div>`;
             });
         }
@@ -1060,10 +1113,11 @@
     }
 
     async function filterSessions(range) {
-        const from = new Date().toISOString().split('T')[0];
-        const to = new Date();
-        if (range === 'week') to.setDate(to.getDate() + 7);
-        else to.setMonth(to.getMonth() + 1);
+        const now = new Date();
+        const from = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).toISOString().split('T')[0];
+        const to = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+        if (range === 'week') to.setDate(now.getDate() + 7);
+        else to.setMonth(now.getMonth() + 1);
         const toStr = to.toISOString().split('T')[0];
         const { data: sessions } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', toStr).order('session_date', { ascending: false });
         renderSearchResults(sessions, 'sessions');
@@ -1090,7 +1144,11 @@
             c.sessions.forEach(s => {
                 if (y > 250) { doc.addPage(); y = 20; }
                 doc.text(`${new Date(s.session_date).toLocaleString('ar-EG')} - ${s.case_status}`, 30, y); y += 7;
-                if (s.decision) { doc.text(s.decision, 40, y); y += 10; }
+                if (s.decision) { 
+                    const split = doc.splitTextToSize(s.decision, 150);
+                    doc.text(split, 40, y); 
+                    y += split.length * 7 + 3;
+                }
             });
         }
         doc.save(`قضية_${c.case_code || c.case_number}.pdf`);

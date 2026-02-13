@@ -2,137 +2,499 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المقالات | محمود عبد الحميد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>إدارة المدونة | محمود عبد الحميد للمحاماة</title>
+    
+    <!-- Quill Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root { --gold: #bf953f; --dark: #020617; }
-        body { background-color: var(--dark); color: white; font-family: 'Tajawal', sans-serif; }
+        /* ===== الأنماط الموحدة للموقع ===== */
+        :root {
+            --primary-dark: #020617;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
+            --gold-solid: #bf953f;
+            --gold-glow: rgba(191, 149, 63, 0.5);
+            --header-height: 90px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: var(--primary-dark); 
+            color: #f8fafc; 
+            overflow-x: hidden;
+        }
+        
         .serif-font { font-family: 'Amiri', serif; }
-        .gold-border { border: 1px solid rgba(191, 149, 63, 0.3); }
-        .ql-container { background: rgba(255,255,255,0.05); border-radius: 0 0 12px 12px; height: 300px; color: white; font-size: 16px; text-align: right; }
-        .ql-toolbar { background: #f3f4f6; border-radius: 12px 12px 0 0; }
-        .ql-editor.ql-blank::before { color: rgba(255,255,255,0.3); right: 15px; left: auto; }
-        .article-card { background: rgba(255,255,255,0.03); transition: all 0.3s ease; }
+        
+        .gold-text { 
+            background: var(--gold-gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+        }
+        
+        .gold-btn { 
+            background: var(--gold-gradient); 
+            color: #1a1a1a; 
+            font-weight: 800; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 0 20px var(--gold-glow);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .gold-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 0 30px var(--gold-glow); 
+        }
+        
+        .card-glass { 
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(191, 149, 63, 0.15); 
+            border-radius: 1.5rem; 
+            transition: all 0.3s ease; 
+        }
+        
+        .card-glass:hover { 
+            border-color: rgba(191, 149, 63, 0.4); 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.2);
+        }
+        
+        .black-border-card { 
+            border: 2px solid #000000; 
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px); 
+        }
+        
+        .whatsapp-float { 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            background: #25d366; 
+            color: white; 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 30px; 
+            z-index: 1000; 
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3); 
+            transition: transform 0.3s ease; 
+            text-decoration: none;
+        }
+        
+        .whatsapp-float:hover { transform: scale(1.1); }
+        
+        #mobile-menu { 
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            transform: translateX(100%); 
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.95);
+        }
+        
+        #mobile-menu.active { transform: translateX(0); }
+        
+        .header-glass {
+            background: rgba(0, 0, 0, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--gold-solid);
+            box-shadow: 0 5px 30px rgba(191, 149, 63, 0.3);
+        }
+        
+        .track-case-btn { 
+            background: transparent; 
+            border: 2px solid var(--gold-solid); 
+            color: white; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+        }
+        
+        .track-case-btn:hover { 
+            background: var(--gold-gradient); 
+            color: #1a1a1a; 
+            border-color: transparent; 
+        }
+        
+        /* الإطار الذهبي */
+        .gold-border {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gold-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid transparent;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728) border-box;
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) padding-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* أنماط Quill Editor */
+        .ql-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 0 0 1rem 1rem;
+            height: 350px;
+            color: white;
+            font-size: 16px;
+            text-align: right;
+            border: 1px solid rgba(191,149,63,0.2);
+            border-top: none;
+        }
+        
+        .ql-toolbar {
+            background: #0f172a;
+            border: 1px solid rgba(191,149,63,0.3);
+            border-radius: 1rem 1rem 0 0;
+            border-bottom: none;
+        }
+        
+        .ql-toolbar .ql-picker-label,
+        .ql-toolbar .ql-picker-item,
+        .ql-toolbar button {
+            color: white;
+        }
+        
+        .ql-toolbar .ql-picker-label:hover,
+        .ql-toolbar button:hover {
+            color: var(--gold-solid);
+        }
+        
+        .ql-editor.ql-blank::before {
+            color: rgba(255,255,255,0.3);
+            right: 15px;
+            left: auto;
+            font-style: italic;
+        }
+        
+        .ql-editor {
+            color: white;
+        }
+        
+        .article-card {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191,149,63,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .article-card:hover {
+            border-color: rgba(191,149,63,0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(191,149,63,0.15);
+        }
+        
+        @media (max-width: 768px) {
+            .header-glass nav { padding: 10px 15px !important; }
+            .logo img { width: 80px !important; height: 80px !important; }
+            .nav-buttons { display: flex !important; flex-direction: column !important; width: 100% !important; }
+            .nav-buttons a { width: 100% !important; text-align: center !important; }
+        }
+        
+        .enhanced-image { transition: transform 0.5s ease, filter 0.3s ease; filter: brightness(0.9) contrast(1.1); }
+        .enhanced-image:hover { transform: scale(1.02); filter: brightness(1) contrast(1.2); }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <div id="lock-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex flex-col items-center justify-center p-6 text-center">
-        <div class="w-full max-w-sm">
-            <i class="fas fa-shield-halved text-6xl text-[#bf953f] mb-6"></i>
-            <h2 class="text-2xl font-bold mb-6 serif-font">دخول الإدارة الآمن</h2>
-            <input type="password" id="adminPass" placeholder="كلمة المرور" class="w-full bg-slate-900 border-2 border-[#bf953f]/30 p-4 rounded-2xl text-center outline-none focus:border-[#bf953f] mb-4 text-white">
-            <button onclick="checkPass()" class="w-full bg-[#bf953f] text-black font-black py-4 rounded-2xl shadow-xl hover:scale-105 transition">دخول</button>
+<!-- ===== أيقونة الواتساب الثابتة ===== -->
+<a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- ===== الهيدر الموحد (مطابق لباقي الصفحات) ===== -->
+<header class="fixed w-full z-[100] header-glass">
+    <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <a href="index.html"><img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-28 h-28 object-contain"></a>
+            <div class="flex flex-col leading-tight">
+                <a href="index.html"><h1 class="font-bold gold-text serif-font whitespace-nowrap text-3xl">محمود عبد الحميد</h1></a>
+                <p class="text-gray-300 font-bold text-xs">المحامي بالنقض والدستورية العليا</p>
+            </div>
+        </div>
+        <div class="hidden lg:flex items-center gap-8 font-bold text-sm">
+            <a href="about.html" class="text-white hover:gold-text transition">عن المؤسسة</a>
+            <a href="index.html#why-us" class="text-white hover:gold-text transition">لماذا تختارنا</a>
+            <a href="specialties.html" class="text-white hover:gold-text transition">تخصصاتنا</a>
+            <a href="about.html#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
+            <a href="contact.html" class="text-white hover:gold-text transition">تواصل معنا</a>
+            <a href="blog.html" class="text-white hover:gold-text transition">المدونة</a>
+            <a href="blog-admin.html" class="gold-text transition">إدارة المدونة</a>
+            <div class="nav-buttons flex items-center gap-2">
+                <a href="client-inquiry.html" class="track-case-btn px-4 py-2.5 rounded-lg text-xs flex items-center gap-2">
+                    <i class="fas fa-search"></i> تابع قضيتك
+                </a>
+                <a href="contact.html?tab=consult" class="gold-btn px-4 py-2.5 rounded-lg text-xs">طلب استشارة فورية</a>
+                <a href="contact.html?tab=visit" class="px-4 py-2.5 border border-white/20 rounded-lg hover:bg-white/10 transition text-white text-xs">
+                    حجز موعد مقابلة
+                </a>
+            </div>
+        </div>
+        <button id="menu-toggle" class="lg:hidden text-2xl gold-text">
+            <i class="fas fa-bars-staggered"></i>
+        </button>
+    </nav>
+</header>
+
+<!-- ===== القائمة الجانبية للموبايل ===== -->
+<div id="mobile-menu" class="fixed inset-0 z-[110] p-10 lg:hidden">
+    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="flex flex-col gap-8 mt-20 text-2xl font-bold">
+        <a href="index.html" onclick="closeMenu()" class="gold-text">الرئيسية</a>
+        <a href="about.html" onclick="closeMenu()" class="gold-text">عن المؤسسة</a>
+        <a href="index.html#why-us" onclick="closeMenu()" class="gold-text">لماذا تختارنا</a>
+        <a href="specialties.html" onclick="closeMenu()" class="gold-text">تخصصاتنا</a>
+        <a href="about.html#vision" onclick="closeMenu()" class="gold-text">الرؤية والأهداف</a>
+        <a href="contact.html" onclick="closeMenu()" class="gold-text">تواصل معنا</a>
+        <a href="blog.html" onclick="closeMenu()" class="gold-text">المدونة</a>
+        <a href="blog-admin.html" onclick="closeMenu()" class="gold-text">إدارة المدونة</a>
+        <div class="flex flex-col gap-4 mt-4">
+            <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg text-center">
+                <i class="fas fa-search mr-2"></i> تابع قضيتك
+            </a>
+            <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg text-center">
+                <i class="fas fa-comments mr-2"></i> طلب استشارة فورية
+            </a>
+            <a href="contact.html?tab=visit" onclick="closeMenu()" 
+               class="py-3 border border-white/20 rounded-xl hover:bg-white/10 transition text-white text-lg text-center">
+                <i class="fas fa-calendar-check mr-2"></i> حجز موعد مقابلة
+            </a>
         </div>
     </div>
+</div>
 
-    <div id="admin-content" class="hidden">
-        <nav class="border-b border-white/5 bg-black/20 p-4 sticky top-0 z-50 backdrop-blur-md">
-            <div class="max-w-6xl mx-auto flex justify-between items-center">
-                <a href="index.html" class="text-gray-400 hover:text-[#bf953f] flex items-center gap-2 transition font-bold">
-                    <i class="fas fa-home"></i> <span>الرئيسية</span>
-                </a>
-                <h1 class="text-[#bf953f] font-black serif-font text-lg">لوحة تحكم الأستاذ محمود</h1>
-                <div id="connection-indicator" class="flex items-center gap-2 bg-red-500/10 px-3 py-1 rounded-full border border-red-500/20">
-                    <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                    <span class="text-[10px] text-red-500 font-bold uppercase">Offline</span>
+<!-- ===== شاشة القفل (مصممة بشكل أنيق) ===== -->
+<div id="lock-screen" class="fixed inset-0 z-[1000] bg-[#020617] flex items-center justify-center p-6">
+    <div class="card-glass gold-border p-8 max-w-md w-full text-center">
+        <i class="fas fa-shield-halved text-6xl gold-text mb-6"></i>
+        <h2 class="text-3xl font-black serif-font gold-text mb-2">دخول الإدارة</h2>
+        <p class="text-white/60 mb-6 text-sm">يرجى إدخال كلمة المرور للوصول إلى لوحة التحكم</p>
+        <input type="password" id="adminPass" placeholder="كلمة المرور" 
+               class="w-full bg-black/40 border-2 border-gold-solid/30 p-4 rounded-xl text-white outline-none focus:border-gold-solid text-center mb-4">
+        <button onclick="checkPass()" class="gold-btn w-full py-4 rounded-xl text-lg font-black">
+            <i class="fas fa-key ml-2"></i> دخول
+        </button>
+    </div>
+</div>
+
+<!-- ===== محتوى الإدارة (يظهر بعد إدخال كلمة السر الصحيحة) ===== -->
+<div id="admin-content" class="hidden">
+
+    <!-- مساحة بادئة للهيدر الثابت -->
+    <div class="h-24"></div>
+
+    <main class="max-w-6xl mx-auto p-4 md:p-8">
+        
+        <!-- رأس لوحة التحكم -->
+        <div class="flex flex-wrap justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-black serif-font gold-text">إدارة المدونة</h1>
+                <p class="text-white/60 text-sm">إضافة وتعديل وحذف المقالات القانونية</p>
+            </div>
+            <div id="connection-indicator" class="flex items-center gap-2 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
+                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                <span class="text-xs text-red-500 font-bold uppercase tracking-wider">غير متصل</span>
+            </div>
+        </div>
+
+        <!-- بطاقة تحرير المقال -->
+        <section class="mb-12">
+            <div class="card-glass p-6 md:p-8 gold-border">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 gold-text">
+                    <i class="fas fa-edit"></i> 
+                    <span id="editor-status-text">إضافة مقال جديد</span>
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div class="space-y-2">
+                        <label class="text-xs text-gray-400 mr-2 flex items-center gap-1">
+                            <i class="fas fa-key"></i> GitHub Personal Access Token
+                        </label>
+                        <input type="password" id="ghToken" placeholder="أدخل التوكن الخاص بك" 
+                               class="w-full bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-gold-solid text-white">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-gray-400 mr-2 flex items-center gap-1">
+                            <i class="fas fa-link"></i> اسم الملف (بالإنجليزية) 
+                        </label>
+                        <input type="text" id="fileName" placeholder="مثال: inheritance-law" 
+                               class="w-full bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-gold-solid text-white">
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <input type="text" id="postTitle" placeholder="عنوان المقال القانوني..." 
+                           class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xl font-bold outline-none focus:border-gold-solid text-white">
+                    
+                    <div class="relative">
+                        <i class="fas fa-image absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="text" id="postImage" placeholder="رابط صورة المقال (اختياري - الافتراضي: images/blog-bg.jpg)" 
+                               class="w-full bg-black/40 border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-gold-solid text-white">
+                    </div>
+                </div>
+                
+                <!-- محرر النصوص Quill -->
+                <div id="editor-container" class="mb-6">
+                    <div id="editor"></div>
+                </div>
+
+                <!-- أزرار الإجراءات -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="publish()" id="pubBtn" class="gold-btn flex-[2] py-4 rounded-xl text-lg font-black flex items-center justify-center gap-2">
+                        <i class="fas fa-cloud-upload-alt"></i> حفظ ونشر المقال
+                    </button>
+                    <button onclick="resetEditor()" id="reset-btn" class="flex-1 bg-white/5 text-white py-4 rounded-xl hover:bg-red-500/20 hover:text-red-500 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                    <a href="blog.html" target="_blank" class="flex-1 bg-white/5 text-white py-4 rounded-xl hover:bg-gold-solid/20 hover:gold-text transition flex items-center justify-center gap-2">
+                        <i class="fas fa-eye"></i> معاينة المدونة
+                    </a>
                 </div>
             </div>
-        </nav>
+        </section>
 
-        <main class="max-w-6xl mx-auto p-4 md:p-8">
-            <section class="mb-12">
-                <div class="bg-white/5 p-4 md:p-8 rounded-3xl gold-border shadow-2xl">
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                        <i class="fas fa-edit text-[#bf953f]"></i> <span id="editor-status-text">إضافة مقال جديد</span>
-                    </h2>
+        <!-- قائمة المقالات الحالية -->
+        <section>
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-2 gold-text">
+                <i class="fas fa-folder-open"></i> المقالات المنشورة
+            </h3>
+            <div id="articles-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- سيتم ملؤها عبر JavaScript -->
+            </div>
+        </section>
+    </main>
 
-                    <div class="grid md:grid-cols-2 gap-4 mb-4">
-                        <div class="space-y-2">
-                            <label class="text-xs text-gray-400 mr-2 italic">مفتاح الوصول (GitHub Token)</label>
-                            <input type="password" id="ghToken" placeholder="Personal Access Token" class="w-full bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-xs text-gray-400 mr-2 italic">اسم الملف الرابط (بالإنجليزي)</label>
-                            <input type="text" id="fileName" placeholder="مثلاً: inheritance-law" class="w-full bg-black/40 border border-white/10 p-3 rounded-xl outline-none focus:border-[#bf953f]">
-                        </div>
-                    </div>
+    <!-- ===== الفوتر الموحد ===== -->
+    <footer class="pt-8 pb-12 border-t border-white/5 text-center bg-black/50 mt-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <img src="logo.png" alt="شعار المؤسسة" class="w-32 h-32 object-contain mx-auto mb-3 enhanced-image">
+            <h2 class="text-2xl font-black gold-text serif-font">مؤسسة محمود عبد الحميد</h2>
+            <p class="text-white/90 font-bold mt-1">المحامي بالنقض والدستورية العليا</p>
+            <div class="flex justify-center gap-8 my-8 text-2xl">
+                <a href="https://wa.me/201101076000" target="_blank" class="gold-text"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.facebook.com/malegal" target="_blank" class="gold-text"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="gold-text"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="gold-text"><i class="fab fa-twitter"></i></a>
+                <a href="mailto:ma.law.firm@outlook.com" class="gold-text"><i class="fas fa-envelope"></i></a>
+                <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="gold-text"><i class="fas fa-map-marker-alt"></i></a>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-4 justify-center">
+                <a href="about.html" class="text-white/50 hover:text-gold-solid transition">عن المؤسسة</a>
+                <a href="specialties.html" class="text-white/50 hover:text-gold-solid transition">تخصصاتنا</a>
+                <a href="contact.html" class="text-white/50 hover:text-gold-solid transition">تواصل معنا</a>
+                <a href="blog.html" class="text-white/50 hover:text-gold-solid transition">المدونة</a>
+                <a href="blog-admin.html" class="text-white/50 hover:text-gold-solid transition">إدارة المدونة</a>
+            </div>
+            <p class="text-white/40 text-xs uppercase tracking-widest mt-4">جميع الحقوق محفوظة © ٢٠٢٦</p>
+        </div>
+    </footer>
+</div>
 
-                    <div class="space-y-4 mb-6">
-                        <input type="text" id="postTitle" placeholder="عنوان المقال القانوني..." class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-xl font-bold outline-none focus:border-[#bf953f]">
-                        
-                        <div class="relative">
-                            <i class="fas fa-image absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                            <input type="text" id="postImage" placeholder="رابط صورة المقال (اختياري)" class="w-full bg-black/40 border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#bf953f]">
-                        </div>
-                    </div>
-                    
-                    <div id="editor-container" class="mb-6"><div id="editor"></div></div>
+<!-- ===== Quill Editor Script ===== -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-                    <div class="flex gap-4">
-                        <button onclick="publish()" id="pubBtn" class="flex-[2] bg-[#bf953f] text-black font-black py-4 rounded-2xl text-lg hover:shadow-lg hover:shadow-[#bf953f]/20 transition active:scale-95">
-                            <i class="fas fa-paper-plane ml-2"></i> حفظ ونشر المقال
-                        </button>
-                        <button onclick="resetEditor()" id="reset-btn" class="flex-1 bg-white/5 text-gray-400 py-4 rounded-2xl hover:bg-red-500/10 hover:text-red-500 transition">
-                            إلغاء
-                        </button>
-                    </div>
-                </div>
-            </section>
+<script>
+    // ===== دوال القائمة الجانبية =====
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
 
-            <section>
-                <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
-                    <i class="fas fa-folder-open text-[#bf953f]"></i> المقالات الحالية
-                </h3>
-                <div id="articles-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    </div>
-            </section>
-        </main>
-    </div>
+    function closeMenu() {
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script>
-        let isEditing = false;
-        let currentFileSha = null;
-
-        // كلمة السر الجديدة
-        function checkPass() {
-            const pass = document.getElementById('adminPass').value;
-            if(pass === "mahmoud237") {
-                document.getElementById('lock-screen').classList.add('hidden');
-                document.getElementById('admin-content').classList.remove('hidden');
-            } else { alert("عذراً، كلمة المرور خاطئة"); }
-        }
-
-        var quill = new Quill('#editor', {
-            theme: 'snow',
-            modules: { toolbar: [[{'header': [1, 2, false]}], ['bold', 'italic'], [{'list': 'ordered'}, {'list': 'bullet'}], [{'direction': 'rtl'}], ['link', 'image', 'clean']] }
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
+    }
 
-        const owner = "malegal";
-        const repo = "mahmoud-legal";
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
+    }
 
-        async function publish() {
-            const token = document.getElementById('ghToken').value;
-            const title = document.getElementById('postTitle').value;
-            const name = document.getElementById('fileName').value;
-            const imageUrl = document.getElementById('postImage').value || "images/blog-bg.jpg"; // صورة افتراضية
-            const content = quill.root.innerHTML;
-            const btn = document.getElementById('pubBtn');
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
 
-            if(!token || !title || !name) { alert("تأكد من إدخال التوكن، العنوان، واسم الملف"); return; }
+    // ===== كلمة المرور للدخول =====
+    function checkPass() {
+        const pass = document.getElementById('adminPass').value;
+        if (pass === "mahmoud237") {
+            document.getElementById('lock-screen').style.display = 'none';
+            document.getElementById('admin-content').classList.remove('hidden');
+        } else {
+            alert("❌ كلمة المرور خاطئة، حاول مجدداً.");
+        }
+    }
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> جاري الحفظ...';
+    // ===== إعداد محرر Quill =====
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'direction': 'rtl' }],
+                ['link', 'image', 'clean']
+            ]
+        },
+        placeholder: 'اكتب محتوى المقال القانوني هنا...',
+        direction: 'rtl'
+    });
 
-            const path = `blog/articles/${name.endsWith('.md') ? name : name + '.md'}`;
-            
-            // هيكلة ملف الـ MD ليشمل الصورة في البداية
-            const mdContent = `---
+    // ===== متغيرات GitHub =====
+    const owner = "malegal";
+    const repo = "mahmoud-legal";
+    let isEditing = false;
+    let currentFileSha = null;
+
+    // ===== دالة النشر / التعديل =====
+    async function publish() {
+        const token = document.getElementById('ghToken').value;
+        const title = document.getElementById('postTitle').value.trim();
+        const name = document.getElementById('fileName').value.trim();
+        const imageUrl = document.getElementById('postImage').value.trim() || "images/blog-bg.jpg";
+        const content = quill.root.innerHTML;
+        const btn = document.getElementById('pubBtn');
+
+        if (!token) { alert("⚠️ يرجى إدخال GitHub Token"); return; }
+        if (!title) { alert("⚠️ يرجى إدخال عنوان المقال"); return; }
+        if (!name) { alert("⚠️ يرجى إدخال اسم الملف"); return; }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch animate-spin ml-2"></i> جاري النشر...';
+
+        const path = `blog/articles/${name.endsWith('.md') ? name : name + '.md'}`;
+        
+        // هيكل ملف Markdown مع صورة مميزة
+        const mdContent = `---
 title: ${title}
 image: ${imageUrl}
 ---
@@ -142,111 +504,190 @@ image: ${imageUrl}
 
 ${content}`;
 
-            const body = {
-                message: isEditing ? `تعديل المقال: ${title}` : `نشر مقال جديد: ${title}`,
-                content: btoa(unescape(encodeURIComponent(mdContent)))
-            };
-            if(isEditing && currentFileSha) body.sha = currentFileSha;
+        const body = {
+            message: isEditing ? `تعديل المقال: ${title}` : `نشر مقال جديد: ${title}`,
+            content: btoa(unescape(encodeURIComponent(mdContent)))
+        };
+        if (isEditing && currentFileSha) body.sha = currentFileSha;
 
-            try {
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
+        try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: { 
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
 
-                if(res.ok) {
-                    alert("تمت العملية بنجاح!");
-                    resetEditor();
-                    loadExistingArticles();
-                } else { throw new Error(); }
-            } catch (e) { alert("فشل الاتصال بـ GitHub. تأكد من صحة التوكن."); }
-            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane ml-2"></i> حفظ ونشر المقال'; }
-        }
-
-        async function loadExistingArticles() {
-            const token = document.getElementById('ghToken').value;
-            if(!token) return;
-            
-            try {
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/blog/articles`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                const files = await res.json();
-                
-                const list = document.getElementById('articles-list');
-                list.innerHTML = '';
-                
-                files.filter(f => f.name.endsWith('.md')).forEach(file => {
-                    const card = document.createElement('div');
-                    card.className = 'article-card p-4 rounded-2xl border border-white/10 hover:border-[#bf953f]/50 transition';
-                    card.innerHTML = `
-                        <p class="text-xs text-gray-500 mb-2 truncate">${file.name}</p>
-                        <div class="flex gap-2">
-                            <button onclick="editArticle('${file.path}', '${file.sha}')" class="flex-1 bg-white/5 py-2 rounded-lg text-xs hover:bg-[#bf953f] hover:text-black transition">تعديل</button>
-                            <button onclick="deleteArticle('${file.path}', '${file.sha}')" class="flex-1 bg-red-500/10 text-red-500 py-2 rounded-lg text-xs hover:bg-red-500 hover:text-white transition">حذف</button>
-                        </div>
-                    `;
-                    list.appendChild(card);
-                });
-                
-                document.getElementById('connection-indicator').className = 'flex items-center gap-2 bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20';
-                document.getElementById('connection-indicator').innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span><span class="text-[10px] text-green-500 font-bold uppercase">Connected</span>';
-            } catch (e) {}
-        }
-
-        async function editArticle(path, sha) {
-            const token = document.getElementById('ghToken').value;
-            try {
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                const data = await res.json();
-                const rawContent = decodeURIComponent(escape(atob(data.content)));
-                
-                // استخراج البيانات من الملف
-                const titleMatch = rawContent.match(/^# (.*)\n/m);
-                const imgMatch = rawContent.match(/!\[.*\]\((.*)\)/);
-                const body = rawContent.split('\n\n').slice(2).join('\n\n');
-
-                document.getElementById('postTitle').value = titleMatch ? titleMatch[1] : '';
-                document.getElementById('postImage').value = imgMatch ? imgMatch[1] : '';
-                document.getElementById('fileName').value = data.name;
-                document.getElementById('fileName').disabled = true;
-                quill.root.innerHTML = body;
-                
-                isEditing = true;
-                currentFileSha = sha;
-                document.getElementById('editor-status-text').innerText = "تعديل مقال منشور";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (e) { alert("فشل في جلب محتوى المقال"); }
-        }
-
-        async function deleteArticle(path, sha) {
-            if(!confirm("سيتم حذف المقال نهائياً من الموقع، هل أنت متأكد؟")) return;
-            const token = document.getElementById('ghToken').value;
-            try {
-                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: "حذف مقال", sha: sha })
-                });
+            if (res.ok) {
+                alert("✅ تم حفظ ونشر المقال بنجاح!");
+                resetEditor();
                 loadExistingArticles();
-            } catch (e) { alert("فشل الحذف"); }
+            } else {
+                const err = await res.json();
+                alert(`❌ فشل العملية: ${err.message}`);
+            }
+        } catch (e) {
+            alert("❌ فشل الاتصال بـ GitHub. تأكد من التوكن واتصال الإنترنت.");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt ml-2"></i> حفظ ونشر المقال';
+        }
+    }
+
+    // ===== تحميل قائمة المقالات الحالية =====
+    async function loadExistingArticles() {
+        const token = document.getElementById('ghToken').value;
+        if (!token) return;
+
+        try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/blog/articles`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+
+            if (!res.ok) {
+                throw new Error('فشل في جلب المقالات');
+            }
+
+            const files = await res.json();
+            const list = document.getElementById('articles-list');
+            list.innerHTML = '';
+
+            if (files.length === 0) {
+                list.innerHTML = '<p class="text-white/50 text-center py-12 col-span-3">لا توجد مقالات منشورة بعد.</p>';
+                return;
+            }
+
+            files.filter(f => f.name.endsWith('.md')).forEach(file => {
+                const card = document.createElement('div');
+                card.className = 'article-card p-5 rounded-2xl gold-border';
+                card.innerHTML = `
+                    <div class="flex flex-col h-full">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fas fa-file-alt gold-text"></i>
+                            <span class="text-xs text-gray-400 truncate flex-1">${file.name}</span>
+                        </div>
+                        <p class="text-sm text-white/70 line-clamp-2 mb-4">
+                            ${decodeURIComponent(file.name.replace('.md', '').replace(/-/g, ' '))}
+                        </p>
+                        <div class="flex gap-2 mt-auto">
+                            <button onclick="editArticle('${file.path}', '${file.sha}')" 
+                                    class="flex-1 bg-white/5 py-2 rounded-lg text-xs hover:bg-gold-solid hover:text-black transition flex items-center justify-center gap-1">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button onclick="deleteArticle('${file.path}', '${file.sha}')" 
+                                    class="flex-1 bg-red-500/10 text-red-500 py-2 rounded-lg text-xs hover:bg-red-500 hover:text-white transition flex items-center justify-center gap-1">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            // تحديث مؤشر الاتصال
+            const indicator = document.getElementById('connection-indicator');
+            indicator.className = 'flex items-center gap-2 bg-green-500/10 px-4 py-2 rounded-full border border-green-500/20';
+            indicator.innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span><span class="text-xs text-green-500 font-bold uppercase">متصل</span>';
+        } catch (e) {
+            console.error(e);
+            // لا نغير حالة الاتصال لتجنب رسائل خطأ غير ضرورية
+        }
+    }
+
+    // ===== تحميل مقال للتعديل =====
+    async function editArticle(path, sha) {
+        const token = document.getElementById('ghToken').value;
+        if (!token) {
+            alert("يرجى إدخال التوكن أولاً.");
+            return;
         }
 
-        function resetEditor() {
-            isEditing = false;
-            currentFileSha = null;
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postImage').value = '';
-            document.getElementById('fileName').value = '';
-            document.getElementById('fileName').disabled = false;
-            quill.root.innerHTML = '';
-            document.getElementById('editor-status-text').innerText = "إضافة مقال جديد";
+        try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            const data = await res.json();
+            const rawContent = decodeURIComponent(escape(atob(data.content)));
+            
+            // استخراج البيانات من الـ Front Matter والـ Markdown
+            const titleMatch = rawContent.match(/^title: (.*)\n/m);
+            const imageMatch = rawContent.match(/^image: (.*)\n/m);
+            // نأخذ المحتوى بعد السطر الفارغ بعد الـ Front Matter
+            const bodyMatch = rawContent.split('\n\n').slice(2).join('\n\n');
+            
+            document.getElementById('postTitle').value = titleMatch ? titleMatch[1] : '';
+            document.getElementById('postImage').value = imageMatch ? imageMatch[1] : '';
+            document.getElementById('fileName').value = data.name.replace('.md', '');
+            document.getElementById('fileName').disabled = true;
+            
+            // تنظيف محتوى Quill ثم إدراج المحتوى
+            quill.root.innerHTML = bodyMatch || rawContent;
+            
+            isEditing = true;
+            currentFileSha = sha;
+            document.getElementById('editor-status-text').innerText = "تعديل مقال منشور";
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+            alert("❌ فشل في تحميل المقال.");
+        }
+    }
+
+    // ===== حذف مقال =====
+    async function deleteArticle(path, sha) {
+        if (!confirm("⚠️ هل أنت متأكد من حذف هذا المقال؟ لا يمكن التراجع عن هذه العملية.")) return;
+        
+        const token = document.getElementById('ghToken').value;
+        if (!token) {
+            alert("يرجى إدخال التوكن.");
+            return;
         }
 
-        document.getElementById('ghToken').addEventListener('blur', loadExistingArticles);
-    </script>
+        try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: 'DELETE',
+                headers: { 
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    message: "حذف مقال", 
+                    sha: sha 
+                })
+            });
+
+            if (res.ok) {
+                alert("✅ تم حذف المقال بنجاح.");
+                loadExistingArticles();
+            } else {
+                alert("❌ فشل الحذف.");
+            }
+        } catch (e) {
+            alert("❌ حدث خطأ.");
+        }
+    }
+
+    // ===== إعادة تعيين النموذج =====
+    function resetEditor() {
+        isEditing = false;
+        currentFileSha = null;
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postImage').value = '';
+        document.getElementById('fileName').value = '';
+        document.getElementById('fileName').disabled = false;
+        quill.root.innerHTML = '';
+        document.getElementById('editor-status-text').innerText = "إضافة مقال جديد";
+    }
+
+    // ===== تحميل المقالات عند إدخال التوكن =====
+    document.getElementById('ghToken').addEventListener('blur', function() {
+        if (this.value.trim() !== '') {
+            loadExistingArticles();
+        }
+    });
+</script>
+
 </body>
 </html>

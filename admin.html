@@ -61,8 +61,17 @@
         }
 
         .nav-tabs { border-bottom: none; gap: 0.5rem; }
-        .nav-tabs .nav-link { color: #ccc; background: rgba(0,0,0,0.4); border: 1px solid rgba(191,149,63,0.3); border-radius: 2rem !important; padding: 0.6rem 1.5rem; font-weight: 600; }
-        .nav-tabs .nav-link.active { background: var(--gold-gradient) !important; color: #1a1a1a !important; font-weight: 800; }
+        /* تعديل حجم الخط للتبويبات */
+        .nav-tabs .nav-link { 
+            color: #ccc; 
+            background: rgba(0,0,0,0.4); 
+            border: 1px solid rgba(191,149,63,0.3); 
+            border-radius: 2rem !important; 
+            padding: 0.8rem 1.8rem; 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+        }
+        .nav-tabs .nav-link.active { background: var(--gold-gradient) !important; color: #1a1a1a !important; font-weight: 900; }
 
         .case-card, .session-card, .security-log-card {
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(191,149,63,0.3); border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; color: white;
@@ -73,7 +82,7 @@
 
         @media (max-width: 768px) {
             .admin-toolbar h1 { font-size: 0.9rem !important; }
-            .nav-tabs .nav-link { font-size: 0.75rem; padding: 8px 12px; }
+            .nav-tabs .nav-link { font-size: 0.85rem; padding: 10px 15px; }
         }
     </style>
 </head>
@@ -362,19 +371,22 @@ async function loadUpcoming(range) {
     }
 
     const { data, error } = await db.from('sessions')
-        .select('*, cases(client_name, court_name, case_number)')
+        .select('*, cases:case_id(client_name, court_name, case_number)') // تم تعديل الربط لضمان جلب بيانات القضية
         .gte('session_date', start)
         .lte('session_date', end.toISOString())
         .order('session_date');
 
     const container = document.getElementById('upcomingSessions');
     if (data && data.length > 0) {
-        container.innerHTML = data.map(s => `
+        container.innerHTML = data.map(s => {
+            const caseInfo = s.cases || {client_name: 'غير معروف', case_number: '-'};
+            return `
             <div class="session-card">
                 <div class="d-flex justify-content-between"><b class="gold-text">${new Date(s.session_date).toLocaleString('ar-EG')}</b><span class="badge bg-warning text-dark">${s.case_status}</span></div>
-                <div>العميل: ${s.cases.client_name} - قضية: ${s.cases.case_number}</div>
+                <div>العميل: ${caseInfo.client_name} - قضية: ${caseInfo.case_number}</div>
                 <div class="small text-white-50">القرار: ${s.decision || 'بانتظار الجلسة'}</div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
     } else { container.innerHTML = '<div class="text-center p-3 text-white-50">لا توجد جلسات مجدولة</div>'; }
 }
 
@@ -385,14 +397,30 @@ async function searchCases() {
     displaySearchResults(data);
 }
 
-// البحث بالتاريخ
+// إصلاح البحث بالتاريخ
 async function searchByDateRange() {
     const from = document.getElementById('searchFrom').value;
     const to = document.getElementById('searchTo').value;
     if(!from || !to) return Swal.fire("تنبيه", "حدد التواريخ", "info");
     
-    const { data } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', to);
-    displaySearchResults(data.map(s => s.cases));
+    // جلب الجلسات في هذا النطاق مع بيانات قضاياها
+    const { data, error } = await db.from('sessions')
+        .select('*, cases:case_id(*)')
+        .gte('session_date', from + "T00:00:00")
+        .lte('session_date', to + "T23:59:59");
+
+    if(data) {
+        // تصفية القضايا المتكررة وعرضها
+        const uniqueCases = [];
+        const seenIds = new Set();
+        data.forEach(s => {
+            if(s.cases && !seenIds.has(s.cases.id)) {
+                uniqueCases.push(s.cases);
+                seenIds.add(s.cases.id);
+            }
+        });
+        displaySearchResults(uniqueCases);
+    }
 }
 
 async function displaySearchResults(data) {
@@ -407,7 +435,7 @@ async function displaySearchResults(data) {
         </div>`).join('');
 }
 
-// عرض التفاصيل الكاملة والجلسات (حل النقطة رقم 2)
+// عرض التفاصيل الكاملة والجلسات
 async function viewCaseFullDetails(id) {
     const { data: caseData } = await db.from('cases').select('*').eq('id', id).single();
     const { data: sessions } = await db.from('sessions').select('*').eq('case_id', id).order('session_date', {ascending: false});
@@ -436,9 +464,11 @@ async function viewCaseFullDetails(id) {
 // 4. إحصائيات وسجلات الأمان
 async function updateStatistics() {
     const { data: cases } = await db.from('cases').select('client_phone');
-    document.getElementById('totalCasesCount').innerText = cases.length;
-    const unique = new Set(cases.map(c => c.client_phone));
-    document.getElementById('totalClientsCount').innerText = unique.size;
+    if(cases) {
+        document.getElementById('totalCasesCount').innerText = cases.length;
+        const unique = new Set(cases.map(c => c.client_phone));
+        document.getElementById('totalClientsCount').innerText = unique.size;
+    }
 }
 
 async function loadSecurityLogs() {
@@ -448,10 +478,12 @@ async function loadSecurityLogs() {
     
     const { data } = await query;
     const res = document.getElementById('securityLogsResults');
-    res.innerHTML = data.map(l => `
-        <div class="security-log-card small py-2">
-            <span class="text-warning">[${new Date(l.created_at).toLocaleString('ar-EG')}]</span> ${l.action} - ${l.ip_address || '' }
-        </div>`).join('');
+    if(data) {
+        res.innerHTML = data.map(l => `
+            <div class="security-log-card small py-2">
+                <span class="text-warning">[${new Date(l.created_at).toLocaleString('ar-EG')}]</span> ${l.action} - ${l.ip_address || '' }
+            </div>`).join('');
+    }
 }
 
 function exportToPDF() { window.print(); }

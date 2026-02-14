@@ -66,6 +66,12 @@
 
         .case-card, .session-card, .security-log-card {
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(191,149,63,0.3); border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .case-card:hover, .session-card:hover {
+            transform: scale(1.01);
+            border-color: var(--gold-solid);
         }
 
         .stats-card { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(191,149,63,0.2); border-radius: 1rem; padding: 1rem; text-align: center; }
@@ -366,6 +372,9 @@ let selectedCaseForCalendar = null;
 let currentSecurityLogId = null;
 let blockedIPsCache = {};
 
+// متغير لتخزين حدث التثبيت
+let deferredPrompt;
+
 // الدخول
 function login(){  
     if(document.getElementById('password').value==="mahmoud237"){  
@@ -602,28 +611,28 @@ function renderSearchResults(data, type) {
     data.forEach(item => {
         if(type === "sessions") {
             const c = item.cases || {};
-            html += `<div class="session-card">
+            html += `<div class="session-card" onclick="openCaseDetails('${c.id}')">
                 <div class="d-flex justify-content-between">
                     <strong class="gold-text">${new Date(item.session_date).toLocaleString('ar-EG')}</strong>
                     <span class="case-status ${getStatusClass(item.case_status)}">${item.case_status}</span>
                 </div>
-                <div class="mt-2" onclick="openCaseDetails('${c.id}')" style="cursor:pointer">
+                <div class="mt-2">
                     <div><b>العميل:</b> ${c.client_name} - <b>القضية:</b> ${c.case_number}/${c.case_year}</div>
                     <div class="small text-white-50">كود: ${c.case_code || ''}</div>
                 </div>
                 ${item.decision ? `<div class="mt-2 p-2 bg-dark rounded small"><b>القرار:</b> ${item.decision}</div>` : ''}
             </div>`;
         } else {
-            html += `<div class="case-card">
+            html += `<div class="case-card" onclick="openCaseDetails('${item.id}')">
                 <div class="d-flex justify-content-between">
-                    <strong class="case-code" onclick="openCaseDetails('${item.id}')" style="cursor:pointer">${item.case_code || ''}</strong>
+                    <strong class="case-code">${item.case_code || ''}</strong>
                     <span class="case-status ${getStatusClass(item.last_case_status)}">${item.last_case_status}</span>
                 </div>
                 <div class="mt-2">
                     <div><b>العميل:</b> ${item.client_name} (${item.client_phone})</div>
                     <div><b>القضية:</b> ${item.case_number}/${item.case_year} - ${item.court_name}</div>
                 </div>
-                <div class="mt-2 d-flex gap-2">
+                <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()"> <!-- منع تفعيل onclick الأب عند الضغط على الأزرار -->
                     <button class="btn btn-sm btn-outline-warning" onclick="loadCaseForEdit('${item.id}')"><i class="bi bi-pencil"></i> تعديل</button>
                     <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCaseFromSearch('${item.id}')"><i class="bi bi-trash"></i> حذف</button>
                 </div>
@@ -653,13 +662,13 @@ async function loadUpcoming(range, btn){
         for(let s of sessions) {
             const { data: c } = await db.from('cases').select('*').eq('id', s.case_id).single();
             if(c) {
-                html += `<div class="session-card">
+                html += `<div class="session-card" onclick="openCaseDetails('${c.id}')">
                     <div class="d-flex justify-content-between">
                         <b class="gold-text">${new Date(s.session_date).toLocaleString('ar-EG')}</b>
                         <span class="case-status ${getStatusClass(s.case_status)}">${s.case_status}</span>
                     </div>
                     <div class="mt-1">${c.client_name} - قضية ${c.case_number}/${c.case_year}</div>
-                    <div class="mt-2 d-flex gap-2">
+                    <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
                         <button class="btn btn-sm btn-outline-warning" onclick="loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i></button>
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteSession('${s.id}')"><i class="bi bi-trash"></i></button>
                         <button class="btn btn-sm btn-outline-success" onclick="addToGoogleCalendarFromSession('${s.id}')"><i class="bi bi-calendar-plus"></i></button>
@@ -686,14 +695,13 @@ async function loadSecurityLogs() {
         const container = document.getElementById('securityLogsResults');
         if(!data || data.length === 0) { container.innerHTML = '<div class="alert alert-info">لا توجد سجلات</div>'; return; }
         container.innerHTML = data.map(log => `
-            <div class="security-log-card">
+            <div class="security-log-card" onclick="viewLogDetails('${log.id}')">
                 <div class="d-flex justify-content-between">
                     <span class="badge ${log.is_success ? 'bg-success' : 'bg-danger'}">${log.action_type}</span>
                     <small class="text-white-50">${new Date(log.created_at).toLocaleString('ar-EG')}</small>
                 </div>
                 <div class="mt-2">
                     <div><b>الهاتف:</b> ${log.phone || '-'} | <b>IP:</b> <span class="log-ip-display">${log.ip_address}</span></div>
-                    <button class="btn btn-sm btn-outline-info mt-2" onclick="viewLogDetails('${log.id}')">التفاصيل</button>
                 </div>
             </div>
         `).join('');
@@ -701,6 +709,7 @@ async function loadSecurityLogs() {
 }
 
 async function viewLogDetails(id) {
+    event.stopPropagation(); // منع أي تأثير إذا تم الضغط على البطاقة
     const { data } = await db.from('security_logs').eq('id', id).single();
     if(!data) return;
     currentSecurityLogId = id;
@@ -718,6 +727,7 @@ async function deleteSecurityLog() {
 
 // دوال التعديل والحذف (v1)
 async function loadCaseForEdit(id) {
+    event.stopPropagation();
     const { data } = await db.from('cases').eq('id', id).single();
     if(!data) return;
     window.editingCaseId = id;
@@ -757,6 +767,7 @@ async function confirmDeleteCase() {
 }
 
 async function loadSessionForEdit(id) {
+    event.stopPropagation();
     const { data } = await db.from('sessions').eq('id', id).single();
     if(!data) return;
     window.editingSessionId = id;
@@ -774,12 +785,14 @@ async function updateSession() {
 }
 
 async function deleteSession(id) {
+    event.stopPropagation();
     if(!confirm('حذف الجلسة؟')) return;
     await db.from('sessions').delete().eq('id', id);
     loadUpcoming('week');
 }
 
 async function openCaseDetails(id) {
+    event.stopPropagation();
     const { data: c } = await db.from('cases').eq('id', id).single();
     const { data: ss } = await db.from('sessions').eq('case_id', id).order('session_date', { ascending: false });
     if(!c) return;
@@ -822,7 +835,19 @@ function addToGoogleCalendar() {
     window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('جلسة: '+s_client.value)}&dates=${start}/${end}`, '_blank');
 }
 function addToGoogleCalendarFromSession(id) { Swal.fire("قريباً", "هذه الميزة قيد التطوير", "info"); }
-function installPWA() { console.log('PWA Install'); }
+
+// دالة تثبيت PWA
+function installPWA() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    }
+}
 
 // تسجيل Service Worker لدعم PWA
 if ('serviceWorker' in navigator) {
@@ -854,16 +879,17 @@ if ('serviceWorker' in navigator) {
         const swUrl = URL.createObjectURL(blob);
         navigator.serviceWorker.register(swUrl).then(reg => {
             console.log('Service Worker registered');
-            // إظهار زر التثبيت إذا لم يكن مثبتاً بعد
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                const installBtn = document.getElementById('installBtn');
-                installBtn.style.display = 'inline-block';
-                installBtn.onclick = () => { e.prompt(); };
-            });
         }).catch(err => console.log('SW registration failed:', err));
     });
 }
+
+// الاستماع لحدث beforeinstallprompt
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installBtn = document.getElementById('installBtn');
+    installBtn.style.display = 'inline-block';
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);

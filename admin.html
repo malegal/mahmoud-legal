@@ -7,7 +7,6 @@
     <meta name="theme-color" content="#bf953f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- تم إصلاح رابط manifest ليعمل بشكل صحيح مع PWA -->
     <link rel="manifest" href='data:application/manifest+json,{"name":"نظام إدارة القضايا","short_name":"القضايا","start_url":".","display":"standalone","background_color":"#020617","theme_color":"#bf953f","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/1048/1048953.png","sizes":"512x512","type":"image/png"}]}'>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,6 +19,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
+        /* نفس الأنماط السابقة - لم يتم تغييرها */
         :root {
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
@@ -27,7 +27,6 @@
             --gold-glow: rgba(191, 149, 63, 0.5);
             --header-height: 70px;
         }
-
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: var(--primary-dark);
@@ -35,7 +34,6 @@
             padding-top: var(--header-height);
             -webkit-tap-highlight-color: transparent;
         }
-
         label, .form-label {
             font-size: 1.1rem;
             font-weight: 600;
@@ -47,23 +45,19 @@
             background: rgba(255,255,255,0.05); border: 1px solid rgba(191,149,63,0.3); color: white; border-radius: 0.8rem;
         }
         .form-control:focus { background: rgba(255,255,255,0.1); border-color: var(--gold-solid); color: white; box-shadow: none; }
-
         .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .gold-btn { background: var(--gold-gradient); color: #1a1a1a; font-weight: 800; border: none; box-shadow: 0 0 15px var(--gold-glow); transition: 0.3s; }
         .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--gold-glow); }
         .card-glass { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(191, 149, 63, 0.2); border-radius: 1.2rem; }
         .gold-border { border: 1px solid var(--gold-solid) !important; }
-
         .admin-toolbar {
             position: fixed; top: 0; left: 0; right: 0; height: var(--header-height);
             background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); border-bottom: 2px solid var(--gold-solid); z-index: 1100;
             display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
         }
-
         .nav-tabs { border-bottom: none; gap: 0.5rem; }
         .nav-tabs .nav-link { color: #ccc; background: rgba(0,0,0,0.4); border: 1px solid rgba(191,149,63,0.3); border-radius: 2rem !important; padding: 0.6rem 1.5rem; font-weight: 600; }
         .nav-tabs .nav-link.active { background: var(--gold-gradient) !important; color: #1a1a1a !important; font-weight: 800; }
-
         .case-card, .session-card, .security-log-card {
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(191,149,63,0.3); border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; color: white;
             cursor: pointer;
@@ -73,10 +67,8 @@
             transform: scale(1.01);
             border-color: var(--gold-solid);
         }
-
         .stats-card { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(191,149,63,0.2); border-radius: 1rem; padding: 1rem; text-align: center; }
         .stats-number { font-size: 2rem; font-weight: bold; color: var(--gold-solid); }
-
         .case-code { font-family: monospace; font-size: 1.2rem; color: var(--gold-solid); font-weight: bold; }
         .case-status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
         .status-new { background: #d4edda; color: #155724; }
@@ -85,11 +77,9 @@
         .status-suspended { background: #e2e3e5; color: #383d41; }
         .status-reserved { background: #cce5ff; color: #004085; }
         .status-judged { background: #d1ecf1; color: #0c5460; }
-
         .log-action-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-left: 5px; }
         .log-ip-display { font-family: monospace; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 5px; border: 1px solid rgba(191,149,63,0.3); }
         .log-details { font-size: 0.85rem; color: #ccc; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid rgba(191,149,63,0.2); white-space: pre-wrap; word-break: break-all; max-height: 150px; overflow-y: auto; }
-
         @media (max-width: 768px) {
             .admin-toolbar h1 { font-size: 0.9rem !important; }
             .nav-tabs .nav-link { font-size: 0.75rem; padding: 8px 12px; }
@@ -103,7 +93,6 @@
         <i class="bi bi-shield-check text-warning fs-5"></i>
         <h1 class="gold-text fs-5 fw-bold mb-0">نظام إدارة القضايا | محمود عبد الحميد المحامي</h1>
     </div>
-    <!-- زر التثبيت أصبح مرئياً عند توفر خاصية PWA -->
     <button class="gold-btn btn btn-sm px-3" onclick="installPWA()" id="installBtn" style="display:none">تثبيت التطبيق</button>
 </div>
 
@@ -131,7 +120,7 @@
         </ul>  
   
         <div class="tab-content">  
-            <!-- تبويب القضايا -->
+            <!-- تبويب القضايا (نفس الكود السابق) -->
             <div class="tab-pane fade show active" id="cases">  
                 <form id="caseForm" class="card-glass p-3 p-md-4 mb-4">  
                     <h5 class="gold-text mb-3">تسجيل قضية جديدة</h5>  
@@ -172,7 +161,7 @@
                 </form>  
             </div>  
 
-            <!-- تبويب الجلسات -->
+            <!-- تبويب الجلسات (نفس الكود السابق) -->
             <div class="tab-pane fade" id="sessions">  
                 <div class="card-glass p-3 p-md-4 mb-4">  
                     <h5 class="gold-text mb-3">تسجيل جلسة <span class="badge bg-secondary">الملء تلقائي</span></h5>  
@@ -267,7 +256,7 @@
                 <div id="searchResults" class="mt-4"></div>  
             </div>  
 
-            <!-- تبويب سجل الاستعلامات -->
+            <!-- تبويب سجل الاستعلامات (نفس الكود السابق) -->
             <div class="tab-pane fade" id="securityLogs">  
                 <div class="card-glass p-3 p-md-4 mb-4">  
                     <h5 class="gold-text mb-3"><i class="bi bi-shield-lock"></i> نظام المراقبة الأمنية</h5>  
@@ -284,7 +273,7 @@
     </div>  
 </div>  
 
-<!-- Modals -->
+<!-- Modals (نفس الكود السابق) -->
 <div class="modal fade" id="caseModal" tabindex="-1">  
     <div class="modal-dialog modal-lg">  
         <div class="modal-content bg-dark text-white gold-border">  
@@ -364,6 +353,7 @@
 </div>
 
 <script>
+// ========== إعدادات Supabase ==========
 const SB_URL="https://iyhfafodhptcdwrjywek.supabase.co";  
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";  
 const db = supabase.createClient(SB_URL, SB_KEY);  
@@ -376,7 +366,7 @@ let blockedIPsCache = {};
 // متغير لتخزين حدث التثبيت
 let deferredPrompt;
 
-// الدخول
+// ========== دوال تسجيل الدخول والإحصائيات ==========
 function login(){  
     if(document.getElementById('password').value==="mahmoud237"){  
         document.getElementById('loginPage').style.display="none";   
@@ -387,7 +377,6 @@ function login(){
     } else { Swal.fire("خطأ","كلمة المرور غير صحيحة","error"); }  
 }
 
-// تحديث الإحصائيات
 async function updateStatistics() {
     try {
         const { count: casesCount } = await db.from('cases').select('*', { count: 'exact', head: true });
@@ -399,17 +388,15 @@ async function updateStatistics() {
     } catch (err) { console.error('Error updating stats:', err); }
 }
 
-// استخراج الرقم الإداري من كود القضية
+// ========== دوال القضايا والجلسات (كما هي) ==========
 function extractAdminNumber(caseCode) {
     if (!caseCode) return null;
     const parts = caseCode.split('-');
     return parts.length >= 3 ? parts[2] : null;
 }
 
-// توليد كود قضية موحد
 async function generateCaseCode(caseYear) {
-    const yearSuffix = caseYear.slice(-2); // آخر رقمين من السنة
-    // البحث عن القضايا في نفس السنة
+    const yearSuffix = caseYear.slice(-2);
     const { data: cases } = await db.from('cases').select('case_code').eq('case_year', caseYear);
     let maxSerial = 0;
     if (cases && cases.length > 0) {
@@ -428,14 +415,12 @@ async function generateCaseCode(caseYear) {
     return `MA-${yearSuffix}-${newSerial}-${randomPart}`;
 }
 
-// البحث بالرقم الإداري (محسّن)
 async function searchByAdminNumber(query) {  
     if (!query || query.length < 1) {  
         document.getElementById('caseSearchResults').style.display = 'none';  
         return;  
     }  
     try {
-        // البحث باستخدام ilike لاحتواء case_code على الرقم المدخل
         const { data, error } = await db.from('cases').select('*').ilike('case_code', `%${query}%`).limit(5);  
         if (error) return;
         if (data && data.length > 0) {  
@@ -457,7 +442,6 @@ async function searchByAdminNumber(query) {
     } catch (err) { console.error(err); }
 }
 
-// البحث العام لتسجيل الجلسة
 async function searchCasesForSession(query) {  
     if (!query || query.length < 2) {  
         document.getElementById('caseSearchResults').style.display = 'none';  
@@ -485,7 +469,6 @@ async function searchCasesForSession(query) {
     } catch (err) { console.error(err); }
 }
 
-// اختيار قضية لتسجيل جلسة
 async function selectCaseForSession(caseId) {  
     try {
         const { data, error } = await db.from('cases').select('*').eq('id', caseId).single();  
@@ -513,7 +496,6 @@ async function selectCaseForSession(caseId) {
     } catch (err) { console.error(err); }
 }
 
-// حفظ القضية مع توليد الكود
 document.getElementById('caseForm').onsubmit = async e => {  
     e.preventDefault();  
     Swal.fire({ title: 'جاري الحفظ...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });  
@@ -523,13 +505,11 @@ document.getElementById('caseForm').onsubmit = async e => {
             opponent_name: opponent_name.value, case_number: case_number.value, case_year: case_year.value, court_name: court_name.value,
             circle: circle.value, case_type: case_type.value, case_subject: case_subject.value, notes: notes.value
         };
-        // توليد كود القضية
         const caseCode = await generateCaseCode(case_year.value);
         caseData.case_code = caseCode;
 
         const { data, error } = await db.from('cases').insert([caseData]).select().single();
         if (error) {
-            // محاولة إعادة الإدراج إذا فشل (قد يكون بسبب سياسة RLS)
             const { data: retryData, error: retryError } = await db.from('cases').insert([caseData]).select();
             if (retryError) Swal.fire("خطأ", retryError.message, "error");
             else if (retryData && retryData.length > 0) showSuccessMessage(retryData[0]);
@@ -548,7 +528,6 @@ function showSuccessMessage(savedCase) {
     updateStatistics();
 }
 
-// حفظ الجلسة
 async function saveSession() {  
     if (!currentCaseId) return Swal.fire("تنبيه", "اختر قضية أولاً", "warning");  
     if (!s_date.value) return Swal.fire("تنبيه", "أدخل تاريخ الجلسة", "warning");  
@@ -564,7 +543,7 @@ async function saveSession() {
     } catch (err) { Swal.fire("خطأ", "حدث خطأ غير متوقع", "error"); }
 }
 
-// البحث العام
+// ========== دوال البحث وعرض النتائج (معدلة لضمان عمل النقر) ==========
 async function searchCases(){  
     const t = searchInput.value;  
     if(!t.trim()) return Swal.fire("تنبيه","أدخل كلمة للبحث","warning");  
@@ -584,7 +563,6 @@ async function searchCases(){
     } catch (err) { Swal.close(); }
 }
 
-// البحث بالتاريخ
 async function searchByDateRange() {  
     const from = document.getElementById('searchFrom').value;  
     const to = document.getElementById('searchTo').value;  
@@ -604,7 +582,6 @@ async function searchByDateRange() {
     } catch (err) { Swal.close(); }
 }
 
-// عرض النتائج
 function renderSearchResults(data, type) {  
     const container = document.getElementById('searchResults');
     if(!data || data.length === 0) { container.innerHTML = '<div class="alert alert-info text-center">لا توجد نتائج</div>'; return; }
@@ -624,7 +601,8 @@ function renderSearchResults(data, type) {
                 ${item.decision ? `<div class="mt-2 p-2 bg-dark rounded small"><b>القرار:</b> ${item.decision}</div>` : ''}
             </div>`;
         } else {
-            html += `<div class="case-card" onclick="openCaseDetails('${item.id}')">
+            // تعديل مهم: استخدام onclick على البطاقة مع تمرير item.id
+            html += `<div class="case-card" data-case-id="${item.id}">
                 <div class="d-flex justify-content-between">
                     <strong class="case-code">${item.case_code || ''}</strong>
                     <span class="case-status ${getStatusClass(item.last_case_status)}">${item.last_case_status}</span>
@@ -633,7 +611,7 @@ function renderSearchResults(data, type) {
                     <div><b>العميل:</b> ${item.client_name} (${item.client_phone})</div>
                     <div><b>القضية:</b> ${item.case_number}/${item.case_year} - ${item.court_name}</div>
                 </div>
-                <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()"> <!-- منع تفعيل onclick الأب عند الضغط على الأزرار -->
+                <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
                     <button class="btn btn-sm btn-outline-warning" onclick="loadCaseForEdit('${item.id}')"><i class="bi bi-pencil"></i> تعديل</button>
                     <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCaseFromSearch('${item.id}')"><i class="bi bi-trash"></i> حذف</button>
                 </div>
@@ -641,6 +619,19 @@ function renderSearchResults(data, type) {
         }
     });
     container.innerHTML = html;
+
+    // إضافة مستمعي الأحداث بعد إدراج العناصر في DOM
+    if(type === "cases") {
+        document.querySelectorAll('.case-card[data-case-id]').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // التأكد أن النقر لم يأت من زر داخلي
+                if(e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                    const caseId = this.getAttribute('data-case-id');
+                    openCaseDetails(caseId);
+                }
+            });
+        });
+    }
 }
 
 function getStatusClass(status) {
@@ -648,7 +639,6 @@ function getStatusClass(status) {
     return map[status] || 'status-new';
 }
 
-// جلب الجلسات القادمة
 async function loadUpcoming(range, btn){  
     if(btn) { document.querySelectorAll('#sessions .btn-group .btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }  
     const start = new Date().toISOString().split('T')[0];  
@@ -681,7 +671,7 @@ async function loadUpcoming(range, btn){
     } catch (err) { console.error(err); }
 }
 
-// سجلات الأمان
+// ========== سجلات الأمان ==========
 async function loadSecurityLogs() {
     try {
         let query = db.from('security_logs').select('*').order('created_at', { ascending: false }).limit(50);
@@ -710,7 +700,7 @@ async function loadSecurityLogs() {
 }
 
 async function viewLogDetails(id) {
-    event.stopPropagation(); // منع أي تأثير إذا تم الضغط على البطاقة
+    event.stopPropagation();
     const { data } = await db.from('security_logs').eq('id', id).single();
     if(!data) return;
     currentSecurityLogId = id;
@@ -726,7 +716,7 @@ async function deleteSecurityLog() {
     loadSecurityLogs();
 }
 
-// دوال التعديل والحذف (v1)
+// ========== دوال التعديل والحذف ==========
 async function loadCaseForEdit(id) {
     event.stopPropagation();
     const { data } = await db.from('cases').eq('id', id).single();
@@ -767,13 +757,12 @@ async function confirmDeleteCase() {
     searchCases();
 }
 
-// دالة مؤقتة لحذف القضية من نتائج البحث
 window.confirmDeleteCaseFromSearch = async function(id) {
     event.stopPropagation();
     if(!confirm('حذف القضية وجميع جلساتها؟')) return;
     await db.from('sessions').delete().eq('case_id', id);
     await db.from('cases').delete().eq('id', id);
-    searchCases(); // إعادة تحميل نتائج البحث
+    searchCases();
 };
 
 async function loadSessionForEdit(id) {
@@ -801,8 +790,9 @@ async function deleteSession(id) {
     loadUpcoming('week');
 }
 
+// ========== دالة فتح تفاصيل القضية (معدلة مع طباعة للتأكد) ==========
 async function openCaseDetails(id) {
-    // التأكد من وجود id
+    console.log('openCaseDetails called with id:', id); // للتأكد من الاستدعاء
     if (!id) return;
     try {
         const { data: c, error } = await db.from('cases').eq('id', id).single();
@@ -829,7 +819,7 @@ async function openCaseDetails(id) {
     }
 }
 
-// طباعة PDF
+// ========== دوال إضافية ==========
 async function printCasePDF() {
     const c = window.currentCaseForPrint;
     if(!c) return;
@@ -853,7 +843,7 @@ function addToGoogleCalendar() {
 }
 function addToGoogleCalendarFromSession(id) { Swal.fire("قريباً", "هذه الميزة قيد التطوير", "info"); }
 
-// دالة تثبيت PWA
+// ========== دوال PWA ==========
 function installPWA() {
     if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -866,7 +856,7 @@ function installPWA() {
     }
 }
 
-// تسجيل Service Worker لدعم PWA - تم التعديل لاستخدام مسار ثابت
+// تسجيل Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         // إنشاء محتوى Service Worker بسيط
@@ -893,7 +883,6 @@ if ('serviceWorker' in navigator) {
                 );
             });
         `;
-        // تسجيل Service Worker باستخدام Blob URL (نظراً لعدم وجود ملف حقيقي)
         const blob = new Blob([swContent], { type: 'application/javascript' });
         const swUrl = URL.createObjectURL(blob);
         navigator.serviceWorker.register(swUrl, { scope: './' }).then(reg => {
@@ -907,12 +896,14 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     const installBtn = document.getElementById('installBtn');
-    installBtn.style.display = 'inline-block';
+    if (installBtn) installBtn.style.display = 'inline-block';
 });
 
+// تهيئة التاريخ في حقل الجلسة
 document.addEventListener('DOMContentLoaded', () => {
     const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);
-    document.getElementById('s_date').value = nextWeek.toISOString().slice(0, 16);
+    const sDateField = document.getElementById('s_date');
+    if (sDateField) sDateField.value = nextWeek.toISOString().slice(0, 16);
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

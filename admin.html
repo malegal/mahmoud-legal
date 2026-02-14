@@ -389,21 +389,44 @@ async function updateStatistics() {
     } catch (err) { console.error('Error updating stats:', err); }
 }
 
-// استخراج الرقم الإداري
+// استخراج الرقم الإداري من كود القضية
 function extractAdminNumber(caseCode) {
     if (!caseCode) return null;
     const parts = caseCode.split('-');
     return parts.length >= 3 ? parts[2] : null;
 }
 
-// البحث بالرقم الإداري
+// توليد كود قضية موحد
+async function generateCaseCode(caseYear) {
+    const yearSuffix = caseYear.slice(-2); // آخر رقمين من السنة
+    // البحث عن القضايا في نفس السنة
+    const { data: cases } = await db.from('cases').select('case_code').eq('case_year', caseYear);
+    let maxSerial = 0;
+    if (cases && cases.length > 0) {
+        cases.forEach(c => {
+            if (c.case_code) {
+                const parts = c.case_code.split('-');
+                if (parts.length >= 3) {
+                    const serial = parseInt(parts[2], 10);
+                    if (!isNaN(serial) && serial > maxSerial) maxSerial = serial;
+                }
+            }
+        });
+    }
+    const newSerial = (maxSerial + 1).toString().padStart(3, '0');
+    const randomPart = Math.random().toString(36).substring(2, 7).toUpperCase();
+    return `MA-${yearSuffix}-${newSerial}-${randomPart}`;
+}
+
+// البحث بالرقم الإداري (محسّن)
 async function searchByAdminNumber(query) {  
     if (!query || query.length < 1) {  
         document.getElementById('caseSearchResults').style.display = 'none';  
         return;  
     }  
     try {
-        const { data, error } = await db.from('cases').select('*').like('case_code', `%-${query}-%`).limit(5);  
+        // البحث باستخدام ilike لاحتواء case_code على الرقم المدخل
+        const { data, error } = await db.from('cases').select('*').ilike('case_code', `%${query}%`).limit(5);  
         if (error) return;
         if (data && data.length > 0) {  
             const resultsDiv = document.getElementById('caseSearchResults');  
@@ -480,7 +503,7 @@ async function selectCaseForSession(caseId) {
     } catch (err) { console.error(err); }
 }
 
-// حفظ القضية
+// حفظ القضية مع توليد الكود
 document.getElementById('caseForm').onsubmit = async e => {  
     e.preventDefault();  
     Swal.fire({ title: 'جاري الحفظ...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });  
@@ -490,8 +513,13 @@ document.getElementById('caseForm').onsubmit = async e => {
             opponent_name: opponent_name.value, case_number: case_number.value, case_year: case_year.value, court_name: court_name.value,
             circle: circle.value, case_type: case_type.value, case_subject: case_subject.value, notes: notes.value
         };
+        // توليد كود القضية
+        const caseCode = await generateCaseCode(case_year.value);
+        caseData.case_code = caseCode;
+
         const { data, error } = await db.from('cases').insert([caseData]).select().single();
         if (error) {
+            // محاولة إعادة الإدراج إذا فشل (قد يكون بسبب سياسة RLS)
             const { data: retryData, error: retryError } = await db.from('cases').insert([caseData]).select();
             if (retryError) Swal.fire("خطأ", retryError.message, "error");
             else if (retryData && retryData.length > 0) showSuccessMessage(retryData[0]);
@@ -795,6 +823,47 @@ function addToGoogleCalendar() {
 }
 function addToGoogleCalendarFromSession(id) { Swal.fire("قريباً", "هذه الميزة قيد التطوير", "info"); }
 function installPWA() { console.log('PWA Install'); }
+
+// تسجيل Service Worker لدعم PWA
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        const swContent = `
+            self.addEventListener('install', e => {
+                e.waitUntil(
+                    caches.open('v1').then(cache => {
+                        return cache.addAll([
+                            '/',
+                            'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+                            'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css',
+                            'https://cdn.tailwindcss.com',
+                            'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap',
+                            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
+                            'https://cdn.jsdelivr.net/npm/sweetalert2@11',
+                            'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+                        ]);
+                    })
+                );
+            });
+            self.addEventListener('fetch', e => {
+                e.respondWith(
+                    caches.match(e.request).then(res => res || fetch(e.request))
+                );
+            });
+        `;
+        const blob = new Blob([swContent], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl).then(reg => {
+            console.log('Service Worker registered');
+            // إظهار زر التثبيت إذا لم يكن مثبتاً بعد
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                const installBtn = document.getElementById('installBtn');
+                installBtn.style.display = 'inline-block';
+                installBtn.onclick = () => { e.prompt(); };
+            });
+        }).catch(err => console.log('SW registration failed:', err));
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);

@@ -20,7 +20,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        /* نفس الأنماط السابقة تماماً */
         :root {
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
@@ -70,7 +69,7 @@
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(191,149,63,0.3); border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; color: white;
             cursor: pointer;
             transition: transform 0.2s;
-            position: relative; /* For positioning buttons */
+            position: relative;
         }
         .case-card:hover, .session-card:hover, .security-log-card:hover {
             transform: scale(1.01);
@@ -89,7 +88,6 @@
         .status-reserved { background: #cce5ff; color: #004085; }
         .status-judged { background: #d1ecf1; color: #0c5460; }
 
-        .log-action-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
         .log-ip-display { font-family: monospace; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 5px; border: 1px solid rgba(191,149,63,0.3); }
         .log-details { font-size: 0.85rem; color: #ccc; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; margin-top: 10px; border: 1px solid rgba(191,149,63,0.2); white-space: pre-wrap; word-break: break-all; max-height: 150px; overflow-y: auto; }
 
@@ -444,9 +442,10 @@
                         <div><strong>القضية:</strong> ${caseData.case_number || '---'} / ${caseData.case_year || '---'}</div>
                     </div>
                     ${s.decision ? `<div class="mt-2 p-2 bg-white/5 rounded text-xs">${s.decision}</div>` : ''}
-                    <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
-                        <button class="btn btn-sm btn-outline-warning" onclick="loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i> تعديل</button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSession('${s.id}')"><i class="bi bi-trash"></i> حذف</button>
+                    
+                    <div class="mt-2 d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-warning" style="z-index: 2; position: relative;" onclick="loadSessionForEdit(event, '${s.id}')"><i class="bi bi-pencil"></i> تعديل</button>
+                        <button class="btn btn-sm btn-outline-danger" style="z-index: 2; position: relative;" onclick="deleteSession(event, '${s.id}')"><i class="bi bi-trash"></i> حذف</button>
                     </div>
                 </div>`;
             }
@@ -633,6 +632,7 @@
                 const { data: sessions } = await db.from('sessions').select('*').eq('case_id', item.id).order('session_date', { ascending: false }).limit(1);
                 item.last_status = sessions && sessions.length > 0 ? sessions[0].case_status : 'جديدة';
             }
+            
             container.innerHTML = data.map(c => `
                 <div class="case-card" onclick="openCaseDetails('${c.id}')">
                     <div class="d-flex justify-content-between">
@@ -643,9 +643,9 @@
                         <div><b>العميل:</b> ${c.client_name} (${c.client_phone})</div>
                         <div><b>القضية:</b> ${c.case_number}/${c.case_year} - ${c.court_name}</div>
                     </div>
-                    <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
-                        <button class="btn btn-sm btn-outline-warning" onclick="loadCaseForEdit('${c.id}')"><i class="bi bi-pencil"></i> تعديل</button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCase('${c.id}')"><i class="bi bi-trash"></i> حذف</button>
+                    <div class="mt-2 d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-warning" style="z-index: 2; position: relative;" onclick="loadCaseForEdit(event, '${c.id}')"><i class="bi bi-pencil"></i> تعديل</button>
+                        <button class="btn btn-sm btn-outline-danger" style="z-index: 2; position: relative;" onclick="deleteCase(event, '${c.id}')"><i class="bi bi-trash"></i> حذف</button>
                     </div>
                 </div>
             `).join('');
@@ -737,9 +737,10 @@
     }
     window.openCaseDetails = openCaseDetails;
 
-    // ========== دوال تعديل وحذف القضايا (جديد) ==========
-    async function loadCaseForEdit(id) {
-        event.stopPropagation(); // منع فتح نافذة التفاصيل
+    // ========== دوال تعديل وحذف القضايا (تم إصلاح التضارب) ==========
+    async function loadCaseForEdit(e, id) {
+        if(e) e.stopPropagation(); 
+        
         const { data } = await db.from('cases').eq('id', id).single();
         if (!data) return;
         editingCaseId = id;
@@ -778,15 +779,13 @@
         if (error) return Swal.fire("خطأ", error.message, "error");
         Swal.fire("تم", "تم تحديث القضية", "success");
         bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
-        searchCases(); // تحديث النتائج
+        searchCases(); 
     }
     window.updateCase = updateCase;
 
     async function confirmDeleteCase() {
         if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟ لا يمكن التراجع عن هذا الإجراء.')) return;
-        // حذف الجلسات المرتبطة أولاً
         await db.from('sessions').delete().eq('case_id', editingCaseId);
-        // ثم حذف القضية
         await db.from('cases').delete().eq('id', editingCaseId);
         bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
         searchCases();
@@ -794,8 +793,8 @@
     }
     window.confirmDeleteCase = confirmDeleteCase;
 
-    async function deleteCase(id) {
-        event.stopPropagation();
+    async function deleteCase(e, id) {
+        if(e) e.stopPropagation();
         if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟')) return;
         await db.from('sessions').delete().eq('case_id', id);
         await db.from('cases').delete().eq('id', id);
@@ -803,13 +802,13 @@
     }
     window.deleteCase = deleteCase;
 
-    // ========== دوال تعديل وحذف الجلسات (جديد) ==========
-    async function loadSessionForEdit(id) {
-        event.stopPropagation();
+    // ========== دوال تعديل وحذف الجلسات (تم إصلاح التضارب) ==========
+    async function loadSessionForEdit(e, id) {
+        if(e) e.stopPropagation();
+        
         const { data } = await db.from('sessions').eq('id', id).single();
         if (!data) return;
         editingSessionId = id;
-        // تحويل التاريخ لصيغة تناسب input datetime-local
         const d = new Date(data.session_date);
         d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         document.getElementById('edit_session_date').value = d.toISOString().slice(0, 16);
@@ -841,8 +840,8 @@
     }
     window.confirmDeleteSession = confirmDeleteSession;
 
-    async function deleteSession(id) {
-        event.stopPropagation();
+    async function deleteSession(e, id) {
+        if(e) e.stopPropagation();
         if (!confirm('حذف الجلسة؟')) return;
         await db.from('sessions').delete().eq('id', id);
         loadUpcoming('week');

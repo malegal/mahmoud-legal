@@ -171,7 +171,7 @@
                 </form>  
             </div>  
 
-            <!-- ========== تبويب الجلسات (مع عرض بيانات القضية المختارة) ========== -->
+            <!-- ========== تبويب الجلسات (مع عرض بيانات القضية المختارة وزر التقويم) ========== -->
             <div class="tab-pane fade" id="sessions">  
                 <div class="card-glass p-3 p-md-4 mb-4">  
                     <h5 class="gold-text mb-3">تسجيل جلسة جديدة</h5>  
@@ -206,7 +206,12 @@
                         </div>  
                         <div class="col-md-12"><label>القرار / الإجراء</label><textarea id="s_decision" class="form-control" rows="2"></textarea></div>  
                     </div>  
-                    <button class="gold-btn btn w-100 mt-3 py-3" onclick="saveSession()">حفظ الجلسة</button>
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="gold-btn btn flex-grow-1 py-3" onclick="saveSession()">حفظ الجلسة</button>
+                        <button class="btn btn-outline-success py-3" onclick="addToGoogleCalendar()" id="calendarBtn" disabled>
+                            <i class="bi bi-calendar-plus"></i> إضافة للتقويم
+                        </button>
+                    </div>
                 </div>  
 
                 <!-- عرض الجلسات القادمة -->
@@ -494,6 +499,8 @@
         document.getElementById('s_case_status').value = (lastSession && lastSession.length > 0) ? lastSession[0].case_status : 'جديدة';
         
         document.getElementById('caseSearchResults').style.display = 'none';
+        // تفعيل زر التقويم
+        document.getElementById('calendarBtn').disabled = false;
     }
 
     // ========== حفظ الجلسة ==========
@@ -513,6 +520,18 @@
         document.getElementById('s_decision').value = '';
         loadUpcoming('week');
         loadStats();
+    }
+
+    // ========== إضافة إلى تقويم جوجل (من v1) ==========
+    function addToGoogleCalendar() {
+        const startDate = document.getElementById('s_date').value;
+        if (!startDate) return Swal.fire("تنبيه", "أدخل تاريخ الجلسة أولاً", "warning");
+        const clientName = document.getElementById('s_client').value || 'العميل';
+        const caseNumber = document.getElementById('s_case_number').value || '';
+        const start = new Date(startDate).toISOString().replace(/-|:|\.\d\d\d/g, "");
+        const end = new Date(new Date(startDate).getTime() + 3600000).toISOString().replace(/-|:|\.\d\d\d/g, "");
+        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('جلسة: ' + clientName + ' - قضية ' + caseNumber)}&dates=${start}/${end}`;
+        window.open(url, '_blank');
     }
 
     // ========== توليد كود القضية ==========
@@ -572,12 +591,12 @@
         if (!q.trim()) return Swal.fire("تنبيه", "أدخل كلمة للبحث", "warning");
         
         // تسجيل محاولة البحث
-        const ip = await getClientIP(); // دالة مساعدة لجلب IP (تقريبية)
+        const ip = await getClientIP();
         await db.from('security_logs').insert([{
-            phone: q,  // تخزين النص المبحوث عنه في حقل phone مؤقتًا
+            phone: q,
             ip_address: ip,
             action_type: 'search_attempt',
-            is_success: false, // سنعدلها لاحقًا إذا نجح
+            is_success: false,
             details: { query: q }
         }]);
 
@@ -585,8 +604,8 @@
         const container = document.getElementById('searchResults');
         if (error) return Swal.fire("خطأ", error.message, "error");
 
-        // تسجيل نجاح البحث إذا وجد نتائج
         if (data && data.length > 0) {
+            // تسجيل نجاح البحث
             await db.from('security_logs').insert([{
                 phone: q,
                 ip_address: ip,
@@ -594,9 +613,7 @@
                 is_success: true,
                 details: { query: q, results_count: data.length }
             }]);
-        }
 
-        if (data && data.length > 0) {
             // جلب آخر حالة لكل قضية
             for (let item of data) {
                 const { data: sessions } = await db.from('sessions').select('*').eq('case_id', item.id).order('session_date', { ascending: false }).limit(1);
@@ -621,10 +638,10 @@
         } else {
             container.innerHTML = '<div class="text-center text-white/50">لا توجد نتائج</div>';
         }
-        loadSecurityLogs(); // تحديث السجل
+        loadSecurityLogs();
     }
 
-    // دالة تقريبية للحصول على IP (في البيئات الحقيقية تحتاج لاستخدام service أو header)
+    // دالة تقريبية للحصول على IP
     async function getClientIP() {
         try {
             const res = await fetch('https://api.ipify.org?format=json');
@@ -635,20 +652,33 @@
         }
     }
 
-    // ========== البحث التاريخي ==========
+    // ========== البحث التاريخي (مصلح ليعمل بشكل موثوق) ==========
     async function searchByDateRange() {
         const from = document.getElementById('searchFrom').value;
         const to = document.getElementById('searchTo').value;
         if (!from || !to) return Swal.fire("تنبيه", "أدخل النطاق الزمني", "warning");
 
-        const { data: sessions, error } = await db.from('sessions').select('*, cases(*)').gte('session_date', from).lte('session_date', to).order('session_date', { ascending: false });
-        const container = document.getElementById('searchResults');
+        // جلب الجلسات في النطاق أولاً
+        const { data: sessions, error } = await db.from('sessions')
+            .select('*')
+            .gte('session_date', from)
+            .lte('session_date', to)
+            .order('session_date', { ascending: false });
+
         if (error) return Swal.fire("خطأ", error.message, "error");
 
-        if (sessions && sessions.length > 0) {
-            container.innerHTML = sessions.map(s => {
-                const c = s.cases || {};
-                return `
+        const container = document.getElementById('searchResults');
+        if (!sessions || sessions.length === 0) {
+            container.innerHTML = '<div class="text-center text-white/50">لا توجد جلسات في هذا النطاق</div>';
+            return;
+        }
+
+        // جلب بيانات القضية لكل جلسة بشكل منفصل
+        let html = '<h6 class="mb-3 gold-text">نتائج البحث التاريخي:</h6>';
+        for (let s of sessions) {
+            const { data: c } = await db.from('cases').select('*').eq('id', s.case_id).single();
+            if (c) {
+                html += `
                 <div class="session-card" onclick="openCaseDetails('${c.id}')">
                     <div class="d-flex justify-content-between">
                         <span class="gold-text">${new Date(s.session_date).toLocaleString('ar-EG')}</span>
@@ -657,10 +687,9 @@
                     <div><b>العميل:</b> ${c.client_name} - <b>القضية:</b> ${c.case_number}/${c.case_year}</div>
                     ${s.decision ? `<div class="mt-1 small">${s.decision}</div>` : ''}
                 </div>`;
-            }).join('');
-        } else {
-            container.innerHTML = '<div class="text-center text-white/50">لا توجد جلسات في هذا النطاق</div>';
+            }
         }
+        container.innerHTML = html;
     }
 
     // ========== فتح تفاصيل القضية ==========
@@ -734,7 +763,7 @@
         if (error) return Swal.fire("خطأ", error.message, "error");
         Swal.fire("تم", "تم تحديث القضية", "success");
         bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
-        searchCases(); // إعادة تحميل نتائج البحث
+        searchCases();
     }
 
     async function confirmDeleteCase() {

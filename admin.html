@@ -612,10 +612,16 @@ function renderSearchResults(data, type) {
         if(type === "sessions") {
             const c = item.cases || {};
             html += `<div class="session-card" onclick="openCaseDetails('${c.id}')">
-                <div class="d-flex justify-content-between">
-                    <strong class="gold-text">${new Date(item.session_date).toLocaleString('ar-EG')}</strong>
-                    <span class="case-status ${getStatusClass(item.case_status)}">${item.case_status}</span>
-                </div>
+                <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
+    <button class="btn btn-sm btn-outline-warning" 
+            onclick="event.stopPropagation(); loadCaseForEdit('${item.id}')">
+        <i class="bi bi-pencil"></i> تعديل
+    </button>
+    <button class="btn btn-sm btn-outline-danger" 
+            onclick="event.stopPropagation(); confirmDeleteCaseFromSearch('${item.id}')">
+        <i class="bi bi-trash"></i> حذف
+    </button>
+</div>
                 <div class="mt-2">
                     <div><b>العميل:</b> ${c.client_name} - <b>القضية:</b> ${c.case_number}/${c.case_year}</div>
                     <div class="small text-white-50">كود: ${c.case_code || ''}</div>
@@ -668,12 +674,20 @@ async function loadUpcoming(range, btn){
                         <b class="gold-text">${new Date(s.session_date).toLocaleString('ar-EG')}</b>
                         <span class="case-status ${getStatusClass(s.case_status)}">${s.case_status}</span>
                     </div>
-                    <div class="mt-1">${c.client_name} - قضية ${c.case_number}/${c.case_year}</div>
                     <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
-                        <button class="btn btn-sm btn-outline-warning" onclick="loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSession('${s.id}')"><i class="bi bi-trash"></i></button>
-                        <button class="btn btn-sm btn-outline-success" onclick="addToGoogleCalendarFromSession('${s.id}')"><i class="bi bi-calendar-plus"></i></button>
-                    </div>
+    <button class="btn btn-sm btn-outline-warning" 
+            onclick="event.stopPropagation(); loadSessionForEdit('${s.id}')">
+        <i class="bi bi-pencil"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-danger" 
+            onclick="event.stopPropagation(); deleteSession('${s.id}')">
+        <i class="bi bi-trash"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-success" 
+            onclick="event.stopPropagation(); addToGoogleCalendarFromSession('${s.id}')">
+        <i class="bi bi-calendar-plus"></i>
+    </button>
+</div>
                 </div>`;
             }
         }
@@ -729,6 +743,8 @@ async function deleteSecurityLog() {
 // دوال التعديل والحذف (v1)
 async function loadCaseForEdit(id) {
     event.stopPropagation();
+    console.log("تم الضغط على تعديل القضية → ID:", id);   // ← أضف هذا السطر
+    // باقي الكود كما هو
     const { data } = await db.from('cases').eq('id', id).single();
     if(!data) return;
     window.editingCaseId = id;
@@ -778,6 +794,8 @@ window.confirmDeleteCaseFromSearch = async function(id) {
 
 async function loadSessionForEdit(id) {
     event.stopPropagation();
+    console.log("تم الضغط على تعديل الجلسة → ID:", id);
+    // باقي الكود
     const { data } = await db.from('sessions').eq('id', id).single();
     if(!data) return;
     window.editingSessionId = id;

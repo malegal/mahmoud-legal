@@ -269,21 +269,25 @@
     </div>  
 </div>  
 
-<!-- ========== Modal عرض تفاصيل القضية ========== -->
+<!-- ========== Modal عرض تفاصيل القضية (الآن يحتوي على أزرار التعديل) ========== -->
 <div class="modal fade" id="caseModal" tabindex="-1">  
     <div class="modal-dialog modal-lg">  
         <div class="modal-content bg-dark text-white gold-border">  
             <div class="modal-header border-secondary"><h5 class="modal-title gold-text">تفاصيل القضية</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>  
             <div class="modal-body" id="caseDetails"></div>  
-            <div class="modal-footer border-secondary">  
-                <button class="gold-btn btn" onclick="printCasePDF()">طباعة التقرير</button>  
-                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">إغلاق</button>  
+            <div class="modal-footer border-secondary justify-content-between">  
+                <!-- أزرار التعديل والحذف هنا في الفوتر لضمان عملها -->
+                <div id="modalActionButtons"></div>
+                <div>
+                    <button class="gold-btn btn me-2" onclick="printCasePDF()">طباعة التقرير</button>  
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">إغلاق</button>  
+                </div>
             </div>  
         </div>  
     </div>  
 </div>
 
-<!-- ========== Modal تعديل القضية (جديد) ========== -->
+<!-- ========== Modal تعديل القضية ========== -->
 <div class="modal fade" id="editCaseModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white gold-border">
@@ -307,7 +311,6 @@
                 </form>
             </div>
             <div class="modal-footer border-secondary">
-                <button class="btn btn-danger" onclick="confirmDeleteCase()">حذف القضية</button>
                 <button class="gold-btn btn" onclick="updateCase()">حفظ التعديلات</button>
                 <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">إلغاء</button>
             </div>
@@ -315,7 +318,7 @@
     </div>
 </div>
 
-<!-- ========== Modal تعديل الجلسة (جديد) ========== -->
+<!-- ========== Modal تعديل الجلسة ========== -->
 <div class="modal fade" id="editSessionModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-white gold-border">
@@ -431,6 +434,7 @@
         for (let s of sessions) {
             const { data: caseData } = await db.from('cases').select('*').eq('id', s.case_id).single();
             if (caseData) {
+                // تمت إزالة أزرار التعديل من هنا لمنع التضارب، التعديل الآن يتم من خلال فتح التفاصيل
                 html += `
                 <div class="session-card" onclick="openCaseDetails('${caseData.id}')">
                     <div class="d-flex justify-content-between">
@@ -442,11 +446,7 @@
                         <div><strong>القضية:</strong> ${caseData.case_number || '---'} / ${caseData.case_year || '---'}</div>
                     </div>
                     ${s.decision ? `<div class="mt-2 p-2 bg-white/5 rounded text-xs">${s.decision}</div>` : ''}
-                    
-                    <div class="mt-2 d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-warning" style="z-index: 2; position: relative;" onclick="loadSessionForEdit(event, '${s.id}')"><i class="bi bi-pencil"></i> تعديل</button>
-                        <button class="btn btn-sm btn-outline-danger" style="z-index: 2; position: relative;" onclick="deleteSession(event, '${s.id}')"><i class="bi bi-trash"></i> حذف</button>
-                    </div>
+                    <div class="mt-2 text-end text-white-50 small"><i class="bi bi-eye"></i> اضغط للتفاصيل والتعديل</div>
                 </div>`;
             }
         }
@@ -633,6 +633,7 @@
                 item.last_status = sessions && sessions.length > 0 ? sessions[0].case_status : 'جديدة';
             }
             
+            // تمت إزالة أزرار التعديل من هنا
             container.innerHTML = data.map(c => `
                 <div class="case-card" onclick="openCaseDetails('${c.id}')">
                     <div class="d-flex justify-content-between">
@@ -643,10 +644,7 @@
                         <div><b>العميل:</b> ${c.client_name} (${c.client_phone})</div>
                         <div><b>القضية:</b> ${c.case_number}/${c.case_year} - ${c.court_name}</div>
                     </div>
-                    <div class="mt-2 d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-warning" style="z-index: 2; position: relative;" onclick="loadCaseForEdit(event, '${c.id}')"><i class="bi bi-pencil"></i> تعديل</button>
-                        <button class="btn btn-sm btn-outline-danger" style="z-index: 2; position: relative;" onclick="deleteCase(event, '${c.id}')"><i class="bi bi-trash"></i> حذف</button>
-                    </div>
+                    <div class="mt-2 text-end text-white-50 small"><i class="bi bi-eye"></i> اضغط للتفاصيل والتعديل</div>
                 </div>
             `).join('');
         } else {
@@ -705,12 +703,13 @@
     }
     window.searchByDateRange = searchByDateRange;
 
-    // ========== فتح تفاصيل القضية ==========
+    // ========== فتح تفاصيل القضية (مع أزرار التعديل الجديدة) ==========
     async function openCaseDetails(id) {
         const { data: c, error } = await db.from('cases').select('*').eq('id', id).single();
         if (error || !c) return;
         const { data: ss } = await db.from('sessions').select('*').eq('case_id', id).order('session_date', { ascending: false });
         currentCaseForPrint = { ...c, sessions: ss || [] };
+        
         let html = `
             <div class="p-2">
                 <h4 class="gold-text serif-font text-xl mb-3">${c.client_name}</h4>
@@ -722,25 +721,40 @@
                     <div><strong>كود القضية:</strong> ${c.case_code || ''}</div>
                 </div>
                 <hr class="my-4 border-white/10">
-                <h6 class="gold-text">سجل الجلسات</h6>
+                <h6 class="gold-text mb-3">سجل الجلسات</h6>
                 <div class="space-y-2">
                     ${ss && ss.length > 0 ? ss.map(s => `
-                        <div class="bg-white/5 p-2 rounded text-xs">
-                            <b>${new Date(s.session_date).toLocaleDateString('ar-EG')}:</b> ${s.decision || 'لا يوجد قرار'} (${s.case_status})
+                        <div class="bg-white/5 p-2 rounded text-xs d-flex justify-content-between align-items-center">
+                            <div>
+                                <b>${new Date(s.session_date).toLocaleDateString('ar-EG')}:</b> ${s.decision || 'لا يوجد قرار'} (${s.case_status})
+                            </div>
+                            <!-- زر تعديل الجلسة هنا -->
+                            <button class="btn btn-sm btn-link text-warning p-0 ms-2" onclick="loadSessionForEdit('${s.id}')">
+                                <i class="bi bi-pencil-square fs-6"></i>
+                            </button>
                         </div>
                     `).join('') : '<div class="text-white/50">لا توجد جلسات مسجلة</div>'}
                 </div>
             </div>
         `;
         document.getElementById('caseDetails').innerHTML = html;
+        
+        // وضع أزرار تعديل وحذف القضية في الفوتر
+        document.getElementById('modalActionButtons').innerHTML = `
+            <button class="btn btn-warning btn-sm" onclick="loadCaseForEdit('${c.id}')"><i class="bi bi-pencil"></i> تعديل القضية</button>
+            <button class="btn btn-danger btn-sm ms-2" onclick="deleteCaseInModal('${c.id}')"><i class="bi bi-trash"></i> حذف</button>
+        `;
+
         new bootstrap.Modal(document.getElementById('caseModal')).show();
     }
     window.openCaseDetails = openCaseDetails;
 
-    // ========== دوال تعديل وحذف القضايا (تم إصلاح التضارب) ==========
-    async function loadCaseForEdit(e, id) {
-        if(e) e.stopPropagation(); 
-        
+    // ========== دوال تعديل وحذف القضايا ==========
+    async function loadCaseForEdit(id) {
+        // إغلاق مودال التفاصيل أولاً
+        const viewModal = bootstrap.Modal.getInstance(document.getElementById('caseModal'));
+        if (viewModal) viewModal.hide();
+
         const { data } = await db.from('cases').eq('id', id).single();
         if (!data) return;
         editingCaseId = id;
@@ -756,7 +770,11 @@
         document.getElementById('edit_case_type').value = data.case_type || 'مدنية';
         document.getElementById('edit_case_subject').value = data.case_subject || '';
         document.getElementById('edit_notes').value = data.notes || '';
-        new bootstrap.Modal(document.getElementById('editCaseModal')).show();
+        
+        // فتح مودال التعديل
+        setTimeout(() => {
+            new bootstrap.Modal(document.getElementById('editCaseModal')).show();
+        }, 300); // تأخير بسيط لضمان إغلاق المودال السابق
     }
     window.loadCaseForEdit = loadCaseForEdit;
 
@@ -784,6 +802,7 @@
     window.updateCase = updateCase;
 
     async function confirmDeleteCase() {
+        // دالة الحذف من داخل مودال التعديل
         if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟ لا يمكن التراجع عن هذا الإجراء.')) return;
         await db.from('sessions').delete().eq('case_id', editingCaseId);
         await db.from('cases').delete().eq('id', editingCaseId);
@@ -793,19 +812,22 @@
     }
     window.confirmDeleteCase = confirmDeleteCase;
 
-    async function deleteCase(e, id) {
-        if(e) e.stopPropagation();
+    async function deleteCaseInModal(id) {
+        // دالة الحذف المباشر من مودال العرض
         if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟')) return;
         await db.from('sessions').delete().eq('case_id', id);
         await db.from('cases').delete().eq('id', id);
+        bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide();
         searchCases();
     }
-    window.deleteCase = deleteCase;
+    window.deleteCaseInModal = deleteCaseInModal;
 
-    // ========== دوال تعديل وحذف الجلسات (تم إصلاح التضارب) ==========
-    async function loadSessionForEdit(e, id) {
-        if(e) e.stopPropagation();
-        
+    // ========== دوال تعديل وحذف الجلسات ==========
+    async function loadSessionForEdit(id) {
+        // إغلاق مودال التفاصيل أولاً
+        const viewModal = bootstrap.Modal.getInstance(document.getElementById('caseModal'));
+        if (viewModal) viewModal.hide();
+
         const { data } = await db.from('sessions').eq('id', id).single();
         if (!data) return;
         editingSessionId = id;
@@ -815,7 +837,10 @@
         
         document.getElementById('edit_session_case_status').value = data.case_status;
         document.getElementById('edit_decision').value = data.decision || '';
-        new bootstrap.Modal(document.getElementById('editSessionModal')).show();
+        
+        setTimeout(() => {
+            new bootstrap.Modal(document.getElementById('editSessionModal')).show();
+        }, 300);
     }
     window.loadSessionForEdit = loadSessionForEdit;
 
@@ -839,14 +864,6 @@
         loadUpcoming('week');
     }
     window.confirmDeleteSession = confirmDeleteSession;
-
-    async function deleteSession(e, id) {
-        if(e) e.stopPropagation();
-        if (!confirm('حذف الجلسة؟')) return;
-        await db.from('sessions').delete().eq('id', id);
-        loadUpcoming('week');
-    }
-    window.deleteSession = deleteSession;
 
     // ========== السجل الأمني ==========
     async function loadSecurityLogs() {

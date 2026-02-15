@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        /* نفس الأنماط السابقة */
+        /* نفس الأنماط السابقة تماماً */
         :root {
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
@@ -48,6 +48,7 @@
             background: rgba(255,255,255,0.05); border: 1px solid rgba(191,149,63,0.3); color: white; border-radius: 0.8rem;
         }
         .form-control:focus { background: rgba(255,255,255,0.1); border-color: var(--gold-solid); color: white; box-shadow: none; }
+        .form-control:read-only { background: rgba(0,0,0,0.3); color: #aaa; }
 
         .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .gold-btn { background: var(--gold-gradient); color: #1a1a1a; font-weight: 800; border: none; box-shadow: 0 0 15px var(--gold-glow); transition: 0.3s; }
@@ -69,6 +70,7 @@
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(191,149,63,0.3); border-radius: 1rem; padding: 1.2rem; margin-bottom: 1rem; color: white;
             cursor: pointer;
             transition: transform 0.2s;
+            position: relative; /* For positioning buttons */
         }
         .case-card:hover, .session-card:hover, .security-log-card:hover {
             transform: scale(1.01);
@@ -172,7 +174,7 @@
                 </form>  
             </div>  
 
-            <!-- ========== تبويب الجلسات (مع عرض بيانات القضية المختارة وزر التقويم) ========== -->
+            <!-- ========== تبويب الجلسات ========== -->
             <div class="tab-pane fade" id="sessions">  
                 <div class="card-glass p-3 p-md-4 mb-4">  
                     <h5 class="gold-text mb-3">تسجيل جلسة جديدة</h5>  
@@ -188,7 +190,7 @@
                             <input id="s_case_code" class="form-control" readonly>
                         </div>
                         
-                        <!-- بيانات القضية المختارة (تظهر عند الاختيار) -->
+                        <!-- بيانات القضية المختارة -->
                         <div class="col-md-4"><label>رقم القضية</label><input id="s_case_number" class="form-control" readonly></div>
                         <div class="col-md-4"><label>سنة القضية</label><input id="s_case_year" class="form-control" readonly></div>
                         <div class="col-md-4"><label>المحكمة</label><input id="s_court" class="form-control" readonly></div>
@@ -226,7 +228,7 @@
                 </div>  
             </div>  
 
-            <!-- ========== تبويب البحث والتقارير (مع إحصائيات وبحث تاريخي) ========== -->
+            <!-- ========== تبويب البحث والتقارير ========== -->
             <div class="tab-pane fade" id="searchTab">
                 <div class='row g-3 mb-4'>
                     <div class='col-6 col-md-3'><div class='stats-card'><div class='stats-number' id='stat-cases'>0</div><div class='text-white-50 small'>إجمالي القضايا</div></div></div>
@@ -252,7 +254,7 @@
                 <div id="searchResults" class="mt-4"></div>  
             </div>
 
-            <!-- ========== تبويب سجل الاستعلامات (مع فلترة) ========== -->
+            <!-- ========== تبويب سجل الاستعلامات ========== -->
             <div class="tab-pane fade" id="securityLogs">
                 <div class="card-glass p-3 p-md-4 mb-4">
                     <h5 class="gold-text mb-3"><i class="bi bi-shield-lock"></i> سجل عمليات البحث</h5>
@@ -283,7 +285,7 @@
     </div>  
 </div>
 
-<!-- ========== Modal تعديل القضية ========== -->
+<!-- ========== Modal تعديل القضية (جديد) ========== -->
 <div class="modal fade" id="editCaseModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white gold-border">
@@ -315,7 +317,7 @@
     </div>
 </div>
 
-<!-- ========== Modal تعديل الجلسة ========== -->
+<!-- ========== Modal تعديل الجلسة (جديد) ========== -->
 <div class="modal fade" id="editSessionModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-white gold-border">
@@ -353,13 +355,12 @@
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
     const db = supabase.createClient(SB_URL, SB_KEY);
 
-    // متغيرات عامة (من v1)
-    let currentCaseId = null;          // للجلسة الحالية المختارة
-    let currentCaseForPrint = null;    // للطباعة
-    let editingCaseId = null;          // للقضية الجاري تعديلها
-    let editingSessionId = null;       // للجلسة الجاري تعديلها
-    let currentSecurityLogId = null;   // للسجل الأمني
-    let deferredPrompt;                // للتثبيت
+    let currentCaseId = null;
+    let currentCaseForPrint = null;
+    let editingCaseId = null;
+    let editingSessionId = null;
+    let currentSecurityLogId = null;
+    let deferredPrompt;
 
     // ========== تسجيل الدخول ==========
     function login() {
@@ -736,9 +737,9 @@
     }
     window.openCaseDetails = openCaseDetails;
 
-    // ========== دوال تعديل وحذف القضايا (مأخوذة من v1) ==========
+    // ========== دوال تعديل وحذف القضايا (جديد) ==========
     async function loadCaseForEdit(id) {
-        event.stopPropagation();
+        event.stopPropagation(); // منع فتح نافذة التفاصيل
         const { data } = await db.from('cases').eq('id', id).single();
         if (!data) return;
         editingCaseId = id;
@@ -777,36 +778,42 @@
         if (error) return Swal.fire("خطأ", error.message, "error");
         Swal.fire("تم", "تم تحديث القضية", "success");
         bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
-        searchCases(); // إعادة تحميل نتائج البحث
+        searchCases(); // تحديث النتائج
     }
     window.updateCase = updateCase;
 
     async function confirmDeleteCase() {
-        if (!confirm('حذف القضية وجميع جلساتها؟')) return;
+        if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+        // حذف الجلسات المرتبطة أولاً
         await db.from('sessions').delete().eq('case_id', editingCaseId);
+        // ثم حذف القضية
         await db.from('cases').delete().eq('id', editingCaseId);
         bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
         searchCases();
+        Swal.fire("تم", "تم حذف القضية", "success");
     }
     window.confirmDeleteCase = confirmDeleteCase;
 
-    // دالة حذف القضية من نتائج البحث مباشرة
     async function deleteCase(id) {
         event.stopPropagation();
-        if (!confirm('حذف القضية وجميع جلساتها؟')) return;
+        if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟')) return;
         await db.from('sessions').delete().eq('case_id', id);
         await db.from('cases').delete().eq('id', id);
         searchCases();
     }
     window.deleteCase = deleteCase;
 
-    // ========== دوال تعديل وحذف الجلسات (مأخوذة من v1) ==========
+    // ========== دوال تعديل وحذف الجلسات (جديد) ==========
     async function loadSessionForEdit(id) {
         event.stopPropagation();
         const { data } = await db.from('sessions').eq('id', id).single();
         if (!data) return;
         editingSessionId = id;
-        document.getElementById('edit_session_date').value = new Date(data.session_date).toISOString().slice(0, 16);
+        // تحويل التاريخ لصيغة تناسب input datetime-local
+        const d = new Date(data.session_date);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        document.getElementById('edit_session_date').value = d.toISOString().slice(0, 16);
+        
         document.getElementById('edit_session_case_status').value = data.case_status;
         document.getElementById('edit_decision').value = data.decision || '';
         new bootstrap.Modal(document.getElementById('editSessionModal')).show();
@@ -822,6 +829,7 @@
         await db.from('sessions').update(updated).eq('id', editingSessionId);
         bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
         loadUpcoming('week');
+        Swal.fire("تم", "تم تحديث الجلسة", "success");
     }
     window.updateSession = updateSession;
 
@@ -833,7 +841,6 @@
     }
     window.confirmDeleteSession = confirmDeleteSession;
 
-    // دالة حذف الجلسة من القائمة مباشرة
     async function deleteSession(id) {
         event.stopPropagation();
         if (!confirm('حذف الجلسة؟')) return;
@@ -976,7 +983,6 @@
     }
     window.installPWA = installPWA;
 
-    // تسجيل Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             const swContent = `
@@ -1010,7 +1016,6 @@
         });
     }
 
-    // تعيين تاريخ افتراضي للجلسة
     document.addEventListener('DOMContentLoaded', () => {
         const nextWeek = new Date();
         nextWeek.setDate(nextWeek.getDate() + 7);

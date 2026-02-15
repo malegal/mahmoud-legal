@@ -602,7 +602,7 @@ function renderSearchResults(data, type) {
             </div>`;
         } else {
             // تعديل مهم: استخدام onclick على البطاقة مع تمرير item.id
-            html += `<div class="case-card" data-case-id="${item.id}">
+            html += `<div class="case-card" data-case-id="${item.id}" onclick="openCaseDetails('${item.id}')">`;
                 <div class="d-flex justify-content-between">
                     <strong class="case-code">${item.case_code || ''}</strong>
                     <span class="case-status ${getStatusClass(item.last_case_status)}">${item.last_case_status}</span>

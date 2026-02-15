@@ -619,7 +619,7 @@ function renderSearchResults(data, type) {
     container.innerHTML = html;
 }
 
-
+    
 function getStatusClass(status) {
     const map = { 'جديدة': 'status-new', 'مؤجلة': 'status-postponed', 'مشطوبة': 'status-canceled', 'موقوفة': 'status-suspended', 'محجوزة للحكم': 'status-reserved', 'محكوم فيها': 'status-judged' };
     return map[status] || 'status-new';

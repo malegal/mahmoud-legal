@@ -757,12 +757,12 @@
     }
     window.openCaseDetails = openCaseDetails;
 
-    // ========== دوال تعديل وحذف القضايا (تم الإصلاح الجذري) ==========
+    // ========== دوال تعديل وحذف القضايا (تم الإصلاح) ==========
     async function loadCaseForEdit(id) {
         console.log('Loading case for edit:', id);
         
-        // 1. جلب البيانات أولاً
-        const { data } = await db.from('cases').eq('id', id).single();
+        // ✅ تم إضافة .select('*') لتصحيح الاستعلام
+        const { data } = await db.from('cases').select('*').eq('id', id).single();
         if (!data) return;
         
         editingCaseId = id;
@@ -779,14 +779,14 @@
         document.getElementById('edit_case_subject').value = data.case_subject || '';
         document.getElementById('edit_notes').value = data.notes || '';
         
-        // 2. إغلاق مودال التفاصيل
+        // إغلاق مودال التفاصيل
         const viewModalEl = document.getElementById('caseModal');
         const viewModal = bootstrap.Modal.getInstance(viewModalEl);
         if (viewModal) {
             viewModal.hide();
         }
 
-        // 3. الانتظار قليلاً ثم فتح مودال التعديل
+        // فتح مودال التعديل بعد تأخير بسيط
         setTimeout(() => {
             const editModal = getModalInstance('editCaseModal');
             editModal.show();
@@ -821,10 +821,6 @@
     }
     window.updateCase = updateCase;
 
-    async function confirmDeleteCase() {
-        // ... (تم الحذف لأنه لم يعد مستخدماً في التصميم الجديد، الحذف الآن مباشر)
-    }
-
     async function deleteCaseInModal(id) {
         if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟')) return;
         await db.from('sessions').delete().eq('case_id', id);
@@ -838,12 +834,14 @@
     }
     window.deleteCaseInModal = deleteCaseInModal;
 
-    // ========== دوال تعديل وحذف الجلسات (تم الإصلاح الجذري) ==========
+    // ========== دوال تعديل وحذف الجلسات (تم الإصلاح) ==========
     async function loadSessionForEdit(id) {
         console.log('Loading session for edit:', id);
 
-        const { data } = await db.from('sessions').eq('id', id).single();
+        // ✅ تم إضافة .select('*') لتصحيح الاستعلام
+        const { data } = await db.from('sessions').select('*').eq('id', id).single();
         if (!data) return;
+        
         editingSessionId = id;
         
         const d = new Date(data.session_date);

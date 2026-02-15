@@ -8,7 +8,32 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"نظام إدارة القضايا","short_name":"القضايا","start_url":".","display":"standalone","background_color":"#020617","theme_color":"#bf953f","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/1048/1048953.png","sizes":"512x512","type":"image/png"}]}'>
+    
+    <!-- ربط الـ Manifest بشكل صحيح -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- نسخة احتياطية للـ manifest في حال عدم وجود ملف -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "نظام إدارة القضايا",
+        "short_name": "القضايا",
+        "description": "نظام متكامل لإدارة القضايا والمحاماة",
+        "start_url": ".",
+        "display": "standalone",
+        "background_color": "#020617",
+        "theme_color": "#bf953f",
+        "icons": [
+            {
+                "src": "https://cdn-icons-png.flaticon.com/512/1048/1048953.png",
+                "sizes": "512x512",
+                "type": "image/png"
+            },
+            {
+                "src": "https://cdn-icons-png.flaticon.com/512/1048/1048953.png",
+                "sizes": "192x192",
+                "type": "image/png"
+            }
+        ]
+    }'>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -348,11 +373,12 @@
 </div>
 
 <script>
+    // ========== إعداد Supabase ==========
     const SB_URL = "https://iyhfafodhptcdwrjywek.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
     const db = supabase.createClient(SB_URL, SB_KEY);
 
-    // متغيرات عامة
+    // ========== متغيرات عامة ==========
     let currentCaseId = null;          // للجلسة الحالية المختارة
     let currentCaseForPrint = null;    // للطباعة
     let editingCaseId = null;          // للقضية الجاري تعديلها
@@ -360,8 +386,31 @@
     let currentSecurityLogId = null;   // للسجل الأمني
     let deferredPrompt;                // للتثبيت
 
+    // ========== دوال مساعدة ==========
+    function getStatusClass(status) {
+        const map = {
+            'جديدة': 'status-new',
+            'مؤجلة': 'status-postponed',
+            'مشطوبة': 'status-canceled',
+            'موقوفة': 'status-suspended',
+            'محجوزة للحكم': 'status-reserved',
+            'محكوم فيها': 'status-judged'
+        };
+        return map[status] || 'status-new';
+    }
+
+    async function getClientIP() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            return data.ip;
+        } catch {
+            return 'unknown';
+        }
+    }
+
     // ========== تسجيل الدخول ==========
-    function login() {
+    window.login = function() {
         if (document.getElementById('password').value === "mahmoud237") {
             document.getElementById('loginPage').style.display = "none";
             document.getElementById('mainContent').style.display = "block";
@@ -371,10 +420,10 @@
         } else {
             Swal.fire("خطأ", "كلمة المرور غير صحيحة", "error");
         }
-    }
+    };
 
     // ========== الإحصائيات ==========
-    async function loadStats() {
+    window.loadStats = async function() {
         try {
             const { count: cCount } = await db.from('cases').select('*', { count: 'exact', head: true });
             document.getElementById('stat-cases').innerText = cCount || 0;
@@ -392,10 +441,10 @@
             const { count: upCount } = await db.from('sessions').select('*', { count: 'exact', head: true }).gte('session_date', today).lte('session_date', nextWeek);
             document.getElementById('stat-sessions').innerText = upCount || 0;
         } catch (e) { console.error(e); }
-    }
+    };
 
-    // ========== الجلسات القادمة (مع أزرار تعديل/حذف) ==========
-    async function loadUpcoming(range, btn) {
+    // ========== الجلسات القادمة ==========
+    window.loadUpcoming = async function(range, btn) {
         if (btn) {
             document.querySelectorAll('#sessions .btn-group .btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -450,22 +499,10 @@
             }
         }
         container.innerHTML = html;
-    }
-
-    function getStatusClass(status) {
-        const map = {
-            'جديدة': 'status-new',
-            'مؤجلة': 'status-postponed',
-            'مشطوبة': 'status-canceled',
-            'موقوفة': 'status-suspended',
-            'محجوزة للحكم': 'status-reserved',
-            'محكوم فيها': 'status-judged'
-        };
-        return map[status] || 'status-new';
-    }
+    };
 
     // ========== البحث عن القضايا لإضافتها للجلسات ==========
-    async function searchCasesForSession(q) {
+    window.searchCasesForSession = async function(q) {
         if (q.length < 2) {
             document.getElementById('caseSearchResults').style.display = 'none';
             return;
@@ -484,13 +521,12 @@
             resDiv.innerHTML = '<div class="text-center p-2">لا توجد نتائج</div>';
             resDiv.style.display = 'block';
         }
-    }
+    };
 
-    async function selectCaseForSession(id) {
+    window.selectCaseForSession = async function(id) {
         const { data, error } = await db.from('cases').select('*').eq('id', id).single();
         if (error || !data) return;
         currentCaseId = data.id;
-        // عرض بيانات القضية في الحقول
         document.getElementById('s_case_code').value = data.case_code || '';
         document.getElementById('s_case_number').value = data.case_number;
         document.getElementById('s_case_year').value = data.case_year;
@@ -505,12 +541,11 @@
         document.getElementById('s_case_status').value = (lastSession && lastSession.length > 0) ? lastSession[0].case_status : 'جديدة';
         
         document.getElementById('caseSearchResults').style.display = 'none';
-        // تفعيل زر التقويم
         document.getElementById('calendarBtn').disabled = false;
-    }
+    };
 
     // ========== حفظ الجلسة ==========
-    async function saveSession() {
+    window.saveSession = async function() {
         if (!currentCaseId) return Swal.fire("تنبيه", "يجب اختيار قضية أولاً", "warning");
         if (!document.getElementById('s_date').value) return Swal.fire("تنبيه", "أدخل تاريخ الجلسة", "warning");
 
@@ -526,10 +561,10 @@
         document.getElementById('s_decision').value = '';
         loadUpcoming('week');
         loadStats();
-    }
+    };
 
-    // ========== إضافة إلى تقويم جوجل (تدعم الهاتف) ==========
-    function addToGoogleCalendar() {
+    // ========== إضافة إلى تقويم جوجل ==========
+    window.addToGoogleCalendar = function() {
         const startDate = document.getElementById('s_date').value;
         if (!startDate) return Swal.fire("تنبيه", "أدخل تاريخ الجلسة أولاً", "warning");
         
@@ -537,20 +572,15 @@
         const caseNumber = document.getElementById('s_case_number').value || '';
         const court = document.getElementById('s_court').value || '';
         
-        // تنسيق التاريخ ليتوافق مع تقويم جوجل (بصيغة ISO بدون علامات)
         const start = new Date(startDate).toISOString().replace(/-|:|\.\d\d\d/g, "");
         const end = new Date(new Date(startDate).getTime() + 3600000).toISOString().replace(/-|:|\.\d\d\d/g, "");
         
-        // إنشاء نص الحدث
         const eventTitle = `جلسة: ${clientName} - قضية ${caseNumber}`;
         const eventDetails = `المحكمة: ${court}`;
         
-        // رابط تقويم جوجل (يعمل على جميع الأجهزة)
         const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${start}/${end}&details=${encodeURIComponent(eventDetails)}`;
-        
-        // فتح الرابط في نافذة جديدة (سيفتح التطبيق إذا كان مثبتًا على الهاتف)
         window.open(url, '_blank');
-    }
+    };
 
     // ========== توليد كود القضية ==========
     async function generateCaseCode(caseYear) {
@@ -603,12 +633,11 @@
         loadStats();
     };
 
-    // ========== البحث العام (مع تسجيل في السجل الأمني) ==========
-    async function searchCases() {
+    // ========== البحث العام ==========
+    window.searchCases = async function() {
         const q = document.getElementById('searchInput').value;
         if (!q.trim()) return Swal.fire("تنبيه", "أدخل كلمة للبحث", "warning");
         
-        // تسجيل محاولة البحث
         const ip = await getClientIP();
         await db.from('security_logs').insert([{
             phone: q,
@@ -623,7 +652,6 @@
         if (error) return Swal.fire("خطأ", error.message, "error");
 
         if (data && data.length > 0) {
-            // تسجيل نجاح البحث
             await db.from('security_logs').insert([{
                 phone: q,
                 ip_address: ip,
@@ -632,7 +660,6 @@
                 details: { query: q, results_count: data.length }
             }]);
 
-            // جلب آخر حالة لكل قضية
             for (let item of data) {
                 const { data: sessions } = await db.from('sessions').select('*').eq('case_id', item.id).order('session_date', { ascending: false }).limit(1);
                 item.last_status = sessions && sessions.length > 0 ? sessions[0].case_status : 'جديدة';
@@ -657,26 +684,14 @@
             container.innerHTML = '<div class="text-center text-white/50">لا توجد نتائج</div>';
         }
         loadSecurityLogs();
-    }
-
-    // دالة تقريبية للحصول على IP
-    async function getClientIP() {
-        try {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            return data.ip;
-        } catch {
-            return 'unknown';
-        }
-    }
+    };
 
     // ========== البحث التاريخي ==========
-    async function searchByDateRange() {
+    window.searchByDateRange = async function() {
         const from = document.getElementById('searchFrom').value;
         const to = document.getElementById('searchTo').value;
         if (!from || !to) return Swal.fire("تنبيه", "أدخل النطاق الزمني", "warning");
 
-        // جلب الجلسات في النطاق
         const { data: sessions, error } = await db.from('sessions')
             .select('*')
             .gte('session_date', from)
@@ -691,7 +706,6 @@
             return;
         }
 
-        // جلب بيانات القضية لكل جلسة
         let html = '<h6 class="mb-3 gold-text">نتائج البحث التاريخي:</h6>';
         for (let s of sessions) {
             const { data: c } = await db.from('cases').select('*').eq('id', s.case_id).single();
@@ -708,10 +722,10 @@
             }
         }
         container.innerHTML = html;
-    }
+    };
 
     // ========== فتح تفاصيل القضية ==========
-    async function openCaseDetails(id) {
+    window.openCaseDetails = async function(id) {
         const { data: c, error } = await db.from('cases').select('*').eq('id', id).single();
         if (error || !c) return;
         const { data: ss } = await db.from('sessions').select('*').eq('case_id', id).order('session_date', { ascending: false });
@@ -739,10 +753,10 @@
         `;
         document.getElementById('caseDetails').innerHTML = html;
         new bootstrap.Modal(document.getElementById('caseModal')).show();
-    }
+    };
 
-    // ========== تعديل القضية ==========
-    async function loadCaseForEdit(id) {
+    // ========== دوال تعديل القضية ==========
+    window.loadCaseForEdit = async function(id) {
         event.stopPropagation();
         const { data } = await db.from('cases').eq('id', id).single();
         if (!data) return;
@@ -760,9 +774,9 @@
         document.getElementById('edit_case_subject').value = data.case_subject || '';
         document.getElementById('edit_notes').value = data.notes || '';
         new bootstrap.Modal(document.getElementById('editCaseModal')).show();
-    }
+    };
 
-    async function updateCase() {
+    window.updateCase = async function() {
         const updated = {
             client_name: document.getElementById('edit_client_name').value,
             client_phone: document.getElementById('edit_client_phone').value,
@@ -782,15 +796,15 @@
         Swal.fire("تم", "تم تحديث القضية", "success");
         bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
         searchCases(); // إعادة تحميل نتائج البحث
-    }
+    };
 
-    async function confirmDeleteCase() {
+    window.confirmDeleteCase = async function() {
         if (!confirm('حذف القضية وجميع جلساتها؟')) return;
         await db.from('sessions').delete().eq('case_id', editingCaseId);
         await db.from('cases').delete().eq('id', editingCaseId);
         bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
         searchCases();
-    }
+    };
 
     window.confirmDeleteCaseFromSearch = async function(id) {
         event.stopPropagation();
@@ -800,8 +814,8 @@
         searchCases();
     };
 
-    // ========== تعديل الجلسة ==========
-    async function loadSessionForEdit(id) {
+    // ========== دوال تعديل الجلسة ==========
+    window.loadSessionForEdit = async function(id) {
         event.stopPropagation();
         const { data } = await db.from('sessions').eq('id', id).single();
         if (!data) return;
@@ -810,9 +824,9 @@
         document.getElementById('edit_session_case_status').value = data.case_status;
         document.getElementById('edit_decision').value = data.decision || '';
         new bootstrap.Modal(document.getElementById('editSessionModal')).show();
-    }
+    };
 
-    async function updateSession() {
+    window.updateSession = async function() {
         const updated = {
             session_date: document.getElementById('edit_session_date').value,
             case_status: document.getElementById('edit_session_case_status').value,
@@ -821,17 +835,24 @@
         await db.from('sessions').update(updated).eq('id', editingSessionId);
         bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
         loadUpcoming('week');
-    }
+    };
 
-    async function deleteSession(id) {
+    window.confirmDeleteSession = async function() {
+        if (!confirm('حذف الجلسة؟')) return;
+        await db.from('sessions').delete().eq('id', editingSessionId);
+        bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
+        loadUpcoming('week');
+    };
+
+    window.deleteSession = async function(id) {
         event.stopPropagation();
         if (!confirm('حذف الجلسة؟')) return;
         await db.from('sessions').delete().eq('id', id);
         loadUpcoming('week');
-    }
+    };
 
     // ========== السجل الأمني ==========
-    async function loadSecurityLogs() {
+    window.loadSecurityLogs = async function() {
         try {
             let query = db.from('security_logs').select('*').order('created_at', { ascending: false }).limit(50);
             const phone = document.getElementById('logPhoneSearch').value;
@@ -860,9 +881,9 @@
                 </div>
             `).join('');
         } catch (err) { console.error(err); }
-    }
+    };
 
-    async function viewLogDetails(id) {
+    window.viewLogDetails = async function(id) {
         event.stopPropagation();
         const { data } = await db.from('security_logs').select('*').eq('id', id).single();
         if (!data) return;
@@ -870,33 +891,30 @@
         document.getElementById('securityLogDetails').innerHTML = `<pre class="log-details">${JSON.stringify(data, null, 2)}</pre>`;
         document.getElementById('deleteLogBtn').style.display = 'block';
         new bootstrap.Modal(document.getElementById('securityLogModal')).show();
-    }
+    };
 
-    async function deleteSecurityLog() {
+    window.deleteSecurityLog = async function() {
         if (!confirm('حذف السجل؟')) return;
         await db.from('security_logs').delete().eq('id', currentSecurityLogId);
         bootstrap.Modal.getInstance(document.getElementById('securityLogModal')).hide();
         loadSecurityLogs();
-    }
+    };
 
-    // ========== طباعة PDF (معدلة لدعم العربية) ==========
-    function printCasePDF() {
+    // ========== طباعة PDF ==========
+    window.printCasePDF = function() {
         if (!currentCaseForPrint) return;
         
         const { jsPDF } = window.jspdf;
-        // إنشاء مستند بحجم A4 ودعم العربية (RTL)
         const doc = new jsPDF({
             orientation: 'portrait',
             unit: 'mm',
             format: 'a4',
             putOnlyUsedFonts: true,
-            hotfix: true // لتحسين دعم العربية
+            hotfix: true
         });
         
-        // إضافة خط يدعم العربية (نستخدم الخط الافتراضي مع إعدادات RTL)
-        doc.setFont('Helvetica', 'normal'); // يمكن تغييره إلى 'Arial' إذا كان متاحاً
+        doc.setFont('Helvetica', 'normal');
         
-        // كتابة المحتوى مع تحديد الاتجاه
         const margin = 20;
         let y = 30;
         
@@ -933,14 +951,14 @@
         }
         
         doc.save(`قضية_${currentCaseForPrint.case_number}.pdf`);
-    }
+    };
 
     // ========== مسح النموذج ==========
-    function clearForm() {
+    window.clearForm = function() {
         document.getElementById('caseForm').reset();
-    }
+    };
 
-    // ========== PWA (اختياري) ==========
+    // ========== PWA والتثبيت ==========
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
@@ -948,11 +966,51 @@
         if (installBtn) installBtn.style.display = 'inline-block';
     });
 
-    function installPWA() {
+    window.installPWA = function() {
         if (deferredPrompt) {
             deferredPrompt.prompt();
-            deferredPrompt = null;
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+                document.getElementById('installBtn').style.display = 'none';
+            });
         }
+    };
+
+    // تسجيل Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            const swContent = `
+                self.addEventListener('install', e => {
+                    e.waitUntil(
+                        caches.open('v1').then(cache => {
+                            return cache.addAll([
+                                '/',
+                                'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+                                'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css',
+                                'https://cdn.tailwindcss.com',
+                                'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap',
+                                'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
+                                'https://cdn.jsdelivr.net/npm/sweetalert2@11',
+                                'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+                            ]);
+                        })
+                    );
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        caches.match(e.request).then(res => res || fetch(e.request))
+                    );
+                });
+            `;
+            const blob = new Blob([swContent], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl, { scope: './' }).then(reg => {
+                console.log('Service Worker registered');
+            }).catch(err => console.log('SW registration failed:', err));
+        });
     }
 
     // تعيين تاريخ افتراضي للجلسة

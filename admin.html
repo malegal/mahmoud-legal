@@ -620,18 +620,7 @@ function renderSearchResults(data, type) {
     });
     container.innerHTML = html;
 
-    // إضافة مستمعي الأحداث بعد إدراج العناصر في DOM
-    if(type === "cases") {
-        document.querySelectorAll('.case-card[data-case-id]').forEach(card => {
-            card.addEventListener('click', function(e) {
-                // التأكد أن النقر لم يأت من زر داخلي
-                if(e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
-                    const caseId = this.getAttribute('data-case-id');
-                    openCaseDetails(caseId);
-                }
-            });
-        });
-    }
+    
 }
 
 function getStatusClass(status) {

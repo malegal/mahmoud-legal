@@ -596,13 +596,11 @@ function renderSearchResults(data, type) {
                 </div>
                 <div class="mt-2">
                     <div><b>العميل:</b> ${c.client_name} - <b>القضية:</b> ${c.case_number}/${c.case_year}</div>
-                    <div class="small text-white-50">كود: ${c.case_code || ''}</div>
                 </div>
-                ${item.decision ? `<div class="mt-2 p-2 bg-dark rounded small"><b>القرار:</b> ${item.decision}</div>` : ''}
             </div>`;
-                } else {
+        } else {
             html += `
-            <div class="case-card" onclick="openCaseDetails('${item.id}')" data-case-id="${item.id}">
+            <div class="case-card" onclick="openCaseDetails('${item.id}')">
                 <div class="d-flex justify-content-between">
                     <strong class="case-code">${item.case_code || ''}</strong>
                     <span class="case-status ${getStatusClass(item.last_case_status)}">${item.last_case_status}</span>
@@ -617,10 +615,10 @@ function renderSearchResults(data, type) {
                 </div>
             </div>`;
         }
-
     });
     container.innerHTML = html;
 }
+
 
 function getStatusClass(status) {
     const map = { 'جديدة': 'status-new', 'مؤجلة': 'status-postponed', 'مشطوبة': 'status-canceled', 'موقوفة': 'status-suspended', 'محجوزة للحكم': 'status-reserved', 'محكوم فيها': 'status-judged' };
@@ -781,12 +779,63 @@ async function deleteSession(id) {
 async function openCaseDetails(id) {
     if (!id || id === 'undefined') return;
     
-    // إظهار مؤشر تحميل
+    // إغلاق أي نافذة مفتوحة سابقاً لتجنب التجميد
+    const existingModal = bootstrap.Modal.getInstance(document.getElementById('caseModal'));
+    if (existingModal) existingModal.hide();
+
     Swal.fire({
         title: 'جاري تحميل التفاصيل...',
         didOpen: () => Swal.showLoading(),
         allowOutsideClick: false
     });
+
+    try {
+        const { data: c, error } = await db.from('cases').eq('id', id).single();
+        if (error || !c) {
+            Swal.fire("خطأ", "تعذر العثور على بيانات القضية", "error");
+            return;
+        }
+        
+        const { data: ss } = await db.from('sessions').eq('case_id', id).order('session_date', { ascending: false });
+        window.currentCaseForPrint = { ...c, sessions: ss || [] };
+        
+        let html = `<div class="p-2 text-end" dir="rtl">
+            <h4 class="gold-text mb-3 border-bottom pb-2">${c.case_code || 'بدون كود'}</h4>
+            <div class="row g-3">
+                <div class="col-6"><b>العميل:</b> ${c.client_name}</div>
+                <div class="col-6"><b>هاتف العميل:</b> ${c.client_phone}</div>
+                <div class="col-6"><b>رقم القضية:</b> ${c.case_number} / ${c.case_year}</div>
+                <div class="col-6"><b>المحكمة:</b> ${c.court_name}</div>
+                <div class="col-12"><b>موضوع القضية:</b> ${c.case_subject || 'غير محدد'}</div>
+            </div>
+            <hr class="border-secondary my-3">
+            <h6 class="gold-text mb-3">سجل الجلسات والقرارات:</h6>
+            <div style="max-height: 300px; overflow-y: auto;">
+                ${(ss && ss.length > 0) ? ss.map(s => `
+                    <div class="mb-2 p-3 bg-dark rounded border-start border-gold border-4">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge bg-warning text-dark">${new Date(s.session_date).toLocaleDateString('ar-EG')}</span>
+                            <span class="case-status ${getStatusClass(s.case_status)}">${s.case_status}</span>
+                        </div>
+                        <div class="text-white mt-1"><b>القرار:</b> ${s.decision || 'بانتظار القرار'}</div>
+                    </div>
+                `).join('') : '<p class="text-muted text-center">لا توجد جلسات مسجلة لهذه القضية</p>'}
+            </div>
+        </div>`;
+
+        Swal.close(); 
+        document.getElementById('caseDetails').innerHTML = html;
+        
+        // فتح النافذة
+        const modalElement = document.getElementById('caseModal');
+        const modalInstance = new bootstrap.Modal(modalElement);
+        modalInstance.show();
+        
+    } catch (err) {
+        console.error('Error:', err);
+        Swal.fire("خطأ", "حدث خطأ أثناء تحميل البيانات", "error");
+    }
+}
 
     try {
         const { data: c, error } = await db.from('cases').eq('id', id).single();

@@ -269,14 +269,14 @@
     </div>  
 </div>  
 
-<!-- ========== Modal عرض تفاصيل القضية (الآن يحتوي على أزرار التعديل) ========== -->
+<!-- ========== Modal عرض تفاصيل القضية ========== -->
 <div class="modal fade" id="caseModal" tabindex="-1">  
     <div class="modal-dialog modal-lg">  
         <div class="modal-content bg-dark text-white gold-border">  
             <div class="modal-header border-secondary"><h5 class="modal-title gold-text">تفاصيل القضية</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>  
             <div class="modal-body" id="caseDetails"></div>  
             <div class="modal-footer border-secondary justify-content-between">  
-                <!-- أزرار التعديل والحذف هنا في الفوتر لضمان عملها -->
+                <!-- أزرار التحكم -->
                 <div id="modalActionButtons"></div>
                 <div>
                     <button class="gold-btn btn me-2" onclick="printCasePDF()">طباعة التقرير</button>  
@@ -363,6 +363,16 @@
     let currentSecurityLogId = null;
     let deferredPrompt;
 
+    // دالة مساعدة للحصول على أو إنشاء كائن Modal (هذه هي النقطة المحورية للحل)
+    function getModalInstance(id) {
+        const el = document.getElementById(id);
+        let modal = bootstrap.Modal.getInstance(el);
+        if (!modal) {
+            modal = new bootstrap.Modal(el);
+        }
+        return modal;
+    }
+
     // ========== تسجيل الدخول ==========
     function login() {
         if (document.getElementById('password').value === "mahmoud237") {
@@ -434,7 +444,6 @@
         for (let s of sessions) {
             const { data: caseData } = await db.from('cases').select('*').eq('id', s.case_id).single();
             if (caseData) {
-                // تمت إزالة أزرار التعديل من هنا لمنع التضارب، التعديل الآن يتم من خلال فتح التفاصيل
                 html += `
                 <div class="session-card" onclick="openCaseDetails('${caseData.id}')">
                     <div class="d-flex justify-content-between">
@@ -633,7 +642,6 @@
                 item.last_status = sessions && sessions.length > 0 ? sessions[0].case_status : 'جديدة';
             }
             
-            // تمت إزالة أزرار التعديل من هنا
             container.innerHTML = data.map(c => `
                 <div class="case-card" onclick="openCaseDetails('${c.id}')">
                     <div class="d-flex justify-content-between">
@@ -745,18 +753,18 @@
             <button class="btn btn-danger btn-sm ms-2" onclick="deleteCaseInModal('${c.id}')"><i class="bi bi-trash"></i> حذف</button>
         `;
 
-        new bootstrap.Modal(document.getElementById('caseModal')).show();
+        getModalInstance('caseModal').show();
     }
     window.openCaseDetails = openCaseDetails;
 
-    // ========== دوال تعديل وحذف القضايا ==========
+    // ========== دوال تعديل وحذف القضايا (تم الإصلاح الجذري) ==========
     async function loadCaseForEdit(id) {
-        // إغلاق مودال التفاصيل أولاً
-        const viewModal = bootstrap.Modal.getInstance(document.getElementById('caseModal'));
-        if (viewModal) viewModal.hide();
-
+        console.log('Loading case for edit:', id);
+        
+        // 1. جلب البيانات أولاً
         const { data } = await db.from('cases').eq('id', id).single();
         if (!data) return;
+        
         editingCaseId = id;
         document.getElementById('edit_client_name').value = data.client_name;
         document.getElementById('edit_client_phone').value = data.client_phone;
@@ -771,10 +779,18 @@
         document.getElementById('edit_case_subject').value = data.case_subject || '';
         document.getElementById('edit_notes').value = data.notes || '';
         
-        // فتح مودال التعديل
+        // 2. إغلاق مودال التفاصيل
+        const viewModalEl = document.getElementById('caseModal');
+        const viewModal = bootstrap.Modal.getInstance(viewModalEl);
+        if (viewModal) {
+            viewModal.hide();
+        }
+
+        // 3. الانتظار قليلاً ثم فتح مودال التعديل
         setTimeout(() => {
-            new bootstrap.Modal(document.getElementById('editCaseModal')).show();
-        }, 300); // تأخير بسيط لضمان إغلاق المودال السابق
+            const editModal = getModalInstance('editCaseModal');
+            editModal.show();
+        }, 500);
     }
     window.loadCaseForEdit = loadCaseForEdit;
 
@@ -795,52 +811,59 @@
         };
         const { error } = await db.from('cases').update(updated).eq('id', editingCaseId);
         if (error) return Swal.fire("خطأ", error.message, "error");
+        
+        // إغلاق مودال التعديل
+        const editModal = bootstrap.Modal.getInstance(document.getElementById('editCaseModal'));
+        if (editModal) editModal.hide();
+        
         Swal.fire("تم", "تم تحديث القضية", "success");
-        bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
         searchCases(); 
     }
     window.updateCase = updateCase;
 
     async function confirmDeleteCase() {
-        // دالة الحذف من داخل مودال التعديل
-        if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟ لا يمكن التراجع عن هذا الإجراء.')) return;
-        await db.from('sessions').delete().eq('case_id', editingCaseId);
-        await db.from('cases').delete().eq('id', editingCaseId);
-        bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
-        searchCases();
-        Swal.fire("تم", "تم حذف القضية", "success");
+        // ... (تم الحذف لأنه لم يعد مستخدماً في التصميم الجديد، الحذف الآن مباشر)
     }
-    window.confirmDeleteCase = confirmDeleteCase;
 
     async function deleteCaseInModal(id) {
-        // دالة الحذف المباشر من مودال العرض
         if (!confirm('هل أنت متأكد من حذف القضية وجميع جلساتها؟')) return;
         await db.from('sessions').delete().eq('case_id', id);
         await db.from('cases').delete().eq('id', id);
-        bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide();
+        
+        const viewModal = bootstrap.Modal.getInstance(document.getElementById('caseModal'));
+        if (viewModal) viewModal.hide();
+        
         searchCases();
+        Swal.fire("تم", "تم الحذف", "success");
     }
     window.deleteCaseInModal = deleteCaseInModal;
 
-    // ========== دوال تعديل وحذف الجلسات ==========
+    // ========== دوال تعديل وحذف الجلسات (تم الإصلاح الجذري) ==========
     async function loadSessionForEdit(id) {
-        // إغلاق مودال التفاصيل أولاً
-        const viewModal = bootstrap.Modal.getInstance(document.getElementById('caseModal'));
-        if (viewModal) viewModal.hide();
+        console.log('Loading session for edit:', id);
 
         const { data } = await db.from('sessions').eq('id', id).single();
         if (!data) return;
         editingSessionId = id;
+        
         const d = new Date(data.session_date);
         d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         document.getElementById('edit_session_date').value = d.toISOString().slice(0, 16);
-        
         document.getElementById('edit_session_case_status').value = data.case_status;
         document.getElementById('edit_decision').value = data.decision || '';
         
+        // إغلاق مودال التفاصيل
+        const viewModalEl = document.getElementById('caseModal');
+        const viewModal = bootstrap.Modal.getInstance(viewModalEl);
+        if (viewModal) {
+            viewModal.hide();
+        }
+        
+        // فتح مودال التعديل بعد تأخير
         setTimeout(() => {
-            new bootstrap.Modal(document.getElementById('editSessionModal')).show();
-        }, 300);
+            const editSessionModal = getModalInstance('editSessionModal');
+            editSessionModal.show();
+        }, 500);
     }
     window.loadSessionForEdit = loadSessionForEdit;
 
@@ -851,7 +874,10 @@
             decision: document.getElementById('edit_decision').value
         };
         await db.from('sessions').update(updated).eq('id', editingSessionId);
-        bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
+        
+        const editModal = bootstrap.Modal.getInstance(document.getElementById('editSessionModal'));
+        if (editModal) editModal.hide();
+        
         loadUpcoming('week');
         Swal.fire("تم", "تم تحديث الجلسة", "success");
     }
@@ -860,8 +886,12 @@
     async function confirmDeleteSession() {
         if (!confirm('حذف الجلسة؟')) return;
         await db.from('sessions').delete().eq('id', editingSessionId);
-        bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
+        
+        const editModal = bootstrap.Modal.getInstance(document.getElementById('editSessionModal'));
+        if (editModal) editModal.hide();
+        
         loadUpcoming('week');
+        Swal.fire("تم", "تم الحذف", "success");
     }
     window.confirmDeleteSession = confirmDeleteSession;
 
@@ -905,14 +935,17 @@
         currentSecurityLogId = id;
         document.getElementById('securityLogDetails').innerHTML = `<pre class="log-details">${JSON.stringify(data, null, 2)}</pre>`;
         document.getElementById('deleteLogBtn').style.display = 'block';
-        new bootstrap.Modal(document.getElementById('securityLogModal')).show();
+        getModalInstance('securityLogModal').show();
     }
     window.viewLogDetails = viewLogDetails;
 
     async function deleteSecurityLog() {
         if (!confirm('حذف السجل؟')) return;
         await db.from('security_logs').delete().eq('id', currentSecurityLogId);
-        bootstrap.Modal.getInstance(document.getElementById('securityLogModal')).hide();
+        
+        const modal = bootstrap.Modal.getInstance(document.getElementById('securityLogModal'));
+        if (modal) modal.hide();
+        
         loadSecurityLogs();
     }
     window.deleteSecurityLog = deleteSecurityLog;

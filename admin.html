@@ -584,7 +584,10 @@ async function searchByDateRange() {
 
 function renderSearchResults(data, type) {  
     const container = document.getElementById('searchResults');
-    if(!data || data.length === 0) { container.innerHTML = '<div class="alert alert-info text-center">لا توجد نتائج</div>'; return; }
+    if(!data || data.length === 0) { 
+        container.innerHTML = '<div class="alert alert-info text-center">لا توجد نتائج</div>'; 
+        return; 
+    }
     let html = `<h6 class="mb-3 gold-text">نتائج البحث (${data.length}):</h6>`;  
     data.forEach(item => {
         if(type === "sessions") {
@@ -601,8 +604,7 @@ function renderSearchResults(data, type) {
                 ${item.decision ? `<div class="mt-2 p-2 bg-dark rounded small"><b>القرار:</b> ${item.decision}</div>` : ''}
             </div>`;
         } else {
-            // تعديل مهم: استخدام onclick على البطاقة مع تمرير item.id
-            html += `<div class="case-card" data-case-id="${item.id}" onclick="openCaseDetails('${item.id}')">`;
+            html += `<div class="case-card" data-case-id="${item.id}" onclick="openCaseDetails('${item.id}')">
                 <div class="d-flex justify-content-between">
                     <strong class="case-code">${item.case_code || ''}</strong>
                     <span class="case-status ${getStatusClass(item.last_case_status)}">${item.last_case_status}</span>
@@ -619,8 +621,6 @@ function renderSearchResults(data, type) {
         }
     });
     container.innerHTML = html;
-
-    
 }
 
 function getStatusClass(status) {

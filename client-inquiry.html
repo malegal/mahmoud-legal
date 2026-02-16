@@ -221,8 +221,8 @@
         .modal-content.glass-theme {
             background: rgba(2, 6, 23, 0.98);
             backdrop-filter: blur(15px);
-            border: 3px solid var(--gold-solid); /* إطار أكثر سمكاً */
-            box-shadow: 0 10px 60px rgba(191, 149, 63, 0.5), 0 0 30px rgba(191,149,63,0.3); /* توهج ذهبي */
+            border: 3px solid var(--gold-solid);
+            box-shadow: 0 10px 60px rgba(191, 149, 63, 0.5), 0 0 30px rgba(191,149,63,0.3);
             border-radius: 0 0 20px 20px;
             margin-top: var(--header-height);
             transition: box-shadow 0.3s ease;
@@ -231,30 +231,35 @@
             box-shadow: 0 15px 70px rgba(191, 149, 63, 0.7), 0 0 50px rgba(191,149,63,0.5);
         }
 
+        /* تصغير نافذة التحذير */
+        #warningModal .modal-dialog {
+            max-width: 400px;
+        }
+
         .warning-content { 
             text-align: center; 
-            padding: 30px 20px; 
+            padding: 25px 15px; 
         }
         .warning-content h3 {
-            font-size: 2rem;
-            margin: 15px 0;
+            font-size: 1.8rem;
+            margin: 10px 0;
         }
         .legal-box {
             background: rgba(255,255,255,0.05); 
             border: 1px solid rgba(191,149,63,0.3);
-            padding: 20px; 
+            padding: 15px; 
             border-radius: 12px; 
-            margin: 25px 0; 
+            margin: 20px 0; 
             text-align: right;
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             color: #e2e8f0;
         }
         .legal-box li { 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
             list-style: none; 
             position: relative; 
-            padding-right: 25px; 
-            font-size: 1.1rem;
+            padding-right: 20px; 
+            font-size: 1rem;
         }
         .legal-box li::before { 
             content: '•'; 
@@ -262,13 +267,13 @@
             position: absolute; 
             right: 0; 
             font-weight: bold; 
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         .warning-content .btn-gold {
             width: auto;
-            padding: 14px 40px;
-            font-size: 1.3rem;
+            padding: 12px 35px;
+            font-size: 1.2rem;
             margin-top: 10px;
         }
 
@@ -450,12 +455,12 @@
     جميع الحقوق محفوظة © 2024 مؤسسة محمود عبد الحميد للمحاماة
 </footer>
 
-<!-- مودال التحذير (إطار ذهبي ملكي وتأثير زجاجي) -->
+<!-- مودال التحذير (مصغر) -->
 <div class="modal fade" id="warningModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content glass-theme">
             <div class="warning-content">
-                <i class="bi bi-shield-lock-fill" style="font-size: 4rem; color: var(--gold-solid);"></i>
+                <i class="bi bi-shield-lock-fill" style="font-size: 3.5rem; color: var(--gold-solid);"></i>
                 <h3 class="text-white amiri-font">تحذير قانوني</h3>
                 <div class="legal-box">
                     <ul>
@@ -473,7 +478,7 @@
     </div>
 </div>
 
-<!-- مودال النتيجة (إطار ذهبي ملكي وتأثير زجاجي) -->
+<!-- مودال النتيجة -->
 <div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content glass-theme text-white">

@@ -6,12 +6,12 @@
     <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
     <title>استعلام القضايا | مؤسسة محمود عبد الحميد</title>
     
-    <!-- Tailwind & Fonts (من الصفحة الرئيسية) -->
+    <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
-    <!-- Bootstrap للمودالات (نفس الكود السابق) -->
+    <!-- Bootstrap للمودالات -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
@@ -24,7 +24,7 @@
             --primary-bg: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
             --gold-solid: #bf953f;
-            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-bg: rgba(2, 6, 23, 0.85); /* أعمق قليلاً */
             --header-height: 90px;
         }
 
@@ -38,7 +38,7 @@
             flex-direction: column;
             overflow-x: hidden;
             margin: 0;
-            padding-top: var(--header-height); /* تعويض الهيدر الثابت */
+            padding-top: var(--header-height);
         }
 
         /* الهيدر كما في الصفحة الرئيسية */
@@ -59,6 +59,11 @@
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
             background-clip: text;
+        }
+        
+        /* استخدام Amiri في اسم المكتب */
+        .amiri-font {
+            font-family: 'Amiri', serif;
         }
         
         .track-case-btn { 
@@ -101,64 +106,109 @@
             display: none;
         }
 
-        /* بطاقة الاستعلام (بنفس التصميم السابق) */
+        /* بطاقة الاستعلام - خلفية سوداء زجاجية */
         .search-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(191, 149, 63, 0.3);
             border-radius: 20px;
-            padding: 40px 30px;
+            padding: 50px 40px; /* زيادة padding */
             width: 100%;
-            max-width: 480px;
+            max-width: 550px; /* أوسع قليلاً */
             text-align: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            box-shadow: 0 0 60px rgba(0,0,0,0.7);
             position: relative;
         }
-        .search-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--gold-gradient); }
+        .search-card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 4px; 
+            background: var(--gold-gradient); 
+        }
+
+        /* تكبير الخطوط */
+        .search-card h1 {
+            font-family: 'Amiri', serif;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+        .search-card p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
 
         /* حقول الإدخال مع البادئات الثابتة */
         .input-group-custom {
             display: flex;
             align-items: center;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(191,149,63,0.3);
-            border-radius: 12px;
-            margin-bottom: 20px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(191,149,63,0.4);
+            border-radius: 14px;
+            margin-bottom: 25px;
             overflow: hidden;
             transition: 0.3s;
         }
         .input-group-custom:focus-within {
             border-color: var(--gold-solid);
-            box-shadow: 0 0 15px rgba(191,149,63,0.2);
+            box-shadow: 0 0 20px rgba(191,149,63,0.3);
         }
         .fixed-prefix {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.4);
             color: var(--gold-solid);
-            padding: 12px 15px;
+            padding: 15px 18px; /* أكبر */
             font-weight: bold;
             font-family: monospace;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             border-left: 1px solid rgba(191,149,63,0.2);
         }
         .form-control-custom {
             background: transparent;
             border: none;
             color: white;
-            padding: 12px;
+            padding: 15px;
             width: 100%;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             outline: none;
             text-align: right;
         }
-        .form-control-custom::placeholder { color: #64748b; }
+        .form-control-custom::placeholder { 
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* زر الاطلاع (ذهبي ملكي) */
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #020617;
+            font-weight: 900;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 25px rgba(191, 149, 63, 0.4);
+        }
+        .btn-gold:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 35px rgba(191, 149, 63, 0.6); 
+        }
 
         /* الفوتر */
         .footer {
-            text-align: center; padding: 20px; color: #64748b; font-size: 0.8rem;
-            border-top: 1px solid rgba(255,255,255,0.05); background: rgba(2, 6, 23, 0.95);
+            text-align: center; 
+            padding: 20px; 
+            color: #94a3b8; 
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05); 
+            background: rgba(2, 6, 23, 0.95);
         }
 
-        /* ===== مودالات (منسوخة من الكود السابق مع تحسين طفيف) ===== */
+        /* ===== مودالات (مع تحسينات) ===== */
         @keyframes dropFromHeader {
             0% { transform: translateY(-100%); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
@@ -175,48 +225,131 @@
         .modal-content.glass-theme {
             background: rgba(2, 6, 23, 0.98);
             border: 2px solid var(--gold-solid);
-            box-shadow: 0 10px 60px rgba(191, 149, 63, 0.2);
+            box-shadow: 0 10px 60px rgba(191, 149, 63, 0.3);
             border-radius: 0 0 20px 20px;
             margin-top: var(--header-height);
         }
 
-        .warning-content { text-align: center; padding: 20px; }
-        .legal-box {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(191,149,63,0.2);
-            padding: 15px; border-radius: 10px; margin: 20px 0; text-align: right;
-            font-size: 0.9rem; color: #cbd5e1;
+        .warning-content { 
+            text-align: center; 
+            padding: 30px 20px; 
         }
-        .legal-box li { margin-bottom: 8px; list-style: none; position: relative; padding-right: 20px; }
-        .legal-box li::before { content: '•'; color: var(--gold-solid); position: absolute; right: 0; font-weight: bold; }
+        .warning-content h3 {
+            font-size: 2rem;
+            margin: 15px 0;
+        }
+        .legal-box {
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(191,149,63,0.3);
+            padding: 20px; 
+            border-radius: 12px; 
+            margin: 25px 0; 
+            text-align: right;
+            font-size: 1rem; 
+            color: #e2e8f0;
+        }
+        .legal-box li { 
+            margin-bottom: 12px; 
+            list-style: none; 
+            position: relative; 
+            padding-right: 25px; 
+            font-size: 1.1rem;
+        }
+        .legal-box li::before { 
+            content: '•'; 
+            color: var(--gold-solid); 
+            position: absolute; 
+            right: 0; 
+            font-weight: bold; 
+            font-size: 1.3rem;
+        }
+
+        /* زر أوافق (ذهبي ملكي) - نفس تصميم gold-btn */
+        .warning-content .btn-gold {
+            width: auto;
+            padding: 14px 40px;
+            font-size: 1.3rem;
+            margin-top: 10px;
+        }
 
         .info-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0;
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+            margin: 25px 0;
         }
         .info-item {
-            background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.05); 
+            padding: 12px; 
+            border-radius: 10px; 
+            border: 1px solid rgba(255,255,255,0.08);
         }
-        .info-label { display: block; font-size: 0.75rem; color: #94a3b8; }
-        .info-value { font-weight: bold; color: #fff; font-size: 0.95rem; }
+        .info-label { 
+            display: block; 
+            font-size: 0.85rem; 
+            color: #a0aec0; 
+            margin-bottom: 5px;
+        }
+        .info-value { 
+            font-weight: bold; 
+            color: #fff; 
+            font-size: 1.1rem; 
+        }
 
         .last-session-box {
-            background: rgba(191, 149, 63, 0.1); border-right: 4px solid var(--gold-solid);
-            padding: 15px; border-radius: 8px; margin-top: 20px;
+            background: rgba(191, 149, 63, 0.15); 
+            border-right: 5px solid var(--gold-solid);
+            padding: 18px; 
+            border-radius: 10px; 
+            margin-top: 25px;
+        }
+        .last-session-box h5 {
+            font-size: 1.2rem;
+        }
+        .last-session-box p {
+            font-size: 1rem;
         }
 
         .modal-actions {
-            display: flex; gap: 10px; justify-content: center; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+            margin-top: 25px; 
+            border-top: 1px solid rgba(255,255,255,0.15); 
+            padding-top: 20px;
         }
         .btn-action {
-            flex: 1; padding: 10px; border-radius: 8px; border: 1px solid transparent; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+            flex: 1; 
+            padding: 12px; 
+            border-radius: 10px; 
+            border: 1px solid transparent; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            transition: 0.3s;
         }
-        .btn-print { border-color: var(--gold-solid); color: var(--gold-solid); background: transparent; }
-        .btn-print:hover { background: var(--gold-solid); color: #000; }
-        .btn-new { background: #fff; color: #000; }
-        .btn-exit { background: #ef4444; color: #fff; }
+        .btn-print { 
+            border-color: var(--gold-solid); 
+            color: var(--gold-solid); 
+            background: transparent; 
+        }
+        .btn-print:hover { 
+            background: var(--gold-solid); 
+            color: #000; 
+        }
+        .btn-new { 
+            background: #fff; 
+            color: #000; 
+        }
+        .btn-exit { 
+            background: #ef4444; 
+            color: #fff; 
+        }
 
         @media (max-width: 768px) {
             .info-grid { grid-template-columns: 1fr; }
-            .header-glass nav { padding: 10px 15px !important; }
+            .search-card { padding: 30px 20px; }
+            .search-card h1 { font-size: 2.2rem; }
         }
         
         @media print {
@@ -229,14 +362,15 @@
 </head>
 <body>
 
-<!-- ========== الهيدر (مأخوذ من الصفحة الرئيسية مع تعديل الروابط) ========== -->
+<!-- ========== الهيدر (بنفس الصفحة الرئيسية) ========== -->
 <header class="header-glass">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center" style="height: 100%;">
         <div class="flex items-center gap-4">
             <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-24 h-24 object-contain">
             <div class="flex flex-col leading-tight">
-                <h1 class="font-bold gold-text serif-font whitespace-nowrap" style="font-size: 28px !important; line-height: 1.2;">محمود عبد الحميد</h1>
-                <p class="text-gray-300 font-bold" style="font-size: 12px !important; line-height: 1.2;">المحامي بالنقض والدستورية العليا</p>
+                <!-- استخدام Amiri هنا كما هو مطلوب -->
+                <h1 class="font-black amiri-font gold-text whitespace-nowrap" style="font-size: 32px !important; line-height: 1.2;">محمود عبد الحميد</h1>
+                <p class="text-gray-300 font-bold" style="font-size: 13px !important; line-height: 1.2;">المحامي بالنقض والدستورية العليا</p>
             </div>
         </div>
         <div class="hidden lg:flex items-center gap-6 font-bold text-sm">
@@ -248,7 +382,6 @@
             <a href="blog.html" class="text-white hover:gold-text transition">المدونة</a>
             <a href="blog-admin.html" class="text-white hover:gold-text transition">إدارة المدونة</a>
             <div class="nav-buttons flex items-center gap-2">
-                <!-- الرابط الحالي مميز -->
                 <a href="client-inquiry.html" class="track-case-btn px-4 py-2 rounded-lg text-xs flex items-center gap-2" style="background: var(--gold-gradient); color: #1a1a1a; border-color: transparent;">
                     <i class="fas fa-search"></i> تابع قضيتك
                 </a>
@@ -258,14 +391,13 @@
                 </a>
             </div>
         </div>
-        <!-- زر القائمة الجانبية للموبايل (نفس الهيكل لكن نربطه) -->
         <button id="menu-toggle" class="lg:hidden text-2xl gold-text">
             <i class="fas fa-bars-staggered"></i>
         </button>
     </nav>
 </header>
 
-<!-- القائمة الجانبية للموبايل (منسوخة) -->
+<!-- القائمة الجانبية للموبايل -->
 <div id="mobile-menu" class="fixed inset-0 z-[110] p-10 lg:hidden" style="background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
@@ -295,8 +427,8 @@
 <!-- ========== المحتوى الرئيسي (بطاقة الاستعلام) ========== -->
 <main class="main-container hidden" id="mainContent">
     <div class="search-card">
-        <h1 style="font-family: 'Amiri'; color: var(--gold-solid); margin-bottom: 10px;">استعلام القضايا</h1>
-        <p style="color: #94a3b8; margin-bottom: 30px;">أدخل بيانات القضية للاطلاع على آخر المستجدات</p>
+        <h1>استعلام القضايا</h1>
+        <p>أدخل بيانات القضية للاطلاع على آخر المستجدات</p>
 
         <form id="searchForm" onsubmit="handleSearch(event)">
             <!-- حقل الهاتف -->
@@ -328,8 +460,8 @@
     <div class="modal-dialog">
         <div class="modal-content glass-theme">
             <div class="warning-content">
-                <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: var(--gold-solid);"></i>
-                <h3 class="mt-2 text-white" style="font-family: 'Amiri';">تحذير قانوني</h3>
+                <i class="bi bi-shield-lock-fill" style="font-size: 4rem; color: var(--gold-solid);"></i>
+                <h3 class="text-white amiri-font">تحذير قانوني</h3>
                 
                 <div class="legal-box">
                     <ul>
@@ -340,6 +472,7 @@
                     </ul>
                 </div>
 
+                <!-- زر أوافق ذهبي ملكي -->
                 <button class="btn-gold" onclick="acceptWarning()">
                     <i class="bi bi-check-circle-fill"></i> أوافق وأتابع
                 </button>
@@ -355,8 +488,8 @@
             <div class="modal-body p-4">
                 <!-- رأس المودال -->
                 <div class="text-center border-bottom border-secondary border-opacity-25 pb-3 mb-3">
-                    <h2 id="r_clientName" style="font-family: 'Amiri'; color: var(--gold-solid); margin: 0;">-</h2>
-                    <span id="r_clientRole" class="badge bg-light text-dark mt-2">-</span>
+                    <h2 id="r_clientName" class="amiri-font" style="color: var(--gold-solid); font-size: 2.2rem;">-</h2>
+                    <span id="r_clientRole" class="badge bg-light text-dark mt-2 px-3 py-1" style="font-size: 1rem;">-</span>
                 </div>
 
                 <!-- شبكة البيانات -->
@@ -371,11 +504,11 @@
 
                 <!-- آخر جلسة -->
                 <div class="last-session-box">
-                    <h5 class="text-white mb-2" style="font-size: 1rem;"><i class="bi bi-clock-history text-warning"></i> آخر جلسة مسجلة</h5>
+                    <h5 class="text-white mb-2"><i class="bi bi-clock-history text-warning"></i> آخر جلسة مسجلة</h5>
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span id="r_lastDate" style="color: var(--gold-solid); font-weight: bold;">-</span>
+                        <span id="r_lastDate" style="color: var(--gold-solid); font-weight: bold; font-size: 1.1rem;">-</span>
                     </div>
-                    <p id="r_lastDecision" class="mb-0 text-white-50" style="font-size: 0.95rem;">-</p>
+                    <p id="r_lastDecision" class="mb-0 text-white-50" style="font-size: 1rem;">-</p>
                 </div>
 
                 <!-- الأزرار -->
@@ -390,7 +523,7 @@
 </div>
 
 <script>
-    // إعدادات Supabase (كما كانت)
+    // إعدادات Supabase
     const SB_URL = "https://iyhfafodhptcdwrjywek.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
     const db = supabase.createClient(SB_URL, SB_KEY);
@@ -400,7 +533,7 @@
     const phoneInput = document.getElementById('phoneInput');
     const codeInput = document.getElementById('codeInput');
 
-    // دالة لإزالة البادئات تلقائياً
+    // إزالة البادئات تلقائياً
     function removePrefix(input, prefix) {
         let value = input.value.trim();
         if (value.startsWith(prefix)) {
@@ -581,7 +714,7 @@
         link.addEventListener('click', closeMenu);
     });
 </script>
-<!-- Bootstrap JS (للمودالات) -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -256,29 +256,19 @@
             line-height: 1;
         }
 
-        .footer-social-icon, .hero-social-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid rgba(191, 149, 63, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            background: rgba(0,0,0,0.5);
-        }
-        
-        .footer-social-icon i, .hero-social-icon i {
+        /* أيقونات التواصل بدون دوائر - ذهبية فقط */
+        .social-icon {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 1.2rem;
+            font-size: 1.8rem; /* حجم أكبر */
+            transition: all 0.3s ease;
+            display: inline-block;
         }
-
-        .footer-social-icon:hover, .hero-social-icon:hover {
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 15px rgba(191, 149, 63, 0.4);
+        
+        .social-icon:hover {
             transform: translateY(-3px);
+            text-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
         }
 
         @media (max-width: 768px) {
@@ -287,6 +277,7 @@
             .section-spacing { padding-top: 4rem !important; padding-bottom: 4rem !important; }
             .hero-buttons { flex-direction: column; gap: 15px; }
             .hero-buttons a { width: 100%; }
+            .social-icon { font-size: 2rem; } /* تكبير للموبايل */
         }
         
         #why-us { background: #01040f !important; }
@@ -379,25 +370,25 @@
             المحامي بالنقض <span class="gold-text mx-2">•</span> الدستورية العليا
         </p>
         
-        <!-- شريط الخبرة + الأيقونات الذهبية -->
+        <!-- شريط الخبرة + الأيقونات الذهبية بدون دوائر -->
         <div class="flex flex-col items-center gap-6 mb-10">
             <span class="px-6 py-2 border border-gold-solid/50 rounded-full bg-black/50 backdrop-blur-sm text-white text-sm font-bold flex items-center gap-2">
                 <i class="fas fa-star text-yellow-500"></i>
                 خبرة أكثر من 22 عاماً في المحاماة
             </span>
             
-            <!-- أيقونات التواصل الذهبية (تحت الخبرة وفوق الأزرار) -->
-            <div class="flex flex-wrap justify-center gap-4 mt-2">
-                <a href="https://wa.me/201101076000" target="_blank" class="hero-social-icon"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.facebook.com/malegal" target="_blank" class="hero-social-icon"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="hero-social-icon"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="hero-social-icon"><i class="fab fa-x-twitter"></i></a>
-                <a href="mailto:ma.law.firm@outlook.com" class="hero-social-icon"><i class="fas fa-envelope"></i></a>
-                <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="hero-social-icon"><i class="fas fa-map-marker-alt"></i></a>
+            <!-- أيقونات التواصل الذهبية بدون دوائر (حجم أكبر) -->
+            <div class="flex flex-wrap justify-center gap-6 mt-2">
+                <a href="https://wa.me/201101076000" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.facebook.com/malegal" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="social-icon"><i class="fab fa-x-twitter"></i></a>
+                <a href="mailto:ma.law.firm@outlook.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+                <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="social-icon"><i class="fas fa-map-marker-alt"></i></a>
             </div>
         </div>
         
-        <!-- الأزرار الثلاثة (استشارة، حجز موعد، تابع قضيتك) -->
+        <!-- الأزرار الثلاثة -->
         <div class="flex flex-col sm:flex-row gap-5 justify-center items-center hero-buttons mt-4">
             <a href="contact.html?tab=consult" class="gold-btn px-10 sm:px-12 py-4 rounded-xl text-base sm:text-lg font-black uppercase tracking-widest min-w-[250px]">
                 طلب استشارة
@@ -412,7 +403,7 @@
     </div>
 </section>
 
-<!-- باقي أقسام الصفحة (نبذة، لماذا تختارنا، آراء العملاء، خدمات، فوتر) كما هي مع تحسين الأيقونات في الفوتر -->
+<!-- باقي الأقسام كما هي مع تعديل أيقونات الفوتر لتصبح بدون دوائر -->
 <section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -457,7 +448,7 @@
             <div class="w-24 h-1 bg-gold-solid mx-auto rounded-full"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- الكروت الستة (مختصرة للطول) -->
+            <!-- الكروت الستة (نفس المحتوى السابق) -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-gavel text-3xl gold-text"></i>
@@ -601,14 +592,14 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر الذهبية (كلها ذهبية بما فيها تويتر) -->
+        <!-- أيقونات الفوتر الذهبية بدون دوائر (بنفس التنسيق) -->
         <div class="flex justify-center gap-6 mb-10">
-            <a href="https://wa.me/201101076000" target="_blank" class="footer-social-icon"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-x-twitter"></i></a>
-            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
-            <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>
-            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="footer-social-icon"><i class="fas fa-map-marker-alt"></i></a>
+            <a href="https://wa.me/201101076000" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.facebook.com/malegal" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="social-icon"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:ma.law.firm@outlook.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="social-icon"><i class="fas fa-map-marker-alt"></i></a>
         </div>
         
         <div class="flex flex-wrap gap-x-8 gap-y-4 justify-center text-sm text-gray-400 mb-8 font-bold">

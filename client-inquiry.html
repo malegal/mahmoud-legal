@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* نفس الألوان والأسلوب المستخدم في نظام إدارة القضايا */
         :root {
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
@@ -38,7 +37,6 @@
             padding: 0 20px;
         }
 
-        /* الهيدر (تم تعديله ليتناسب مع النظام) */
         .header {
             position: fixed;
             top: 0;
@@ -118,6 +116,11 @@
             box-shadow: 0 0 20px var(--gold-glow);
         }
 
+        /* إخفاء العدادات */
+        .session-timer, .attempts-counter {
+            display: none !important;
+        }
+
         /* حاوية الاستعلام */
         .inquiry-container {
             min-height: calc(100vh - var(--header-height) - 100px);
@@ -140,22 +143,6 @@
             position: relative;
         }
 
-        /* مؤقت الجلسة وعداد المحاولات - بنفس أسلوب الإدارة */
-        .session-timer, .attempts-counter {
-            position: absolute;
-            top: 10px;
-            background: rgba(191, 149, 63, 0.2);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #fcf6ba;
-            border: 1px solid rgba(191, 149, 63, 0.3);
-            backdrop-filter: blur(5px);
-        }
-        .session-timer { left: 10px; }
-        .attempts-counter { right: 10px; }
-
-        /* عنوان الصفحة بتدرج ذهبي */
         .inquiry-box h1 {
             font-size: 28px;
             background: var(--gold-gradient);
@@ -177,7 +164,6 @@
             line-height: 1.6;
         }
 
-        /* حقول الإدخال - مشابهة للإدارة */
         .form-group {
             margin-bottom: 25px;
             text-align: right;
@@ -213,7 +199,6 @@
             box-shadow: none;
         }
 
-        /* حقل مزود ببادئة (prefix) */
         .input-prefix-wrapper {
             display: flex;
             align-items: center;
@@ -236,7 +221,6 @@
             border-radius: 0;
         }
 
-        /* زر الاستعلام (gold-btn) */
         .btn-inquiry {
             background: var(--gold-gradient);
             color: #1a1a1a;
@@ -261,7 +245,6 @@
             box-shadow: 0 0 25px var(--gold-glow);
         }
 
-        /* رسائل الخطأ والنجاح */
         .message {
             padding: 12px;
             border-radius: 8px;
@@ -280,42 +263,76 @@
             border: 1px solid #4ade80;
         }
 
-        /* مربع النتائج - بنفس تصميم بطاقات القضايا */
-        .result-box {
+        /* ========== المودال ========== */
+        .modal-overlay {
             display: none;
-            text-align: right;
-            margin-top: 30px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(191, 149, 63, 0.3);
-            border-radius: 1rem;
-            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
-            animation: fadeIn 0.5s ease;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid var(--gold-solid);
+            border-radius: 1.2rem;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 40px var(--gold-glow);
+            animation: fadeIn 0.4s ease;
+            color: #f8fafc;
+            padding: 25px;
             position: relative;
         }
 
-        .result-header {
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(191, 149, 63, 0.3);
         }
 
-        .result-header h2 {
+        .modal-header h2 {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-size: 24px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 20px;
+            gap: 10px;
         }
 
-        /* شبكة المعلومات */
+        .close-btn {
+            background: transparent;
+            border: 2px solid var(--gold-solid);
+            color: var(--gold-solid);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-btn:hover {
+            background: var(--gold-solid);
+            color: #1a1a1a;
+        }
+
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -346,7 +363,7 @@
             word-break: break-word;
         }
 
-        /* عناصر الجلسات */
+        /* تلوين تاريخ الجلسة والقرار بالذهب */
         .session-item {
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
@@ -356,7 +373,7 @@
         }
 
         .session-date {
-            color: var(--gold-solid);
+            color: var(--gold-solid) !important;
             font-weight: bold;
             margin-bottom: 8px;
             display: flex;
@@ -365,26 +382,11 @@
             font-size: 16px;
         }
 
-        /* زر الخروج والطباعة */
-        .logout-btn, .print-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--gold-solid);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-        .logout-btn:hover, .print-btn:hover {
-            background: var(--gold-solid);
-            color: #1a1a1a;
+        .session-decision {
+            color: #fcf6ba;
+            font-weight: 500;
         }
 
-        /* قسم التواصل */
         .contact-section {
             margin-top: 25px;
             padding: 20px;
@@ -421,6 +423,7 @@
             border: 1px solid rgba(191, 149, 63, 0.2);
             text-decoration: none;
             transition: all 0.3s;
+            cursor: pointer;
         }
         .contact-item:hover {
             transform: translateY(-3px);
@@ -431,7 +434,53 @@
         .contact-item span { color: #cbd5e1; font-size: 13px; }
         .contact-link { color: #fcf6ba; font-weight: bold; font-size: 15px; }
 
-        /* تعليمات */
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(191, 149, 63, 0.3);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #1a1a1a;
+            font-weight: 800;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 10px var(--gold-glow);
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .btn-outline-gold {
+            background: transparent;
+            border: 2px solid var(--gold-solid);
+            color: var(--gold-solid);
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-outline-gold:hover {
+            background: var(--gold-solid);
+            color: #1a1a1a;
+        }
+
         .instructions {
             background: rgba(191, 149, 63, 0.1);
             padding: 20px;
@@ -464,7 +513,6 @@
             font-size: 20px;
         }
 
-        /* الفوتر */
         .footer {
             background: rgba(0, 0, 0, 0.9);
             padding: 25px 0;
@@ -481,7 +529,7 @@
         }
         .whatsapp-link:hover { color: #fcf6ba; }
 
-        /* شاشة التحذير القانوني (بنفس التصميم) */
+        /* شاشة التحذير القانوني */
         .click-warning {
             position: fixed;
             top: 0;
@@ -726,6 +774,7 @@
         <main>
             <div class="inquiry-container">
                 <div class="inquiry-box">
+                    <!-- العدادات مخفية بواسطة CSS -->
                     <div class="session-timer" id="sessionTimer">
                         <i class="fas fa-clock"></i> تنتهي الجلسة بعد: <span id="timerDisplay">15:00</span>
                     </div>
@@ -784,66 +833,6 @@
                         <div id="successMessage" class="message success"></div>
                     </form>
                     
-                    <div id="inquiryResult" class="result-box">
-                        <button class="logout-btn" onclick="logoutSession()">
-                            <i class="fas fa-sign-out-alt"></i> خروج
-                        </button>
-                        <div class="result-header">
-                            <h2><i class="fas fa-file-contract"></i> تفاصيل القضية</h2>
-                            <button class="print-btn" onclick="printCaseDetails()">
-                                <i class="fas fa-print"></i> طباعة
-                            </button>
-                        </div>
-                        <div class="info-grid">
-                            <div class="info-item"><div class="info-label"><i class="fas fa-hashtag"></i> كود القضية</div><div class="info-value" id="resultCaseCode">-</div></div>
-                            <div class="info-item"><div class="info-label"><i class="fas fa-user"></i> اسم العميل</div><div class="info-value" id="resultClientName">-</div></div>
-                            <div class="info-item"><div class="info-label"><i class="fas fa-user-friends"></i> اسم الخصم</div><div class="info-value" id="resultOpponentName">-</div></div>
-                            <div class="info-item"><div class="info-label"><i class="fas fa-hashtag"></i> رقم القضية</div><div class="info-value" id="resultCaseNumber">-</div></div>
-                            <div class="info-item"><div class="info-label"><i class="fas fa-calendar"></i> سنة القضية</div><div class="info-value" id="resultCaseYear">-</div></div>
-                            <div class="info-item"><div class="info-label"><i class="fas fa-gavel"></i> المحكمة</div><div class="info-value" id="resultCourt">-</div></div>
-                        </div>
-                        <h3 style="color: #bf953f; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-gavel"></i> آخر جلسة مسجلة
-                        </h3>
-                        <div id="lastSessionInfo"></div>
-                        
-                        <div class="contact-section">
-                            <h3><i class="fas fa-headset"></i> للاستفسار يرجى التواصل عبر:</h3>
-                            <div class="contact-info">
-                                <a href="#" class="contact-item" onclick="openWhatsApp(event)">
-                                    <i class="fab fa-whatsapp"></i>
-                                    <span>الواتساب</span>
-                                    <span class="contact-link">01101076000</span>
-                                </a>
-                                <a href="#" class="contact-item" onclick="openEmail(event)">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>البريد الإلكتروني</span>
-                                    <span class="contact-link">ma.legaleg@outlook.com</span>
-                                </a>
-                                <a href="#" class="contact-item" onclick="bookAppointment(event)">
-                                    <i class="fas fa-calendar-check"></i>
-                                    <span>حجز موعد مقابلة</span>
-                                    <span style="color: #bf953f; font-size: 13px;">في المكتب</span>
-                                </a>
-                            </div>
-                            <p style="color: #94a3b8; margin-top: 15px; font-size: 13px;">
-                                <i class="fas fa-info-circle"></i> جميع الرسائل ترد خلال 24 ساعة عمل.
-                            </p>
-                        </div>
-                        
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;">
-                            <p style="color: #94a3b8; font-size: 13px;">
-                                <i class="fas fa-info-circle"></i> ملاحظة: هذه المعلومات خاصة بك فقط. يرجى عدم مشاركة كود القضية مع أي شخص.
-                            </p>
-                        </div>
-                        
-                        <div class="text-center mt-3">
-                            <button class="logout-btn" onclick="logoutSession()" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #60a5fa;">
-                                <i class="fas fa-redo"></i> بحث جديد
-                            </button>
-                        </div>
-                    </div>
-                    
                     <div class="instructions">
                         <h3><i class="fas fa-info-circle"></i> ملاحظات هامة</h3>
                         <ul>
@@ -851,7 +840,6 @@
                             <li>الكود يبدأ بـ MA- ثم أدخل الكود المتبقي (مثال: MA-26001H7K8G9).</li>
                             <li>إذا نسيت الكود، يرجى التواصل مع المكتب على الواتساب.</li>
                             <li>جميع البيانات محمية بسرية تامة وفقاً للقوانين.</li>
-                            <li>تنتهي جلسة الاستعلام تلقائياً بعد 15 دقيقة.</li>
                         </ul>
                     </div>
                 </div>
@@ -871,6 +859,73 @@
         </footer>
     </div>
 
+    <!-- مودال عرض نتيجة الاستعلام -->
+    <div id="resultModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-contract"></i> تفاصيل القضية</h2>
+                <button class="close-btn" onclick="closeResultModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label"><i class="fas fa-hashtag"></i> كود القضية</div><div class="info-value" id="modalCaseCode">-</div></div>
+                    <div class="info-item"><div class="info-label"><i class="fas fa-user"></i> اسم العميل</div><div class="info-value" id="modalClientName">-</div></div>
+                    <div class="info-item"><div class="info-label"><i class="fas fa-user-friends"></i> اسم الخصم</div><div class="info-value" id="modalOpponentName">-</div></div>
+                    <div class="info-item"><div class="info-label"><i class="fas fa-hashtag"></i> رقم القضية</div><div class="info-value" id="modalCaseNumber">-</div></div>
+                    <div class="info-item"><div class="info-label"><i class="fas fa-calendar"></i> سنة القضية</div><div class="info-value" id="modalCaseYear">-</div></div>
+                    <div class="info-item"><div class="info-label"><i class="fas fa-gavel"></i> المحكمة</div><div class="info-value" id="modalCourt">-</div></div>
+                </div>
+                <h3 style="color: #bf953f; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-gavel"></i> آخر جلسة مسجلة
+                </h3>
+                <div id="modalLastSessionInfo"></div>
+                
+                <div class="contact-section">
+                    <h3><i class="fas fa-headset"></i> للاستفسار يرجى التواصل عبر:</h3>
+                    <div class="contact-info">
+                        <a href="#" class="contact-item" onclick="openWhatsApp(event)">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>الواتساب</span>
+                            <span class="contact-link">01101076000</span>
+                        </a>
+                        <a href="#" class="contact-item" onclick="openEmail(event)">
+                            <i class="fas fa-envelope"></i>
+                            <span>البريد الإلكتروني</span>
+                            <span class="contact-link">ma.legaleg@outlook.com</span>
+                        </a>
+                        <a href="#" class="contact-item" onclick="bookAppointment(event)">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>حجز موعد مقابلة</span>
+                            <span style="color: #bf953f; font-size: 13px;">في المكتب</span>
+                        </a>
+                    </div>
+                    <p style="color: #94a3b8; margin-top: 15px; font-size: 13px;">
+                        <i class="fas fa-info-circle"></i> جميع الرسائل ترد خلال 24 ساعة عمل.
+                    </p>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                    <p style="color: #94a3b8; font-size: 13px;">
+                        <i class="fas fa-info-circle"></i> ملاحظة: هذه المعلومات خاصة بك فقط. يرجى عدم مشاركة كود القضية مع أي شخص.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline-gold" onclick="closeResultModal()">
+                    <i class="fas fa-times"></i> إغلاق
+                </button>
+                <div>
+                    <button class="btn-gold" onclick="printCaseDetails()">
+                        <i class="fas fa-print"></i> طباعة
+                    </button>
+                    <button class="btn-outline-gold" onclick="logoutSession()" style="margin-right: 10px;">
+                        <i class="fas fa-redo"></i> بحث جديد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ------------------------------------------------------------
         //                     المتغيرات العامة
@@ -879,7 +934,6 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ';
         
         let supabaseClient = null;
-        let warningAccepted = false;
         let currentCaseData = null;
         let currentCaseCode = '';
         let userIP = 'unknown';
@@ -1076,7 +1130,7 @@
                     const attemptsSpan = document.getElementById('failedAttempts');
                     const attemptsCounter = document.getElementById('attemptsCounter');
                     if (r.attempts_count) {
-                        attemptsCounter.style.display = 'block';
+                        // العدادات مخفية، لكن يمكن تحديث القيمة داخلياً
                         attemptsSpan.textContent = r.attempts_count;
                     }
                     return isIPBlocked;
@@ -1136,28 +1190,34 @@
         }
 
         // ------------------------------------------------------------
-        //                      عرض النتائج
+        //                      عرض النتائج في المودال
         // ------------------------------------------------------------
-        function displayResults(caseData, lastSession) {
+        function displayResultsInModal(caseData, lastSession) {
             currentCaseData = caseData;
             currentCaseCode = caseData.case_code;
-            document.getElementById('resultCaseCode').textContent = caseData.case_code || '-';
-            document.getElementById('resultClientName').textContent = caseData.client_name || '-';
-            document.getElementById('resultOpponentName').textContent = caseData.opponent_name || '-';
-            document.getElementById('resultCaseNumber').textContent = caseData.case_number || '-';
-            document.getElementById('resultCaseYear').textContent = caseData.case_year || '-';
-            document.getElementById('resultCourt').textContent = caseData.court_name || '-';
-            
-            const sessDiv = document.getElementById('lastSessionInfo');
+
+            document.getElementById('modalCaseCode').textContent = caseData.case_code || '-';
+            document.getElementById('modalClientName').textContent = caseData.client_name || '-';
+            document.getElementById('modalOpponentName').textContent = caseData.opponent_name || '-';
+            document.getElementById('modalCaseNumber').textContent = caseData.case_number || '-';
+            document.getElementById('modalCaseYear').textContent = caseData.case_year || '-';
+            document.getElementById('modalCourt').textContent = caseData.court_name || '-';
+
+            const sessDiv = document.getElementById('modalLastSessionInfo');
             if (lastSession) {
                 const d = new Date(lastSession.session_date);
                 const formatted = d.toLocaleDateString('ar-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-                sessDiv.innerHTML = `<div class="session-item"><div class="session-date"><i class="fas fa-calendar-day"></i> تاريخ آخر جلسة: ${formatted}</div><div style="color:#cbd5e1;">الحالة: ${lastSession.decision || 'تمت الجلسة'}</div></div>`;
+                sessDiv.innerHTML = `
+                    <div class="session-item">
+                        <div class="session-date"><i class="fas fa-calendar-day"></i> تاريخ آخر جلسة: ${formatted}</div>
+                        <div class="session-decision">القرار: ${lastSession.decision || 'تمت الجلسة'}</div>
+                    </div>`;
             } else {
                 sessDiv.innerHTML = `<div class="session-item" style="text-align:center;">لا توجد جلسات مسجلة.</div>`;
             }
-            document.getElementById('inquiryResult').style.display = 'block';
-            document.getElementById('inquiryForm').style.display = 'none';
+
+            // إظهار المودال
+            document.getElementById('resultModal').style.display = 'flex';
             startSessionTimer();
         }
 
@@ -1166,18 +1226,11 @@
         // ------------------------------------------------------------
         function startSessionTimer() {
             clearSessionTimer();
-            const timerEl = document.getElementById('sessionTimer');
-            const display = document.getElementById('timerDisplay');
-            timerEl.style.display = 'block';
             let timeLeft = SESSION_DURATION;
             sessionTimer = setInterval(() => {
                 timeLeft -= 1000;
                 if (timeLeft <= 0) {
                     endSession();
-                } else {
-                    const m = Math.floor(timeLeft / 60000);
-                    const s = Math.floor((timeLeft % 60000) / 1000);
-                    display.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
                 }
             }, 1000);
             sessionTimeout = setTimeout(endSession, SESSION_DURATION);
@@ -1186,7 +1239,6 @@
         function clearSessionTimer() {
             if (sessionTimer) clearInterval(sessionTimer);
             if (sessionTimeout) clearTimeout(sessionTimeout);
-            document.getElementById('sessionTimer').style.display = 'none';
         }
 
         async function endSession() {
@@ -1194,19 +1246,23 @@
             await logSecurityEvent('session_ended', true, null, { case_id: currentCaseData?.id });
             Swal.fire({
                 title: 'انتهت الجلسة',
-                text: 'انتهت مدة الاستعلام (15 دقيقة). تم مسح البيانات.',
+                text: 'انتهت مدة الاستعلام (15 دقيقة). تم إغلاق النافذة.',
                 icon: 'info',
                 confirmButtonColor: '#bf953f'
             });
+            closeResultModal();
             logoutSession();
         }
+
+        window.closeResultModal = function() {
+            document.getElementById('resultModal').style.display = 'none';
+        };
 
         window.logoutSession = function() {
             currentCaseData = null;
             currentCaseCode = '';
             clearSessionTimer();
-            document.getElementById('inquiryResult').style.display = 'none';
-            document.getElementById('inquiryForm').style.display = 'block';
+            closeResultModal();
             document.getElementById('phone').value = '';
             document.getElementById('caseCode').value = '';
             document.getElementById('errorMessage').style.display = 'none';
@@ -1258,7 +1314,14 @@
                 cancelButtonText: 'إلغاء'
             }).then((r) => {
                 if (r.isConfirmed) {
-                    window.print();
+                    // يمكن تخصيص الطباعة لفتح نافذة تحتوي على البيانات فقط
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`
+                        <html dir="rtl"><head><title>تفاصيل القضية</title>
+                        <style>body{font-family:Tajawal; background:#020617; color:#fff; padding:20px;}</style>
+                        </head><body>${document.querySelector('.modal-content').cloneNode(true).innerHTML}</body></html>`);
+                    printWindow.document.close();
+                    printWindow.print();
                 }
             });
         };
@@ -1331,7 +1394,7 @@
 
                 const result = await searchCase(fullPhone, fullCaseCode);
                 if (result.success) {
-                    displayResults(result.data, result.lastSession);
+                    displayResultsInModal(result.data, result.lastSession);
                 } else {
                     showError(result.message);
                     await checkIPBlock();

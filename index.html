@@ -219,7 +219,7 @@
         
         .visit-btn {
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid #ffffff; /* أبيض خالص */
             color: #fff;
             transition: all 0.3s ease;
         }
@@ -256,12 +256,12 @@
             line-height: 1;
         }
 
-        /* أيقونات التواصل بدون دوائر - ذهبية فقط */
+        /* أيقونات التواصل بدون دوائر - ذهبية بحجم أصغر (1.4rem) */
         .social-icon {
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 1.8rem; /* حجم أكبر */
+            font-size: 1.4rem;
             transition: all 0.3s ease;
             display: inline-block;
         }
@@ -277,7 +277,7 @@
             .section-spacing { padding-top: 4rem !important; padding-bottom: 4rem !important; }
             .hero-buttons { flex-direction: column; gap: 15px; }
             .hero-buttons a { width: 100%; }
-            .social-icon { font-size: 2rem; } /* تكبير للموبايل */
+            .social-icon { font-size: 1.5rem; }
         }
         
         #why-us { background: #01040f !important; }
@@ -311,6 +311,8 @@
             <a href="blog.html" class="nav-link-gold">المدونة</a>
             
             <div class="nav-buttons flex items-center gap-2 mr-2">
+                <!-- أيقونة تويتر في الهيدر (ذهبية) -->
+                <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="social-icon"><i class="fab fa-x-twitter"></i></a>
                 <a href="client-inquiry.html" class="track-case-btn px-3 py-2 rounded-lg text-xs flex items-center gap-2">
                     <i class="fas fa-gavel"></i> تابع قضيتك
                 </a>
@@ -370,14 +372,14 @@
             المحامي بالنقض <span class="gold-text mx-2">•</span> الدستورية العليا
         </p>
         
-        <!-- شريط الخبرة + الأيقونات الذهبية بدون دوائر -->
+        <!-- شريط الخبرة + الأيقونات الذهبية بدون دوائر (بحجم أصغر) -->
         <div class="flex flex-col items-center gap-6 mb-10">
             <span class="px-6 py-2 border border-gold-solid/50 rounded-full bg-black/50 backdrop-blur-sm text-white text-sm font-bold flex items-center gap-2">
                 <i class="fas fa-star text-yellow-500"></i>
                 خبرة أكثر من 22 عاماً في المحاماة
             </span>
             
-            <!-- أيقونات التواصل الذهبية بدون دوائر (حجم أكبر) -->
+            <!-- أيقونات التواصل الذهبية بدون دوائر (حجم 1.4rem) -->
             <div class="flex flex-wrap justify-center gap-6 mt-2">
                 <a href="https://wa.me/201101076000" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://www.facebook.com/malegal" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -388,7 +390,7 @@
             </div>
         </div>
         
-        <!-- الأزرار الثلاثة -->
+        <!-- الأزرار الثلاثة: استشارة (ذهبي)، حجز موعد (أبيض)، تابع قضيتك (ذهبي) -->
         <div class="flex flex-col sm:flex-row gap-5 justify-center items-center hero-buttons mt-4">
             <a href="contact.html?tab=consult" class="gold-btn px-10 sm:px-12 py-4 rounded-xl text-base sm:text-lg font-black uppercase tracking-widest min-w-[250px]">
                 طلب استشارة
@@ -403,7 +405,7 @@
     </div>
 </section>
 
-<!-- باقي الأقسام كما هي مع تعديل أيقونات الفوتر لتصبح بدون دوائر -->
+<!-- باقي الأقسام (نبذة، لماذا تختارنا، آراء العملاء، خدمات، فوتر) مع أيقونة تويتر مضبوطة في الفوتر -->
 <section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -448,7 +450,7 @@
             <div class="w-24 h-1 bg-gold-solid mx-auto rounded-full"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- الكروت الستة (نفس المحتوى السابق) -->
+            <!-- الكروت الستة (نفس المحتوى) -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-gavel text-3xl gold-text"></i>
@@ -503,6 +505,7 @@
             <p class="text-white opacity-70 max-w-2xl mx-auto">ثقة عملائنا هي الوسام الحقيقي الذي نفخر به. إليك بعض مما قاله موكلونا عن تجربتهم معنا.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
+            <!-- 3 شهادات كما هي -->
             <div class="card-glass testimonial-card gold-border reveal-on-scroll">
                 <i class="fas fa-quote-left quote-icon"></i>
                 <div class="flex text-yellow-500 mb-4 relative z-10 text-sm">
@@ -592,7 +595,7 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر الذهبية بدون دوائر (بنفس التنسيق) -->
+        <!-- أيقونات الفوتر الذهبية بدون دوائر (بحجم 1.4rem) -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://wa.me/201101076000" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.facebook.com/malegal" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>

@@ -8,93 +8,96 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* جميع الأنماط الأصلية كما هي - لم تتغير */
+        /* نفس الألوان والأسلوب المستخدم في نظام إدارة القضايا */
+        :root {
+            --primary-dark: #020617;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
+            --gold-solid: #bf953f;
+            --gold-glow: rgba(191, 149, 63, 0.5);
+            --header-height: 70px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Tajawal', sans-serif;
         }
-        
+
         body {
-            background: #020617;
+            background-color: var(--primary-dark);
             color: #f8fafc;
             min-height: 100vh;
-            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
             overflow-x: hidden;
+            padding-top: var(--header-height);
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        
-        /* الهيدر - تم تعديل ترتيب العناصر */
+
+        /* الهيدر (تم تعديله ليتناسب مع النظام) */
         .header {
-            background: rgba(0, 0, 0, 0.95);
-            border-bottom: 2px solid #bf953f;
-            padding: 8px 0;
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
-        }
-        
-        .navbar {
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--gold-solid);
+            z-index: 1100;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            padding: 0 20px;
         }
-        
-        /* وضع اللوغو في اليمين */
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
             text-decoration: none;
-            color: #bf953f;
-            flex: 1;
-            min-width: 250px;
         }
-        
+
         .logo-img {
             width: 50px;
             height: 50px;
             object-fit: cover;
             border-radius: 5px;
         }
-        
-        .logo-text {
-            text-align: right;
-            line-height: 1.2;
-        }
-        
+
         .logo-text h1 {
             font-family: 'Amiri', serif;
             font-size: 20px;
             color: #fcf6ba;
             margin: 0;
         }
-        
+
         .logo-text h2 {
             font-family: 'Amiri', serif;
             font-size: 14px;
-            color: #bf953f;
+            color: var(--gold-solid);
             margin: 0;
             font-weight: normal;
         }
-        
-        /* زر الصفحة الرئيسية - في أقصى اليسار */
+
         .nav-buttons {
             display: flex;
             gap: 10px;
-            margin-right: auto; /* يدفع الزر إلى اليسار في الـ RTL */
         }
-        
+
         .nav-btn {
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
-            color: #020617;
+            background: var(--gold-gradient);
+            color: #1a1a1a;
             padding: 8px 20px;
             font-size: 14px;
             border-radius: 8px;
@@ -104,64 +107,61 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-weight: bold;
+            font-weight: 800;
             text-decoration: none;
             white-space: nowrap;
+            box-shadow: 0 0 10px var(--gold-glow);
         }
-        
+
         .nav-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
+            box-shadow: 0 0 20px var(--gold-glow);
         }
-        
-        /* باقي الأنماط كما هي دون تغيير */
+
+        /* حاوية الاستعلام */
         .inquiry-container {
-            min-height: calc(100vh - 150px);
+            min-height: calc(100vh - var(--header-height) - 100px);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 40px 15px;
         }
-        
+
         .inquiry-box {
-            background: rgba(0, 0, 0, 0.85);
-            border: 1px solid rgba(191, 149, 63, 0.2);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            border-radius: 1.2rem;
             padding: 30px;
-            border-radius: 20px;
             width: 100%;
             max-width: 800px;
             text-align: center;
             box-shadow: 0 20px 60px rgba(191, 149, 63, 0.1);
             position: relative;
         }
-        
-        .session-timer {
+
+        /* مؤقت الجلسة وعداد المحاولات - بنفس أسلوب الإدارة */
+        .session-timer, .attempts-counter {
             position: absolute;
             top: 10px;
-            left: 10px;
             background: rgba(191, 149, 63, 0.2);
             padding: 5px 10px;
-            border-radius: 5px;
+            border-radius: 20px;
             font-size: 12px;
-            color: #ffcc00;
-            display: none;
+            color: #fcf6ba;
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            backdrop-filter: blur(5px);
         }
-        
-        .attempts-counter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(191, 149, 63, 0.2);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            color: #ffcc00;
-            display: none;
-        }
-        
+        .session-timer { left: 10px; }
+        .attempts-counter { right: 10px; }
+
+        /* عنوان الصفحة بتدرج ذهبي */
         .inquiry-box h1 {
             font-size: 28px;
-            color: #bf953f;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -169,121 +169,167 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        
+
         .inquiry-box p {
             color: #cbd5e1;
             margin-bottom: 30px;
             font-size: 16px;
             line-height: 1.6;
         }
-        
+
+        /* حقول الإدخال - مشابهة للإدارة */
         .form-group {
             margin-bottom: 25px;
             text-align: right;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #bf953f;
-            font-weight: bold;
+            color: #e2e8f0;
+            font-weight: 600;
             font-size: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
             justify-content: flex-end;
         }
-        
+
         .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            color: white;
+            border-radius: 0.8rem;
             width: 100%;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(191, 149, 63, 0.3);
-            border-radius: 10px;
-            color: white;
             font-size: 16px;
             transition: all 0.3s;
         }
-        
+
         .form-control:focus {
             outline: none;
-            border-color: #bf953f;
-            box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.1);
+            border-color: var(--gold-solid);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
         }
-        
+
+        /* حقل مزود ببادئة (prefix) */
+        .input-prefix-wrapper {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            border-radius: 0.8rem;
+            overflow: hidden;
+        }
+        .input-prefix-wrapper .prefix {
+            padding: 15px;
+            color: var(--gold-solid);
+            font-weight: bold;
+            border-right: 1px solid rgba(191, 149, 63, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+        }
+        .input-prefix-wrapper .form-control {
+            border: none;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        /* زر الاستعلام (gold-btn) */
         .btn-inquiry {
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
-            color: #020617;
+            background: var(--gold-gradient);
+            color: #1a1a1a;
+            font-weight: 800;
+            border: none;
+            box-shadow: 0 0 15px var(--gold-glow);
+            transition: 0.3s;
             padding: 16px 40px;
             font-size: 18px;
             border-radius: 10px;
-            border: none;
             cursor: pointer;
-            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 10px;
             margin-top: 10px;
-            font-weight: bold;
             width: 100%;
             justify-content: center;
         }
-        
+
         .btn-inquiry:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(191, 149, 63, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px var(--gold-glow);
         }
-        
+
+        /* رسائل الخطأ والنجاح */
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+            font-size: 14px;
+        }
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+        .message.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+
+        /* مربع النتائج - بنفس تصميم بطاقات القضايا */
         .result-box {
             display: none;
             text-align: right;
             margin-top: 30px;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            border: 3px solid #bf953f;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            border-radius: 1rem;
             box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
             animation: fadeIn 0.5s ease;
             position: relative;
         }
-        
-        .logout-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 2px solid #f87171;
-            padding: 5px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: inline-flex;
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            transition: all 0.3s;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        
-        .logout-btn:hover {
-            background: #f87171;
-            color: #020617;
+
+        .result-header h2 {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
         }
-        
+
+        /* شبكة المعلومات */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
         }
-        
+
         .info-item {
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
             border-radius: 10px;
             border: 1px solid rgba(191, 149, 63, 0.2);
         }
-        
+
         .info-label {
             color: #94a3b8;
             font-size: 13px;
@@ -292,24 +338,25 @@
             align-items: center;
             gap: 6px;
         }
-        
+
         .info-value {
             color: #fcf6ba;
             font-size: 16px;
             font-weight: bold;
             word-break: break-word;
         }
-        
+
+        /* عناصر الجلسات */
         .session-item {
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 10px;
-            border-right: 3px solid #bf953f;
+            border-right: 3px solid var(--gold-solid);
         }
-        
+
         .session-date {
-            color: #bf953f;
+            color: var(--gold-solid);
             font-weight: bold;
             margin-bottom: 8px;
             display: flex;
@@ -317,7 +364,27 @@
             gap: 8px;
             font-size: 16px;
         }
-        
+
+        /* زر الخروج والطباعة */
+        .logout-btn, .print-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--gold-solid);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .logout-btn:hover, .print-btn:hover {
+            background: var(--gold-solid);
+            color: #1a1a1a;
+        }
+
+        /* قسم التواصل */
         .contact-section {
             margin-top: 25px;
             padding: 20px;
@@ -326,9 +393,9 @@
             border: 1px solid rgba(191, 149, 63, 0.3);
             text-align: center;
         }
-        
+
         .contact-section h3 {
-            color: #bf953f;
+            color: var(--gold-solid);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -336,14 +403,14 @@
             gap: 8px;
             font-size: 18px;
         }
-        
+
         .contact-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
-        
+
         .contact-item {
             display: flex;
             flex-direction: column;
@@ -353,92 +420,28 @@
             border-radius: 8px;
             border: 1px solid rgba(191, 149, 63, 0.2);
             text-decoration: none;
-            cursor: pointer;
             transition: all 0.3s;
         }
-        
         .contact-item:hover {
             transform: translateY(-3px);
             background: rgba(191, 149, 63, 0.15);
             box-shadow: 0 5px 15px rgba(191, 149, 63, 0.2);
         }
-        
-        .contact-item i {
-            font-size: 20px;
-            color: #bf953f;
-            margin-bottom: 8px;
-        }
-        
-        .contact-item span {
-            color: #cbd5e1;
-            font-size: 13px;
-            margin-bottom: 3px;
-        }
-        
-        .contact-link {
-            color: #fcf6ba;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 15px;
-        }
-        
-        .footer {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 25px 0;
-            text-align: center;
-            border-top: 1px solid rgba(191, 149, 63, 0.2);
-        }
-        
-        .footer p {
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        
-        .whatsapp-link {
-            color: #bf953f;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 8px;
-            font-weight: bold;
-        }
-        
-        .whatsapp-link:hover {
-            color: #fcf6ba;
-        }
-        
-        .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin: 10px 0;
-            display: none;
-            font-size: 14px;
-        }
-        
-        .message.error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 2px solid #f87171;
-        }
-        
-        .message.success {
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            border: 2px solid #4ade80;
-        }
-        
+        .contact-item i { font-size: 20px; color: var(--gold-solid); margin-bottom: 8px; }
+        .contact-item span { color: #cbd5e1; font-size: 13px; }
+        .contact-link { color: #fcf6ba; font-weight: bold; font-size: 15px; }
+
+        /* تعليمات */
         .instructions {
             background: rgba(191, 149, 63, 0.1);
             padding: 20px;
             border-radius: 12px;
             margin-top: 30px;
             text-align: right;
-            border-right: 3px solid #bf953f;
+            border-right: 3px solid var(--gold-solid);
         }
-        
         .instructions h3 {
-            color: #bf953f;
+            color: var(--gold-solid);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
@@ -446,12 +449,6 @@
             justify-content: flex-end;
             font-size: 18px;
         }
-        
-        .instructions ul {
-            list-style: none;
-            padding: 0;
-        }
-        
         .instructions li {
             padding: 8px 0;
             color: #cbd5e1;
@@ -461,60 +458,30 @@
             justify-content: flex-end;
             font-size: 14px;
         }
-        
         .instructions li:before {
             content: "•";
-            color: #bf953f;
+            color: var(--gold-solid);
             font-size: 20px;
-            font-weight: bold;
         }
-        
-        .print-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid #bf953f;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
+
+        /* الفوتر */
+        .footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 25px 0;
+            text-align: center;
+            border-top: 1px solid rgba(191, 149, 63, 0.2);
+        }
+        .footer p { color: #94a3b8; font-size: 14px; }
+        .whatsapp-link {
+            color: var(--gold-solid);
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-            transition: all 0.3s;
-            font-size: 14px;
+            gap: 6px;
         }
-        
-        .print-btn:hover {
-            background: #bf953f;
-            color: #020617;
-        }
-        
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .result-header h2 {
-            color: #bf953f;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 20px;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease;
-        }
-        
+        .whatsapp-link:hover { color: #fcf6ba; }
+
+        /* شاشة التحذير القانوني (بنفس التصميم) */
         .click-warning {
             position: fixed;
             top: 0;
@@ -528,10 +495,10 @@
             z-index: 9999;
             padding: 20px;
         }
-        
+
         .click-warning-content {
             background: rgba(0, 0, 0, 0.98);
-            border: 3px solid #bf953f;
+            border: 3px solid var(--gold-solid);
             border-radius: 15px;
             padding: 30px;
             max-width: 800px;
@@ -539,11 +506,14 @@
             animation: fadeIn 0.5s ease;
             max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 0 40px rgba(191, 149, 63, 0.3);
+            box-shadow: 0 0 40px var(--gold-glow);
         }
-        
+
         .click-warning-content h2 {
-            color: #ffcc00;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 25px;
             font-size: 26px;
             display: flex;
@@ -551,7 +521,7 @@
             justify-content: center;
             gap: 15px;
         }
-        
+
         .legal-text {
             color: #f87171;
             font-size: 17px;
@@ -563,7 +533,7 @@
             border: 2px solid rgba(248, 113, 113, 0.4);
             text-align: center;
         }
-        
+
         .warning-buttons {
             display: flex;
             gap: 20px;
@@ -571,47 +541,45 @@
             justify-content: center;
             flex-wrap: wrap;
         }
-        
+
         .warning-btn {
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 100%);
-            color: #020617;
+            background: var(--gold-gradient);
+            color: #1a1a1a;
             padding: 18px 50px;
             font-size: 20px;
             border-radius: 12px;
             border: none;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-weight: 800;
+            transition: 0.3s;
             flex: 1;
             min-width: 250px;
-            box-shadow: 0 5px 20px rgba(191, 149, 63, 0.4);
+            box-shadow: 0 5px 20px var(--gold-glow);
         }
-        
         .warning-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(191, 149, 63, 0.5);
+            box-shadow: 0 8px 25px var(--gold-glow);
         }
-        
+
         .warning-btn-reject {
             background: linear-gradient(135deg, #ef4444 0%, #fca5a5 100%);
-            color: #020617;
+            color: #1a1a1a;
             padding: 18px 50px;
             font-size: 20px;
             border-radius: 12px;
             border: none;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-weight: 800;
+            transition: 0.3s;
             flex: 1;
             min-width: 250px;
             box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
         }
-        
         .warning-btn-reject:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
         }
-        
+
         .warning-checkbox {
             display: flex;
             align-items: center;
@@ -623,7 +591,7 @@
             border-radius: 10px;
             border: 1px solid rgba(191, 149, 63, 0.3);
         }
-        
+
         .warning-checkbox label {
             color: #fcf6ba;
             font-size: 17px;
@@ -632,14 +600,13 @@
             align-items: center;
             gap: 10px;
         }
-        
         .warning-checkbox input {
             width: 22px;
             height: 22px;
             cursor: pointer;
-            accent-color: #bf953f;
+            accent-color: var(--gold-solid);
         }
-        
+
         .ip-block-message {
             background: rgba(239, 68, 68, 0.2);
             border: 2px solid #f87171;
@@ -649,14 +616,14 @@
             text-align: center;
             display: none;
         }
-        
+
         .loading-message {
             display: none;
             text-align: center;
             padding: 30px;
             background: rgba(0, 0, 0, 0.8);
             border-radius: 15px;
-            border: 2px solid #bf953f;
+            border: 2px solid var(--gold-solid);
             position: fixed;
             top: 50%;
             left: 50%;
@@ -664,29 +631,24 @@
             z-index: 10000;
             width: 300px;
         }
-        
+
         .shake {
             animation: shake 0.5s ease-in-out;
         }
-        
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
             20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .logo {
-                justify-content: center;
-                min-width: auto;
-            }
-            .nav-buttons {
-                margin-right: 0; /* إلغاء الدفع لليسار في الشاشات الصغيرة */
-            }
+            .navbar { flex-direction: column; gap: 10px; }
             .inquiry-box { padding: 20px; }
             .inquiry-box h1 { font-size: 24px; }
             .click-warning-content { padding: 20px; }
@@ -695,7 +657,7 @@
     </style>
 </head>
 <body>
-    <!-- نافذة التحذير القانوني (تظهر أولاً) -->
+    <!-- نافذة التحذير القانوني -->
     <div id="dataWarningModal" class="click-warning" style="display: flex;">
         <div class="click-warning-content">
             <h2><i class="fas fa-exclamation-triangle"></i> عميلنا العزيز</h2>
@@ -740,12 +702,11 @@
         <p>جاري تهيئة النظام...</p>
     </div>
 
-    <!-- المحتوى الرئيسي (مخفي حتى الموافقة) -->
+    <!-- المحتوى الرئيسي -->
     <div id="mainContent" style="display: none;">
         <header class="header">
             <div class="container">
                 <nav class="navbar">
-                    <!-- اللوغو في اليمين (بداية السطر) -->
                     <a href="#" class="logo">
                         <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="logo-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>'">
                         <div class="logo-text">
@@ -753,7 +714,6 @@
                             <h2>المحامي بالنقض والدستورية العليا</h2>
                         </div>
                     </a>
-                    <!-- زر الصفحة الرئيسية في أقصى اليسار (باستخدام margin-right: auto) -->
                     <div class="nav-buttons">
                         <a href="#" class="nav-btn">
                             <i class="fas fa-home"></i> الصفحة الرئيسية
@@ -782,39 +742,34 @@
                         <p style="margin-top: 10px;"><i class="fas fa-clock"></i> الوقت المتبقي: <span id="blockTimeRemaining">15:00</span></p>
                     </div>
                     
-                    <!-- نموذج الاستعلام مع البادئات في اليسار (تم عكس الترتيب) -->
                     <form id="inquiryForm">
-                        <!-- حقل رقم الهاتف - البادئة 20 في اليسار -->
                         <div class="form-group">
                             <label for="phone"><i class="fas fa-phone"></i> رقم هاتف العميل</label>
-                            <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 2px solid rgba(191,149,63,0.3); border-radius: 10px; overflow: hidden;">
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">20</span>
                                 <input type="tel" id="phone" class="form-control" 
-                                       style="border: none; background: transparent; padding-left: 0; border-radius: 0;"
-                                       placeholder="أدخل بقية الرقم (مثال: 1101076000)" 
+                                       placeholder="مثال: 1101076000" 
                                        inputmode="numeric"
                                        pattern="[0-9]*"
                                        required
                                        autocomplete="off"
                                        dir="ltr">
-                                <span style="padding: 15px; color: #bf953f; font-weight: bold; border-right: 2px solid rgba(191,149,63,0.3); background: rgba(0,0,0,0.2); white-space: nowrap;">20</span>
                             </div>
                             <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
                                 رقم الهاتف المسجل يبدأ بـ 20 ثم 10 أرقام (مثال: 201101076000)
                             </small>
                         </div>
                         
-                        <!-- حقل كود القضية - البادئة MA- في اليسار -->
                         <div class="form-group">
                             <label for="caseCode"><i class="fas fa-file-contract"></i> كود القضية</label>
-                            <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 2px solid rgba(191,149,63,0.3); border-radius: 10px; overflow: hidden;">
+                            <div class="input-prefix-wrapper">
+                                <span class="prefix">MA-</span>
                                 <input type="text" id="caseCode" class="form-control" 
-                                       style="border: none; background: transparent; padding-left: 0; border-radius: 0;"
-                                       placeholder="أدخل الكود (مثال: 26001H7K8G9)" 
+                                       placeholder="مثال: 26001H7K8G9" 
                                        autocapitalize="characters"
                                        required
                                        autocomplete="off"
                                        dir="ltr">
-                                <span style="padding: 15px; color: #bf953f; font-weight: bold; border-right: 2px solid rgba(191,149,63,0.3); background: rgba(0,0,0,0.2); white-space: nowrap;">MA-</span>
                             </div>
                             <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
                                 الكود يبدأ بـ MA- ثم الأرقام والحروف (مثال: MA-26001H7K8G9)
@@ -829,7 +784,6 @@
                         <div id="successMessage" class="message success"></div>
                     </form>
                     
-                    <!-- نتائج البحث (مخفية في البداية) -->
                     <div id="inquiryResult" class="result-box">
                         <button class="logout-btn" onclick="logoutSession()">
                             <i class="fas fa-sign-out-alt"></i> خروج
@@ -1000,7 +954,7 @@
         }
 
         // ------------------------------------------------------------
-        //               دوال التحذير القانوني (تم إصلاحها)
+        //               دوال التحذير القانوني
         // ------------------------------------------------------------
         window.acceptWarning = async function() {
             const checkbox = document.getElementById('understandCheckbox');
@@ -1075,7 +1029,7 @@
         };
 
         // ------------------------------------------------------------
-        //      إعداد البادئات الثابتة - معكوسة لأن البادئة في اليسار
+        //      إعداد البادئات الثابتة
         // ------------------------------------------------------------
         function setupInputPrefixes() {
             const caseInput = document.getElementById('caseCode');

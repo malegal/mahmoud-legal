@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>استعلام عن القضايا | مؤسسة محمود عبد الحميد</title>
+    <title>استعلام العملاء | مؤسسة محمود عبد الحميد</title>
     <meta name="theme-color" content="#bf953f">
 
-    <!-- المكتبات والتنسيقات -->
+    <!-- المكتبات -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         :root {
@@ -21,6 +20,7 @@
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
             --gold-solid: #bf953f;
             --gold-glow: rgba(191, 149, 63, 0.5);
+            --glass-bg: rgba(15, 23, 42, 0.7);
         }
 
         body {
@@ -31,321 +31,317 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- الهيدر --- */
+        .header {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(191, 149, 63, 0.3);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+        }
+        .header-logo { font-family: 'Amiri', serif; font-size: 1.5rem; color: #fff; }
+        .header-logo i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-left: 10px; }
+
+        /* --- حاوية البحث (الوسط) --- */
+        .main-container {
+            flex: 1;
+            display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            margin-top: 70px; /* لتعويض الهيدر */
         }
 
-        /* --- تصميم بطاقة البحث --- */
-        .search-container {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(15, 23, 42, 0.6);
+        .search-card {
+            background: var(--glass-bg);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(191, 149, 63, 0.3);
             border-radius: 20px;
             padding: 40px 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 480px;
             text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
             position: relative;
             overflow: hidden;
         }
+        .search-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gold-gradient); }
 
-        .search-container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 5px;
-            background: var(--gold-gradient);
-        }
+        .search-title { font-family: 'Amiri', serif; font-size: 2rem; margin-bottom: 10px; color: #fff; }
+        .search-subtitle { color: #94a3b8; font-size: 0.9rem; margin-bottom: 30px; }
 
-        .logo-area i {
-            font-size: 4rem;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-
-        .main-title {
-            font-family: 'Amiri', serif;
-            color: #fff;
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-
-        .sub-title {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-        }
-
-        /* --- حقول الإدخال --- */
         .form-control {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(191, 149, 63, 0.2);
-            color: #fff;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            transition: 0.3s;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(191,149,63,0.2);
+            color: white; border-radius: 12px; padding: 12px; text-align: center; font-size: 1.1rem;
+            margin-bottom: 15px; transition: 0.3s;
         }
-
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 15px rgba(191, 149, 63, 0.2);
-            outline: none;
-            color: #fff;
-        }
-
+        .form-control:focus { background: rgba(255,255,255,0.1); border-color: var(--gold-solid); box-shadow: 0 0 15px rgba(191,149,63,0.2); outline: none; color: white; }
         .form-control::placeholder { color: #64748b; font-size: 0.9rem; }
 
-        .btn-search {
-            background: var(--gold-gradient);
-            color: #020617;
-            font-weight: 800;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 5px 20px rgba(191, 149, 63, 0.3);
+        .btn-gold {
+            background: var(--gold-gradient); color: #020617; font-weight: 800; border: none;
+            width: 100%; padding: 12px; border-radius: 12px; font-size: 1.1rem; cursor: pointer;
+            transition: 0.3s; box-shadow: 0 5px 20px rgba(191, 149, 63, 0.3); display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(191, 149, 63, 0.5); }
+
+        /* --- الفوتير --- */
+        .footer {
+            text-align: center; padding: 20px; color: #64748b; font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.05); background: rgba(2, 6, 23, 0.95);
         }
 
-        .btn-search:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.5);
-        }
-
-        /* --- تصميم المودال (مطابق للوحة الإدارة) --- */
+        /* ========================================= */
+        /* تصميم المودالات (التحذير + النتائج) - فاخر */
+        /* ========================================= */
+        
+        /* الثيم الزجاجي الموحد للمودالات */
         .modal-content.glass-theme {
-            background: rgba(2, 6, 23, 0.95);
+            background: rgba(2, 6, 23, 0.96);
             backdrop-filter: blur(20px);
             border: 1px solid var(--gold-solid);
-            border-radius: 20px;
-            box-shadow: 0 0 50px rgba(191, 149, 63, 0.15);
+            box-shadow: 0 0 60px rgba(191, 149, 63, 0.25);
+            border-radius: 1.5rem;
         }
 
-        .modal-header { border: none; padding-bottom: 0; }
-        .btn-close-white { filter: invert(1); opacity: 0.8; }
+        /* مودال التحذير */
+        .warning-icon { font-size: 3rem; color: #ef4444; margin-bottom: 15px; animation: pulse 2s infinite; }
+        .legal-text { text-align: right; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid rgba(191,149,63,0.1); margin: 20px 0; font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; }
+        .legal-text ul { list-style-type: none; padding: 0; }
+        .legal-text li { margin-bottom: 8px; position: relative; padding-right: 20px; }
+        .legal-text li::before { content: '•'; color: var(--gold-solid); position: absolute; right: 0; font-weight: bold; }
 
-        /* عنوان العميل */
+        /* مودال النتائج (نفس تصميم لوحة الإدارة) */
         .client-title-large {
-            font-family: 'Amiri', serif;
-            font-size: 2.2rem;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            font-family: 'Amiri', serif; font-size: 2.2rem;
+            background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5); text-align: center; margin-bottom: 5px;
         }
 
-        /* شبكة المعلومات (Grid) */
-        .info-grid-modern {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin: 25px 0;
-        }
-
+        /* الشبكة (Grid) */
+        .info-grid-modern { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 25px 0; }
         .glass-info-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(191, 149, 63, 0.15);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            transition: all 0.3s ease;
+            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(191, 149, 63, 0.15); padding: 15px; border-radius: 12px;
+            text-align: center; transition: all 0.3s ease;
         }
-
-        .glass-info-card:hover {
-            background: rgba(191, 149, 63, 0.1);
-            border-color: var(--gold-solid);
-            transform: translateY(-3px);
-        }
-
-        .glass-info-card i { font-size: 1.5rem; color: var(--gold-solid); margin-bottom: 8px; }
-        .glass-info-card .label { display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 4px; }
-        .glass-info-card .value { font-size: 1rem; font-weight: bold; color: #f8fafc; }
+        .glass-info-card:hover { border-color: var(--gold-solid); background: rgba(191, 149, 63, 0.08); transform: translateY(-3px); }
+        .glass-info-card i { font-size: 1.4rem; color: var(--gold-solid); margin-bottom: 8px; }
+        .glass-info-card .label { display: block; font-size: 0.75rem; color: #94a3b8; }
+        .glass-info-card .value { font-size: 1rem; font-weight: bold; color: #f1f5f9; }
 
         /* التايم لاين (Timeline) */
-        .timeline-container {
-            position: relative;
-            padding-right: 25px;
-            margin-top: 25px;
-            border-right: 2px solid rgba(191, 149, 63, 0.2);
-        }
-
+        .timeline-container { position: relative; padding-right: 25px; margin-top: 25px; border-right: 2px solid rgba(191, 149, 63, 0.15); }
         .timeline-item { position: relative; margin-bottom: 25px; }
-
         .timeline-item::before {
-            content: '';
-            position: absolute;
-            right: -32px;
-            top: 15px;
-            width: 14px;
-            height: 14px;
-            background: var(--primary-bg);
-            border: 3px solid var(--gold-solid);
-            border-radius: 50%;
-            z-index: 1;
-            box-shadow: 0 0 10px rgba(191, 149, 63, 0.4);
+            content: ''; position: absolute; right: -32px; top: 15px; width: 14px; height: 14px;
+            background: var(--primary-bg); border: 3px solid var(--gold-solid); border-radius: 50%;
+            z-index: 1; box-shadow: 0 0 10px rgba(191, 149, 63, 0.4);
         }
-
         .timeline-content {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(191, 149, 63, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(191, 149, 63, 0.1); border-radius: 12px; padding: 15px;
         }
+        .timeline-date { color: var(--gold-solid); font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 5px; }
         
-        .timeline-content:hover {
-            background: rgba(191, 149, 63, 0.05);
-            border-color: var(--gold-solid);
+        /* أزرار المودال */
+        .modal-footer-custom {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+            border-top: 1px solid rgba(191,149,63,0.2); padding-top: 20px; margin-top: 20px;
         }
+        .btn-modal-action {
+            padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; text-align: center;
+            display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print { background: transparent; border: 1px solid var(--gold-solid); color: var(--gold-solid); }
+        .btn-print:hover { background: var(--gold-solid); color: #000; }
+        .btn-new { background: rgba(255,255,255,0.1); border: 1px solid #fff; color: #fff; }
+        .btn-new:hover { background: #fff; color: #000; }
+        .btn-exit { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; }
+        .btn-exit:hover { background: #ef4444; color: #fff; }
 
-        .timeline-date {
-            color: var(--gold-solid);
-            font-weight: bold;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-            display: block;
-        }
-        
-        .timeline-desc { color: #e2e8f0; font-size: 0.95rem; line-height: 1.6; }
-        
-        /* تلوين الحالات */
-        .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; float: left; }
-        .bg-new { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #4ade80; }
-        .bg-wait { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #facc15; }
-        .bg-done { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid #38bdf8; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #64748b;
-            font-size: 0.8rem;
+        @media (max-width: 768px) {
+            .client-title-large { font-size: 1.8rem; }
+            .info-grid-modern { grid-template-columns: 1fr 1fr; }
+            .modal-footer-custom { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- واجهة البحث -->
-    <div class="search-container">
-        <div class="logo-area">
-            <i class="bi bi-bank"></i>
+    <!-- الهيدر -->
+    <header class="header">
+        <div class="header-logo">
+            <i class="bi bi-bank"></i> مؤسسة محمود عبد الحميد
         </div>
-        <h1 class="main-title">محمود عبد الحميد</h1>
-        <p class="sub-title">للمحاماة والاستشارات القانونية</p>
+    </header>
 
-        <form id="searchForm" onsubmit="handleSearch(event)">
-            <input type="tel" id="phoneInput" class="form-control" placeholder="رقم الهاتف (مثال: 01xxxxxxxxx)" required>
-            <input type="text" id="codeInput" class="form-control" placeholder="كود القضية (مثال: MA-23-001)" required style="text-transform: uppercase;">
-            
-            <button type="submit" class="btn-search" id="searchBtn">
-                <i class="bi bi-search me-2"></i> استعلام عن القضية
-            </button>
-        </form>
+    <!-- المحتوى الرئيسي (البحث) -->
+    <main class="main-container">
+        <div class="search-card">
+            <h1 class="search-title">استعلام العملاء</h1>
+            <p class="search-subtitle">أدخل بياناتك للاطلاع على تفاصيل قضيتك</p>
 
-        <div class="footer">
-            جميع الحقوق محفوظة © 2024
+            <form id="searchForm" onsubmit="handleSearch(event)">
+                <input type="tel" id="phoneInput" class="form-control" placeholder="رقم الهاتف (مثال: 01xxxxxxxxx)" required autocomplete="off">
+                <input type="text" id="codeInput" class="form-control" placeholder="كود القضية (MA-xxxxx)" required autocomplete="off" style="text-transform: uppercase;">
+                
+                <button type="submit" class="btn-gold" id="searchBtn">
+                    <i class="bi bi-search"></i> بحث عن القضية
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- الفوتير -->
+    <footer class="footer">
+        جميع الحقوق محفوظة © 2024 مؤسسة محمود عبد الحميد للمحاماة
+    </footer>
+
+    <!-- ========================================= -->
+    <!-- 1. مودال التحذير القانوني (يظهر عند البدء) -->
+    <!-- ========================================= -->
+    <div class="modal fade" id="warningModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-theme text-white text-center p-4">
+                <div class="modal-body">
+                    <i class="bi bi-shield-exclamation warning-icon"></i>
+                    <h3 class="gold-text" style="font-family: 'Amiri'; margin-bottom: 15px;">تنويه قانوني هام</h3>
+                    <p class="text-white-50 small">يرجى قراءة الشروط التالية بعناية قبل الاستخدام</p>
+                    
+                    <div class="legal-text">
+                        <ul>
+                            <li>هذا النظام مخصص حصرياً لعملاء مكتب محمود عبد الحميد.</li>
+                            <li>جميع بيانات القضايا سرية للغاية ومحمية بموجب القانون.</li>
+                            <li>محاولة الدخول غير المصرح به أو التلاعب بالبيانات يعرضك للمساءلة القانونية.</li>
+                            <li>يتم تسجيل عنوان IP ووقت الدخول لأغراض أمنية.</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-check d-flex justify-content-center gap-2 mb-4">
+                        <input class="form-check-input" type="checkbox" id="agreeCheck" style="background-color: transparent; border-color: var(--gold-solid);">
+                        <label class="form-check-label text-white small" for="agreeCheck">
+                            أقر بأني صاحب الشأن وأوافق على الشروط
+                        </label>
+                    </div>
+
+                    <button class="btn-gold" id="agreeBtn" onclick="acceptWarning()" disabled>
+                        موافق ومتابعة
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- المودال (نفس تصميم لوحة الإدارة) -->
-    <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+    <!-- ========================================= -->
+    <!-- 2. مودال عرض النتائج (تصميم التايم لاين) -->
+    <!-- ========================================= -->
+    <div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content glass-theme text-white">
-                <div class="modal-header">
-                    <button type="button" class="btn-close btn-close-white me-auto ms-0" data-bs-dismiss="modal"></button>
+                <div class="modal-header border-0 pb-0">
+                    <!-- لا يوجد زر إغلاق هنا، التحكم من الأسفل -->
                 </div>
-                <div class="modal-body p-4 pt-0" id="modalContent">
-                    <!-- سيتم حقن البيانات هنا بنفس تصميم لوحة الإدارة -->
-                </div>
-                <div class="modal-footer border-top border-secondary border-opacity-25 justify-content-center">
-                    <button class="btn btn-outline-warning" onclick="printReport()">
-                        <i class="bi bi-printer me-2"></i> طباعة التقرير
-                    </button>
-                    <a href="https://wa.me/201101076000" target="_blank" class="btn btn-success" style="background: #25D366; border:none; color:white;">
-                        <i class="bi bi-whatsapp me-2"></i> تواصل معنا
-                    </a>
+                <div class="modal-body p-4 pt-0" id="resultContent">
+                    <!-- سيتم حقن المحتوى هنا -->
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // إعدادات Supabase
+        // --- الإعدادات ---
         const SB_URL = "https://iyhfafodhptcdwrjywek.supabase.co";
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
         const db = supabase.createClient(SB_URL, SB_KEY);
+        
+        let warningModalInstance;
+        let resultModalInstance;
 
-        let currentCaseData = null;
+        // --- عند تحميل الصفحة ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // تشغيل مودال التحذير
+            const warningEl = document.getElementById('warningModal');
+            warningModalInstance = new bootstrap.Modal(warningEl);
+            warningModalInstance.show();
 
-        // دالة البحث
+            // تفعيل زر الموافقة
+            document.getElementById('agreeCheck').addEventListener('change', function() {
+                document.getElementById('agreeBtn').disabled = !this.checked;
+            });
+        });
+
+        // --- قبول التحذير ---
+        function acceptWarning() {
+            warningModalInstance.hide();
+        }
+
+        // --- معالجة البحث ---
         async function handleSearch(e) {
             e.preventDefault();
             const btn = document.getElementById('searchBtn');
             const originalText = btn.innerHTML;
             
-            // تحضير البيانات
             let phone = document.getElementById('phoneInput').value.trim();
             let code = document.getElementById('codeInput').value.trim().toUpperCase();
 
-            // تحقق بسيط
+            // إضافة MA- إذا لم تكن موجودة
+            if (!code.startsWith('MA-')) {
+                // إذا أدخل المستخدم أرقاماً فقط أو كود بدون بادئة
+                // نفترض أننا سنبحث عن القيمة المدخلة، وإذا فشلنا نجرب مع MA-
+            }
+
+            // التحقق المبدئي
             if(phone.length < 10 || code.length < 3) {
-                Swal.fire({icon: 'warning', title: 'تنبيه', text: 'يرجى التأكد من صحة البيانات المدخلة', confirmButtonColor: '#bf953f'});
+                Swal.fire({icon:'warning', title:'تنبيه', text:'يرجى إدخال بيانات صحيحة', confirmButtonColor:'#bf953f', background:'#020617', color:'#fff'});
                 return;
             }
 
-            // إضافة بادئة MA- إذا نسيها العميل
-            if(!code.startsWith('MA-') && !code.startsWith('ma-')) {
-                // يمكننا إضافة منطق هنا للتعامل بذكاء، لكن سنفترض أن العميل قد يكتب الكود بدون البادئة أحياناً
-            }
-
-            btn.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> جاري البحث...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> جاري البحث...';
             btn.disabled = true;
 
             try {
-                // 1. البحث عن القضية
+                // البحث في قاعدة البيانات
+                // نجرب الكود كما هو، أو مع إضافة MA-
                 const { data: cases, error } = await db
                     .from('cases')
                     .select('*')
-                    .or(`case_code.eq.${code},case_code.eq.MA-${code}`) // محاولة مطابقة الكود مع أو بدون MA
-                    .limit(1);
+                    .or(`case_code.eq.${code},case_code.eq.MA-${code},case_code.eq.${code.replace('MA-', '')}`)
+                    .limit(5); // قد يكون هناك تشابه، نجلب القليل
 
                 if (error) throw error;
 
-                // التحقق من الهاتف (بمرونة)
-                const targetCase = cases.find(c => c.client_phone.includes(phone) || phone.includes(c.client_phone));
+                // فلترة النتائج حسب رقم الهاتف
+                const targetCase = cases && cases.find(c => c.client_phone.includes(phone) || phone.includes(c.client_phone));
 
                 if (!targetCase) {
-                    throw new Error("بيانات غير صحيحة");
+                    throw new Error('NOT_FOUND');
                 }
 
-                // 2. جلب الجلسات
+                // جلب الجلسات
                 const { data: sessions } = await db
                     .from('sessions')
                     .select('*')
                     .eq('case_id', targetCase.id)
                     .order('session_date', { ascending: false });
 
-                // 3. عرض المودال بالتصميم المطلوب
-                currentCaseData = { ...targetCase, sessions: sessions || [] };
-                renderModal(targetCase, sessions || []);
+                // عرض النتائج
+                renderResultModal(targetCase, sessions || []);
 
             } catch (err) {
                 console.error(err);
+                let msg = 'لم يتم العثور على قضية مطابقة. تأكد من الكود ورقم الهاتف.';
+                if(err.message !== 'NOT_FOUND' && err.code) msg = 'خطأ في الاتصال بالنظام';
+                
                 Swal.fire({
-                    icon: 'error', 
-                    title: 'عذراً', 
-                    text: 'لم يتم العثور على قضية مطابقة لهذه البيانات. يرجى التأكد من الكود ورقم الهاتف.', 
+                    icon: 'error',
+                    title: 'عذراً',
+                    text: msg,
                     confirmButtonColor: '#bf953f',
                     background: '#020617',
                     color: '#fff'
@@ -356,32 +352,18 @@
             }
         }
 
-        // دالة رسم المودال (نفس تصميم لوحة الإدارة بالضبط)
-        function renderModal(c, ss) {
-            // دوال مساعدة للتنسيق
-            const formatDate = (dateStr) => new Date(dateStr).toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+        // --- رسم مودال النتائج (التصميم الفخم) ---
+        function renderResultModal(c, ss) {
+            const formatDate = (d) => new Date(d).toLocaleDateString('ar-EG', { weekday:'long', year:'numeric', month:'short', day:'numeric' });
             
-            const getStatusClass = (status) => {
-                if(status === 'مؤجلة') return 'bg-wait';
-                if(status === 'محكوم فيها') return 'bg-done';
-                return 'bg-new';
-            }
-
-            const getIcon = (type) => {
-                if(type?.includes('جنائية')) return 'bi-fingerprint';
-                if(type?.includes('أسرة')) return 'bi-people';
-                return 'bi-briefcase';
-            };
-
-            // بناء HTML
             let html = `
                 <div class="text-center mb-4 mt-2">
-                    <div class="mb-2"><i class="bi ${getIcon(c.case_type)} fs-1 text-warning"></i></div>
+                    <div class="mb-2"><i class="bi bi-bank fs-1 text-warning"></i></div>
                     <h2 class="client-title-large">${c.client_name}</h2>
                     <p class="text-white-50">${c.case_type || 'قضية'} | ${c.court_name}</p>
                 </div>
 
-                <!-- شبكة المعلومات (نفس تصميم الإدارة) -->
+                <!-- الشبكة -->
                 <div class="info-grid-modern">
                     <div class="glass-info-card">
                         <i class="bi bi-hash"></i>
@@ -389,31 +371,30 @@
                         <span class="value">${c.case_number} / ${c.case_year}</span>
                     </div>
                     <div class="glass-info-card">
-                        <i class="bi bi-person-x"></i>
+                        <i class="bi bi-person-exclamation"></i>
                         <span class="label">الخصم</span>
                         <span class="value">${c.opponent_name || '-'}</span>
                     </div>
                     <div class="glass-info-card">
-                        <i class="bi bi-building"></i>
+                        <i class="bi bi-diagram-3"></i>
                         <span class="label">الدائرة</span>
                         <span class="value">${c.circle || '-'}</span>
                     </div>
                     <div class="glass-info-card">
-                        <i class="bi bi-tag"></i>
-                        <span class="label">الصفة</span>
+                        <i class="bi bi-person-badge"></i>
+                        <span class="label">الصـفـة</span>
                         <span class="value">${c.client_role || '-'}</span>
                     </div>
                 </div>
 
-                <!-- موضوع الدعوى -->
-                ${c.case_subject ? `
-                <div class="alert" style="background: rgba(191, 149, 63, 0.1); border: 1px solid rgba(191, 149, 63, 0.3); color: #e2e8f0; border-radius: 12px;">
-                    <i class="bi bi-info-circle me-2 text-warning"></i>
-                    <strong>موضوع الدعوى:</strong> ${c.case_subject}
-                </div>` : ''}
+                <!-- الموضوع -->
+                <div class="alert" style="background: rgba(191,149,63,0.1); border:1px solid rgba(191,149,63,0.3); color:#cbd5e1; font-size:0.9rem;">
+                    <i class="bi bi-info-circle me-2 text-warning"></i> 
+                    <strong>الموضوع:</strong> ${c.case_subject || 'لا يوجد وصف'}
+                </div>
 
                 <!-- التايم لاين -->
-                <h5 class="text-warning mt-4 mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+                <h5 class="gold-text mt-4 mb-3 border-bottom border-secondary border-opacity-25 pb-2">
                     <i class="bi bi-clock-history"></i> سجل الجلسات
                 </h5>
                 
@@ -421,51 +402,65 @@
                     ${ss.length > 0 ? ss.map(s => `
                         <div class="timeline-item">
                             <div class="timeline-content">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <span class="timeline-date">
-                                        <i class="bi bi-calendar-check"></i> ${formatDate(s.session_date)}
-                                    </span>
-                                    <span class="status-badge ${getStatusClass(s.case_status)}">${s.case_status}</span>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="timeline-date"><i class="bi bi-calendar-check"></i> ${formatDate(s.session_date)}</span>
+                                    <span class="badge ${s.case_status === 'مؤجلة' ? 'bg-warning text-dark' : 'bg-success'}">${s.case_status}</span>
                                 </div>
-                                <div class="timeline-desc">
-                                    ${s.decision ? `<i class="bi bi-gavel text-warning ms-1"></i> ${s.decision}` : 'لم يتم إدراج قرار للجلسة بعد'}
+                                <div style="font-size:0.95rem; color:#e2e8f0; line-height:1.5;">
+                                    ${s.decision ? `<i class="bi bi-gavel text-warning ms-1"></i> ${s.decision}` : 'لم يتم تسجيل القرار بعد'}
                                 </div>
                             </div>
                         </div>
-                    `).join('') : '<div class="text-center text-white-50 py-3">لا توجد جلسات مسجلة حتى الآن</div>'}
+                    `).join('') : '<div class="text-center text-white-50 py-3">لا توجد جلسات مسجلة</div>'}
+                </div>
+
+                <!-- الأزرار المطلوبة -->
+                <div class="modal-footer-custom">
+                    <button class="btn-modal-action btn-print" onclick="window.print()">
+                        <i class="bi bi-printer"></i> طباعة
+                    </button>
+                    <button class="btn-modal-action btn-new" onclick="newSearch()">
+                        <i class="bi bi-search"></i> بحث آخر
+                    </button>
+                    <button class="btn-modal-action btn-exit" onclick="exitSystem()">
+                        <i class="bi bi-box-arrow-right"></i> خروج
+                    </button>
                 </div>
             `;
 
-            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('resultContent').innerHTML = html;
             
-            // فتح المودال
-            new bootstrap.Modal(document.getElementById('resultModal')).show();
+            const el = document.getElementById('resultModal');
+            resultModalInstance = new bootstrap.Modal(el);
+            resultModalInstance.show();
         }
 
-        // دالة الطباعة (PDF بسيط للعميل)
-        function printReport() {
-            if (!currentCaseData) return;
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ align: "right", unit: "mm", format: "a4" });
-            
-            // بسبب دعم العربية المحدود في jsPDF الافتراضي، هذا مجرد توضيح.
-            // في الواقع يفضل استخدام html2pdf أو طباعة المتصفح window.print()
-            // سنستخدم طباعة المتصفح لضمان ظهور التصميم العربي بشكل صحيح
-            
-            const printContent = document.getElementById('modalContent').innerHTML;
-            const win = window.open('', '', 'height=700,width=900');
-            win.document.write('<html dir="rtl"><head><title>تقرير القضية</title>');
-            win.document.write('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">');
-            win.document.write('<style>body{font-family: sans-serif; padding: 20px;} .timeline-item::before{display:none;} .glass-info-card{border:1px solid #000; padding:10px; margin-bottom:10px;} </style>');
-            win.document.write('</head><body>');
-            win.document.write('<h2 style="text-align:center; margin-bottom:20px;">تقرير متابعة قضية</h2>');
-            win.document.write(printContent);
-            win.document.write('</body></html>');
-            win.document.close();
-            win.print();
+        // --- وظائف الأزرار ---
+        function newSearch() {
+            if(resultModalInstance) resultModalInstance.hide();
+            document.getElementById('searchForm').reset();
         }
+
+        function exitSystem() {
+            Swal.fire({
+                title: 'هل تريد الخروج؟',
+                text: "سيتم إعادة تحميل الصفحة",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#bf953f',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم، خروج',
+                cancelButtonText: 'إلغاء',
+                background: '#020617',
+                color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        }
+
     </script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

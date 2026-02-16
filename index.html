@@ -169,31 +169,23 @@
             transform: scale(1.1); 
         }
         
-        /* أيقونات الفوتر بألوانها الرسمية - مصغرة */
+        /* أيقونات الفوتر بألوانها الرسمية - بدون خلفيات دائرية */
         .footer-social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            color: white;
+            font-size: 1.8rem;  /* حجم مناسب */
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
             text-decoration: none;
+            margin: 0 10px;
+            display: inline-block;
         }
         
-        .footer-social-icon.facebook { background: #1877f2; }
-        .footer-social-icon.linkedin { background: #0a66c2; }
-        .footer-social-icon.twitter { 
-            background: #ffffff; /* خلفية بيضاء */
-            color: #000000; /* X أسود */
-        }
-        .footer-social-icon.email { background: #ea4335; }
+        .footer-social-icon.facebook { color: #1877f2; }      /* فيسبوك أزرق */
+        .footer-social-icon.linkedin { color: #0a66c2; }      /* لينكد إن أزرق */
+        .footer-social-icon.twitter { color: #ffffff; }       /* تويتر أبيض (X) */
+        .footer-social-icon.email { color: #ea4335; }         /* إيميل أحمر */
         
         .footer-social-icon:hover {
             transform: translateY(-5px);
-            filter: brightness(1.2);
+            text-shadow: 0 0 15px currentColor;
         }
         
         #mobile-menu { 
@@ -307,6 +299,7 @@
             .hero-buttons a { width: 100%; }
             .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
             .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
+            .footer-social-icon { font-size: 2rem; margin: 0 8px; } /* تكبير قليلاً للموبايل */
         }
         
         #why-us { background: #01040f !important; }
@@ -346,7 +339,6 @@
             <a href="blog.html" class="nav-link-gold">المدونة</a>
             
             <div class="nav-buttons flex items-center gap-2 mr-2">
-                <!-- تم إزالة أيقونة تويتر من الهيدر -->
                 <a href="client-inquiry.html" class="track-case-btn px-3 py-2 rounded-lg text-xs flex items-center gap-2">
                     <i class="fas fa-gavel"></i> تابع قضيتك
                 </a>
@@ -402,11 +394,13 @@
                 محمود عبد الحميد
             </span>
         </h1>
-        <p class="text-white tracking-[0.1em] sm:tracking-[0.2em] font-medium text-lg sm:text-xl md:text-2xl mb-8 md:mb-10">
-    المحامي بالنقض <span class="gold-text mx-2">و</span> الدستورية العليا
-</p>
         
-        <!-- شريط الخبرة فقط (بدون أيقونات التواصل) -->
+        <!-- النص المعدل: الواو عادية (ليست ذهبية) -->
+        <p class="text-white tracking-[0.1em] sm:tracking-[0.2em] font-medium text-lg sm:text-xl md:text-2xl mb-8 md:mb-10">
+            المحامي بالنقض <span class="mx-2">و</span> الدستورية العليا
+        </p>
+        
+        <!-- شريط الخبرة -->
         <div class="flex flex-col items-center gap-6 mb-10">
             <span class="px-6 py-2 border border-gold-solid/50 rounded-full bg-black/50 backdrop-blur-sm text-white text-sm font-bold flex items-center gap-2">
                 <i class="fas fa-star text-yellow-500"></i>
@@ -429,7 +423,7 @@
     </div>
 </section>
 
-<!-- باقي الأقسام (نبذة، لماذا تختارنا، آراء العملاء، خدمات) -->
+<!-- بقية الأقسام (نبذة، لماذا تختارنا، آراء العملاء، خدمات) -->
 <section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -474,7 +468,7 @@
             <div class="w-24 h-1 bg-gold-solid mx-auto rounded-full"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- الكروت الستة -->
+            <!-- الكروت الستة (كما هي) -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-gavel text-3xl gold-text"></i>
@@ -529,6 +523,7 @@
             <p class="text-white opacity-70 max-w-2xl mx-auto">ثقة عملائنا هي الوسام الحقيقي الذي نفخر به. إليك بعض مما قاله موكلونا عن تجربتهم معنا.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
+            <!-- ثلاث شهادات (كما هي) -->
             <div class="card-glass testimonial-card gold-border reveal-on-scroll">
                 <i class="fas fa-quote-left quote-icon"></i>
                 <div class="flex text-yellow-500 mb-4 relative z-10 text-sm">
@@ -618,7 +613,7 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر بألوانها الرسمية - مصغرة -->
+        <!-- أيقونات الفوتر بألوانها الرسمية - بدون خلفيات دائرية -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>

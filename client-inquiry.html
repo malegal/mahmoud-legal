@@ -2,14 +2,20 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>استعلام العملاء | مؤسسة محمود عبد الحميد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
+    <title>استعلام القضايا | مؤسسة محمود عبد الحميد</title>
     
-    <!-- المكتبات -->
+    <!-- Tailwind & Fonts (من الصفحة الرئيسية) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap للمودالات (نفس الكود السابق) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     
+    <!-- Supabase و SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -19,6 +25,7 @@
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
             --gold-solid: #bf953f;
             --glass-bg: rgba(15, 23, 42, 0.7);
+            --header-height: 90px;
         }
 
         body {
@@ -30,55 +37,71 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            margin: 0;
+            padding-top: var(--header-height); /* تعويض الهيدر الثابت */
         }
 
-        /* --- الهيدر القديم (كما في صفحة الاستعلام القديمة) --- */
-        .header {
-            position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(2, 6, 23, 0.95);
-            backdrop-filter: blur(10px);
+        /* الهيدر كما في الصفحة الرئيسية */
+        .header-glass {
+            background: rgba(0, 0, 0, 0.95) !important;
+            backdrop-filter: blur(20px);
             border-bottom: 2px solid var(--gold-solid);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px;
+            box-shadow: 0 5px 30px rgba(191, 149, 63, 0.3);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--header-height);
             z-index: 1050;
         }
-        .header-logo { font-family: 'Amiri', serif; font-size: 1.4rem; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .header-logo i { color: var(--gold-solid); font-size: 1.6rem; }
         
-        /* زر الصفحة الرئيسية ذهبي ملكي */
-        .home-link {
-            color: var(--gold-solid);
-            font-size: 1.5rem;
-            transition: 0.3s;
-            text-decoration: none;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
+        .gold-text { 
+            background: var(--gold-gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
             background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
-            filter: drop-shadow(0 0 5px rgba(191,149,63,0.5));
         }
-        .home-link:hover {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 15px gold);
+        
+        .track-case-btn { 
+            background: transparent; 
+            border: 2px solid var(--gold-solid); 
+            color: white; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+        }
+        .track-case-btn:hover { 
+            background: var(--gold-gradient); 
+            color: #1a1a1a; 
+            border-color: transparent; 
+        }
+        
+        .gold-btn { 
+            background: var(--gold-gradient); 
+            color: #1a1a1a; 
+            font-weight: 800; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.5);
+            border: none;
+            cursor: pointer;
+        }
+        .gold-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 0 30px rgba(191, 149, 63, 0.7); 
         }
 
-        /* --- المحتوى الرئيسي (فورم البحث) --- */
+        /* المحتوى الرئيسي */
         .main-container {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            margin-top: 70px;
             transition: opacity 0.3s ease;
         }
-        /* في البداية يكون مخفياً */
         .main-container.hidden {
             display: none;
         }
 
-        /* خلفية سوداء بتأثير زجاجي */
+        /* بطاقة الاستعلام (بنفس التصميم السابق) */
         .search-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -93,7 +116,7 @@
         }
         .search-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--gold-gradient); }
 
-        /* --- حقول الإدخال مع البادئات الثابتة --- */
+        /* حقول الإدخال مع البادئات الثابتة */
         .input-group-custom {
             display: flex;
             align-items: center;
@@ -129,23 +152,13 @@
         }
         .form-control-custom::placeholder { color: #64748b; }
 
-        .btn-gold {
-            background: var(--gold-gradient); color: #020617; font-weight: 800; border: none;
-            width: 100%; padding: 12px; border-radius: 12px; font-size: 1.1rem; cursor: pointer;
-            transition: 0.3s; box-shadow: 0 5px 20px rgba(191, 149, 63, 0.3);
-        }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(191, 149, 63, 0.5); }
-
-        /* --- الفوتير --- */
+        /* الفوتر */
         .footer {
             text-align: center; padding: 20px; color: #64748b; font-size: 0.8rem;
             border-top: 1px solid rgba(255,255,255,0.05); background: rgba(2, 6, 23, 0.95);
         }
 
-        /* ========================================= */
-        /* تصميم المودالات (المنسدلة من الهيدر) */
-        /* ========================================= */
-        
+        /* ===== مودالات (منسوخة من الكود السابق مع تحسين طفيف) ===== */
         @keyframes dropFromHeader {
             0% { transform: translateY(-100%); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
@@ -164,7 +177,7 @@
             border: 2px solid var(--gold-solid);
             box-shadow: 0 10px 60px rgba(191, 149, 63, 0.2);
             border-radius: 0 0 20px 20px;
-            margin-top: 70px;
+            margin-top: var(--header-height);
         }
 
         .warning-content { text-align: center; padding: 20px; }
@@ -203,6 +216,7 @@
 
         @media (max-width: 768px) {
             .info-grid { grid-template-columns: 1fr; }
+            .header-glass nav { padding: 10px 15px !important; }
         }
         
         @media print {
@@ -215,283 +229,359 @@
 </head>
 <body>
 
-    <!-- الهيدر القديم (كما في صفحة الاستعلام القديمة) -->
-    <header class="header">
-        <div class="header-logo">
-            <i class="bi bi-bank"></i> مؤسسة محمود عبد الحميد
+<!-- ========== الهيدر (مأخوذ من الصفحة الرئيسية مع تعديل الروابط) ========== -->
+<header class="header-glass">
+    <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center" style="height: 100%;">
+        <div class="flex items-center gap-4">
+            <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-24 h-24 object-contain">
+            <div class="flex flex-col leading-tight">
+                <h1 class="font-bold gold-text serif-font whitespace-nowrap" style="font-size: 28px !important; line-height: 1.2;">محمود عبد الحميد</h1>
+                <p class="text-gray-300 font-bold" style="font-size: 12px !important; line-height: 1.2;">المحامي بالنقض والدستورية العليا</p>
+            </div>
         </div>
-        <a href="https://almostshar.vercel.app/index.html" class="home-link" title="الرئيسية">
-            <i class="bi bi-house-door-fill"></i>
-        </a>
-    </header>
+        <div class="hidden lg:flex items-center gap-6 font-bold text-sm">
+            <a href="about.html" class="text-white hover:gold-text transition">عن المؤسسة</a>
+            <a href="index.html#why-us" class="text-white hover:gold-text transition">لماذا تختارنا</a>
+            <a href="specialties.html" class="text-white hover:gold-text transition">تخصصاتنا</a>
+            <a href="about.html#vision" class="text-white hover:gold-text transition">الرؤية والأهداف</a>
+            <a href="contact.html" class="text-white hover:gold-text transition">تواصل معنا</a>
+            <a href="blog.html" class="text-white hover:gold-text transition">المدونة</a>
+            <a href="blog-admin.html" class="text-white hover:gold-text transition">إدارة المدونة</a>
+            <div class="nav-buttons flex items-center gap-2">
+                <!-- الرابط الحالي مميز -->
+                <a href="client-inquiry.html" class="track-case-btn px-4 py-2 rounded-lg text-xs flex items-center gap-2" style="background: var(--gold-gradient); color: #1a1a1a; border-color: transparent;">
+                    <i class="fas fa-search"></i> تابع قضيتك
+                </a>
+                <a href="contact.html?tab=consult" class="gold-btn px-4 py-2 rounded-lg text-xs">طلب استشارة فورية</a>
+                <a href="contact.html?tab=visit" class="px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition text-white text-xs">
+                    حجز موعد مقابلة
+                </a>
+            </div>
+        </div>
+        <!-- زر القائمة الجانبية للموبايل (نفس الهيكل لكن نربطه) -->
+        <button id="menu-toggle" class="lg:hidden text-2xl gold-text">
+            <i class="fas fa-bars-staggered"></i>
+        </button>
+    </nav>
+</header>
 
-    <!-- المحتوى الرئيسي (مخفي في البداية) -->
-    <main class="main-container hidden" id="mainContent">
-        <div class="search-card">
-            <h1 style="font-family: 'Amiri'; color: var(--gold-solid); margin-bottom: 10px;">استعلام القضايا</h1>
-            <p style="color: #94a3b8; margin-bottom: 30px;">أدخل بيانات القضية للاطلاع على آخر المستجدات</p>
+<!-- القائمة الجانبية للموبايل (منسوخة) -->
+<div id="mobile-menu" class="fixed inset-0 z-[110] p-10 lg:hidden" style="background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);">
+    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="flex flex-col gap-8 mt-20 text-2xl font-bold">
+        <a href="about.html" onclick="closeMenu()" class="gold-text">عن المؤسسة</a>
+        <a href="index.html#why-us" onclick="closeMenu()" class="gold-text">لماذا تختارنا</a>
+        <a href="specialties.html" onclick="closeMenu()" class="gold-text">تخصصاتنا القانونية</a>
+        <a href="about.html#vision" onclick="closeMenu()" class="gold-text">الرؤية والأهداف</a>
+        <a href="contact.html" onclick="closeMenu()" class="gold-text">تواصل معنا</a>
+        <a href="blog.html" onclick="closeMenu()" class="gold-text">المدونة</a>
+        <a href="blog-admin.html" onclick="closeMenu()" class="gold-text">إدارة المدونة</a>
+        <div class="flex flex-col gap-4 mt-4">
+            <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg text-center">
+                <i class="fas fa-search mr-2"></i> تابع قضيتك
+            </a>
+            <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg text-center">
+                <i class="fas fa-comments mr-2"></i> طلب استشارة فورية
+            </a>
+            <a href="contact.html?tab=visit" onclick="closeMenu()" class="py-3 border border-white/20 rounded-xl hover:bg-white/10 transition text-white text-lg text-center">
+                <i class="fas fa-calendar-check mr-2"></i> حجز موعد مقابلة
+            </a>
+        </div>
+    </div>
+</div>
 
-            <form id="searchForm" onsubmit="handleSearch(event)">
-                <!-- حقل الهاتف مع معالجة البادئة 20 -->
-                <div class="input-group-custom">
-                    <input type="tel" id="phoneInput" class="form-control-custom" placeholder="رقم الهاتف" required>
-                    <span class="fixed-prefix">20</span>
-                </div>
+<!-- ========== المحتوى الرئيسي (بطاقة الاستعلام) ========== -->
+<main class="main-container hidden" id="mainContent">
+    <div class="search-card">
+        <h1 style="font-family: 'Amiri'; color: var(--gold-solid); margin-bottom: 10px;">استعلام القضايا</h1>
+        <p style="color: #94a3b8; margin-bottom: 30px;">أدخل بيانات القضية للاطلاع على آخر المستجدات</p>
 
-                <!-- حقل الكود مع معالجة البادئة MA- -->
-                <div class="input-group-custom">
-                    <input type="text" id="codeInput" class="form-control-custom" placeholder="كود القضية" required style="text-transform: uppercase;">
-                    <span class="fixed-prefix">MA-</span>
-                </div>
+        <form id="searchForm" onsubmit="handleSearch(event)">
+            <!-- حقل الهاتف -->
+            <div class="input-group-custom">
+                <input type="tel" id="phoneInput" class="form-control-custom" placeholder="رقم الهاتف" required>
+                <span class="fixed-prefix">20</span>
+            </div>
+
+            <!-- حقل الكود -->
+            <div class="input-group-custom">
+                <input type="text" id="codeInput" class="form-control-custom" placeholder="كود القضية" required style="text-transform: uppercase;">
+                <span class="fixed-prefix">MA-</span>
+            </div>
+            
+            <button type="submit" class="btn-gold" id="searchBtn">
+                <i class="bi bi-search"></i> الاطلاع
+            </button>
+        </form>
+    </div>
+</main>
+
+<!-- الفوتير -->
+<footer class="footer">
+    جميع الحقوق محفوظة © 2024 مؤسسة محمود عبد الحميد للمحاماة
+</footer>
+
+<!-- مودال التحذير (ينسدل من الهيدر) -->
+<div class="modal fade" id="warningModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content glass-theme">
+            <div class="warning-content">
+                <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: var(--gold-solid);"></i>
+                <h3 class="mt-2 text-white" style="font-family: 'Amiri';">تحذير قانوني</h3>
                 
-                <button type="submit" class="btn-gold" id="searchBtn">
-                    <i class="bi bi-search"></i> الاطلاع
+                <div class="legal-box">
+                    <ul>
+                        <li>هذا النظام مخصص فقط لعملاء المكتب المصرح لهم.</li>
+                        <li>بيانات القضايا المعروضة سرية ومحمية قانونياً.</li>
+                        <li>يتم تسجيل بيانات الدخول (IP) لأغراض الحماية.</li>
+                        <li>الدخول غير المصرح به يعرضك للمساءلة القانونية.</li>
+                    </ul>
+                </div>
+
+                <button class="btn-gold" onclick="acceptWarning()">
+                    <i class="bi bi-check-circle-fill"></i> أوافق وأتابع
                 </button>
-            </form>
+            </div>
         </div>
-    </main>
+    </div>
+</div>
 
-    <!-- الفوتير -->
-    <footer class="footer">
-        جميع الحقوق محفوظة © 2024 مؤسسة محمود عبد الحميد للمحاماة
-    </footer>
+<!-- مودال النتيجة (ينسدل من الهيدر) -->
+<div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content glass-theme text-white">
+            <div class="modal-body p-4">
+                <!-- رأس المودال -->
+                <div class="text-center border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+                    <h2 id="r_clientName" style="font-family: 'Amiri'; color: var(--gold-solid); margin: 0;">-</h2>
+                    <span id="r_clientRole" class="badge bg-light text-dark mt-2">-</span>
+                </div>
 
-    <!-- مودال التحذير (ينسدل من الهيدر) -->
-    <div class="modal fade" id="warningModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content glass-theme">
-                <div class="warning-content">
-                    <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: var(--gold-solid);"></i>
-                    <h3 class="mt-2 text-white" style="font-family: 'Amiri';">تحذير قانوني</h3>
-                    
-                    <div class="legal-box">
-                        <ul>
-                            <li>هذا النظام مخصص فقط لعملاء المكتب المصرح لهم.</li>
-                            <li>بيانات القضايا المعروضة سرية ومحمية قانونياً.</li>
-                            <li>يتم تسجيل بيانات الدخول (IP) لأغراض الحماية.</li>
-                            <li>الدخول غير المصرح به يعرضك للمساءلة القانونية.</li>
-                        </ul>
+                <!-- شبكة البيانات -->
+                <div class="info-grid">
+                    <div class="info-item"><span class="info-label">اسم الخصم</span><span class="info-value" id="r_opponent">-</span></div>
+                    <div class="info-item"><span class="info-label">المحكمة</span><span class="info-value" id="r_court">-</span></div>
+                    <div class="info-item"><span class="info-label">رقم القضية</span><span class="info-value" id="r_caseNum">-</span></div>
+                    <div class="info-item"><span class="info-label">الدائرة</span><span class="info-value" id="r_circle">-</span></div>
+                    <div class="info-item"><span class="info-label">موضوع الدعوى</span><span class="info-value" id="r_subject">-</span></div>
+                    <div class="info-item"><span class="info-label">حالة القضية</span><span class="info-value text-warning" id="r_status">-</span></div>
+                </div>
+
+                <!-- آخر جلسة -->
+                <div class="last-session-box">
+                    <h5 class="text-white mb-2" style="font-size: 1rem;"><i class="bi bi-clock-history text-warning"></i> آخر جلسة مسجلة</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span id="r_lastDate" style="color: var(--gold-solid); font-weight: bold;">-</span>
                     </div>
+                    <p id="r_lastDecision" class="mb-0 text-white-50" style="font-size: 0.95rem;">-</p>
+                </div>
 
-                    <button class="btn-gold" onclick="acceptWarning()">
-                        <i class="bi bi-check-circle-fill"></i> أوافق وأتابع
-                    </button>
+                <!-- الأزرار -->
+                <div class="modal-actions">
+                    <button class="btn-action btn-print" onclick="window.print()"><i class="bi bi-printer"></i> طباعة</button>
+                    <button class="btn-action btn-new" onclick="newSearch()"><i class="bi bi-search"></i> بحث جديد</button>
+                    <button class="btn-action btn-exit" onclick="exitSystem()"><i class="bi bi-box-arrow-right"></i> خروج</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- مودال النتيجة (ينسدل من الهيدر) -->
-    <div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content glass-theme text-white">
-                <div class="modal-body p-4">
-                    <div class="text-center border-bottom border-secondary border-opacity-25 pb-3 mb-3">
-                        <h2 id="r_clientName" style="font-family: 'Amiri'; color: var(--gold-solid); margin: 0;">-</h2>
-                        <span id="r_clientRole" class="badge bg-light text-dark mt-2">-</span>
-                    </div>
+<script>
+    // إعدادات Supabase (كما كانت)
+    const SB_URL = "https://iyhfafodhptcdwrjywek.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
+    const db = supabase.createClient(SB_URL, SB_KEY);
+    
+    let warningModal, resultModal;
+    const mainContent = document.getElementById('mainContent');
+    const phoneInput = document.getElementById('phoneInput');
+    const codeInput = document.getElementById('codeInput');
 
-                    <div class="info-grid">
-                        <div class="info-item"><span class="info-label">اسم الخصم</span><span class="info-value" id="r_opponent">-</span></div>
-                        <div class="info-item"><span class="info-label">المحكمة</span><span class="info-value" id="r_court">-</span></div>
-                        <div class="info-item"><span class="info-label">رقم القضية</span><span class="info-value" id="r_caseNum">-</span></div>
-                        <div class="info-item"><span class="info-label">الدائرة</span><span class="info-value" id="r_circle">-</span></div>
-                        <div class="info-item"><span class="info-label">موضوع الدعوى</span><span class="info-value" id="r_subject">-</span></div>
-                        <div class="info-item"><span class="info-label">حالة القضية</span><span class="info-value text-warning" id="r_status">-</span></div>
-                    </div>
-
-                    <div class="last-session-box">
-                        <h5 class="text-white mb-2" style="font-size: 1rem;"><i class="bi bi-clock-history text-warning"></i> آخر جلسة مسجلة</h5>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span id="r_lastDate" style="color: var(--gold-solid); font-weight: bold;">-</span>
-                        </div>
-                        <p id="r_lastDecision" class="mb-0 text-white-50" style="font-size: 0.95rem;">-</p>
-                    </div>
-
-                    <div class="modal-actions">
-                        <button class="btn-action btn-print" onclick="window.print()"><i class="bi bi-printer"></i> طباعة</button>
-                        <button class="btn-action btn-new" onclick="newSearch()"><i class="bi bi-search"></i> بحث جديد</button>
-                        <button class="btn-action btn-exit" onclick="exitSystem()"><i class="bi bi-box-arrow-right"></i> خروج</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // إعدادات Supabase
-        const SB_URL = "https://iyhfafodhptcdwrjywek.supabase.co";
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5aGZhZm9kaHB0Y2R3cmp5d2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcxMzUzODYsImV4cCI6MjA4MjcxMTM4Nn0.YmeMSDkQ3Z_vpyMTyZ-3jbKLFzVZzwcLeDsdczrErHQ";
-        const db = supabase.createClient(SB_URL, SB_KEY);
-        
-        let warningModal, resultModal;
-        const mainContent = document.getElementById('mainContent');
-        const phoneInput = document.getElementById('phoneInput');
-        const codeInput = document.getElementById('codeInput');
-
-        // دالة لإزالة البادئات تلقائياً
-        function removePrefix(input, prefix) {
-            let value = input.value.trim();
-            if (value.startsWith(prefix)) {
-                input.value = value.substring(prefix.length).trim();
-            }
+    // دالة لإزالة البادئات تلقائياً
+    function removePrefix(input, prefix) {
+        let value = input.value.trim();
+        if (value.startsWith(prefix)) {
+            input.value = value.substring(prefix.length).trim();
         }
+    }
 
-        // مراقبة حقل الهاتف لإزالة "20" منه
-        phoneInput.addEventListener('input', function() {
-            removePrefix(this, '20');
-        });
-        phoneInput.addEventListener('paste', function() {
-            setTimeout(() => removePrefix(this, '20'), 10);
-        });
+    phoneInput.addEventListener('input', function() {
+        removePrefix(this, '20');
+    });
+    phoneInput.addEventListener('paste', function() {
+        setTimeout(() => removePrefix(this, '20'), 10);
+    });
 
-        // مراقبة حقل الكود لإزالة "MA-" منه (مع مراعاة حالة الأحرف)
-        codeInput.addEventListener('input', function() {
+    codeInput.addEventListener('input', function() {
+        let val = this.value.trim().toUpperCase();
+        if (val.startsWith('MA-')) {
+            this.value = val.substring(3).trim();
+        } else {
+            this.value = val;
+        }
+    });
+    codeInput.addEventListener('paste', function() {
+        setTimeout(() => {
             let val = this.value.trim().toUpperCase();
             if (val.startsWith('MA-')) {
                 this.value = val.substring(3).trim();
             } else {
-                this.value = val; // تحويل إلى uppercase دائماً
+                this.value = val;
             }
-        });
-        codeInput.addEventListener('paste', function() {
-            setTimeout(() => {
-                let val = this.value.trim().toUpperCase();
-                if (val.startsWith('MA-')) {
-                    this.value = val.substring(3).trim();
-                } else {
-                    this.value = val;
-                }
-            }, 10);
-        });
+        }, 10);
+    });
 
-        // عند التحميل
-        document.addEventListener('DOMContentLoaded', () => {
-            const warningEl = document.getElementById('warningModal');
-            warningModal = new bootstrap.Modal(warningEl);
+    document.addEventListener('DOMContentLoaded', () => {
+        const warningEl = document.getElementById('warningModal');
+        warningModal = new bootstrap.Modal(warningEl);
+        
+        const resultEl = document.getElementById('resultModal');
+        resultModal = new bootstrap.Modal(resultEl);
+
+        warningModal.show();
+    });
+
+    function acceptWarning() {
+        warningModal.hide();
+        mainContent.classList.remove('hidden');
+    }
+
+    async function handleSearch(e) {
+        e.preventDefault();
+        const btn = document.getElementById('searchBtn');
+        const originalText = btn.innerHTML;
+        
+        let phoneVal = phoneInput.value.trim();
+        let codeVal = codeInput.value.trim().toUpperCase();
+        
+        if (phoneVal.startsWith('20')) phoneVal = phoneVal.substring(2).trim();
+        if (codeVal.startsWith('MA-')) codeVal = codeVal.substring(3).trim();
+
+        if(!phoneVal || !codeVal) return;
+
+        const fullPhone = "20" + phoneVal;
+        const fullCode = "MA-" + codeVal;
+
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> جاري التحقق...';
+        btn.disabled = true;
+
+        try {
+            const { data: cases, error } = await db
+                .from('cases')
+                .select('*')
+                .eq('case_code', fullCode)
+                .limit(1);
+
+            if (error) throw error;
             
-            const resultEl = document.getElementById('resultModal');
-            resultModal = new bootstrap.Modal(resultEl);
+            const targetCase = cases.length > 0 ? cases[0] : null;
 
-            warningModal.show();
-        });
-
-        function acceptWarning() {
-            warningModal.hide();
-            mainContent.classList.remove('hidden');
-        }
-
-        async function handleSearch(e) {
-            e.preventDefault();
-            const btn = document.getElementById('searchBtn');
-            const originalText = btn.innerHTML;
-            
-            // تنظيف المدخلات مرة أخرى (احتياطاً)
-            let phoneVal = phoneInput.value.trim();
-            let codeVal = codeInput.value.trim().toUpperCase();
-            
-            // إزالة أي بادئة متبقية
-            if (phoneVal.startsWith('20')) phoneVal = phoneVal.substring(2).trim();
-            if (codeVal.startsWith('MA-')) codeVal = codeVal.substring(3).trim();
-
-            if(!phoneVal || !codeVal) return;
-
-            const fullPhone = "20" + phoneVal;
-            const fullCode = "MA-" + codeVal;
-
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> جاري التحقق...';
-            btn.disabled = true;
-
-            try {
-                const { data: cases, error } = await db
-                    .from('cases')
-                    .select('*')
-                    .eq('case_code', fullCode)
-                    .limit(1);
-
-                if (error) throw error;
-                
-                const targetCase = cases.length > 0 ? cases[0] : null;
-
-                if (!targetCase || !targetCase.client_phone.includes(fullPhone)) {
-                    throw new Error("NOT_FOUND");
-                }
-
-                const { data: sessions } = await db
-                    .from('sessions')
-                    .select('*')
-                    .eq('case_id', targetCase.id)
-                    .order('session_date', { ascending: false })
-                    .limit(1);
-
-                const lastSession = sessions && sessions.length > 0 ? sessions[0] : null;
-
-                showResult(targetCase, lastSession);
-
-            } catch (err) {
-                console.error(err);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'عذراً',
-                    text: 'بيانات الدخول غير صحيحة. يرجى التأكد من الكود ورقم الهاتف.',
-                    confirmButtonColor: '#bf953f',
-                    background: '#020617',
-                    color: '#fff'
-                });
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        }
-
-        function showResult(c, s) {
-            document.getElementById('r_clientName').innerText = c.client_name;
-            document.getElementById('r_clientRole').innerText = c.client_role;
-            document.getElementById('r_opponent').innerText = c.opponent_name || '-';
-            document.getElementById('r_court').innerText = c.court_name;
-            document.getElementById('r_caseNum').innerText = c.case_number + ' / ' + c.case_year;
-            document.getElementById('r_circle').innerText = c.circle || '-';
-            document.getElementById('r_subject').innerText = c.case_subject || 'غير محدد';
-            
-            if (s) {
-                document.getElementById('r_status').innerText = s.case_status;
-                const d = new Date(s.session_date);
-                document.getElementById('r_lastDate').innerText = d.toLocaleDateString('ar-EG', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-                document.getElementById('r_lastDecision').innerText = s.decision || 'لم يسجل قرار';
-            } else {
-                document.getElementById('r_status').innerText = 'جديدة';
-                document.getElementById('r_lastDate').innerText = 'لا توجد جلسات مسجلة';
-                document.getElementById('r_lastDecision').innerText = '';
+            if (!targetCase || !targetCase.client_phone.includes(fullPhone)) {
+                throw new Error("NOT_FOUND");
             }
 
-            resultModal.show();
-        }
+            const { data: sessions } = await db
+                .from('sessions')
+                .select('*')
+                .eq('case_id', targetCase.id)
+                .order('session_date', { ascending: false })
+                .limit(1);
 
-        function newSearch() {
-            resultModal.hide();
-            document.getElementById('searchForm').reset();
-            // إعادة تعيين الحقول يدوياً بعد المسح
-            phoneInput.value = '';
-            codeInput.value = '';
-        }
+            const lastSession = sessions && sessions.length > 0 ? sessions[0] : null;
 
-        function exitSystem() {
-            resultModal.hide();
+            showResult(targetCase, lastSession);
+
+        } catch (err) {
+            console.error(err);
             Swal.fire({
-                icon: 'success',
-                title: 'شكراً لك',
-                text: 'شكراً لاستخدامكم نظام الاستعلام الإلكتروني لمؤسسة محمود عبد الحميد.',
-                background: '#020617',
-                color: '#fff',
+                icon: 'error',
+                title: 'عذراً',
+                text: 'بيانات الدخول غير صحيحة. يرجى التأكد من الكود ورقم الهاتف.',
                 confirmButtonColor: '#bf953f',
-                confirmButtonText: 'إغلاق',
-                timer: 3000
-            }).then(() => {
-                window.location.href = "https://almostshar.vercel.app/index.html";
+                background: '#020617',
+                color: '#fff'
             });
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    function showResult(c, s) {
+        document.getElementById('r_clientName').innerText = c.client_name;
+        document.getElementById('r_clientRole').innerText = c.client_role;
+        document.getElementById('r_opponent').innerText = c.opponent_name || '-';
+        document.getElementById('r_court').innerText = c.court_name;
+        document.getElementById('r_caseNum').innerText = c.case_number + ' / ' + c.case_year;
+        document.getElementById('r_circle').innerText = c.circle || '-';
+        document.getElementById('r_subject').innerText = c.case_subject || 'غير محدد';
+        
+        if (s) {
+            document.getElementById('r_status').innerText = s.case_status;
+            const d = new Date(s.session_date);
+            document.getElementById('r_lastDate').innerText = d.toLocaleDateString('ar-EG', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+            document.getElementById('r_lastDecision').innerText = s.decision || 'لم يسجل قرار';
+        } else {
+            document.getElementById('r_status').innerText = 'جديدة';
+            document.getElementById('r_lastDate').innerText = 'لا توجد جلسات مسجلة';
+            document.getElementById('r_lastDecision').innerText = '';
         }
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        resultModal.show();
+    }
+
+    function newSearch() {
+        resultModal.hide();
+        document.getElementById('searchForm').reset();
+        phoneInput.value = '';
+        codeInput.value = '';
+    }
+
+    function exitSystem() {
+        resultModal.hide();
+        Swal.fire({
+            icon: 'success',
+            title: 'شكراً لك',
+            text: 'شكراً لاستخدامكم نظام الاستعلام الإلكتروني لمؤسسة محمود عبد الحميد.',
+            background: '#020617',
+            color: '#fff',
+            confirmButtonColor: '#bf953f',
+            confirmButtonText: 'إغلاق',
+            timer: 3000
+        }).then(() => {
+            window.location.href = "https://almostshar.vercel.app/index.html";
+        });
+    }
+
+    // دوال القائمة الجانبية للهاتف
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    
+    function closeMenu() {
+        mobileMenu.style.transform = 'translateX(100%)';
+        document.body.style.overflow = '';
+    }
+    
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.style.transform = 'translateX(0)';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
+    }
+    
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+</script>
+<!-- Bootstrap JS (للمودالات) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

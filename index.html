@@ -132,7 +132,7 @@
             background: rgba(2, 6, 23, 0.95);
         }
         
-        /* أيقونات الواتساب والاتصال العائمة */
+        /* الأيقونات العائمة */
         .contact-floating {
             position: fixed;
             bottom: 30px;
@@ -162,22 +162,22 @@
         }
         
         .call-float {
-            background: #0077b6; /* أزرق داكن للاتصال */
+            background: #0077b6;
         }
         
         .whatsapp-float:hover, .call-float:hover { 
             transform: scale(1.1); 
         }
         
-        /* أيقونات الفوتر بألوانها الرسمية */
+        /* أيقونات الفوتر بألوانها الرسمية - مصغرة */
         .footer-social-icon {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
             color: white;
             text-decoration: none;
@@ -185,7 +185,10 @@
         
         .footer-social-icon.facebook { background: #1877f2; }
         .footer-social-icon.linkedin { background: #0a66c2; }
-        .footer-social-icon.twitter { background: #000000; } /* X أسود */
+        .footer-social-icon.twitter { 
+            background: #ffffff; /* خلفية بيضاء */
+            color: #000000; /* X أسود */
+        }
         .footer-social-icon.email { background: #ea4335; }
         
         .footer-social-icon:hover {
@@ -426,7 +429,7 @@
     </div>
 </section>
 
-<!-- باقي الأقسام (نبذة، لماذا تختارنا، آراء العملاء، خدمات) كما هي مع حذف أي أيقونات اجتماعية -->
+<!-- باقي الأقسام (نبذة، لماذا تختارنا، آراء العملاء، خدمات) -->
 <section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -471,7 +474,7 @@
             <div class="w-24 h-1 bg-gold-solid mx-auto rounded-full"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- الكروت الستة (نفس المحتوى) -->
+            <!-- الكروت الستة -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-gavel text-3xl gold-text"></i>
@@ -526,7 +529,6 @@
             <p class="text-white opacity-70 max-w-2xl mx-auto">ثقة عملائنا هي الوسام الحقيقي الذي نفخر به. إليك بعض مما قاله موكلونا عن تجربتهم معنا.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
-            <!-- 3 شهادات كما هي -->
             <div class="card-glass testimonial-card gold-border reveal-on-scroll">
                 <i class="fas fa-quote-left quote-icon"></i>
                 <div class="flex text-yellow-500 mb-4 relative z-10 text-sm">
@@ -616,7 +618,7 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر بألوانها الرسمية (فيس بوك، لينكد إن، تويتر، إيميل) -->
+        <!-- أيقونات الفوتر بألوانها الرسمية - مصغرة -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>

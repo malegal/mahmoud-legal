@@ -12,6 +12,7 @@
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
             --gold-solid: #bf953f;
+            --gold-light: #fcf6ba;
             --gold-glow: rgba(191, 149, 63, 0.5);
             --header-height: 70px;
         }
@@ -76,7 +77,7 @@
         .logo-text h1 {
             font-family: 'Amiri', serif;
             font-size: 20px;
-            color: #fcf6ba;
+            color: var(--gold-light);
             margin: 0;
         }
 
@@ -199,6 +200,7 @@
             box-shadow: none;
         }
 
+        /* حقل الإدخال مع البادئة في اليسار */
         .input-prefix-wrapper {
             display: flex;
             align-items: center;
@@ -206,19 +208,24 @@
             border: 1px solid rgba(191, 149, 63, 0.3);
             border-radius: 0.8rem;
             overflow: hidden;
+            flex-direction: row; /* في RTL، البادئة تظهر على اليسار */
         }
         .input-prefix-wrapper .prefix {
             padding: 15px;
-            color: var(--gold-solid);
+            color: var(--gold-light);
             font-weight: bold;
-            border-right: 1px solid rgba(191, 149, 63, 0.3);
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.4);
             white-space: nowrap;
+            font-size: 16px;
+            border-right: 1px solid rgba(191, 149, 63, 0.3); /* يفصل البادئة عن الحقل */
+            order: 2; /* يجعل البادئة على اليسار في RTL */
         }
         .input-prefix-wrapper .form-control {
             border: none;
             background: transparent;
             border-radius: 0;
+            order: 1;
+            flex: 1;
         }
 
         .btn-inquiry {
@@ -357,13 +364,13 @@
         }
 
         .info-value {
-            color: #fcf6ba;
+            color: var(--gold-light);
             font-size: 16px;
             font-weight: bold;
             word-break: break-word;
         }
 
-        /* تلوين تاريخ الجلسة والقرار بالذهب */
+        /* تلوين الجلسة بالذهب */
         .session-item {
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
@@ -373,7 +380,7 @@
         }
 
         .session-date {
-            color: var(--gold-solid) !important;
+            color: var(--gold-light) !important;
             font-weight: bold;
             margin-bottom: 8px;
             display: flex;
@@ -383,8 +390,9 @@
         }
 
         .session-decision {
-            color: #fcf6ba;
+            color: var(--gold-light);
             font-weight: 500;
+            margin-top: 5px;
         }
 
         .contact-section {
@@ -432,7 +440,7 @@
         }
         .contact-item i { font-size: 20px; color: var(--gold-solid); margin-bottom: 8px; }
         .contact-item span { color: #cbd5e1; font-size: 13px; }
-        .contact-link { color: #fcf6ba; font-weight: bold; font-size: 15px; }
+        .contact-link { color: var(--gold-light); font-weight: bold; font-size: 15px; }
 
         .modal-footer {
             display: flex;
@@ -527,7 +535,7 @@
             align-items: center;
             gap: 6px;
         }
-        .whatsapp-link:hover { color: #fcf6ba; }
+        .whatsapp-link:hover { color: var(--gold-light); }
 
         /* شاشة التحذير القانوني */
         .click-warning {
@@ -641,7 +649,7 @@
         }
 
         .warning-checkbox label {
-            color: #fcf6ba;
+            color: var(--gold-light);
             font-size: 17px;
             cursor: pointer;
             display: flex;
@@ -795,7 +803,6 @@
                         <div class="form-group">
                             <label for="phone"><i class="fas fa-phone"></i> رقم هاتف العميل</label>
                             <div class="input-prefix-wrapper">
-                                <span class="prefix">20</span>
                                 <input type="tel" id="phone" class="form-control" 
                                        placeholder="مثال: 1101076000" 
                                        inputmode="numeric"
@@ -803,25 +810,26 @@
                                        required
                                        autocomplete="off"
                                        dir="ltr">
+                                <span class="prefix">20</span>
                             </div>
                             <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
-                                رقم الهاتف المسجل يبدأ بـ 20 ثم 10 أرقام (مثال: 201101076000)
+                                الرقم الكامل: 20 + الأرقام المدخلة (مثال: 201101076000)
                             </small>
                         </div>
                         
                         <div class="form-group">
                             <label for="caseCode"><i class="fas fa-file-contract"></i> كود القضية</label>
                             <div class="input-prefix-wrapper">
-                                <span class="prefix">MA-</span>
                                 <input type="text" id="caseCode" class="form-control" 
                                        placeholder="مثال: 26001H7K8G9" 
                                        autocapitalize="characters"
                                        required
                                        autocomplete="off"
                                        dir="ltr">
+                                <span class="prefix">MA-</span>
                             </div>
                             <small style="color: #94a3b8; display: block; text-align: right; margin-top: 5px; font-size: 12px;">
-                                الكود يبدأ بـ MA- ثم الأرقام والحروف (مثال: MA-26001H7K8G9)
+                                الكود الكامل: MA- + الكود المدخل (مثال: MA-26001H7K8G9)
                             </small>
                         </div>
                         
@@ -1128,9 +1136,7 @@
                     isIPBlocked = r.is_blocked;
                     blockRemainingTime = r.minutes_left || 0;
                     const attemptsSpan = document.getElementById('failedAttempts');
-                    const attemptsCounter = document.getElementById('attemptsCounter');
                     if (r.attempts_count) {
-                        // العدادات مخفية، لكن يمكن تحديث القيمة داخلياً
                         attemptsSpan.textContent = r.attempts_count;
                     }
                     return isIPBlocked;
@@ -1314,11 +1320,19 @@
                 cancelButtonText: 'إلغاء'
             }).then((r) => {
                 if (r.isConfirmed) {
-                    // يمكن تخصيص الطباعة لفتح نافذة تحتوي على البيانات فقط
                     const printWindow = window.open('', '_blank');
                     printWindow.document.write(`
                         <html dir="rtl"><head><title>تفاصيل القضية</title>
-                        <style>body{font-family:Tajawal; background:#020617; color:#fff; padding:20px;}</style>
+                        <style>
+                            body { font-family: Tajawal; background: #020617; color: #fff; padding: 20px; }
+                            .info-grid { display: grid; grid-template-columns: repeat(2,1fr); gap:10px; }
+                            .info-item { background: rgba(0,0,0,0.3); padding:10px; border-radius:8px; }
+                            .info-label { color: #94a3b8; font-size:12px; }
+                            .info-value { color: #fcf6ba; font-weight:bold; }
+                            .session-item { border-right:3px solid #bf953f; padding:10px; margin-top:10px; }
+                            .session-date { color: #fcf6ba; }
+                            .session-decision { color: #fcf6ba; }
+                        </style>
                         </head><body>${document.querySelector('.modal-content').cloneNode(true).innerHTML}</body></html>`);
                     printWindow.document.close();
                     printWindow.print();

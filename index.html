@@ -10,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-dark: #000000;
+            /* تم اختيار الكحلي الليلي العميق ليكون أكثر فخامة من الأسود المصمت */
+            --primary-dark: #020617; 
+            
             /* التدرج الذهبي الملكي */
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #bf953f;
@@ -99,7 +101,7 @@
             gap: 10px;
             padding: 12px 24px;
             background: transparent;
-            border: 1px solid transparent; /* إطار شفاف في البداية */
+            border: 1px solid transparent;
             border-radius: 8px;
             font-weight: bold;
             font-size: 1.1rem;
@@ -120,7 +122,7 @@
         
         /* الكروت */
         .card-glass { 
-            background: rgba(20, 20, 20, 0.6);
+            background: rgba(20, 20, 30, 0.6); /* تعديل طفيف ليتناسب مع الكحلي */
             backdrop-filter: blur(10px); 
             border: 1px solid rgba(191, 149, 63, 0.2); 
             border-radius: 1.5rem; 
@@ -135,7 +137,7 @@
         
         .black-border-card { 
             border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(2, 6, 23, 0.95); /* كحلي غامق جداً */
         }
         
         .whatsapp-float { 
@@ -159,7 +161,6 @@
         
         .whatsapp-float:hover { transform: scale(1.1); }
         
-        /* القائمة الجانبية */
         #mobile-menu { 
             transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
             transform: translateX(100%); 
@@ -171,20 +172,22 @@
         
         section { scroll-margin-top: var(--header-height); position: relative; overflow: hidden; }
         
-        /* الهيدر الأسود الزجاجي */
+        /* الهيدر الأسود الزجاجي مع الخط الذهبي */
         .header-glass {
-            background: rgba(0, 0, 0, 0.9) !important; /* أسود زجاجي داكن */
+            background: rgba(0, 0, 0, 0.95) !important; /* أسود زجاجي داكن */
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(191, 149, 63, 0.2);
+            /* الخط الذهبي الملكي أسفل الهيدر */
+            border-bottom: 2px solid;
+            border-image: var(--gold-gradient) 1;
             box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
         }
         
-        /* الخلفية الإسلامية الهندسية */
+        /* الخلفية الإسلامية الهندسية فوق الكحلي */
         .islamic-pattern-bg {
-            background-color: #000000;
+            background-color: var(--primary-dark);
             background-image: 
-                linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
-                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23555555' fill-opacity='0.15'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             background-attachment: fixed;
         }
 
@@ -223,6 +226,19 @@
             background: var(--gold-gradient); 
             color: #000; 
             border-color: transparent; 
+        }
+        
+        .visit-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .visit-btn:hover {
+            border-color: var(--gold-solid);
+            background: rgba(191, 149, 63, 0.1);
+            color: var(--gold-solid);
         }
         
         /* Animation */
@@ -287,10 +303,10 @@
             .hero-buttons a { width: 100%; }
         }
         
-        #why-us { background: #000000 !important; }
+        #why-us { background: #01040f !important; } /* لون كحلي غامق جداً لقسم لماذا نحن */
         
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
     </style>
 </head>
@@ -300,18 +316,19 @@
     <i class="fab fa-whatsapp"></i>
 </a>
 
-<!-- الهيدر الأسود الزجاجي -->
+<!-- الهيدر الأسود الزجاجي مع الخط الذهبي -->
 <header class="fixed w-full z-[100] header-glass">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center gap-4">
             <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-20 h-20 object-contain">
             <div class="flex flex-col leading-tight">
-                <h1 class="font-bold gold-text serif-font whitespace-nowrap" style="font-size: 24px !important; line-height: 1.2;">محمود عبد الحميد</h1>
-                <p class="text-gray-400 font-medium" style="font-size: 11px !important; line-height: 1.2;">المحامي بالنقض والدستورية العليا</p>
+                <!-- تم تكبير الخط حسب طلبك -->
+                <h1 class="font-bold gold-text serif-font whitespace-nowrap" style="font-size: 28px !important; line-height: 1.3;">محمود عبد الحميد</h1>
+                <p class="text-gray-300 font-medium" style="font-size: 13px !important; line-height: 1.2; letter-spacing: 0.5px;">المحامي بالنقض والدستورية العليا</p>
             </div>
         </div>
         <!-- الروابط باللون الذهبي الملكي -->
-        <div class="hidden lg:flex items-center gap-8 font-bold text-sm">
+        <div class="hidden xl:flex items-center gap-6 font-bold text-sm">
             <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
             <a href="#why-us" class="nav-link-gold">لماذا تختارنا</a>
             <a href="#testimonials" class="nav-link-gold">آراء العملاء</a>
@@ -319,14 +336,18 @@
             <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
             <a href="blog.html" class="nav-link-gold">المدونة</a>
             
-            <div class="nav-buttons flex items-center gap-3 mr-4">
-                <a href="client-inquiry.html" class="track-case-btn px-4 py-2 rounded-lg text-xs flex items-center gap-2">
+            <div class="nav-buttons flex items-center gap-2 mr-2">
+                <a href="client-inquiry.html" class="track-case-btn px-3 py-2 rounded-lg text-xs flex items-center gap-2">
                     <i class="fas fa-gavel"></i> تابع قضيتك
+                </a>
+                <!-- تمت إعادة زر حجز موعد -->
+                <a href="contact.html?tab=visit" class="visit-btn px-3 py-2 rounded-lg text-xs">
+                    حجز موعد
                 </a>
                 <a href="contact.html?tab=consult" class="gold-btn px-4 py-2 rounded-lg text-xs shadow-lg">طلب استشارة</a>
             </div>
         </div>
-        <button id="menu-toggle" class="lg:hidden text-2xl gold-text">
+        <button id="menu-toggle" class="xl:hidden text-2xl gold-text">
             <i class="fas fa-bars-staggered"></i>
         </button>
     </nav>
@@ -336,16 +357,19 @@
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
     </button>
-    <div class="flex flex-col gap-6 text-xl font-bold text-center">
-        <a href="about.html" onclick="closeMenu()" class="nav-link-gold text-2xl">عن المؤسسة</a>
-        <a href="#why-us" onclick="closeMenu()" class="nav-link-gold text-2xl">لماذا تختارنا</a>
-        <a href="#testimonials" onclick="closeMenu()" class="nav-link-gold text-2xl">آراء العملاء</a>
-        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-2xl">تخصصاتنا</a>
-        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-2xl">تواصل معنا</a>
-        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold text-2xl">المدونة</a>
+    <div class="flex flex-col gap-5 text-xl font-bold text-center">
+        <a href="about.html" onclick="closeMenu()" class="nav-link-gold text-xl">عن المؤسسة</a>
+        <a href="#why-us" onclick="closeMenu()" class="nav-link-gold text-xl">لماذا تختارنا</a>
+        <a href="#testimonials" onclick="closeMenu()" class="nav-link-gold text-xl">آراء العملاء</a>
+        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-xl">تخصصاتنا</a>
+        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-xl">تواصل معنا</a>
+        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold text-xl">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
         <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">
              تابع قضيتك
+        </a>
+        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg">
+             حجز موعد
         </a>
         <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg">
              طلب استشارة
@@ -353,7 +377,7 @@
     </div>
 </div>
 
-<!-- HERO SECTION: خلفية إسلامية هندسية -->
+<!-- HERO SECTION: خلفية إسلامية هندسية مع لون كحلي ليلي -->
 <section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 relative overflow-hidden islamic-pattern-bg">
     
     <div class="section-content relative z-10 max-w-5xl mx-auto reveal-on-scroll">
@@ -393,7 +417,7 @@
 </section>
 
 <!-- ===== نبذة عن المكتب ===== -->
-<section class="py-20 md:py-24 bg-black">
+<section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
             <div class="space-y-8 reveal-on-scroll">
@@ -419,7 +443,7 @@
                     </div>
                 </div>
 
-                <!-- زر "اقرأ المزيد" الجديد الذهبي -->
+                <!-- زر "اقرأ المزيد" الذهبي -->
                 <a href="about.html" class="read-more-btn mt-6 group">
                     <span>اقرأ المزيد عن المؤسسة</span>
                     <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
@@ -435,7 +459,7 @@
 </section>
 
 <!-- ===== قسم لماذا تختارنا ===== -->
-<section id="why-us" class="section-spacing relative bg-black">
+<section id="why-us" class="section-spacing relative">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="text-center mb-20 reveal-on-scroll">
             <span class="text-gold-solid text-sm font-bold tracking-widest uppercase">لماذا نحن؟</span>
@@ -496,7 +520,7 @@
 </section>
 
 <!-- ===== قسم آراء العملاء ===== -->
-<section id="testimonials" class="section-spacing relative bg-[#050505]">
+<section id="testimonials" class="section-spacing relative bg-[#020617]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16 reveal-on-scroll">
             <span class="text-gold-solid text-sm font-bold tracking-widest uppercase">شهادات نعتز بها</span>
@@ -565,12 +589,11 @@
     </div>
 </section>
 
-<!-- قسم الترويج للخدمات (تم حذف بطاقة عن المؤسسة) -->
-<section class="py-20 relative overflow-hidden bg-black/50">
+<!-- قسم الترويج للخدمات -->
+<section class="py-20 relative overflow-hidden bg-[#050a25]/50">
     <div class="max-w-7xl mx-auto px-6 text-center relative z-10 reveal-on-scroll">
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">اكتشف خدماتنا القانونية المتكاملة</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- تم حذف كارت عن المؤسسة واكتفينا بالثلاثة الباقين ليكون التنسيق ممتاز -->
             <a href="specialties.html" class="card-glass px-8 py-8 rounded-2xl hover:border-gold-solid transition group">
                 <i class="fas fa-briefcase text-4xl gold-text mb-4 group-hover:scale-110 transition-transform"></i>
                 <h3 class="text-xl font-bold text-white">تخصصاتنا</h3>
@@ -602,6 +625,7 @@
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://wa.me/201101076000" target="_blank" class="footer-social-icon"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
+            <!-- أيقونة X تويتر باللون الذهبي -->
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-x-twitter"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>

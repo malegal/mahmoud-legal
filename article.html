@@ -2,30 +2,35 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الدراسة القانونية | محمود عبد الحميد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>جاري تحميل الدراسة... | محمود عبد الحميد</title>
     
+    <!-- المكتبات الخارجية -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
+
     <style>
         :root {
             --primary-dark: #020617; 
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #bf953f;
+            --gold-glow: rgba(191, 149, 63, 0.4);
         }
 
         /* --- وضع القراءة المريح --- */
         body { 
-            background-color: #fdfaf6; /* خلفية أوف وايت (مثل ورق الكتب الفاخرة) */
-            color: #1a1a1a; /* خط أسود مائل للرمادي لتقليل إجهاد العين */
+            background-color: #fcfaf2; /* خلفية مائلة للاصفرار (كريمي فاخر) */
             font-family: 'Tajawal', sans-serif;
             margin: 0; padding: 0;
+            color: #1a1a1a;
         }
 
-        /* الحفاظ على ألوان الهوية في الهيدر والفوتر والقائمة الجانبية */
+        /* خط المقال الرئيسي */
+        .article-font { font-family: 'Amiri', serif; }
+        
+        /* الحفاظ على ألوان الهوية في الهيدر والفوتر والمنيو */
         .dark-section { background-color: var(--primary-dark) !important; color: white !important; }
         .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
@@ -36,111 +41,131 @@
             border-image: var(--gold-gradient) 1;
         }
 
-        /* تخصيص نص المقال */
+        /* حاوية المقال */
         .article-content-box {
-            max-width: 900px;
-            margin: 50px auto;
+            max-width: 850px;
+            margin: 40px auto;
             background: #ffffff;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.05);
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
         }
 
         .markdown-body {
-            font-size: 1.4rem; /* خط كبير وواضح */
-            line-height: 2.2; /* مسافة واسعة بين الأسطر لراحة العين */
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem; /* حجم خط مثالي للقراءة */
+            line-height: 2.1;
             text-align: justify;
+            color: #111111;
         }
         
-        .markdown-body h2, .markdown-body h3 {
-            font-family: 'Amiri', serif;
-            color: var(--gold-solid);
-            margin-top: 3rem;
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+            color: #bf953f;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
             font-weight: 700;
         }
 
         .markdown-body blockquote {
             border-right: 6px solid var(--gold-solid);
-            background: #f8f9fa;
+            background: #fdfdfd;
             padding: 20px 30px;
             margin: 30px 0;
-            font-family: 'Amiri', serif;
             font-size: 1.6rem;
             font-style: italic;
+            color: #444;
         }
 
-        /* القائمة الجانبية للموبايل */
+        /* القائمة الجانبية للموبايل (مطابق للمرفق) */
         #mobile-menu { 
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); 
-            z-index: 200; transform: translateX(100%); transition: 0.4s;
+            z-index: 200; transform: translateX(100%); transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
             display: flex; flex-direction: column; justify-content: center;
         }
         #mobile-menu.active { transform: translateX(0); }
 
-        /* أيقونات الفوتر الملكية */
+        /* أيقونات الفوتر الملكية الذهبية */
         .footer-social-icon {
-            width: 45px; height: 45px; border-radius: 50%; border: 1px solid rgba(191, 149, 63, 0.5);
+            width: 45px; height: 45px; border-radius: 50%; border: 1px solid rgba(191, 149, 63, 0.3);
             display: flex; align-items: center; justify-content: center; transition: 0.3s;
-            background: rgba(0,0,0,0.3); color: #bf953f; text-decoration: none;
+            background: rgba(0,0,0,0.5); color: #bf953f; text-decoration: none; font-size: 1.3rem;
         }
+        .footer-social-icon i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .footer-social-icon:hover { 
-            background: var(--gold-gradient); color: #000; border-color: transparent;
-            transform: translateY(-5px); box-shadow: 0 5px 15px rgba(191, 149, 63, 0.4);
+            border-color: var(--gold-solid); transform: translateY(-5px); 
+            background: var(--gold-gradient); box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
         }
+        .footer-social-icon:hover i { -webkit-text-fill-color: #000; color: #000; background: none; }
+
+        /* الأيقونات العائمة */
+        .contact-floating { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
+        .whatsapp-float, .call-float { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.3s; color: white; }
+        .whatsapp-float { background: #25d366; } .call-float { background: #0077b6; }
+        .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
 
-<!-- الهيدر (مطابق لموقعك الرسمي) -->
+<!-- الأيقونات العائمة -->
+<div class="contact-floating">
+    <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+    <a href="tel:+201101076000" class="call-float"><i class="fas fa-phone-alt"></i></a>
+</div>
+
+<!-- الهيدر (مطابق تماماً لصفحتك الرئيسية) -->
 <header class="fixed w-full z-[100] header-glass dark-section">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center gap-4">
-            <img src="logo.png" alt="شعار" class="w-16 h-16 object-contain">
+            <img src="logo.png" alt="شعار" class="w-20 h-20 object-contain">
             <div class="flex flex-col leading-tight">
-                <h1 class="font-bold gold-text serif-font text-2xl">محمود عبد الحميد</h1>
-                <p class="text-gray-300 text-[11px]">المحامي بالنقض والدستورية العليا</p>
+                <h1 class="font-bold gold-text serif-font text-[28px]">محمود عبد الحميد</h1>
+                <p class="text-gray-300 font-medium text-[13px]">المحامي بالنقض والدستورية العليا</p>
             </div>
         </div>
         <div class="hidden xl:flex items-center gap-6 font-bold text-sm">
             <a href="index.html" style="color: white">الرئيسية</a>
+            <a href="about.html" style="color: white">عن المؤسسة</a>
+            <a href="specialties.html" style="color: white">تخصصاتنا</a>
             <a href="blog.html" class="gold-text">المدونة</a>
-            <a href="contact.html" class="border border-gold-solid px-4 py-2 rounded-lg text-white hover:bg-gold-solid hover:text-black transition">اتصل بنا</a>
+            <a href="contact.html" class="gold-btn px-4 py-2 rounded-lg text-xs shadow-lg">طلب استشارة</a>
         </div>
         <button id="menu-toggle" class="xl:hidden text-2xl gold-text"><i class="fas fa-bars-staggered"></i></button>
     </nav>
 </header>
 
-<!-- القائمة الجانبية للموبايل -->
-<div id="mobile-menu" class="dark-section">
+<!-- القائمة الجانبية للموبايل (مطابقة للمرفق) -->
+<div id="mobile-menu" class="dark-section p-8">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text"><i class="fas fa-times"></i></button>
-    <div class="flex flex-col gap-8 text-2xl font-bold text-center">
-        <a href="index.html" style="color: white">الرئيسية</a>
+    <div class="flex flex-col gap-6 text-xl font-bold text-center">
+        <a href="index.html" class="gold-text text-xl">الرئيسية</a>
+        <a href="about.html" style="color: white">عن المؤسسة</a>
+        <a href="specialties.html" style="color: white">تخصصاتنا</a>
         <a href="blog.html" class="gold-text">المدونة القانونية</a>
-        <a href="specialties.html" style="color: white text-2xl">تخصصاتنا</a>
-        <a href="contact.html" style="color: white text-2xl">تواصل معنا</a>
+        <a href="contact.html" class="gold-btn py-3 rounded-xl">طلب استشارة</a>
     </div>
 </div>
 
-<!-- محتوى المقال -->
-<main class="pt-32 pb-20 px-4">
+<!-- المحتوى الرئيسي للمقال -->
+<main class="pt-48 pb-20 px-4">
     <div class="article-content-box">
         <div id="loader" class="text-center py-20">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-gold-solid"></div>
-            <p class="mt-4 text-gray-500 italic">جاري تحميل الدراسة القانونية...</p>
+            <p class="mt-4 text-gray-400 italic">جاري مراجعة الدراسة القانونية...</p>
         </div>
 
         <div id="article-wrapper" class="hidden">
-            <h1 id="article-title" class="text-4xl md:text-5xl font-black serif-font text-gray-900 mb-8 border-b-2 border-gold-solid/20 pb-6 leading-tight"></h1>
+            <h1 id="article-title" class="text-4xl md:text-5xl font-bold article-font text-gray-900 mb-8 border-b border-gray-100 pb-8 leading-tight"></h1>
             <div id="article-content" class="markdown-body">
-                <!-- النص سيظهر هنا -->
+                <!-- النص يظهر هنا -->
             </div>
         </div>
     </div>
 
-    <!-- مقالات مقترحة في الأسفل -->
-    <div class="max-w-[900px] mx-auto mt-16">
+    <!-- قسم مقالات مقترحة -->
+    <div class="max-w-[850px] mx-auto mt-16">
         <h3 class="text-2xl font-bold serif-font text-gray-800 mb-8 flex items-center gap-3">
-            <span class="w-8 h-1 bg-gold-solid"></span> دراسات ذات صلة
+            <span class="w-8 h-1 bg-gold-solid"></span> دراسات قانونية أخرى
         </h3>
         <div id="suggestions" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- سيتم تعبئتها بواسطة JS -->
@@ -148,40 +173,43 @@
     </div>
 </main>
 
-<!-- الفوتر الملكي (مطابق لموقعك الرسمي) -->
+<!-- الفوتر الملكي (مطابق تماماً لصفحتك الرئيسية) -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 dark-section text-center">
     <div class="max-w-7xl mx-auto px-6">
-        <img src="logo.png" class="w-20 h-20 mx-auto mb-4">
+        <img src="logo.png" class="w-24 h-24 mx-auto mb-4">
         <h2 class="text-3xl font-black gold-text serif-font mb-2">مؤسسة محمود عبد الحميد</h2>
-        <div class="flex justify-center gap-5 my-10">
+        <p class="text-gray-400 font-medium mb-10">التميز في المحاماة والاستشارات القانونية</p>
+        
+        <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>
         </div>
-        <p class="text-gray-500 text-[10px] tracking-widest border-t border-gold-solid/10 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
+        
+        <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/20 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
     </div>
 </footer>
 
 <script>
-    // التحكم في المنيو
+    // التحكم في القائمة الجانبية
     const menuToggle = document.getElementById('menu-toggle');
     const menuClose = document.getElementById('menu-close');
     const mobileMenu = document.getElementById('mobile-menu');
     menuToggle.onclick = () => mobileMenu.classList.add('active');
     menuClose.onclick = () => mobileMenu.classList.remove('active');
 
-    // تحميل المقال
-    async function loadArticle() {
+    // تحميل المقال من GitHub
+    async function fetchArticle() {
         const slug = new URLSearchParams(window.location.search).get('slug');
         if(!slug) { window.location.href = 'blog.html'; return; }
 
         const owner = "malegal"; const repo = "mahmoud-legal";
         try {
-            // جلب المقال الحالي
             const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/blog/articles/${slug}.md`);
             const md = await res.text();
             
+            document.title = decodeURIComponent(slug.replace(/-/g, ' ')) + " | مدونة محمود عبد الحميد";
             document.getElementById('article-title').textContent = decodeURIComponent(slug.replace(/-/g, ' '));
             document.getElementById('article-content').innerHTML = marked.parse(md);
             document.getElementById('loader').classList.add('hidden');
@@ -197,14 +225,16 @@
                 const sSlug = f.name.replace('.md', '');
                 const sTitle = decodeURIComponent(sSlug.replace(/-/g, ' '));
                 sugBox.innerHTML += `
-                    <a href="article.html?slug=${sSlug}" class="block bg-white p-6 rounded-xl border border-gray-200 hover:border-gold-solid transition shadow-sm">
-                        <h4 class="font-bold text-gray-900 leading-snug line-clamp-2">${sTitle}</h4>
-                        <span class="text-gold-solid text-xs mt-3 block font-bold">قراءة المزيد...</span>
+                    <a href="article.html?slug=${sSlug}" class="block bg-white p-6 border border-gray-100 hover:border-gold-solid transition-all rounded-lg shadow-sm group">
+                        <h4 class="font-bold text-gray-900 leading-snug group-hover:text-gold-solid transition">${sTitle}</h4>
+                        <span class="text-gold-solid text-xs mt-3 block">قراءة الدراسة...</span>
                     </a>`;
             });
-        } catch (e) { console.error("Error loading article"); }
+        } catch (e) { 
+            document.getElementById('loader').innerHTML = "<p class='text-red-500'>عذراً، لم يتم العثور على هذا المقال.</p>";
+        }
     }
-    loadArticle();
+    fetchArticle();
 </script>
 
 </body>

@@ -169,23 +169,39 @@
             transform: scale(1.1); 
         }
         
-        /* أيقونات الفوتر بألوانها الرسمية - مصغرة قليلاً */
+        /* أيقونات الفوتر - تصميم ذهبي (محدث) */
         .footer-social-icon {
-            font-size: 1.5rem;  /* تم التصغير من 1.8rem إلى 1.5rem */
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.5);
             text-decoration: none;
-            margin: 0 10px;
-            display: inline-block;
+            color: #bf953f;
+            font-size: 1.3rem;
         }
         
-        .footer-social-icon.facebook { color: #1877f2; }      /* فيسبوك أزرق */
-        .footer-social-icon.linkedin { color: #0a66c2; }      /* لينكد إن أزرق */
-        .footer-social-icon.twitter { color: #1da1f2; }       /* تويتر أزرق فاتح (لون الطائر) */
-        .footer-social-icon.email { color: #ea4335; }         /* إيميل أحمر */
-        
+        .footer-social-icon i {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .footer-social-icon:hover {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
             transform: translateY(-5px);
-            text-shadow: 0 0 15px currentColor;
+            background: var(--gold-gradient);
+        }
+        
+        .footer-social-icon:hover i {
+            background: none;
+            -webkit-text-fill-color: #000;
+            color: #000;
         }
         
         #mobile-menu { 
@@ -299,7 +315,7 @@
             .hero-buttons a { width: 100%; }
             .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
             .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
-            .footer-social-icon { font-size: 1.3rem; margin: 0 8px; } /* تصغير إضافي للموبايل */
+            .footer-social-icon { width: 40px; height: 40px; font-size: 1.1rem; } /* تصغير للموبايل */
         }
         
         #why-us { background: #01040f !important; }
@@ -605,8 +621,7 @@
     </div>
 </section>
 
-<!-- الفوتر بلون كحلي غامق عميق مع أيقونات مصغرة وأيقونة تويتر القديمة -->
-<!-- الفوتر (مع أيقونات ذهبية وتويتر العصفورة) -->
+<!-- الفوتر (مطابق لفوتر صفحة تواصل معنا) -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -615,10 +630,9 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر الذهبية (مع تويتر العصفورة) -->
+        <!-- أيقونات الفوتر الذهبية -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
-            <!-- أيقونة تويتر القديمة (العصفورة) بلون ذهبي -->
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تويتر"><i class="fab fa-twitter"></i></a>
             <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تليجرام"><i class="fab fa-telegram-plane"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon" title="لينكد إن"><i class="fab fa-linkedin-in"></i></a>
@@ -698,7 +712,7 @@
                         if (!yearsCounted) {
                             yearsCounted = true;
                             let current = 0;
-                            const increment = 1; // قفزة ثابتة لأن الرقم صغير
+                            const increment = 1;
                             const timer = setInterval(() => {
                                 current += increment;
                                 yearsElement.textContent = current;
@@ -713,7 +727,7 @@
                         if (!casesCounted) {
                             casesCounted = true;
                             let current = 0;
-                            const increment = 10; // قفزات أكبر للوصول إلى 1000
+                            const increment = 10;
                             const timer = setInterval(() => {
                                 current += increment;
                                 casesElement.textContent = current;

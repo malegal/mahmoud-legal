@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>المكتب الفني | إدارة المحتوى القانوني</title>
+    <title>لوحة التحكم | مؤسسة محمود عبد الحميد</title>
     
     <!-- المكتبات -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -24,151 +24,118 @@
         .serif-font { font-family: 'Amiri', serif; }
         .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         
-        /* تصميم المحرر */
+        /* تنسيق المحرر للجوال */
         .ql-toolbar { background: #f8fafc !important; border-radius: 12px 12px 0 0 !important; border: none !important; }
-        .ql-container { background: #ffffff !important; color: #1a1a1a !important; border-radius: 0 0 12px 12px !important; min-height: 400px; font-size: 1.2rem; border: none !important; }
+        .ql-container { background: #ffffff !important; color: #1a1a1a !important; border-radius: 0 0 12px 12px !important; min-height: 300px; font-size: 1.1rem; border: none !important; }
         
         .side-panel { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(191, 149, 63, 0.2); }
         .input-dark { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; color: white; outline: none; width: 100%; transition: 0.3s; }
-        .input-dark:focus { border-color: var(--gold-solid); box-shadow: 0 0 10px rgba(191,149,63,0.2); }
         
-        .btn-gold { background: var(--gold-gradient); color: #000; font-weight: 800; padding: 12px 24px; border-radius: 8px; transition: 0.3s; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-gold { background: var(--gold-gradient); color: #000; font-weight: 800; padding: 10px 16px; border-radius: 8px; transition: 0.3s; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(191,149,63,0.4); }
-        .btn-outline { border: 1px solid var(--gold-solid); color: var(--gold-solid); padding: 10px 20px; border-radius: 8px; transition: 0.3s; font-weight: 600; }
-        .btn-outline:hover { background: rgba(191,149,63,0.1); }
 
-        /* حالة الشبكة */
-        #status-badge { transition: 0.3s; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        #status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; }
         .online { background: #10b981; color: white; }
         .offline { background: #ef4444; color: white; }
 
-        /* كروت المقالات */
-        .article-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(191,149,63,0.1); border-radius: 12px; padding: 12px; transition: 0.3s; }
-        .article-card:hover { border-color: var(--gold-solid); background: rgba(255,255,255,0.05); }
+        .article-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(191,149,63,0.1); border-radius: 12px; padding: 12px; margin-bottom: 8px; transition: 0.2s; }
+        .article-card:hover { border-color: var(--gold-solid); }
 
-        /* وضع المعاينة */
-        #preview-modal-content { background-color: var(--paper-bg); font-family: 'Amiri', serif; color: #1a1a1a; }
-
-        /* الفوتر */
-        .footer-brand { white-space: nowrap; font-family: 'Amiri', serif; }
+        /* تخصيص السكرول بار */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold-solid); border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <!-- شاشة الدخول -->
-<div id="lock-screen" class="fixed inset-0 z-[2000] bg-black flex items-center justify-center p-6">
-    <div class="max-w-md w-full text-center bg-[#020617] p-10 rounded-3xl border border-gold-solid/30 shadow-2xl">
-        <i class="fas fa-user-shield text-6xl gold-text mb-6"></i>
-        <h2 class="text-3xl font-bold gold-text mb-6 serif-font">المكتب الفني للمحاماة</h2>
-        <input type="password" id="adminPass" placeholder="كلمة مرور الإدارة" class="w-full input-dark text-center text-2xl mb-6">
-        <button onclick="checkPass()" class="btn-gold w-full text-lg">دخول اللوحة</button>
+<div id="lock-screen" class="fixed inset-0 z-[2000] bg-black flex items-center justify-center p-4">
+    <div class="max-w-md w-full text-center bg-[#020617] p-8 rounded-3xl border border-gold-solid/30 shadow-2xl">
+        <i class="fas fa-shield-alt text-5xl gold-text mb-4"></i>
+        <h2 class="text-2xl font-bold gold-text mb-6">إدارة مؤسسة محمود عبد الحميد</h2>
+        <input type="password" id="adminPass" placeholder="كلمة المرور" class="w-full input-dark text-center text-xl mb-6">
+        <button onclick="checkPass()" class="btn-gold w-full py-4 text-lg">دخول النظام</button>
     </div>
 </div>
 
 <div id="admin-main" class="hidden min-h-screen flex flex-col">
-    <!-- الهيدر -->
-    <header class="border-b border-gold-solid/20 p-4 bg-black/50 sticky top-0 z-50 backdrop-blur-md">
-        <div class="max-w-[1600px] mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <h1 class="text-xl font-bold gold-text serif-font">نظام الإدارة (PWA)</h1>
+    <!-- الهيدر المطور للجوال -->
+    <header class="border-b border-gold-solid/20 p-3 bg-black/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-[1400px] mx-auto flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <h1 class="text-lg font-bold gold-text serif-font">المكتب الفني</h1>
                 <div id="status-badge" class="online">متصل</div>
             </div>
             
-            <div class="flex gap-3">
-                <button onclick="aiHelper()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
-                    <i class="fas fa-magic"></i> المساعد الذكي
+            <div class="flex flex-wrap gap-2">
+                <button onclick="aiHelper()" class="bg-indigo-600 text-white p-2 rounded-lg text-xs flex items-center gap-1">
+                    <i class="fas fa-magic"></i> <span class="hidden sm:inline">AI مساعد</span>
                 </button>
-                <button onclick="saveLocally()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition">
-                    <i class="fas fa-save ml-2"></i> حفظ محلي (بدون نت)
+                <button onclick="saveLocally()" class="bg-gray-700 text-white p-2 rounded-lg text-xs">
+                    <i class="fas fa-save"></i> <span class="hidden sm:inline">حفظ محلي</span>
                 </button>
-                <button onclick="showLivePreview()" class="btn-outline text-sm">
-                    <i class="fas fa-eye ml-2"></i> معاينة حية
-                </button>
-                <button onclick="saveArticle('blog/articles')" id="publish-btn" class="btn-gold text-sm">
-                    <i class="fas fa-paper-plane ml-2"></i> نشر أونلاين
+                <button onclick="saveArticle('blog/articles')" id="publish-btn" class="btn-gold text-xs">
+                    <i class="fas fa-paper-plane"></i> <span id="btn-text">نشر أونلاين</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-8 flex-grow">
+    <main class="max-w-[1400px] mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-6 flex-grow w-full">
         <!-- المحرر الرئيسي -->
-        <div class="lg:col-span-3 space-y-6">
-            <div class="side-panel p-6 rounded-2xl">
-                <input type="text" id="postTitle" placeholder="عنوان الدراسة القانونية..." 
-                       class="w-full bg-transparent text-4xl font-bold serif-font border-b border-gold-solid/20 pb-4 outline-none focus:border-gold-solid mb-6 text-white">
-                
-                <div id="editor-wrapper">
-                    <div id="editor"></div>
-                </div>
+        <div class="lg:col-span-3 space-y-4">
+            <div class="side-panel p-4 rounded-xl">
+                <input type="text" id="postTitle" placeholder="عنوان المقال..." 
+                       class="w-full bg-transparent text-2xl md:text-3xl font-bold serif-font border-b border-gold-solid/20 pb-3 outline-none focus:border-gold-solid mb-4 text-white">
+                <div id="editor"></div>
             </div>
         </div>
 
-        <!-- الجانب الأيمن -->
-        <div class="space-y-6">
+        <!-- الجانب الأيمن / السفلي في الجوال -->
+        <div class="space-y-4">
             <!-- رفع الصورة -->
-            <div class="side-panel p-6 rounded-2xl">
-                <h3 class="gold-text font-bold mb-4 flex items-center gap-2"><i class="fas fa-image"></i> صورة المقال</h3>
+            <div class="side-panel p-4 rounded-xl">
+                <h3 class="gold-text font-bold mb-3 text-sm flex items-center gap-2"><i class="fas fa-image"></i> صورة المقال</h3>
                 <input type="file" id="imageInput" class="hidden" accept="image/*">
-                <div onclick="document.getElementById('imageInput').click()" class="border-2 border-dashed border-gold-solid/20 rounded-xl p-4 text-center cursor-pointer hover:bg-white/5 transition">
-                    <i class="fas fa-cloud-upload-alt text-2xl mb-2 opacity-50 text-gold-solid"></i>
-                    <p class="text-[10px] text-gray-400">ارفع صورة من جهازك</p>
-                    <img id="img-preview" class="mt-4 rounded-lg hidden w-full h-32 object-cover border border-gold-solid/20">
+                <div onclick="document.getElementById('imageInput').click()" class="border-2 border-dashed border-gold-solid/20 rounded-lg p-4 text-center cursor-pointer hover:bg-white/5 transition">
+                    <i class="fas fa-upload text-xl mb-2 opacity-50 text-gold-solid"></i>
+                    <p class="text-[10px] text-gray-400">اختر صورة</p>
+                    <img id="img-preview" class="mt-2 rounded hidden w-full h-24 object-cover">
                 </div>
             </div>
 
             <!-- SEO -->
-            <div class="side-panel p-6 rounded-2xl">
-                <h3 class="gold-text font-bold mb-4 flex items-center gap-2 text-sm"><i class="fas fa-search"></i> الأرشفة (SEO)</h3>
-                <input type="text" id="postSlug" placeholder="الرابط (slug-name)" class="input-dark text-xs mb-3">
-                <textarea id="metaDesc" rows="3" class="input-dark text-[11px]" placeholder="وصف البحث..."></textarea>
+            <div class="side-panel p-4 rounded-xl">
+                <h3 class="gold-text font-bold mb-3 text-sm flex items-center gap-2"><i class="fas fa-search"></i> الأرشفة</h3>
+                <input type="text" id="postSlug" placeholder="الرابط (slug)" class="input-dark text-xs mb-2">
+                <textarea id="metaDesc" rows="2" class="input-dark text-[10px]" placeholder="وصف جوجل..."></textarea>
             </div>
 
             <!-- قائمة المحتوى -->
-            <div class="side-panel p-6 rounded-2xl">
-                <h3 class="gold-text font-bold mb-4 flex items-center justify-between text-sm">
-                    <span><i class="fas fa-archive"></i> الأرشيف والمسودات</span>
-                    <button onclick="loadAllContent()" class="text-blue-400 hover:underline text-[10px]">تحديث</button>
+            <div class="side-panel p-4 rounded-xl flex flex-col max-h-[400px]">
+                <h3 class="gold-text font-bold mb-3 flex items-center justify-between text-sm">
+                    <span><i class="fas fa-history"></i> المقالات المنشورة</span>
+                    <button onclick="loadAllContent()" class="text-blue-400 text-[10px]"><i class="fas fa-sync"></i></button>
                 </h3>
                 
-                <!-- مسودات الجهاز -->
-                <div id="local-drafts-list" class="mb-4 space-y-2 border-b border-white/5 pb-4">
-                    <p class="text-[9px] text-gray-500 uppercase mb-2 tracking-widest">مسودات بدون إنترنت</p>
-                </div>
-
-                <div id="content-list" class="max-h-[300px] overflow-y-auto space-y-2 pr-1">
-                    <!-- جلب المقالات من السيرفر -->
+                <div id="content-list" class="overflow-y-auto space-y-2 flex-grow pr-1 text-right">
+                    <!-- المقالات تظهر هنا -->
                 </div>
             </div>
         </div>
     </main>
-
-    <!-- الفوتر الملكي -->
-    <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black text-center mt-auto">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="footer-brand text-3xl md:text-5xl font-black gold-text mb-8">مؤسسة محمود عبد الحميد للمحاماة</h2>
-            <div class="flex justify-center gap-8 mb-12">
-                <a href="https://www.facebook.com/malegal" target="_blank" class="text-gold-solid text-2xl hover:scale-110 transition"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="text-gold-solid text-2xl hover:scale-110 transition"><i class="fab fa-linkedin-in"></i></a>
-                <a href="blog.html" class="text-gold-solid text-2xl hover:scale-110 transition"><i class="fas fa-newspaper"></i></a>
-            </div>
-            <p class="text-gray-600 text-[10px] tracking-widest uppercase serif-font">جميع الحقوق محفوظة © ٢٠٢٦</p>
-        </div>
-    </footer>
 </div>
 
-<!-- مودال المعاينة -->
-<div id="preview-modal" class="fixed inset-0 z-[1000] bg-black/95 hidden overflow-y-auto p-4 md:p-20 text-right">
-    <button onclick="closePreview()" class="fixed top-10 left-10 text-white text-4xl hover:text-gold-solid"><i class="fas fa-times"></i></button>
-    <div id="preview-modal-content" class="max-w-4xl mx-auto rounded-xl p-10 shadow-2xl">
-        <h1 id="p-title" class="text-5xl font-bold serif-font mb-8 text-black"></h1>
-        <div id="p-body" class="text-xl leading-relaxed text-black article-font" style="font-family:'Amiri', serif"></div>
-    </div>
-</div>
+<!-- كود الربط بالتطبيق -->
+<script>
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+    const manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest'; manifestLink.href = 'manifest.json';
+    document.head.appendChild(manifestLink);
+</script>
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // الإعدادات
     const GITHUB_TOKEN = "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";
     const OWNER = "malegal";
     const REPO = "mahmoud-legal";
@@ -177,110 +144,53 @@
     let editSha = null;
     let uploadedImageBase64 = null;
 
-    // 1. نظام الدخول PWA
     function checkPass() {
         if(document.getElementById('adminPass').value === "mahmoud237") {
             document.getElementById('lock-screen').style.display = 'none';
             document.getElementById('admin-main').classList.remove('hidden');
-        } else { alert("كلمة المرور خاطئة"); }
+            loadAllContent();
+        } else { alert("خطأ!"); }
     }
 
-    // 2. تسجيل الـ Service Worker (لتحويله لتطبيق والعمل بدون نت)
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then(() => console.log('PWA Ready'));
-    }
-    const manifestLink = document.createElement('link');
-    manifestLink.rel = 'manifest'; manifestLink.href = 'manifest.json';
-    document.head.appendChild(manifestLink);
-
-    // 3. مراقبة الإنترنت
-    function updateStatus() {
-        const badge = document.getElementById('status-badge');
-        badge.innerText = navigator.onLine ? "متصل" : "أوفلاين";
-        badge.className = navigator.onLine ? "online" : "offline";
-    }
-    window.addEventListener('online', updateStatus); window.addEventListener('offline', updateStatus);
-    updateStatus();
-
-    // 4. المحرر
     var quill = new Quill('#editor', {
         theme: 'snow',
-        modules: { toolbar: [['bold', 'italic', 'underline', 'blockquote'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }], ['link', 'image', 'clean']] },
-        placeholder: 'ابدأ بصياغة مذكرتك القانونية هنا...'
+        modules: { toolbar: [['bold', 'italic', 'underline', 'blockquote'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'image', 'clean']] },
+        placeholder: 'اكتب مذكرتك هنا...'
     });
 
-    // 5. رفع الصور
+    // معالجة الصورة
     document.getElementById('imageInput').onchange = function(e) {
         const file = e.target.files[0];
         const reader = new FileReader();
         reader.onload = function() {
             uploadedImageBase64 = reader.result.split(',')[1];
-            const preview = document.getElementById('img-preview');
-            preview.src = reader.result; preview.classList.remove('hidden');
+            document.getElementById('img-preview').src = reader.result;
+            document.getElementById('img-preview').classList.remove('hidden');
         };
         reader.readAsDataURL(file);
     };
 
-    // 6. المساعد الذكي AI
+    // AI Helper
     function aiHelper() {
         const text = quill.getText();
-        const title = document.getElementById('postTitle').value;
-        if(text.length < 5) return alert("اكتب محتوى أولاً");
-        document.getElementById('metaDesc').value = text.substring(0, 160).trim() + "...";
+        if(text.length < 5) return alert("اكتب نصاً أولاً");
+        document.getElementById('metaDesc').value = text.substring(0, 150).trim() + "...";
         if(!document.getElementById('postSlug').value) {
-            document.getElementById('postSlug').value = title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') || "legal-" + Date.now();
+            document.getElementById('postSlug').value = document.getElementById('postTitle').value.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
         }
-        alert("✨ المساعد الذكي قام بتوليد بيانات الـ SEO");
     }
 
-    // 7. الحفظ المحلي (Offline Storage)
-    function saveLocally() {
-        const title = document.getElementById('postTitle').value;
-        if(!title) return alert("اكتب عنواناً للمسودة");
-        const draft = { title: title, content: quill.root.innerHTML, date: new Date().toLocaleString('ar-EG') };
-        let drafts = JSON.parse(localStorage.getItem('local_law_drafts') || '[]');
-        drafts.push(draft);
-        localStorage.setItem('local_law_drafts', JSON.stringify(drafts));
-        alert("✅ تم الحفظ في ذاكرة الجهاز (يمكنك النشر عند توفر النت)");
-        loadLocalDrafts();
-    }
-
-    function loadLocalDrafts() {
-        const list = document.getElementById('local-drafts-list');
-        const drafts = JSON.parse(localStorage.getItem('local_law_drafts') || '[]');
-        list.innerHTML = drafts.map((d, i) => `
-            <div class="bg-white/5 p-2 rounded border border-white/5 flex justify-between items-center">
-                <span class="text-[10px] truncate font-bold w-1/2">${d.title}</span>
-                <div class="flex gap-2">
-                    <button onclick="restoreLocal(${i})" class="text-blue-400 text-[10px]">فتح</button>
-                    <button onclick="deleteLocal(${i})" class="text-red-500 text-[10px]">حذف</button>
-                </div>
-            </div>`).join('');
-    }
-
-    function restoreLocal(i) {
-        const d = JSON.parse(localStorage.getItem('local_law_drafts'))[i];
-        document.getElementById('postTitle').value = d.title;
-        quill.root.innerHTML = d.content;
-    }
-
-    function deleteLocal(i) {
-        let drafts = JSON.parse(localStorage.getItem('local_law_drafts'));
-        drafts.splice(i, 1); localStorage.setItem('local_law_drafts', JSON.stringify(drafts));
-        loadLocalDrafts();
-    }
-
-    // 8. النشر لـ GitHub
+    // الحفظ والرفع
     async function saveArticle(folder) {
-        if(!navigator.onLine) return alert("أنت غير متصل بالإنترنت. يرجى الحفظ محلياً.");
-        
         const title = document.getElementById('postTitle').value;
         const slug = document.getElementById('postSlug').value || Date.now();
         const content = quill.root.innerHTML;
         const meta = document.getElementById('metaDesc').value;
 
-        const btn = document.getElementById('publish-btn');
-        btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> جاري النشر...';
+        if(!title || !content) return alert("املأ البيانات");
+
+        const btnText = document.getElementById('btn-text');
+        btnText.innerText = "جاري الحفظ...";
 
         try {
             let imagePath = "images/blog-bg.jpg";
@@ -308,15 +218,15 @@ ${content}`;
                 body: JSON.stringify(body)
             });
 
-            if(res.ok) { alert("✅ تم النشر بنجاح!"); location.reload(); }
-        } catch (e) { alert("حدث خطأ في الاتصال بالسيرفر"); }
-        btn.innerHTML = "نشر أونلاين";
+            if(res.ok) { alert("تم الحفظ بنجاح أونلاين!"); location.reload(); }
+        } catch (e) { alert("خطأ في الاتصال"); }
+        btnText.innerText = "نشر أونلاين";
     }
 
-    // 9. إدارة المحتوى (تعديل وحذف)
+    // جلب المقالات للتعديل والحذف
     async function loadAllContent() {
         const listDiv = document.getElementById('content-list');
-        listDiv.innerHTML = '<p class="text-center text-[10px] py-4">جاري التحميل...</p>';
+        listDiv.innerHTML = '<p class="text-center text-xs py-4">جاري التحميل...</p>';
         try {
             const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/blog/articles`, {
                 headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
@@ -327,46 +237,59 @@ ${content}`;
                 return `
                     <div class="article-card flex justify-between items-center gap-2">
                         <span class="text-[10px] truncate font-bold flex-grow">${title}</span>
-                        <div class="flex gap-2">
-                            <button onclick="editRemote('${file.path}', '${file.sha}')" class="text-blue-400 text-[10px]"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteRemote('${file.path}', '${file.sha}')" class="text-red-500 text-[10px]"><i class="fas fa-trash"></i></button>
+                        <div class="flex gap-1">
+                            <button onclick="editRemote('${file.path}', '${file.sha}')" class="bg-blue-500/20 text-blue-400 p-2 rounded text-[10px] hover:bg-blue-500 hover:text-white transition"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteRemote('${file.path}', '${file.sha}')" class="bg-red-500/20 text-red-500 p-2 rounded text-[10px] hover:bg-red-500 hover:text-white transition"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>`;
             }).join('');
         } catch (e) { listDiv.innerHTML = "فشل تحميل الأرشيف"; }
     }
 
+    // وظيفة التعديل
     async function editRemote(path, sha) {
-        const res = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${path}`);
-        const md = await res.text();
-        const content = md.split('---').pop();
-        document.getElementById('postTitle').value = path.split('/').pop().replace('.md', '').replace(/-/g, ' ');
-        document.getElementById('postSlug').value = path.split('/').pop().replace('.md', '');
-        quill.root.innerHTML = content;
-        isEditing = true; editSha = sha;
-        window.scrollTo(0,0);
+        if(!confirm("هل تريد تعديل هذا المقال؟")) return;
+        try {
+            const res = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${path}`);
+            const md = await res.text();
+            
+            // محاولة بسيطة لفصل الـ Frontmatter عن المحتوى
+            const parts = md.split('---');
+            const content = parts.length > 2 ? parts.slice(2).join('---') : md;
+            
+            document.getElementById('postTitle').value = path.split('/').pop().replace('.md', '').replace(/-/g, ' ');
+            document.getElementById('postSlug').value = path.split('/').pop().replace('.md', '');
+            document.getElementById('postSlug').readOnly = true; // نثبت الرابط عند التعديل لعدم كسر الروابط القديمة
+            
+            quill.root.innerHTML = content.trim();
+            isEditing = true;
+            editSha = sha;
+            
+            document.getElementById('btn-text').innerText = "تحديث المقال";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) { alert("فشل جلب المقال"); }
     }
 
+    // وظيفة الحذف
     async function deleteRemote(path, sha) {
-        if(!confirm("حذف نهائي؟")) return;
-        await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
-            method: 'DELETE', headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: "Delete", sha: sha })
-        });
-        loadAllContent();
+        if(!confirm("⚠️ تحذير: سيتم حذف المقال نهائياً من الموقع. هل أنت متأكد؟")) return;
+        try {
+            const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: "Delete article", sha: sha })
+            });
+            if(res.ok) { alert("تم الحذف بنجاح."); loadAllContent(); }
+            else { alert("فشل الحذف، تأكد من الصلاحيات."); }
+        } catch (e) { alert("خطأ في الاتصال."); }
     }
 
-    // 10. المعاينة
-    function showLivePreview() {
-        document.getElementById('p-title').innerText = document.getElementById('postTitle').value;
-        document.getElementById('p-body').innerHTML = quill.root.innerHTML;
-        document.getElementById('preview-modal').classList.remove('hidden');
+    // الحفظ المحلي
+    function saveLocally() {
+        const draft = { title: document.getElementById('postTitle').value, content: quill.root.innerHTML, date: new Date().getTime() };
+        localStorage.setItem('draft_' + draft.date, JSON.stringify(draft));
+        alert("تم الحفظ في ذاكرة الهاتف.");
     }
-    function closePreview() { document.getElementById('preview-modal').classList.add('hidden'); }
-
-    // تشغيل القوائم
-    loadLocalDrafts();
-    loadAllContent();
 </script>
 
 </body>

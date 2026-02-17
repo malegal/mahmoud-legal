@@ -6,6 +6,7 @@
     <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
     <title>تواصل معنا | محمود عبد الحميد - المحامي بالنقض والدستورية العليا</title>
     
+    <!-- المكتبات الخارجية -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -65,6 +66,25 @@
             overflow: hidden;
             z-index: 1;
         }
+
+        .gold-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: 0.5s;
+            z-index: 2;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
         
         .gold-btn:hover { 
             transform: translateY(-3px); 
@@ -85,82 +105,172 @@
         }
         
         .contact-floating {
-            position: fixed; bottom: 30px; right: 30px;
-            display: flex; flex-direction: column; gap: 15px; z-index: 1000;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
         }
+        
         .whatsapp-float, .call-float { 
-            width: 60px; height: 60px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease; text-decoration: none; color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: white;
             border: 1px solid rgba(255,255,255,0.1);
         }
+        
         .whatsapp-float { background: #25d366; }
         .call-float { background: #0077b6; }
         .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
         
         .header-glass {
             background: rgba(0, 0, 0, 0.95) !important;
-            backdrop-filter: blur(20px); border-bottom: 2px solid;
-            border-image: var(--gold-gradient) 1; box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid;
+            border-image: var(--gold-gradient) 1;
+            box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
         }
         
         .islamic-pattern-bg {
             background-color: var(--primary-dark);
-            background-image: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
+            background-image: 
+                linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
                 url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             background-attachment: fixed;
         }
 
         .track-case-btn, .visit-btn { 
-            background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); 
-            color: #fff; font-weight: 600; transition: all 0.3s ease; 
+            background: transparent; 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            color: #fff; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
         }
+        
         .track-case-btn { border-color: var(--gold-solid); }
-        .track-case-btn:hover { background: var(--gold-gradient); color: #000; border-color: transparent; }
-        .visit-btn:hover { border-color: var(--gold-solid); background: rgba(191, 149, 63, 0.1); color: var(--gold-solid); }
+        
+        .track-case-btn:hover { 
+            background: var(--gold-gradient); 
+            color: #000; 
+            border-color: transparent; 
+        }
+        
+        .visit-btn:hover {
+            border-color: var(--gold-solid);
+            background: rgba(191, 149, 63, 0.1);
+            color: var(--gold-solid);
+        }
         
         #mobile-menu { 
-            position: fixed; top: 0; right: 0; bottom: 0; left: 0;
-            background: rgba(0, 0, 0, 0.98); z-index: 110;
-            transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
-            overflow-y: auto; display: flex; flex-direction: column; justify-content: center;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 110;
+            transform: translateX(100%); 
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        #mobile-menu.active { transform: translateX(0); }
         
-        .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        #mobile-menu.active { 
+            transform: translateX(0);
+        }
+        
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
         
         .tab-btn.active {
-            background: var(--gold-gradient) !important; color: #000 !important;
+            background: var(--gold-gradient) !important;
+            color: #000 !important;
             box-shadow: 0 0 15px var(--gold-glow);
         }
+        
         .tab-btn {
-            background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.7);
             transition: all 0.3s ease;
         }
-        .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.1); color: white; }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
         
         .contact-info-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            border-radius: 1rem; background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
+        
         .contact-info-item:hover {
-            border-color: var(--gold-solid); background: rgba(191, 149, 63, 0.05);
+            border-color: var(--gold-solid);
+            background: rgba(191, 149, 63, 0.05);
             transform: translateX(-5px);
         }
         
+        /* أنماط أيقونات الفوتر الذهبية */
         .footer-social-icon {
-            width: 45px; height: 45px; border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
             border: 1px solid rgba(191, 149, 63, 0.3);
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s ease; background: rgba(0,0,0,0.5);
-            text-decoration: none; color: #bf953f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.5);
+            text-decoration: none;
+            color: #bf953f;
         }
-        .footer-social-icon i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.3rem; }
-        .footer-social-icon:hover { border-color: var(--gold-solid); box-shadow: 0 0 20px rgba(191, 149, 63, 0.4); transform: translateY(-5px); background: var(--gold-gradient); }
-        .footer-social-icon:hover i { background: none; -webkit-text-fill-color: #000; color: #000; }
+        
+        .footer-social-icon i {
+            font-size: 1.3rem;
+            color: inherit;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-social-icon:hover {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
+            transform: translateY(-5px);
+            background: var(--gold-gradient);
+        }
+        
+        .footer-social-icon:hover i {
+            background: none;
+            -webkit-text-fill-color: #000;
+            color: #000;
+        }
 
         .hidden { display: none !important; }
 
@@ -232,7 +342,6 @@
         <a href="index.html#why-us" onclick="closeMenu()" class="nav-link-gold text-xl">لماذا تختارنا</a>
         <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-xl">تخصصاتنا</a>
         <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-xl">تواصل معنا</a>
-        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold text-xl">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
         <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">تابع قضيتك</a>
         <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg">حجز موعد</a>
@@ -270,11 +379,13 @@
             
             <!-- العمود الأيمن: معلومات الاتصال + الخريطة -->
             <div class="lg:col-span-5 space-y-8 reveal-on-scroll">
+                
                 <div class="mb-2">
                     <h3 class="text-3xl font-bold gold-text serif-font mb-2">بيانات التواصل</h3>
                     <p class="text-gray-400">تفضل بزيارتنا أو الاتصال بنا في أوقات العمل الرسمية</p>
                 </div>
 
+                <!-- كروت المعلومات -->
                 <div class="space-y-4">
                     <div class="contact-info-item group">
                         <div class="w-12 h-12 rounded-full border border-gold-solid/30 flex items-center justify-center group-hover:bg-gold-solid group-hover:text-black transition-all duration-300 flex-shrink-0">
@@ -308,6 +419,7 @@
                     </div>
                 </div>
 
+                <!-- الخريطة المضمنة -->
                 <div class="rounded-2xl overflow-hidden border border-gold-solid/20 h-64 w-full relative group shadow-2xl">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3642.4!2d32.9!3d24.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDA1JzMxLjIiTiAzMsKwNTMnNDkuMiJF!5e0!3m2!1sen!2seg!4v1600000000000!5m2!1sen!2seg" 
@@ -321,21 +433,23 @@
                     </a>
                 </div>
 
-                <div class="pt-4 border-t border-white/10">
-                    <h4 class="text-white font-bold mb-4 text-sm">تابعنا على المنصات:</h4>
-                    <div class="flex gap-4">
-                        <a href="https://www.facebook.com/malegal" target="_blank" class="w-10 h-10 rounded-lg bg-[#1877f2]/10 text-[#1877f2] flex items-center justify-center hover:bg-[#1877f2] hover:text-white transition-all border border-[#1877f2]/20"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-[#0088cc]/10 text-[#0088cc] flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all border border-[#0088cc]/20"><i class="fab fa-telegram-plane"></i></a>
-                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10"><i class="fab fa-twitter"></i></a>
-                        <a href="https://wa.me/201101076000" target="_blank" class="w-10 h-10 rounded-lg bg-[#25d366]/10 text-[#25d366] flex items-center justify-center hover:bg-[#25d366] hover:text-white transition-all border border-[#25d366]/20"><i class="fab fa-whatsapp"></i></a>
+                <!-- أيقونات التواصل السريع (مع لينكد إن) -->
+                <div class="pt-4 border-t border-white/10 text-center">
+                    <h4 class="text-white font-bold mb-4 text-xl">تابعنا على المنصات:</h4>
+                    <div class="flex gap-4 justify-center flex-wrap">
+                        <a href="https://www.facebook.com/malegal" target="_blank" class="w-12 h-12 rounded-lg bg-[#1877f2]/10 text-[#1877f2] flex items-center justify-center hover:bg-[#1877f2] hover:text-white transition-all border border-[#1877f2]/20 text-xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="w-12 h-12 rounded-lg bg-[#0a66c2]/10 text-[#0a66c2] flex items-center justify-center hover:bg-[#0a66c2] hover:text-white transition-all border border-[#0a66c2]/20 text-xl"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-12 h-12 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10 text-xl"><i class="fab fa-twitter"></i></a>
+                        <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="w-12 h-12 rounded-lg bg-[#0088cc]/10 text-[#0088cc] flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all border border-[#0088cc]/20 text-xl"><i class="fab fa-telegram-plane"></i></a>
+                        <a href="https://wa.me/201101076000" target="_blank" class="w-12 h-12 rounded-lg bg-[#25d366]/10 text-[#25d366] flex items-center justify-center hover:bg-[#25d366] hover:text-white transition-all border border-[#25d366]/20 text-xl"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
+
             </div>
 
             <!-- العمود الأيسر: النماذج -->
             <div class="lg:col-span-7 reveal-on-scroll" style="transition-delay: 200ms;">
-                <!-- إضافة ID هنا للتعرف على الحاوية -->
-                <div id="forms-container" class="card-glass p-1 md:p-8 border-t-4 border-gold-solid h-full relative overflow-hidden">
+                <div class="card-glass p-1 md:p-8 border-t-4 border-gold-solid h-full relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gold-solid/5 to-transparent pointer-events-none"></div>
                     
                     <div class="relative z-10 p-4">
@@ -349,7 +463,7 @@
                             </button>
                         </div>
 
-                        <!-- نموذج الاستشارة (مع ID للهاش) -->
+                        <!-- نموذج الاستشارة -->
                         <div id="consult-form" class="space-y-6">
                             <div class="text-center mb-6">
                                 <h3 class="text-2xl font-bold text-white">طلب استشارة قانونية</h3>
@@ -377,7 +491,7 @@
                             </form>
                         </div>
 
-                        <!-- نموذج الحجز (مع ID للهاش) -->
+                        <!-- نموذج الحجز -->
                         <div id="visit-form" class="space-y-6 hidden">
                             <div class="text-center mb-6">
                                 <h3 class="text-2xl font-bold text-white">حجز موعد في المكتب</h3>
@@ -417,7 +531,7 @@
     </div>
 </section>
 
-<!-- الفوتر -->
+<!-- الفوتر (مع أيقونات ذهبية وتويتر العصفورة) -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -426,6 +540,7 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
+        <!-- أيقونات الفوتر الذهبية (مع تويتر العصفورة) -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تويتر"><i class="fab fa-twitter"></i></a>
@@ -495,13 +610,13 @@
         }
     }
 
-    // منطق التوجيه والنزول التلقائي (Scroll)
     document.addEventListener("DOMContentLoaded", function() {
-        // أنيميشن الظهور
+        // الأنيميشن
         const observerOptions = {
             threshold: 0.1,
             rootMargin: "0px 0px -50px 0px"
         };
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -510,40 +625,39 @@
                 }
             });
         }, observerOptions);
+        
         const elements = document.querySelectorAll('.reveal-on-scroll');
         elements.forEach(el => observer.observe(el));
         
-        // 1. قراءة الباراميترز (consult أو visit)
+        // التعامل مع روابط التبويب الخارجية ومعامل specialty
         const urlParams = new URLSearchParams(window.location.search);
         const tabParam = urlParams.get('tab');
+        const specialtyParam = urlParams.get('specialty');
         
-        // 2. تفعيل التبويب المناسب
+        // ضبط التبويب
         if (tabParam === 'visit') {
             switchTab('visit');
         } else {
-            switchTab('consult'); // الافتراضي
+            switchTab('consult');
         }
-
-        // 3. النزول التلقائي (Scroll) إلى النموذج إذا كان هناك هاش (#)
-        // هذا الكود يتأكد من أن العنصر مرئي قبل النزول إليه
-        if (window.location.hash) {
-            const targetId = window.location.hash.substring(1); // إزالة علامة #
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                setTimeout(() => {
-                    targetElement.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
-                    });
-                }, 100); // تأخير بسيط لضمان اكتمال تحميل الصفحة
+        
+        // إذا كان هناك معامل specialty، نضيفه إلى حقل التفاصيل في نموذج الاستشارة
+        if (specialtyParam) {
+            // التأكد أننا في تبويب الاستشارة
+            if (tabParam !== 'visit') {
+                // فتح تبويب الاستشارة (بالفعل هو الافتراضي ولكن للتأكيد)
+                switchTab('consult');
+            }
+            const consultMessageField = document.getElementById('consultMessage');
+            if (consultMessageField) {
+                consultMessageField.value = `أرغب في الحصول على استشارة قانونية بخصوص: ${specialtyParam}`;
             }
         }
 
         const today = new Date().toISOString().split('T')[0];
         document.querySelectorAll('input[type="date"]').forEach(input => input.min = today);
 
-        // إرسال النماذج
+        // إرسال النماذج للواتساب
         document.getElementById('consultForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('consultName').value;

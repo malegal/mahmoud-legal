@@ -138,7 +138,7 @@
             box-shadow: 0 0 30px var(--gold-glow, rgba(191,149,63,0.7)); 
         }
 
-        /* القائمة الجانبية للموبايل - مطابقة تماماً لصفحة تواصل معنا */
+        /* القائمة الجانبية للموبايل - مع مسافات أقل */
         #mobile-menu { 
             position: fixed;
             top: 0;
@@ -459,18 +459,18 @@
     </nav>
 </header>
 
-<!-- القائمة الجانبية للموبايل - مطابقة تماماً لصفحة تواصل معنا -->
+<!-- القائمة الجانبية للموبايل - مع مسافات أقل -->
 <div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
     </button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center">
+    <div class="flex flex-col gap-3 text-xl font-bold text-center"> <!-- تم تغيير gap-5 إلى gap-3 -->
         <a href="index.html" onclick="closeMenu()" class="nav-link-gold text-xl">الرئيسية</a>
         <a href="about.html" onclick="closeMenu()" class="nav-link-gold text-xl">عن المؤسسة</a>
         <a href="index.html#why-us" onclick="closeMenu()" class="nav-link-gold text-xl">لماذا تختارنا</a>
         <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-xl">تخصصاتنا</a>
         <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-xl">تواصل معنا</a>
-        <div class="h-px bg-white/10 w-full my-4"></div>
+        <div class="h-px bg-white/10 w-full my-2"></div> <!-- تم تغيير my-4 إلى my-2 -->
         <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">
              تابع قضيتك
         </a>

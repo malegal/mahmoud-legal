@@ -523,7 +523,8 @@
                 <!-- سيتم ملء القائمة بالجافاسكربت -->
             </ul>
             
-            <a href="contact.html?tab=consult" class="gold-btn w-full py-4 rounded-xl text-lg font-black block text-center">
+            <!-- زر طلب استشارة (سيتم تحديث الرابط ديناميكيًا) -->
+            <a id="consult-request-btn" href="contact.html?tab=consult" class="gold-btn w-full py-4 rounded-xl text-lg font-black block text-center">
                 طلب استشارة في هذا التخصص
             </a>
         </div>
@@ -683,6 +684,7 @@
     const modalIcon = document.getElementById('modal-icon');
     const modalDesc = document.getElementById('modal-desc');
     const modalServices = document.getElementById('modal-services');
+    const consultBtn = document.getElementById('consult-request-btn'); // زر طلب الاستشارة
 
     // فتح المودال عند الضغط على البطاقة
     cards.forEach(card => {
@@ -703,6 +705,10 @@
                     li.textContent = service;
                     modalServices.appendChild(li);
                 });
+                
+                // تحديث رابط زر طلب الاستشارة ليشمل التخصص
+                const specialtyNameEncoded = encodeURIComponent(data.title);
+                consultBtn.href = `contact.html?tab=consult&specialty=${specialtyNameEncoded}`;
                 
                 // إظهار المودال
                 modal.classList.add('active');

@@ -181,6 +181,7 @@
         .footer-social-icon.facebook { color: #1877f2; }
         .footer-social-icon.linkedin { color: #0a66c2; }
         .footer-social-icon.twitter { color: #1da1f2; }
+        .footer-social-icon.telegram { color: #0088cc; }
         .footer-social-icon.email { color: #ea4335; }
         .footer-social-icon.whatsapp { color: #25d366; }
         .footer-social-icon.map { color: #ea4335; }
@@ -202,6 +203,7 @@
         .follow-icon.facebook { color: #1877f2; }
         .follow-icon.linkedin { color: #0a66c2; }
         .follow-icon.twitter { color: #1da1f2; }
+        .follow-icon.telegram { color: #0088cc; }
         .follow-icon.email { color: #ea4335; }
         .follow-icon.whatsapp { color: #25d366; }
         .follow-icon.map { color: #ea4335; }
@@ -309,10 +311,11 @@
             transition: all 0.3s ease;
         }
         
-        input, textarea, select {
+        /* حقول الإدخال بنفس النمط الأصلي */
+        input, textarea {
             background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(191,149,63,0.2);
             color: white;
+            border: 1px solid rgba(191,149,63,0.2);
             border-radius: 1rem;
             padding: 1rem;
             width: 100%;
@@ -320,7 +323,7 @@
             transition: all 0.3s ease;
         }
         
-        input:focus, textarea:focus, select:focus {
+        input:focus, textarea:focus {
             border-color: var(--gold-solid);
             box-shadow: 0 0 15px rgba(191,149,63,0.3);
         }
@@ -328,22 +331,16 @@
         input::placeholder, textarea::placeholder {
             color: rgba(255,255,255,0.5);
         }
-
-        @media (max-width: 768px) {
-            .header-glass nav { padding: 10px 15px !important; }
-            .section-spacing { padding-top: 4rem !important; padding-bottom: 4rem !important; }
-            .hero-buttons { flex-direction: column; gap: 15px; }
-            .hero-buttons a { width: 100%; }
-            .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
-            .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
-            .footer-social-icon { font-size: 1.3rem; margin: 0 8px; }
-            .follow-icon { font-size: 1.8rem; margin: 0 10px; }
+        
+        .date-placeholder::placeholder {
+            color: #9ca3af;
         }
         
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
+        .hidden {
+            display: none !important;
+        }
         
+        /* بطاقات معلومات الاتصال */
         .contact-info-item {
             display: flex;
             align-items: center;
@@ -367,6 +364,22 @@
             font-size: 1.8rem;
             color: var(--gold-solid);
         }
+
+        @media (max-width: 768px) {
+            .header-glass nav { padding: 10px 15px !important; }
+            .section-spacing { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+            .hero-buttons { flex-direction: column; gap: 15px; }
+            .hero-buttons a { width: 100%; }
+            .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
+            .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
+            .footer-social-icon { font-size: 1.3rem; margin: 0 8px; }
+            .follow-icon { font-size: 1.8rem; margin: 0 10px; }
+            .grid-cols-2 { grid-template-columns: 1fr !important; }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -456,20 +469,23 @@
                 تواصل معنا
             </span>
         </h1>
+        
+        <!-- الجملة الترحيبية كما في الكود الأصلي -->
+        <p class="text-xl text-white/80 mt-4">نحن على بعد خطوة واحدة منك .. اختر طريقة التواصل المناسبة</p>
     </div>
 </section>
 
 <!-- محتوى صفحة التواصل -->
 <section class="py-20 md:py-24 px-6 max-w-7xl mx-auto">
     
-    <!-- معلومات الاتصال (تواصل) -->
+    <!-- معلومات الاتصال (تواصل) مع العنوان الجديد -->
     <div class="grid md:grid-cols-3 gap-6 mb-16 reveal-on-scroll">
-        <!-- العنوان -->
+        <!-- العنوان (محدث) -->
         <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="contact-info-item">
             <i class="fas fa-map-marker-alt"></i>
             <div class="flex flex-col">
                 <span class="text-sm text-gold-solid font-bold">العنوان</span>
-                <span class="text-white/90">القاهرة، مصر</span>
+                <span class="text-white/90 text-sm">شارع كسر الحجر المتفرع من شارع كورنيش النيل أمام مجمع المحاكم ، اسوان</span>
             </div>
         </a>
         
@@ -492,7 +508,7 @@
         </a>
     </div>
     
-    <!-- قسم تابعنا -->
+    <!-- قسم تابعنا (مع إضافة تيلجرام) -->
     <div class="text-center mb-16 reveal-on-scroll">
         <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-8">تابعنا</h2>
         <div class="flex justify-center gap-6 flex-wrap">
@@ -500,6 +516,8 @@
             <a href="https://www.facebook.com/malegal" target="_blank" class="follow-icon facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="follow-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="follow-icon twitter"><i class="fab fa-twitter"></i></a>
+            <!-- أيقونة تيلجرام (يمكن إزالتها بسهولة) -->
+            <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="follow-icon telegram"><i class="fab fa-telegram-plane"></i></a>
             <a href="mailto:ma.law.firm@outlook.com" class="follow-icon email"><i class="fas fa-envelope"></i></a>
             <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="follow-icon map"><i class="fas fa-map-marker-alt"></i></a>
         </div>
@@ -511,7 +529,7 @@
         <button onclick="switchTab('visit')" id="btn-visit" class="tab-btn flex-1 py-4 rounded-xl font-bold text-white transition-all">حجز موعد مقابلة</button>
     </div>
 
-    <!-- نموذج الاستشارة -->
+    <!-- نموذج الاستشارة (نفس الحقول الأصلية) -->
     <div id="consult-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border max-w-2xl mx-auto reveal-on-scroll">
         <h3 class="text-2xl font-bold gold-text mb-6">نموذج الاستشارة السريعة</h3>
         <form id="consultForm" class="space-y-6">
@@ -522,20 +540,20 @@
         </form>
     </div>
 
-    <!-- نموذج حجز موعد -->
+    <!-- نموذج حجز موعد (نفس الحقول الأصلية) -->
     <div id="visit-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border max-w-2xl mx-auto hidden reveal-on-scroll">
         <h3 class="text-2xl font-bold gold-text mb-6">حجز موعد في المكتب</h3>
         <form id="visitForm" class="space-y-6">
             <input type="text" id="visitName" placeholder="الاسم بالكامل" required>
             <input type="tel" id="visitPhone" placeholder="رقم الهاتف" required>
-            <input type="date" id="visitDate" class="text-white" required>
+            <input type="date" id="visitDate" class="date-placeholder" required>
             <textarea id="visitReason" placeholder="سبب المقابلة" rows="3" required></textarea>
             <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال طلب الحجز</button>
         </form>
     </div>
 </section>
 
-<!-- الفوتر المطابق لباقي الصفحات (بدون واتساب) -->
+<!-- الفوتر المطابق لباقي الصفحات (مع إضافة تيلجرام) -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#020617] text-center relative">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -544,11 +562,13 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر بألوانها الرسمية - بدون واتساب -->
+        <!-- أيقونات الفوتر مع إضافة تيلجرام -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon twitter"><i class="fab fa-twitter"></i></a>
+            <!-- أيقونة تيلجرام في الفوتر -->
+            <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon telegram"><i class="fab fa-telegram-plane"></i></a>
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon email"><i class="fas fa-envelope"></i></a>
             <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="footer-social-icon map"><i class="fas fa-map-marker-alt"></i></a>
         </div>
@@ -641,13 +661,13 @@
         const today = new Date().toISOString().split('T')[0];
         document.querySelectorAll('input[type="date"]').forEach(input => input.min = today);
 
-        // نماذج واتساب
+        // نماذج واتساب (نفس الكود الأصلي مع تحسين بسيط)
         document.getElementById('consultForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('consultName').value;
             const phone = document.getElementById('consultPhone').value;
             const message = document.getElementById('consultMessage').value;
-            const msg = `*طلب استشارة جديدة*%0Aالاسم: ${name}%0Aالواتساب: ${phone}%0Aالرسالة: ${message}`;
+            const msg = `طلب استشارة من: ${name}%0Aالواتساب: ${phone}%0Aالرسالة: ${message}`;
             window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
         });
 
@@ -657,7 +677,7 @@
             const phone = document.getElementById('visitPhone').value;
             const date = document.getElementById('visitDate').value;
             const reason = document.getElementById('visitReason').value;
-            const msg = `*طلب حجز موعد*%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالتاريخ: ${date}%0Aالسبب: ${reason}`;
+            const msg = `طلب حجز موعد من: ${name}%0Aالهاتف: ${phone}%0Aالتاريخ: ${date}%0Aالسبب: ${reason}`;
             window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
         });
     });

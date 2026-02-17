@@ -1,0 +1,21 @@
+{
+  "name": "إدارة مكتب محمود عبد الحميد",
+  "short_name": "إدارة القانون",
+  "description": "لوحة تحكم إدارة المحتوى القانوني",
+  "start_url": "blog-admin.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#bf953f",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

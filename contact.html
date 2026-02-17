@@ -236,6 +236,7 @@
             transform: translateX(-5px);
         }
         
+        /* أنماط أيقونات الفوتر العامة */
         .footer-social-icon {
             width: 45px;
             height: 45px;
@@ -247,14 +248,12 @@
             transition: all 0.3s ease;
             background: rgba(0,0,0,0.5);
             text-decoration: none;
-            color: #bf953f;
+            color: #bf953f; /* لون ذهبي افتراضي للأيقونة */
         }
         
         .footer-social-icon i {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             font-size: 1.3rem;
+            color: inherit; /* يرث اللون من العنصر الأب */
         }
 
         .footer-social-icon:hover {
@@ -262,12 +261,23 @@
             box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
             transform: translateY(-5px);
             background: var(--gold-gradient);
+            color: #000; /* عند التحويم يصبح النص أسود */
+        }
+
+        /* أيقونة X الخاصة في الفوتر - تجاوز الأنماط */
+        .footer-social-icon.x-icon {
+            border: 2px solid #bf953f !important;
+            background: transparent !important;
+            color: #000 !important;
         }
         
-        .footer-social-icon:hover i {
-            background: none;
-            -webkit-text-fill-color: #000;
-            color: #000;
+        .footer-social-icon.x-icon i {
+            color: #000 !important;
+        }
+        
+        .footer-social-icon.x-icon:hover {
+            background: var(--gold-gradient) !important;
+            color: #000 !important;
         }
 
         .hidden { display: none !important; }
@@ -433,11 +443,14 @@
 
                 <!-- أيقونات التواصل السريع (معدلة: أكبر، في الوسط، عنوان أكبر) -->
                 <div class="pt-4 border-t border-white/10 text-center">
-                    <h4 class="text-white font-bold mb-4 text-xl">تابعنا على المنصات:</h4> <!-- تم التكبير والتوسيط -->
-                    <div class="flex gap-4 justify-center"> <!-- تمت إضافة justify-center -->
+                    <h4 class="text-white font-bold mb-4 text-xl">تابعنا على المنصات:</h4>
+                    <div class="flex gap-4 justify-center">
                         <a href="https://www.facebook.com/malegal" target="_blank" class="w-12 h-12 rounded-lg bg-[#1877f2]/10 text-[#1877f2] flex items-center justify-center hover:bg-[#1877f2] hover:text-white transition-all border border-[#1877f2]/20 text-xl"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="w-12 h-12 rounded-lg bg-[#0088cc]/10 text-[#0088cc] flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all border border-[#0088cc]/20 text-xl"><i class="fab fa-telegram-plane"></i></a>
-                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-12 h-12 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10 text-xl"><i class="fab fa-x-twitter"></i></a>
+                        <!-- أيقونة X في منتصف الصفحة - تم إصلاحها -->
+                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-12 h-12 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10 text-xl">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
                         <a href="https://wa.me/201101076000" target="_blank" class="w-12 h-12 rounded-lg bg-[#25d366]/10 text-[#25d366] flex items-center justify-center hover:bg-[#25d366] hover:text-white transition-all border border-[#25d366]/20 text-xl"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
@@ -540,10 +553,12 @@
         <!-- أيقونات الفوتر (واتساب تمت إزالته، X بحدود ذهبية ونص أسود) -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
-            <!-- أيقونة X بتصميم خاص: حدود ذهبية ونص أسود -->
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="منصة X" style="border: 2px solid #bf953f; background: transparent; color: #000; background-image: none;">
-                <i class="fab fa-x-twitter" style="color: #000; background: none; -webkit-text-fill-color: #000;"></i>
+            
+            <!-- أيقونة X بتصميم خاص: حدود ذهبية ونص أسود (تم إصلاحها) -->
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon x-icon" title="منصة X">
+                <i class="fab fa-x-twitter"></i>
             </a>
+            
             <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تليجرام"><i class="fab fa-telegram-plane"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon" title="لينكد إن"><i class="fab fa-linkedin-in"></i></a>
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon" title="البريد الإلكتروني"><i class="fas fa-envelope"></i></a>

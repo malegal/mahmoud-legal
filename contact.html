@@ -13,7 +13,6 @@
     
     <style>
         :root {
-            /* الألوان الأساسية: كحلي ليلي عميق + ذهبي ملكي */
             --primary-dark: #020617; 
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #bf953f;
@@ -33,7 +32,6 @@
         
         .serif-font { font-family: 'Amiri', serif; }
         
-        /* تأثير النصوص الذهبية */
         .gold-text { 
             background: var(--gold-gradient); 
             -webkit-background-clip: text; 
@@ -42,7 +40,6 @@
             text-fill-color: transparent;
         }
 
-        /* روابط القائمة */
         .nav-link-gold {
             background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
             -webkit-background-clip: text;
@@ -57,7 +54,6 @@
             transform: scale(1.05);
         }
         
-        /* الأزرار الذهبية */
         .gold-btn { 
             background: var(--gold-gradient); 
             color: #000; 
@@ -95,7 +91,6 @@
             box-shadow: 0 0 30px var(--gold-glow); 
         }
 
-        /* الكروت الزجاجية */
         .card-glass { 
             background: rgba(20, 20, 30, 0.6);
             backdrop-filter: blur(10px); 
@@ -109,7 +104,6 @@
             box-shadow: 0 15px 40px rgba(191, 149, 63, 0.1);
         }
         
-        /* الأيقونات العائمة */
         .contact-floating {
             position: fixed;
             bottom: 30px;
@@ -139,7 +133,6 @@
         .call-float { background: #0077b6; }
         .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
         
-        /* الهيدر */
         .header-glass {
             background: rgba(0, 0, 0, 0.95) !important;
             backdrop-filter: blur(20px);
@@ -148,7 +141,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
         }
         
-        /* الخلفية الإسلامية */
         .islamic-pattern-bg {
             background-color: var(--primary-dark);
             background-image: 
@@ -157,7 +149,6 @@
             background-attachment: fixed;
         }
 
-        /* زر متابعة القضية وحجز الموعد */
         .track-case-btn, .visit-btn { 
             background: transparent; 
             border: 1px solid rgba(255, 255, 255, 0.3); 
@@ -180,7 +171,6 @@
             color: var(--gold-solid);
         }
         
-        /* القائمة الجانبية (تم الإصلاح) */
         #mobile-menu { 
             position: fixed;
             top: 0;
@@ -189,7 +179,6 @@
             left: 0;
             background: rgba(0, 0, 0, 0.98);
             z-index: 110;
-            /* الإخفاء الافتراضي: إزاحة لليمين 100% */
             transform: translateX(100%); 
             transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
             overflow-y: auto;
@@ -199,10 +188,9 @@
         }
         
         #mobile-menu.active { 
-            transform: translateX(0); /* الإظهار */
+            transform: translateX(0);
         }
         
-        /* الأنيميشن */
         .reveal-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -214,7 +202,6 @@
             transform: translateY(0);
         }
         
-        /* التبويبات */
         .tab-btn.active {
             background: var(--gold-gradient) !important;
             color: #000 !important;
@@ -232,7 +219,6 @@
             color: white;
         }
         
-        /* بطاقات معلومات الاتصال */
         .contact-info-item {
             display: flex;
             align-items: center;
@@ -250,7 +236,6 @@
             transform: translateX(-5px);
         }
         
-        /* أيقونات الفوتر الذهبية */
         .footer-social-icon {
             width: 45px;
             height: 45px;
@@ -262,12 +247,10 @@
             transition: all 0.3s ease;
             background: rgba(0,0,0,0.5);
             text-decoration: none;
-            /* اللون الذهبي */
             color: #bf953f;
         }
         
         .footer-social-icon i {
-            /* تطبيق تدرج ذهبي للنص داخل الأيقونة */
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -282,7 +265,6 @@
         }
         
         .footer-social-icon:hover i {
-            /* عند التحويم يصبح الرمز أسود */
             background: none;
             -webkit-text-fill-color: #000;
             color: #000;
@@ -387,7 +369,7 @@
     </div>
 </section>
 
-<!-- محتوى الصفحة (التقسيم الشبكي الجديد) -->
+<!-- محتوى الصفحة -->
 <section class="py-16 md:py-20 px-6 relative z-10">
     <div class="max-w-7xl mx-auto">
         
@@ -435,7 +417,7 @@
                     </div>
                 </div>
 
-                <!-- الخريطة المضمنة (Dark Mode) -->
+                <!-- الخريطة المضمنة -->
                 <div class="rounded-2xl overflow-hidden border border-gold-solid/20 h-64 w-full relative group shadow-2xl">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3642.4!2d32.9!3d24.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDA1JzMxLjIiTiAzMsKwNTMnNDkuMiJF!5e0!3m2!1sen!2seg!4v1600000000000!5m2!1sen!2seg" 
@@ -449,14 +431,13 @@
                     </a>
                 </div>
 
-                <!-- أيقونات التواصل السريع (بالألوان الأصلية لتمييزها في هذا القسم) -->
+                <!-- أيقونات التواصل السريع -->
                 <div class="pt-4 border-t border-white/10">
                     <h4 class="text-white font-bold mb-4 text-sm">تابعنا على المنصات:</h4>
                     <div class="flex gap-4">
                         <a href="https://www.facebook.com/malegal" target="_blank" class="w-10 h-10 rounded-lg bg-[#1877f2]/10 text-[#1877f2] flex items-center justify-center hover:bg-[#1877f2] hover:text-white transition-all border border-[#1877f2]/20"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-[#0088cc]/10 text-[#0088cc] flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all border border-[#0088cc]/20"><i class="fab fa-telegram-plane"></i></a>
-                        <!-- أيقونة تويتر (العصفورة) -->
-                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10"><i class="fab fa-twitter"></i></a>
+                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10"><i class="fab fa-x-twitter"></i></a>
                         <a href="https://wa.me/201101076000" target="_blank" class="w-10 h-10 rounded-lg bg-[#25d366]/10 text-[#25d366] flex items-center justify-center hover:bg-[#25d366] hover:text-white transition-all border border-[#25d366]/20"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
@@ -466,7 +447,6 @@
             <!-- العمود الأيسر: النماذج -->
             <div class="lg:col-span-7 reveal-on-scroll" style="transition-delay: 200ms;">
                 <div class="card-glass p-1 md:p-8 border-t-4 border-gold-solid h-full relative overflow-hidden">
-                    <!-- خلفية جمالية خفيفة داخل الكارت -->
                     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gold-solid/5 to-transparent pointer-events-none"></div>
                     
                     <div class="relative z-10 p-4">
@@ -548,8 +528,7 @@
     </div>
 </section>
 
-<!-- الفوتر -->
-<!-- الفوتر -->
+<!-- الفوتر (معدّل: تمت إزالة واتساب، وتثبيت X الذهبية) -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -558,14 +537,11 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر (كلها ذهبية بما فيها X) -->
+        <!-- أيقونات الفوتر (واتساب تمت إزالته، X موجودة وذهبية) -->
         <div class="flex justify-center gap-6 mb-10">
-            <a href="https://wa.me/201101076000" target="_blank" class="footer-social-icon" title="واتساب"><i class="fab fa-whatsapp"></i></a>
+            <!-- تمت إزالة أيقونة واتساب من هنا -->
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
-            
-            <!-- أيقونة X (تويتر سابقاً) ستظهر ذهبية بوضوح -->
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="منصة X"><i class="fab fa-x-twitter"></i></a>
-            
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="منصة X"><i class="fab fa-x-twitter"></i></a> <!-- X ذهبية -->
             <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تليجرام"><i class="fab fa-telegram-plane"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon" title="لينكد إن"><i class="fab fa-linkedin-in"></i></a>
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon" title="البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
@@ -585,7 +561,7 @@
 </footer>
 
 <script>
-    // قائمة الموبايل (Logic Fix)
+    // قائمة الموبايل
     const mobileMenu = document.getElementById('mobile-menu');
     const menuToggle = document.getElementById('menu-toggle');
     const menuClose = document.getElementById('menu-close');
@@ -608,7 +584,6 @@
         menuClose.addEventListener('click', closeMenu);
     }
     
-    // إغلاق القائمة عند النقر على الروابط
     document.querySelectorAll('#mobile-menu a').forEach(link => {
         link.addEventListener('click', closeMenu);
     });
@@ -633,7 +608,6 @@
         }
     }
 
-    // الكود عند التحميل
     document.addEventListener("DOMContentLoaded", function() {
         // الأنيميشن
         const observerOptions = {
@@ -662,7 +636,6 @@
             switchTab('consult');
         }
 
-        // تاريخ اليوم كحد أدنى
         const today = new Date().toISOString().split('T')[0];
         document.querySelectorAll('input[type="date"]').forEach(input => input.min = today);
 

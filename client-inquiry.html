@@ -41,12 +41,13 @@
             padding-top: var(--header-height);
         }
 
-        /* الهيدر */
+        /* الهيدر - مطابق لصفحة تخصصاتنا */
         .header-glass {
             background: rgba(0, 0, 0, 0.95) !important;
             backdrop-filter: blur(20px);
-            border-bottom: 2px solid var(--gold-solid);
-            box-shadow: 0 5px 30px rgba(191, 149, 63, 0.3);
+            border-bottom: 2px solid;
+            border-image: var(--gold-gradient) 1;
+            box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
             position: fixed;
             top: 0;
             width: 100%;
@@ -74,20 +75,20 @@
             transform: scale(1.05);
         }
         
-        .amiri-font {
+        .serif-font {
             font-family: 'Amiri', serif;
         }
         
         .track-case-btn { 
             background: transparent; 
-            border: 2px solid var(--gold-solid); 
-            color: white; 
+            border: 1px solid var(--gold-solid); 
+            color: #fff; 
             font-weight: 600; 
             transition: all 0.3s ease; 
         }
         .track-case-btn:hover { 
             background: var(--gold-gradient); 
-            color: #1a1a1a; 
+            color: #000; 
             border-color: transparent; 
         }
         
@@ -105,16 +106,36 @@
         
         .gold-btn { 
             background: var(--gold-gradient); 
-            color: #1a1a1a; 
+            color: #000; 
             font-weight: 800; 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            box-shadow: 0 0 20px rgba(191, 149, 63, 0.5);
+            box-shadow: 0 0 15px var(--gold-glow, rgba(191,149,63,0.4));
             border: none;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .gold-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: 0.5s;
+            z-index: 2;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
         }
         .gold-btn:hover { 
             transform: translateY(-3px); 
-            box-shadow: 0 0 30px rgba(191, 149, 63, 0.7); 
+            box-shadow: 0 0 30px var(--gold-glow, rgba(191,149,63,0.7)); 
         }
 
         /* القائمة الجانبية للموبايل */
@@ -247,11 +268,6 @@
         }
 
         /* ===== مودالات بإطار ذهبي ملكي وتأثير زجاجي محسن ===== */
-        @keyframes dropFromHeader {
-            0% { transform: translateY(-100%); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
         .modal.fade .modal-dialog {
             transition: transform 0.4s ease-out;
             transform: translateY(-100px);
@@ -408,7 +424,7 @@
 </head>
 <body>
 
-<!-- ========== الهيدر ========== -->
+<!-- ========== الهيدر المطابق لصفحة تخصصاتنا ========== -->
 <header class="fixed w-full z-[100] header-glass">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center" style="height: 100%;">
         <div class="flex items-center gap-4">
@@ -443,7 +459,7 @@
     </nav>
 </header>
 
-<!-- القائمة الجانبية للموبايل -->
+<!-- القائمة الجانبية للموبايل - مطابقة لصفحة تخصصاتنا -->
 <div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
@@ -719,7 +735,7 @@
         });
     }
 
-    // قائمة الموبايل
+    // قائمة الموبايل - نفس وظائف الصفحات الأخرى
     const mobileMenu = document.getElementById('mobile-menu');
     const menuToggle = document.getElementById('menu-toggle');
     const menuClose = document.getElementById('menu-close');

@@ -180,6 +180,28 @@
             color: var(--gold-solid);
         }
         
+        /* القائمة الجانبية (تم الإصلاح) */
+        #mobile-menu { 
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 110;
+            /* الإخفاء الافتراضي: إزاحة لليمين 100% */
+            transform: translateX(100%); 
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        #mobile-menu.active { 
+            transform: translateX(0); /* الإظهار */
+        }
+        
         /* الأنيميشن */
         .reveal-on-scroll {
             opacity: 0;
@@ -228,7 +250,7 @@
             transform: translateX(-5px);
         }
         
-        /* أيقونات الفوتر */
+        /* أيقونات الفوتر الذهبية */
         .footer-social-icon {
             width: 45px;
             height: 45px;
@@ -240,19 +262,30 @@
             transition: all 0.3s ease;
             background: rgba(0,0,0,0.5);
             text-decoration: none;
+            /* اللون الذهبي */
+            color: #bf953f;
         }
         
         .footer-social-icon i {
+            /* تطبيق تدرج ذهبي للنص داخل الأيقونة */
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .footer-social-icon:hover {
             border-color: var(--gold-solid);
-            box-shadow: 0 0 15px rgba(191, 149, 63, 0.4);
-            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
+            transform: translateY(-5px);
+            background: var(--gold-gradient);
+        }
+        
+        .footer-social-icon:hover i {
+            /* عند التحويم يصبح الرمز أسود */
+            background: none;
+            -webkit-text-fill-color: #000;
+            color: #000;
         }
 
         .hidden { display: none !important; }
@@ -416,13 +449,14 @@
                     </a>
                 </div>
 
-                <!-- أيقونات التواصل السريع -->
+                <!-- أيقونات التواصل السريع (بالألوان الأصلية لتمييزها في هذا القسم) -->
                 <div class="pt-4 border-t border-white/10">
                     <h4 class="text-white font-bold mb-4 text-sm">تابعنا على المنصات:</h4>
                     <div class="flex gap-4">
                         <a href="https://www.facebook.com/malegal" target="_blank" class="w-10 h-10 rounded-lg bg-[#1877f2]/10 text-[#1877f2] flex items-center justify-center hover:bg-[#1877f2] hover:text-white transition-all border border-[#1877f2]/20"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-[#0088cc]/10 text-[#0088cc] flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all border border-[#0088cc]/20"><i class="fab fa-telegram-plane"></i></a>
-                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10"><i class="fab fa-x-twitter"></i></a>
+                        <!-- أيقونة تويتر (العصفورة) -->
+                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10"><i class="fab fa-twitter"></i></a>
                         <a href="https://wa.me/201101076000" target="_blank" class="w-10 h-10 rounded-lg bg-[#25d366]/10 text-[#25d366] flex items-center justify-center hover:bg-[#25d366] hover:text-white transition-all border border-[#25d366]/20"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
@@ -523,12 +557,12 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر (كلها ذهبية كما طلبت) -->
+        <!-- أيقونات الفوتر (كلها ذهبية) -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://wa.me/201101076000" target="_blank" class="footer-social-icon"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
-            <!-- أيقونة X ذهبية -->
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-x-twitter"></i></a>
+            <!-- أيقونة تويتر العصفورة -->
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
             <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-telegram-plane"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>
@@ -548,7 +582,7 @@
 </footer>
 
 <script>
-    // قائمة الموبايل
+    // قائمة الموبايل (Logic Fix)
     const mobileMenu = document.getElementById('mobile-menu');
     const menuToggle = document.getElementById('menu-toggle');
     const menuClose = document.getElementById('menu-close');
@@ -570,6 +604,11 @@
     if (menuClose) {
         menuClose.addEventListener('click', closeMenu);
     }
+    
+    // إغلاق القائمة عند النقر على الروابط
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
 
     // تبديل النماذج
     function switchTab(tab) {

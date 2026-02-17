@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
     <title>تواصل معنا | محمود عبد الحميد - المحامي بالنقض والدستورية العليا</title>
+    
+    <!-- المكتبات الخارجية -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
+            /* الألوان الأساسية: كحلي ليلي عميق + ذهبي ملكي */
             --primary-dark: #020617; 
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #bf953f;
@@ -29,6 +33,7 @@
         
         .serif-font { font-family: 'Amiri', serif; }
         
+        /* تأثير النصوص الذهبية */
         .gold-text { 
             background: var(--gold-gradient); 
             -webkit-background-clip: text; 
@@ -37,6 +42,7 @@
             text-fill-color: transparent;
         }
 
+        /* روابط القائمة */
         .nav-link-gold {
             background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
             -webkit-background-clip: text;
@@ -51,6 +57,7 @@
             transform: scale(1.05);
         }
         
+        /* الأزرار الذهبية */
         .gold-btn { 
             background: var(--gold-gradient); 
             color: #000; 
@@ -88,31 +95,7 @@
             box-shadow: 0 0 30px var(--gold-glow); 
         }
 
-        .read-more-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        .read-more-btn span, .read-more-btn i {
-            background: var(--gold-gradient); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-        }
-
-        .read-more-btn:hover, .read-more-btn:active {
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
-            background: rgba(191, 149, 63, 0.05);
-        }
-        
+        /* الكروت الزجاجية */
         .card-glass { 
             background: rgba(20, 20, 30, 0.6);
             backdrop-filter: blur(10px); 
@@ -123,13 +106,7 @@
         
         .card-glass:hover { 
             border-color: rgba(191, 149, 63, 0.8); 
-            transform: translateY(-8px); 
             box-shadow: 0 15px 40px rgba(191, 149, 63, 0.1);
-        }
-        
-        .black-border-card { 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(2, 6, 23, 0.95);
         }
         
         /* الأيقونات العائمة */
@@ -151,79 +128,18 @@
             align-items: center;
             justify-content: center;
             font-size: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             transition: transform 0.3s ease;
             text-decoration: none;
             color: white;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .whatsapp-float {
-            background: #25d366;
-        }
+        .whatsapp-float { background: #25d366; }
+        .call-float { background: #0077b6; }
+        .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
         
-        .call-float {
-            background: #0077b6;
-        }
-        
-        .whatsapp-float:hover, .call-float:hover { 
-            transform: scale(1.1); 
-        }
-        
-        /* أيقونات الفوتر بألوانها الرسمية */
-        .footer-social-icon {
-            font-size: 1.5rem;
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
-            text-decoration: none;
-            margin: 0 10px;
-            display: inline-block;
-        }
-        
-        .footer-social-icon.facebook { color: #1877f2; }
-        .footer-social-icon.linkedin { color: #0a66c2; }
-        .footer-social-icon.twitter { color: #1da1f2; }
-        .footer-social-icon.telegram { color: #0088cc; }
-        .footer-social-icon.email { color: #ea4335; }
-        .footer-social-icon.whatsapp { color: #25d366; }
-        .footer-social-icon.map { color: #ea4335; }
-        
-        .footer-social-icon:hover {
-            transform: translateY(-5px);
-            text-shadow: 0 0 15px currentColor;
-        }
-        
-        /* أيقونات قسم تابعنا (بنفس الألوان) */
-        .follow-icon {
-            font-size: 2rem;
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
-            text-decoration: none;
-            margin: 0 15px;
-            display: inline-block;
-        }
-        
-        .follow-icon.facebook { color: #1877f2; }
-        .follow-icon.linkedin { color: #0a66c2; }
-        .follow-icon.twitter { color: #1da1f2; }
-        .follow-icon.telegram { color: #0088cc; }
-        .follow-icon.email { color: #ea4335; }
-        .follow-icon.whatsapp { color: #25d366; }
-        .follow-icon.map { color: #ea4335; }
-        
-        .follow-icon:hover {
-            transform: translateY(-5px);
-            text-shadow: 0 0 15px currentColor;
-        }
-        
-        #mobile-menu { 
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
-            transform: translateX(100%); 
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.98);
-        }
-        
-        #mobile-menu.active { transform: translateX(0); }
-        
-        section { scroll-margin-top: var(--header-height); position: relative; overflow: hidden; }
-        
+        /* الهيدر */
         .header-glass {
             background: rgba(0, 0, 0, 0.95) !important;
             backdrop-filter: blur(20px);
@@ -232,6 +148,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
         }
         
+        /* الخلفية الإسلامية */
         .islamic-pattern-bg {
             background-color: var(--primary-dark);
             background-image: 
@@ -240,48 +157,21 @@
             background-attachment: fixed;
         }
 
-        .gold-border {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .gold-border::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            border: 1px solid transparent;
-            border-radius: 1.5rem;
-            background: linear-gradient(135deg, #bf953f, transparent, #b38728) border-box;
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: destination-out;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-        
-        .section-spacing { padding-top: 6rem; padding-bottom: 6rem; }
-        
-        .track-case-btn { 
+        /* زر متابعة القضية وحجز الموعد */
+        .track-case-btn, .visit-btn { 
             background: transparent; 
-            border: 1px solid var(--gold-solid); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
             color: #fff; 
             font-weight: 600; 
             transition: all 0.3s ease; 
         }
         
+        .track-case-btn { border-color: var(--gold-solid); }
+        
         .track-case-btn:hover { 
             background: var(--gold-gradient); 
             color: #000; 
             border-color: transparent; 
-        }
-        
-        .visit-btn {
-            background: transparent;
-            border: 1px solid #ffffff;
-            color: #fff;
-            transition: all 0.3s ease;
         }
         
         .visit-btn:hover {
@@ -290,6 +180,7 @@
             color: var(--gold-solid);
         }
         
+        /* الأنيميشن */
         .reveal-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -301,43 +192,22 @@
             transform: translateY(0);
         }
         
+        /* التبويبات */
         .tab-btn.active {
             background: var(--gold-gradient) !important;
             color: #000 !important;
-            font-weight: 800;
+            box-shadow: 0 0 15px var(--gold-glow);
         }
         
         .tab-btn {
-            transition: all 0.3s ease;
-        }
-        
-        /* حقول الإدخال بنفس النمط الأصلي */
-        input, textarea {
             background: rgba(255,255,255,0.05);
-            color: white;
-            border: 1px solid rgba(191,149,63,0.2);
-            border-radius: 1rem;
-            padding: 1rem;
-            width: 100%;
-            outline: none;
+            color: rgba(255,255,255,0.7);
             transition: all 0.3s ease;
         }
-        
-        input:focus, textarea:focus {
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 15px rgba(191,149,63,0.3);
-        }
-        
-        input::placeholder, textarea::placeholder {
-            color: rgba(255,255,255,0.5);
-        }
-        
-        .date-placeholder::placeholder {
-            color: #9ca3af;
-        }
-        
-        .hidden {
-            display: none !important;
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+            color: white;
         }
         
         /* بطاقات معلومات الاتصال */
@@ -347,34 +217,50 @@
             gap: 15px;
             padding: 15px;
             border-radius: 1rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(191,149,63,0.1);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
-            text-decoration: none;
-            color: white;
         }
         
         .contact-info-item:hover {
             border-color: var(--gold-solid);
-            background: rgba(191,149,63,0.1);
+            background: rgba(191, 149, 63, 0.05);
             transform: translateX(-5px);
         }
         
-        .contact-info-item i {
-            font-size: 1.8rem;
-            color: var(--gold-solid);
+        /* أيقونات الفوتر */
+        .footer-social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.5);
+            text-decoration: none;
         }
+        
+        .footer-social-icon i {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.2rem;
+        }
+
+        .footer-social-icon:hover {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 15px rgba(191, 149, 63, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .hidden { display: none !important; }
 
         @media (max-width: 768px) {
             .header-glass nav { padding: 10px 15px !important; }
-            .section-spacing { padding-top: 4rem !important; padding-bottom: 4rem !important; }
             .hero-buttons { flex-direction: column; gap: 15px; }
             .hero-buttons a { width: 100%; }
-            .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
-            .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
-            .footer-social-icon { font-size: 1.3rem; margin: 0 8px; }
-            .follow-icon { font-size: 1.8rem; margin: 0 10px; }
-            .grid-cols-2 { grid-template-columns: 1fr !important; }
         }
         
         ::-webkit-scrollbar { width: 8px; }
@@ -384,7 +270,7 @@
 </head>
 <body>
 
-<!-- الأيقونات العائمة: واتساب واتصال -->
+<!-- الأيقونات العائمة -->
 <div class="contact-floating">
     <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float">
         <i class="fab fa-whatsapp"></i>
@@ -394,6 +280,7 @@
     </a>
 </div>
 
+<!-- الهيدر -->
 <header class="fixed w-full z-[100] header-glass">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center gap-4">
@@ -409,7 +296,7 @@
             <a href="index.html#why-us" class="nav-link-gold">لماذا تختارنا</a>
             <a href="index.html#testimonials" class="nav-link-gold">آراء العملاء</a>
             <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
-            <a href="contact.html" class="nav-link-gold" style="text-decoration: underline; text-decoration-color: #bf953f;">تواصل معنا</a>
+            <a href="contact.html" class="nav-link-gold" style="border-bottom: 2px solid #bf953f;">تواصل معنا</a>
             <a href="blog.html" class="nav-link-gold">المدونة</a>
             
             <div class="nav-buttons flex items-center gap-2 mr-2">
@@ -436,25 +323,17 @@
         <a href="index.html" onclick="closeMenu()" class="nav-link-gold text-xl">الرئيسية</a>
         <a href="about.html" onclick="closeMenu()" class="nav-link-gold text-xl">عن المؤسسة</a>
         <a href="index.html#why-us" onclick="closeMenu()" class="nav-link-gold text-xl">لماذا تختارنا</a>
-        <a href="index.html#testimonials" onclick="closeMenu()" class="nav-link-gold text-xl">آراء العملاء</a>
         <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-xl">تخصصاتنا</a>
         <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-xl">تواصل معنا</a>
-        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold text-xl">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">
-             تابع قضيتك
-        </a>
-        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg">
-             حجز موعد
-        </a>
-        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg">
-             طلب استشارة
-        </a>
+        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg">حجز موعد</a>
+        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg">طلب استشارة</a>
     </div>
 </div>
 
-<!-- قسم الهيرو الداخلي -->
-<section class="min-h-[40vh] flex flex-col items-center justify-center text-center px-6 pt-20 relative overflow-hidden islamic-pattern-bg">
+<!-- الهيرو -->
+<section class="min-h-[40vh] flex flex-col items-center justify-center text-center px-6 pt-32 pb-10 relative overflow-hidden islamic-pattern-bg">
     <div class="section-content relative z-10 max-w-5xl mx-auto reveal-on-scroll">
         <div class="inline-block mb-6 relative">
             <span class="block gold-text text-xs sm:text-sm font-black tracking-[0.3em] uppercase relative z-10">
@@ -463,98 +342,180 @@
             <div class="h-px w-full bg-gradient-to-r from-transparent via-gold-solid to-transparent absolute bottom-[-10px]"></div>
         </div>
         
-        <h1 class="mb-6">
+        <h1 class="mb-4">
             <span class="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl 
                         font-black serif-font gold-text leading-tight tracking-wide drop-shadow-2xl">
                 تواصل معنا
             </span>
         </h1>
-        
-        <!-- الجملة الترحيبية كما في الكود الأصلي -->
-        <p class="text-xl text-white/80 mt-4">نحن على بعد خطوة واحدة منك .. اختر طريقة التواصل المناسبة</p>
+        <p class="text-xl text-white/80 mt-4 max-w-2xl mx-auto">
+            نحن هنا للاستماع إليك والدفاع عن حقوقك. اختر الطريقة الأنسب للتواصل معنا.
+        </p>
     </div>
 </section>
 
-<!-- محتوى صفحة التواصل -->
-<section class="py-20 md:py-24 px-6 max-w-7xl mx-auto">
-    
-    <!-- معلومات الاتصال (تواصل) مع العنوان الجديد -->
-    <div class="grid md:grid-cols-3 gap-6 mb-16 reveal-on-scroll">
-        <!-- العنوان (محدث) -->
-        <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="contact-info-item">
-            <i class="fas fa-map-marker-alt"></i>
-            <div class="flex flex-col">
-                <span class="text-sm text-gold-solid font-bold">العنوان</span>
-                <span class="text-white/90 text-sm">شارع كسر الحجر المتفرع من شارع كورنيش النيل أمام مجمع المحاكم ، اسوان</span>
-            </div>
-        </a>
+<!-- محتوى الصفحة (التقسيم الشبكي الجديد) -->
+<section class="py-16 md:py-20 px-6 relative z-10">
+    <div class="max-w-7xl mx-auto">
         
-        <!-- رقم الهاتف -->
-        <a href="tel:+201101076000" class="contact-info-item">
-            <i class="fas fa-phone-alt"></i>
-            <div class="flex flex-col">
-                <span class="text-sm text-gold-solid font-bold">الهاتف</span>
-                <span class="text-white/90">+20 110 107 6000</span>
+        <div class="grid lg:grid-cols-12 gap-12 items-start">
+            
+            <!-- العمود الأيمن: معلومات الاتصال + الخريطة -->
+            <div class="lg:col-span-5 space-y-8 reveal-on-scroll">
+                
+                <div class="mb-2">
+                    <h3 class="text-3xl font-bold gold-text serif-font mb-2">بيانات التواصل</h3>
+                    <p class="text-gray-400">تفضل بزيارتنا أو الاتصال بنا في أوقات العمل الرسمية</p>
+                </div>
+
+                <!-- كروت المعلومات -->
+                <div class="space-y-4">
+                    <div class="contact-info-item group">
+                        <div class="w-12 h-12 rounded-full border border-gold-solid/30 flex items-center justify-center group-hover:bg-gold-solid group-hover:text-black transition-all duration-300 flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-xl text-gold-solid group-hover:text-black"></i>
+                        </div>
+                        <div>
+                            <span class="block text-gold-solid font-bold text-sm mb-1">العنوان</span>
+                            <p class="text-gray-300 text-sm leading-relaxed">شارع كسر الحجر، المتفرع من شارع كورنيش النيل، أمام مجمع المحاكم، أسوان</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item group">
+                        <div class="w-12 h-12 rounded-full border border-gold-solid/30 flex items-center justify-center group-hover:bg-gold-solid group-hover:text-black transition-all duration-300 flex-shrink-0">
+                            <i class="fas fa-phone-alt text-xl text-gold-solid group-hover:text-black"></i>
+                        </div>
+                        <div>
+                            <span class="block text-gold-solid font-bold text-sm mb-1">الهاتف والواتساب</span>
+                            <p class="text-gray-300 text-sm ltr" style="direction: ltr;">+20 110 107 6000</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item group">
+                        <div class="w-12 h-12 rounded-full border border-gold-solid/30 flex items-center justify-center group-hover:bg-gold-solid group-hover:text-black transition-all duration-300 flex-shrink-0">
+                            <i class="fas fa-clock text-xl text-gold-solid group-hover:text-black"></i>
+                        </div>
+                        <div>
+                            <span class="block text-gold-solid font-bold text-sm mb-1">ساعات العمل</span>
+                            <p class="text-gray-300 text-sm">السبت - الخميس: ٩:٠٠ ص - ١٠:٠٠ م</p>
+                            <p class="text-gray-500 text-xs mt-1">الجمعة: مغلق</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الخريطة المضمنة (Dark Mode) -->
+                <div class="rounded-2xl overflow-hidden border border-gold-solid/20 h-64 w-full relative group shadow-2xl">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3642.4!2d32.9!3d24.09!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDA1JzMxLjIiTiAzMsKwNTMnNDkuMiJF!5e0!3m2!1sen!2seg!4v1600000000000!5m2!1sen!2seg" 
+                        width="100%" height="100%" style="border:0; filter: grayscale(100%) invert(90%) contrast(85%);" 
+                        allowfullscreen="" loading="lazy">
+                    </iframe>
+                    <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-all flex items-center justify-center">
+                        <span class="bg-gold-solid text-black px-4 py-2 rounded-lg font-bold opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-4 group-hover:translate-y-0 shadow-lg">
+                            <i class="fas fa-external-link-alt mr-2"></i> فتح في Google Maps
+                        </span>
+                    </a>
+                </div>
+
+                <!-- أيقونات التواصل السريع -->
+                <div class="pt-4 border-t border-white/10">
+                    <h4 class="text-white font-bold mb-4 text-sm">تابعنا على المنصات:</h4>
+                    <div class="flex gap-4">
+                        <a href="https://www.facebook.com/malegal" target="_blank" class="w-10 h-10 rounded-lg bg-[#1877f2]/10 text-[#1877f2] flex items-center justify-center hover:bg-[#1877f2] hover:text-white transition-all border border-[#1877f2]/20"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-[#0088cc]/10 text-[#0088cc] flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all border border-[#0088cc]/20"><i class="fab fa-telegram-plane"></i></a>
+                        <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-black hover:text-white hover:border-white transition-all border border-white/10"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://wa.me/201101076000" target="_blank" class="w-10 h-10 rounded-lg bg-[#25d366]/10 text-[#25d366] flex items-center justify-center hover:bg-[#25d366] hover:text-white transition-all border border-[#25d366]/20"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
             </div>
-        </a>
-        
-        <!-- البريد الإلكتروني -->
-        <a href="mailto:ma.law.firm@outlook.com" class="contact-info-item">
-            <i class="fas fa-envelope"></i>
-            <div class="flex flex-col">
-                <span class="text-sm text-gold-solid font-bold">البريد الإلكتروني</span>
-                <span class="text-white/90">ma.law.firm@outlook.com</span>
+
+            <!-- العمود الأيسر: النماذج -->
+            <div class="lg:col-span-7 reveal-on-scroll" style="transition-delay: 200ms;">
+                <div class="card-glass p-1 md:p-8 border-t-4 border-gold-solid h-full relative overflow-hidden">
+                    <!-- خلفية جمالية خفيفة داخل الكارت -->
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gold-solid/5 to-transparent pointer-events-none"></div>
+                    
+                    <div class="relative z-10 p-4">
+                        <!-- أزرار التبويب -->
+                        <div class="flex bg-black/40 p-1.5 rounded-xl mb-8 border border-white/5">
+                            <button onclick="switchTab('consult')" id="btn-consult" class="tab-btn active flex-1 py-3 rounded-lg font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-comment-dots"></i> استشارة سريعة
+                            </button>
+                            <button onclick="switchTab('visit')" id="btn-visit" class="tab-btn flex-1 py-3 rounded-lg font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-calendar-check"></i> حجز موعد
+                            </button>
+                        </div>
+
+                        <!-- نموذج الاستشارة -->
+                        <div id="consult-form" class="space-y-6">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-white">طلب استشارة قانونية</h3>
+                                <p class="text-gray-400 text-sm mt-2">املأ النموذج وسيتم تحويلك مباشرة للواتساب للرد الفوري</p>
+                            </div>
+                            <form id="consultForm" class="space-y-5">
+                                <div class="grid md:grid-cols-2 gap-5">
+                                    <div class="space-y-2">
+                                        <label class="text-xs text-gold-solid font-bold mr-2">الاسم بالكامل</label>
+                                        <input type="text" id="consultName" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-gold-solid focus:ring-1 focus:ring-gold-solid transition-all outline-none" placeholder="الاسم ثلاثي..." required>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs text-gold-solid font-bold mr-2">رقم الهاتف / الواتساب</label>
+                                        <input type="tel" id="consultPhone" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-gold-solid focus:ring-1 focus:ring-gold-solid transition-all outline-none" placeholder="01xxxxxxxxx" required>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs text-gold-solid font-bold mr-2">تفاصيل الاستشارة</label>
+                                    <textarea id="consultMessage" rows="5" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-gold-solid focus:ring-1 focus:ring-gold-solid transition-all outline-none" placeholder="يرجى كتابة ملخص للقضية أو الاستفسار..." required></textarea>
+                                </div>
+                                <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black shadow-lg hover:shadow-gold-solid/20 flex items-center justify-center gap-3">
+                                    <span>إرسال الاستشارة</span>
+                                    <i class="fab fa-whatsapp text-xl"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- نموذج الحجز -->
+                        <div id="visit-form" class="space-y-6 hidden">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-white">حجز موعد في المكتب</h3>
+                                <p class="text-gray-400 text-sm mt-2">ناقش قضيتك وجهاً لوجه مع الأستاذ محمود عبد الحميد</p>
+                            </div>
+                            <form id="visitForm" class="space-y-5">
+                                <div class="space-y-2">
+                                    <label class="text-xs text-gold-solid font-bold mr-2">الاسم بالكامل</label>
+                                    <input type="text" id="visitName" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-gold-solid transition-all outline-none" required>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-5">
+                                    <div class="space-y-2">
+                                        <label class="text-xs text-gold-solid font-bold mr-2">رقم الهاتف</label>
+                                        <input type="tel" id="visitPhone" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-gold-solid transition-all outline-none" required>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs text-gold-solid font-bold mr-2">تاريخ المقابلة المفضل</label>
+                                        <input type="date" id="visitDate" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-gold-solid transition-all outline-none" required>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs text-gold-solid font-bold mr-2">سبب الزيارة</label>
+                                    <textarea id="visitReason" rows="3" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-gold-solid transition-all outline-none" placeholder="استشارة بخصوص قضية..." required></textarea>
+                                </div>
+                                <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black shadow-lg hover:shadow-gold-solid/20 flex items-center justify-center gap-3">
+                                    <span>تأكيد طلب الحجز</span>
+                                    <i class="fas fa-calendar-check"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        </a>
-    </div>
-    
-    <!-- قسم تابعنا (مع إضافة تيلجرام) -->
-    <div class="text-center mb-16 reveal-on-scroll">
-        <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-8">تابعنا</h2>
-        <div class="flex justify-center gap-6 flex-wrap">
-            <a href="https://wa.me/201101076000" target="_blank" class="follow-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://www.facebook.com/malegal" target="_blank" class="follow-icon facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="follow-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="follow-icon twitter"><i class="fab fa-twitter"></i></a>
-            <!-- أيقونة تيلجرام (يمكن إزالتها بسهولة) -->
-            <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="follow-icon telegram"><i class="fab fa-telegram-plane"></i></a>
-            <a href="mailto:ma.law.firm@outlook.com" class="follow-icon email"><i class="fas fa-envelope"></i></a>
-            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="follow-icon map"><i class="fas fa-map-marker-alt"></i></a>
+
         </div>
     </div>
-
-    <!-- أزرار التبويب -->
-    <div class="bg-white/5 p-2 rounded-2xl mb-12 max-w-2xl mx-auto reveal-on-scroll">
-        <button onclick="switchTab('consult')" id="btn-consult" class="tab-btn active flex-1 py-4 rounded-xl font-bold text-white transition-all">طلب استشارة قانونية</button>
-        <button onclick="switchTab('visit')" id="btn-visit" class="tab-btn flex-1 py-4 rounded-xl font-bold text-white transition-all">حجز موعد مقابلة</button>
-    </div>
-
-    <!-- نموذج الاستشارة (نفس الحقول الأصلية) -->
-    <div id="consult-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border max-w-2xl mx-auto reveal-on-scroll">
-        <h3 class="text-2xl font-bold gold-text mb-6">نموذج الاستشارة السريعة</h3>
-        <form id="consultForm" class="space-y-6">
-            <input type="text" id="consultName" placeholder="الاسم بالكامل" required>
-            <input type="tel" id="consultPhone" placeholder="رقم الواتساب" required>
-            <textarea id="consultMessage" placeholder="اشرح استشارتك باختصار.." rows="5" required></textarea>
-            <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال عبر واتساب</button>
-        </form>
-    </div>
-
-    <!-- نموذج حجز موعد (نفس الحقول الأصلية) -->
-    <div id="visit-form" class="card-glass p-10 border-t-4 border-gold-solid gold-border max-w-2xl mx-auto hidden reveal-on-scroll">
-        <h3 class="text-2xl font-bold gold-text mb-6">حجز موعد في المكتب</h3>
-        <form id="visitForm" class="space-y-6">
-            <input type="text" id="visitName" placeholder="الاسم بالكامل" required>
-            <input type="tel" id="visitPhone" placeholder="رقم الهاتف" required>
-            <input type="date" id="visitDate" class="date-placeholder" required>
-            <textarea id="visitReason" placeholder="سبب المقابلة" rows="3" required></textarea>
-            <button type="submit" class="gold-btn w-full py-4 rounded-xl text-lg font-black">إرسال طلب الحجز</button>
-        </form>
-    </div>
 </section>
 
-<!-- الفوتر المطابق لباقي الصفحات (مع إضافة تيلجرام) -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#020617] text-center relative">
+<!-- الفوتر -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
             <img src="logo.png" alt="شعار المؤسسة" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90 hover:opacity-100 transition">
@@ -562,15 +523,16 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر مع إضافة تيلجرام -->
+        <!-- أيقونات الفوتر (كلها ذهبية كما طلبت) -->
         <div class="flex justify-center gap-6 mb-10">
-            <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon twitter"><i class="fab fa-twitter"></i></a>
-            <!-- أيقونة تيلجرام في الفوتر -->
-            <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon telegram"><i class="fab fa-telegram-plane"></i></a>
-            <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon email"><i class="fas fa-envelope"></i></a>
-            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="footer-social-icon map"><i class="fas fa-map-marker-alt"></i></a>
+            <a href="https://wa.me/201101076000" target="_blank" class="footer-social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
+            <!-- أيقونة X ذهبية -->
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-telegram-plane"></i></a>
+            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>
+            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="footer-social-icon"><i class="fas fa-map-marker-alt"></i></a>
         </div>
         
         <div class="flex flex-wrap gap-x-8 gap-y-4 justify-center text-sm text-gray-400 mb-8 font-bold">
@@ -586,6 +548,7 @@
 </footer>
 
 <script>
+    // قائمة الموبايل
     const mobileMenu = document.getElementById('mobile-menu');
     const menuToggle = document.getElementById('menu-toggle');
     const menuClose = document.getElementById('menu-close');
@@ -608,7 +571,7 @@
         menuClose.addEventListener('click', closeMenu);
     }
 
-    // دوال التبويب
+    // تبديل النماذج
     function switchTab(tab) {
         const consultForm = document.getElementById('consult-form');
         const visitForm = document.getElementById('visit-form');
@@ -628,9 +591,9 @@
         }
     }
 
-    // تحديد التبويب بناءً على معامل ?tab= في الرابط
-    window.addEventListener('DOMContentLoaded', function() {
-        // أنيميشن الظهور
+    // الكود عند التحميل
+    document.addEventListener("DOMContentLoaded", function() {
+        // الأنيميشن
         const observerOptions = {
             threshold: 0.1,
             rootMargin: "0px 0px -50px 0px"
@@ -648,7 +611,7 @@
         const elements = document.querySelectorAll('.reveal-on-scroll');
         elements.forEach(el => observer.observe(el));
         
-        // التبويب
+        // التعامل مع روابط التبويب الخارجية
         const urlParams = new URLSearchParams(window.location.search);
         const tabParam = urlParams.get('tab');
         if (tabParam === 'visit') {
@@ -657,17 +620,17 @@
             switchTab('consult');
         }
 
-        // تعيين الحد الأدنى للتاريخ
+        // تاريخ اليوم كحد أدنى
         const today = new Date().toISOString().split('T')[0];
         document.querySelectorAll('input[type="date"]').forEach(input => input.min = today);
 
-        // نماذج واتساب (نفس الكود الأصلي مع تحسين بسيط)
+        // إرسال النماذج للواتساب
         document.getElementById('consultForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('consultName').value;
             const phone = document.getElementById('consultPhone').value;
             const message = document.getElementById('consultMessage').value;
-            const msg = `طلب استشارة من: ${name}%0Aالواتساب: ${phone}%0Aالرسالة: ${message}`;
+            const msg = `*طلب استشارة قانونية*%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالتفاصيل: ${message}`;
             window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
         });
 
@@ -677,7 +640,7 @@
             const phone = document.getElementById('visitPhone').value;
             const date = document.getElementById('visitDate').value;
             const reason = document.getElementById('visitReason').value;
-            const msg = `طلب حجز موعد من: ${name}%0Aالهاتف: ${phone}%0Aالتاريخ: ${date}%0Aالسبب: ${reason}`;
+            const msg = `*طلب حجز موعد*%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالتاريخ المفضل: ${date}%0Aسبب الزيارة: ${reason}`;
             window.open(`https://wa.me/201101076000?text=${msg}`, '_blank');
         });
     });

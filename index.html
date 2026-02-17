@@ -315,7 +315,7 @@
             .hero-buttons a { width: 100%; }
             .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
             .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
-            .footer-social-icon { width: 40px; height: 40px; font-size: 1.1rem; } /* تصغير للموبايل */
+            .footer-social-icon { width: 40px; height: 40px; font-size: 1.1rem; }
         }
         
         #why-us { background: #01040f !important; }
@@ -439,7 +439,7 @@
     </div>
 </section>
 
-<!-- قسم نبذة عن المكتب مع العداد -->
+<!-- قسم نبذة عن المكتب مع العداد (تم إزالة العداد من هنا) -->
 <section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -453,16 +453,7 @@
                 <p class="text-white text-lg leading-loose text-justify opacity-90">
                     منذ تأسيس مؤسسة محمود عبد الحميد للمحاماة، ونحن نضع نصب أعيننا هدفاً واحداً: تقديم خدمات قانونية استثنائية ترتقي لمستوى توقعات موكلينا. بفضل خبرة تمتد لأكثر من عقدين، نمتلك المعرفة العميقة والرؤية الثاقبة للتعامل مع أعقد القضايا أمام محاكم النقض والدستورية.
                 </p>
-                <div class="grid grid-cols-2 gap-6 border-t border-white/10 pt-6">
-                    <div>
-                        <span class="block text-4xl font-bold gold-text mb-1 serif-font" id="years-counter">0</span>
-                        <span class="text-sm text-gray-400">عاماً من الخبرة</span>
-                    </div>
-                    <div>
-                        <span class="block text-4xl font-bold gold-text mb-1 serif-font" id="cases-counter">0</span>
-                        <span class="text-sm text-gray-400">قضية ناجحة</span>
-                    </div>
-                </div>
+                <!-- تم إزالة العداد من هنا -->
                 <a href="about.html" class="read-more-btn mt-6 group">
                     <span>اقرأ المزيد عن المؤسسة</span>
                     <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
@@ -484,7 +475,7 @@
             <div class="w-24 h-1 bg-gold-solid mx-auto rounded-full"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- الكروت الستة (كما هي) -->
+            <!-- الكروت الستة الأساسية (كما هي) -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-gavel text-3xl gold-text"></i>
@@ -506,21 +497,46 @@
                 <h3 class="text-2xl font-bold text-white mb-4">النزاهة والشفافية</h3>
                 <p class="text-white opacity-80 leading-relaxed">نشاركك تفاصيل قضيتك بكل أمانة، ونقدم المشورة الصادقة بعيداً عن الوعود الزائفة.</p>
             </div>
+            <!-- بطاقة خبرة عملية تجاوزت (جديدة) -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
+                <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
+                    <i class="fas fa-chart-line text-3xl gold-text"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">خبرة عملية تجاوزت</h3>
+                <div class="flex items-baseline justify-center gap-1">
+                    <span class="block text-5xl font-bold gold-text mb-1 serif-font" id="exp-years-counter">0</span>
+                    <span class="text-2xl gold-text">+</span>
+                </div>
+                <p class="text-white opacity-80 text-center">عاماً من الخبرة في المحاماة</p>
+            </div>
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 100ms;">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-clock text-3xl gold-text"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-4">سرعة ودقة الإنجاز</h3>
                 <p class="text-white opacity-80 leading-relaxed">نقدر قيمة الوقت، لذا نعمل بمنهجية منظمة لضمان سير الإجراءات دون أي تأخير غير مبرر.</p>
             </div>
-            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 100ms;">
+            <!-- بطاقة أكثر من +1500 ملف قانوني (جديدة) -->
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 200ms;">
+                <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
+                    <i class="fas fa-briefcase text-3xl gold-text"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">ملفات قانونية ناجحة</h3>
+                <div class="flex items-baseline justify-center gap-1">
+                    <span class="block text-5xl font-bold gold-text mb-1 serif-font" id="cases-success-counter">0</span>
+                    <span class="text-2xl gold-text">+</span>
+                </div>
+                <p class="text-white opacity-80 text-center">ملفاً تعاملنا معه باحتراف</p>
+            </div>
+            <!-- بقية البطاقات -->
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-shield-alt text-3xl gold-text"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-white mb-4">سرية تامة للمعلومات</h3>
                 <p class="text-white opacity-80 leading-relaxed">نلتزم بأعلى معايير السرية المهنية لحماية خصوصية موكلينا وبياناتهم الحساسة.</p>
             </div>
-            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 200ms;">
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 100ms;">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-users text-3xl gold-text"></i>
                 </div>
@@ -695,44 +711,45 @@
         const elements = document.querySelectorAll('.reveal-on-scroll');
         elements.forEach(el => observer.observe(el));
         
-        // عداد الخبرة والقضايا
-        const yearsElement = document.getElementById('years-counter');
-        const casesElement = document.getElementById('cases-counter');
+        // عداد الخبرة (22 عاماً)
+        const expYearsElement = document.getElementById('exp-years-counter');
+        // عداد القضايا الناجحة (1500 ملف)
+        const casesSuccessElement = document.getElementById('cases-success-counter');
         
-        if (yearsElement && casesElement) {
-            const yearsTarget = 22;
-            const casesTarget = 2000;
-            let yearsCounted = false;
-            let casesCounted = false;
+        if (expYearsElement && casesSuccessElement) {
+            const expYearsTarget = 22;
+            const casesSuccessTarget = 1500;
+            let expYearsCounted = false;
+            let casesSuccessCounted = false;
             
             const counterObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         // بدء عد الخبرة
-                        if (!yearsCounted) {
-                            yearsCounted = true;
+                        if (!expYearsCounted) {
+                            expYearsCounted = true;
                             let current = 0;
                             const increment = 1;
                             const timer = setInterval(() => {
                                 current += increment;
-                                yearsElement.textContent = current;
-                                if (current >= yearsTarget) {
-                                    yearsElement.textContent = yearsTarget;
+                                expYearsElement.textContent = current;
+                                if (current >= expYearsTarget) {
+                                    expYearsElement.textContent = expYearsTarget;
                                     clearInterval(timer);
                                 }
                             }, 50);
                         }
                         
                         // بدء عد القضايا
-                        if (!casesCounted) {
-                            casesCounted = true;
+                        if (!casesSuccessCounted) {
+                            casesSuccessCounted = true;
                             let current = 0;
                             const increment = 10;
                             const timer = setInterval(() => {
                                 current += increment;
-                                casesElement.textContent = current;
-                                if (current >= casesTarget) {
-                                    casesElement.textContent = casesTarget;
+                                casesSuccessElement.textContent = current;
+                                if (current >= casesSuccessTarget) {
+                                    casesSuccessElement.textContent = casesSuccessTarget;
                                     clearInterval(timer);
                                 }
                             }, 20);
@@ -743,8 +760,8 @@
                 });
             }, { threshold: 0.3 });
             
-            counterObserver.observe(yearsElement);
-            counterObserver.observe(casesElement);
+            counterObserver.observe(expYearsElement);
+            counterObserver.observe(casesSuccessElement);
         }
     });
 </script>

@@ -12,39 +12,37 @@
             --primary-dark: #020617; 
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #bf953f;
+            --gold-glow: rgba(191, 149, 63, 0.4);
         }
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--primary-dark); color: #ffffff; scroll-behavior: smooth; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--primary-dark); color: #ffffff; scroll-behavior: smooth; overflow-x: hidden; }
         .serif-font { font-family: 'Amiri', serif; }
         .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .header-glass { background: rgba(0, 0, 0, 0.95) !important; backdrop-filter: blur(20px); border-bottom: 2px solid; border-image: var(--gold-gradient) 1; }
-        .nav-link-gold { background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
-        .gold-btn { background: var(--gold-gradient); color: #000; font-weight: 800; transition: 0.4s; }
+        .header-glass { background: rgba(0, 0, 0, 0.95) !important; backdrop-filter: blur(20px); border-bottom: 2px solid; border-image: var(--gold-gradient) 1; box-shadow: 0 10px 30px rgba(0,0,0, 0.8); }
+        .nav-link-gold { background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; transition: all 0.3s ease; }
+        .gold-btn { background: var(--gold-gradient); color: #000; font-weight: 800; transition: 0.4s; box-shadow: 0 0 15px var(--gold-glow); }
         
-        /* الأزرار العائمة */
+        /* الأيقونات العائمة */
         .contact-floating { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
-        .whatsapp-float, .call-float { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; color: white; }
+        .whatsapp-float, .call-float { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; color: white; }
         .whatsapp-float { background: #25d366; } .call-float { background: #0077b6; }
-        .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
-
+        
         /* الفوتر الذهبي الملكي */
-        .footer-social-icon {
-            width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--gold-solid);
-            display: flex; align-items: center; justify-content: center; transition: 0.3s;
-            background: transparent; color: var(--gold-solid);
-        }
-        .footer-social-icon:hover { 
-            background: var(--gold-gradient); color: #000; 
-            box-shadow: 0 0 15px var(--gold-solid); transform: translateY(-3px);
-        }
+        .footer-social-icon { width: 45px; height: 45px; border-radius: 50%; border: 1px solid rgba(191, 149, 63, 0.3); display: flex; align-items: center; justify-content: center; transition: 0.3s; background: rgba(0,0,0,0.5); color: #bf953f; }
+        .footer-social-icon i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .footer-social-icon:hover { border-color: var(--gold-solid); transform: translateY(-5px); background: var(--gold-gradient); }
+        .footer-social-icon:hover i { -webkit-text-fill-color: #000; }
+
+        /* القائمة الجانبية */
+        #mobile-menu { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); z-index: 110; transform: translateX(100%); transition: 0.4s; display: flex; flex-direction: column; justify-content: center; }
+        #mobile-menu.active { transform: translateX(0); }
 
         .card-glass { background: rgba(20, 20, 30, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(191, 149, 63, 0.2); border-radius: 1.5rem; transition: 0.4s; }
-        .card-glass:hover { border-color: var(--gold-solid); transform: translateY(-5px); }
-        .islamic-pattern-bg { background-image: linear-gradient(rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.9)), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23bf953f' fill-opacity='0.05'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10z' /%3E%3C/g%3E%3C/svg%3E"); }
+        .islamic-pattern-bg { background-image: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10z' /%3E%3C/g%3E%3C/svg%3E"); }
     </style>
 </head>
 <body>
 
-<!-- الأزرار العائمة -->
+<!-- الأيقونات العائمة -->
 <div class="contact-floating">
     <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
     <a href="tel:+201101076000" class="call-float"><i class="fas fa-phone-alt"></i></a>
@@ -53,25 +51,38 @@
 <!-- الهيدر الموحد -->
 <header class="fixed w-full z-[100] header-glass">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <img src="logo.png" alt="شعار" class="w-16 h-16 object-contain">
+        <div class="flex items-center gap-4">
+            <img src="logo.png" alt="شعار" class="w-20 h-20 object-contain">
             <div class="flex flex-col leading-tight">
-                <h1 class="font-bold gold-text serif-font text-2xl">محمود عبد الحميد</h1>
-                <p class="text-gray-300 text-[11px]">المحامي بالنقض والدستورية العليا</p>
+                <h1 class="font-bold gold-text serif-font text-[28px]">محمود عبد الحميد</h1>
+                <p class="text-gray-300 font-medium text-[13px]">المحامي بالنقض والدستورية العليا</p>
             </div>
         </div>
-        <div class="hidden lg:flex items-center gap-6 font-bold text-sm">
+        <div class="hidden xl:flex items-center gap-6 font-bold text-sm">
             <a href="index.html" class="nav-link-gold">الرئيسية</a>
             <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
             <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
             <a href="blog.html" class="nav-link-gold border-b-2 border-gold-solid">المدونة</a>
-            <a href="contact.html" class="gold-btn px-4 py-2 rounded-lg text-[12px]">طلب استشارة</a>
+            <a href="contact.html" class="gold-btn px-4 py-2 rounded-lg text-xs shadow-lg">طلب استشارة</a>
         </div>
+        <button id="menu-toggle" class="xl:hidden text-2xl gold-text"><i class="fas fa-bars-staggered"></i></button>
     </nav>
 </header>
 
+<!-- القائمة الجانبية (الموبايل) -->
+<div id="mobile-menu">
+    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text"><i class="fas fa-times"></i></button>
+    <div class="flex flex-col gap-6 text-2xl font-bold text-center">
+        <a href="index.html" class="nav-link-gold">الرئيسية</a>
+        <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
+        <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
+        <a href="blog.html" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">المدونة</a>
+        <a href="contact.html" class="gold-btn py-3 rounded-xl mx-10 text-lg">طلب استشارة</a>
+    </div>
+</div>
+
 <section class="min-h-[45vh] flex flex-col items-center justify-center text-center px-6 pt-32 islamic-pattern-bg">
-    <span class="gold-text uppercase tracking-[0.4em] font-black text-sm mb-2">Legal Blog</span>
+    <span class="gold-text uppercase tracking-[0.4em] font-black text-xs mb-2">Legal Blog</span>
     <h1 class="text-5xl md:text-7xl font-black serif-font gold-text">المدونة القانونية</h1>
     <p class="text-white/60 mt-4 max-w-xl text-lg italic">نحو نشر الوعي القانوني بأسلوب علمي رصين</p>
 </section>
@@ -98,6 +109,12 @@
 </footer>
 
 <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.onclick = () => mobileMenu.classList.add('active');
+    menuClose.onclick = () => mobileMenu.classList.remove('active');
+
     async function loadBlog() {
         const grid = document.getElementById('blog-grid');
         const owner = "malegal"; const repo = "mahmoud-legal"; const path = "blog/articles";
@@ -109,7 +126,7 @@
                 const slug = file.name.replace('.md', '');
                 const title = decodeURIComponent(slug.replace(/-/g, ' '));
                 grid.innerHTML += `
-                    <div class="card-glass p-8 flex flex-col h-full text-right">
+                    <div class="card-glass p-8 flex flex-col h-full text-right border-gold-solid/20 border group hover:border-gold-solid transition">
                         <div class="gold-text font-bold text-[10px] mb-4 uppercase tracking-tighter">دراسة قانونية</div>
                         <h3 class="text-xl font-bold mb-6 serif-font leading-relaxed flex-grow line-clamp-2">${title}</h3>
                         <a href="article.html?slug=${slug}" class="gold-btn w-full block text-center py-3 rounded-lg text-[12px]">استعراض الدراسة</a>

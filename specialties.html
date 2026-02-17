@@ -523,15 +523,15 @@
                 <!-- سيتم ملء القائمة بالجافاسكربت -->
             </ul>
             
-            <!-- زر طلب استشارة (سيتم تحديث الرابط ديناميكيًا) -->
-            <a id="consult-request-btn" href="contact.html?tab=consult" class="gold-btn w-full py-4 rounded-xl text-lg font-black block text-center">
+            <!-- تم تعديل الرابط هنا ليوجه إلى تبويب الاستشارة -->
+            <a href="contact.html?tab=consult" class="gold-btn w-full py-4 rounded-xl text-lg font-black block text-center">
                 طلب استشارة في هذا التخصص
             </a>
         </div>
     </div>
 </div>
 
-<!-- الفوتر الموحد (مطابق لصفحة تواصل معنا) -->
+<!-- الفوتر الموحد (تم حذف واتساب) -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -541,6 +541,7 @@
         </div>
         
         <div class="flex justify-center gap-6 mb-10">
+            <!-- تم حذف أيقونة واتساب من هنا -->
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تويتر"><i class="fab fa-twitter"></i></a>
             <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تليجرام"><i class="fab fa-telegram-plane"></i></a>
@@ -684,7 +685,6 @@
     const modalIcon = document.getElementById('modal-icon');
     const modalDesc = document.getElementById('modal-desc');
     const modalServices = document.getElementById('modal-services');
-    const consultBtn = document.getElementById('consult-request-btn'); // زر طلب الاستشارة
 
     // فتح المودال عند الضغط على البطاقة
     cards.forEach(card => {
@@ -705,10 +705,6 @@
                     li.textContent = service;
                     modalServices.appendChild(li);
                 });
-                
-                // تحديث رابط زر طلب الاستشارة ليشمل التخصص
-                const specialtyNameEncoded = encodeURIComponent(data.title);
-                consultBtn.href = `contact.html?tab=consult&specialty=${specialtyNameEncoded}`;
                 
                 // إظهار المودال
                 modal.classList.add('active');

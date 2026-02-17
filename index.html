@@ -169,9 +169,9 @@
             transform: scale(1.1); 
         }
         
-        /* أيقونات الفوتر بألوانها الرسمية - بدون خلفيات دائرية */
+        /* أيقونات الفوتر بألوانها الرسمية - مصغرة قليلاً */
         .footer-social-icon {
-            font-size: 1.8rem;  /* حجم مناسب */
+            font-size: 1.5rem;  /* تم التصغير من 1.8rem إلى 1.5rem */
             transition: transform 0.3s ease, text-shadow 0.3s ease;
             text-decoration: none;
             margin: 0 10px;
@@ -180,7 +180,7 @@
         
         .footer-social-icon.facebook { color: #1877f2; }      /* فيسبوك أزرق */
         .footer-social-icon.linkedin { color: #0a66c2; }      /* لينكد إن أزرق */
-        .footer-social-icon.twitter { color: #ffffff; }       /* تويتر أبيض (X) */
+        .footer-social-icon.twitter { color: #1da1f2; }       /* تويتر أزرق فاتح (لون الطائر) */
         .footer-social-icon.email { color: #ea4335; }         /* إيميل أحمر */
         
         .footer-social-icon:hover {
@@ -299,7 +299,7 @@
             .hero-buttons a { width: 100%; }
             .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
             .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
-            .footer-social-icon { font-size: 2rem; margin: 0 8px; } /* تكبير قليلاً للموبايل */
+            .footer-social-icon { font-size: 1.3rem; margin: 0 8px; } /* تصغير إضافي للموبايل */
         }
         
         #why-us { background: #01040f !important; }
@@ -423,7 +423,7 @@
     </div>
 </section>
 
-<!-- بقية الأقسام (نبذة، لماذا تختارنا، آراء العملاء، خدمات) -->
+<!-- قسم نبذة عن المكتب مع العداد -->
 <section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -439,11 +439,11 @@
                 </p>
                 <div class="grid grid-cols-2 gap-6 border-t border-white/10 pt-6">
                     <div>
-                        <span class="block text-4xl font-bold gold-text mb-1 serif-font">+22</span>
+                        <span class="block text-4xl font-bold gold-text mb-1 serif-font" id="years-counter">0</span>
                         <span class="text-sm text-gray-400">عاماً من الخبرة</span>
                     </div>
                     <div>
-                        <span class="block text-4xl font-bold gold-text mb-1 serif-font">+1000</span>
+                        <span class="block text-4xl font-bold gold-text mb-1 serif-font" id="cases-counter">0</span>
                         <span class="text-sm text-gray-400">قضية ناجحة</span>
                     </div>
                 </div>
@@ -605,7 +605,7 @@
     </div>
 </section>
 
-<!-- الفوتر بلون كحلي غامق عميق (بدلاً من الأسود) مع حد ذهبي رفيع -->
+<!-- الفوتر بلون كحلي غامق عميق مع أيقونات مصغرة وأيقونة تويتر القديمة -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#020617] text-center relative">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -614,11 +614,11 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر بألوانها الرسمية - بدون خلفيات دائرية -->
+        <!-- أيقونات الفوتر بألوانها الرسمية - مصغرة وبأيقونة تويتر القديمة (الطائر) -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon twitter"><i class="fab fa-twitter"></i></a>  <!-- أيقونة الطائر القديم -->
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon email"><i class="fas fa-envelope"></i></a>
         </div>
         
@@ -656,11 +656,14 @@
         menuClose.addEventListener('click', closeMenu);
     }
 
+    // عداد الأرقام
     document.addEventListener("DOMContentLoaded", function() {
+        // أنيميشن الظهور
         const observerOptions = {
             threshold: 0.1,
             rootMargin: "0px 0px -50px 0px"
         };
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -669,8 +672,61 @@
                 }
             });
         }, observerOptions);
+        
         const elements = document.querySelectorAll('.reveal-on-scroll');
         elements.forEach(el => observer.observe(el));
+        
+        // عداد الخبرة والقضايا
+        const yearsElement = document.getElementById('years-counter');
+        const casesElement = document.getElementById('cases-counter');
+        
+        if (yearsElement && casesElement) {
+            const yearsTarget = 22;
+            const casesTarget = 1000;
+            let yearsCounted = false;
+            let casesCounted = false;
+            
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // بدء عد الخبرة
+                        if (!yearsCounted) {
+                            yearsCounted = true;
+                            let current = 0;
+                            const increment = 1; // قفزة ثابتة لأن الرقم صغير
+                            const timer = setInterval(() => {
+                                current += increment;
+                                yearsElement.textContent = current;
+                                if (current >= yearsTarget) {
+                                    yearsElement.textContent = yearsTarget;
+                                    clearInterval(timer);
+                                }
+                            }, 50);
+                        }
+                        
+                        // بدء عد القضايا
+                        if (!casesCounted) {
+                            casesCounted = true;
+                            let current = 0;
+                            const increment = 10; // قفزات أكبر للوصول إلى 1000
+                            const timer = setInterval(() => {
+                                current += increment;
+                                casesElement.textContent = current;
+                                if (current >= casesTarget) {
+                                    casesElement.textContent = casesTarget;
+                                    clearInterval(timer);
+                                }
+                            }, 20);
+                        }
+                        
+                        counterObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            
+            counterObserver.observe(yearsElement);
+            counterObserver.observe(casesElement);
+        }
     });
 </script>
 

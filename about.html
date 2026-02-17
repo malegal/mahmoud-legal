@@ -169,7 +169,7 @@
             transform: scale(1.1); 
         }
         
-        /* أيقونات الفوتر بألوانها الرسمية */
+        /* أيقونات الفوتر بألوانها الرسمية - بدون واتساب (تمت إزالته) */
         .footer-social-icon {
             font-size: 1.5rem;
             transition: transform 0.3s ease, text-shadow 0.3s ease;
@@ -182,8 +182,7 @@
         .footer-social-icon.linkedin { color: #0a66c2; }
         .footer-social-icon.twitter { color: #1da1f2; }
         .footer-social-icon.email { color: #ea4335; }
-        .footer-social-icon.whatsapp { color: #25d366; }
-        .footer-social-icon.map { color: #ea4335; }
+        .footer-social-icon.map { color: #ea4335; }  /* أيقونة الموقع */
         
         .footer-social-icon:hover {
             transform: translateY(-5px);
@@ -278,7 +277,7 @@
             transform: translateY(0);
         }
 
-        /* تأثير الصور: تبدأ أبيض وأسود ثم تتحول بعد 3 ثوانٍ */
+        /* تأثير الصور: تبدأ أبيض وأسود ثم تتحول بعد 5.5 ثانية */
         .auto-colorize {
             filter: grayscale(100%);
             transition: filter 1.5s ease;
@@ -473,7 +472,7 @@
     </div>
 </section>
 
-<!-- الفوتر -->
+<!-- الفوتر - بدون أيقونة واتساب (تمت إزالتها لتجنب التكرار مع الأيقونة العائمة) -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#020617] text-center relative">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -482,9 +481,8 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر بألوانها الرسمية -->
+        <!-- أيقونات الفوتر بألوانها الرسمية - بدون واتساب (أكثر احترافية ونظافة) -->
         <div class="flex justify-center gap-6 mb-10">
-            <a href="https://wa.me/201101076000" target="_blank" class="footer-social-icon whatsapp"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon twitter"><i class="fab fa-twitter"></i></a>
@@ -546,12 +544,12 @@
         const elements = document.querySelectorAll('.reveal-on-scroll');
         elements.forEach(el => observer.observe(el));
         
-        // تأثير تلوين الصور تلقائياً بعد 3 ثوانٍ
+        // تأثير تلوين الصور تلقائياً بعد 5.5 ثانية (5500 مللي ثانية)
         setTimeout(function() {
             document.querySelectorAll('.auto-colorize').forEach(img => {
                 img.classList.add('colorized');
             });
-        }, 3000); // 3 ثوانٍ تأخير
+        }, 5500); // 5.5 ثوانٍ
     });
 </script>
 

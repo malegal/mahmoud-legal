@@ -2,14 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>المدونة القانونية | محمود عبد الحميد - المحامي بالنقض والدستورية العليا</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جاري تحميل الدراسة... | محمود عبد الحميد</title>
     
     <!-- المكتبات الخارجية -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- مكتبة تحويل Markdown إلى HTML (ضرورية جداً لفتح المقالات) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
         :root {
             --primary-dark: #020617; 
@@ -18,180 +21,222 @@
             --gold-glow: rgba(191, 149, 63, 0.4);
         }
         
-        body { font-family: 'Tajawal', sans-serif; background-color: var(--primary-dark); color: #ffffff; scroll-behavior: smooth; overflow-x: hidden; }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: var(--primary-dark); 
+            color: #ffffff;
+            line-height: 1.8;
+        }
+
         .serif-font { font-family: 'Amiri', serif; }
         .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
+        /* تنسيقات الهيدر */
+        .header-glass {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid #bf953f;
+        }
+
+        /* تنسيقات قراءة المقال (أهم جزء) */
+        .article-body {
+            font-size: 1.35rem; /* حجم خط مريح للقراءة */
+            text-align: justify;
+            color: #e2e8f0;
+        }
+        
+        /* عناوين داخل المقال بوزن ملكي */
+        .article-body h1, .article-body h2, .article-body h3 {
+            font-family: 'Amiri', serif;
+            color: var(--gold-solid);
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        .article-body h1 { font-size: 2.8rem; border-bottom: 1px solid rgba(191, 149, 63, 0.3); padding-bottom: 10px; }
+        .article-body h2 { font-size: 2.2rem; }
+        .article-body h3 { font-size: 1.8rem; }
+        
+        /* الاقتباسات القانونية */
+        .article-body blockquote {
+            border-right: 5px solid var(--gold-solid);
+            background: rgba(191, 149, 63, 0.05);
+            padding: 1.5rem 2rem;
+            margin: 2.5rem 0;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+        }
+
         /* الأيقونات العائمة */
         .contact-floating { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
-        .whatsapp-float, .call-float { 
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-size: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; color: white; border: 1px solid rgba(255,255,255,0.1); 
-        }
-        .whatsapp-float { background: #25d366; }
-        .call-float { background: #0077b6; }
-        .whatsapp-float:hover, .call-float:hover { transform: scale(1.1) rotate(5deg); }
-
-        /* الهيدر والنو بار */
-        .header-glass { background: rgba(0, 0, 0, 0.95) !important; backdrop-filter: blur(20px); border-bottom: 2px solid; border-image: var(--gold-gradient) 1; }
-        .nav-link-gold { background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
-        .gold-btn { background: var(--gold-gradient); color: #000; font-weight: 800; transition: 0.4s; box-shadow: 0 0 15px var(--gold-glow); }
-        .gold-btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--gold-glow); }
-
-        /* كروت المدونة */
-        .card-glass { background: rgba(20, 20, 30, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(191, 149, 63, 0.2); border-radius: 1.5rem; transition: 0.4s; }
-        .card-glass:hover { border-color: rgba(191, 149, 63, 0.8); transform: translateY(-8px); box-shadow: 0 15px 40px rgba(191, 149, 63, 0.1); }
+        .whatsapp-float, .call-float { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; color: white; }
+        .whatsapp-float { background: #25d366; } .call-float { background: #0077b6; }
+        .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
 
         /* الفوتر الذهبي الملكي */
         .footer-social-icon {
-            width: 45px; height: 45px; border-radius: 50%; border: 1px solid rgba(191, 149, 63, 0.3);
-            display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
-            background: rgba(0,0,0,0.5); text-decoration: none; color: #bf953f;
+            width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--gold-solid);
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
+            background: transparent; color: var(--gold-solid);
         }
-        .footer-social-icon i { font-size: 1.3rem; }
         .footer-social-icon:hover { 
-            border-color: #fcf6ba; transform: translateY(-5px); 
             background: var(--gold-gradient); color: #000; 
-            box-shadow: 0 0 20px rgba(191, 149, 63, 0.6);
+            box-shadow: 0 0 15px var(--gold-solid); transform: translateY(-3px);
         }
 
-        #mobile-menu { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); z-index: 110; transform: translateX(100%); transition: 0.4s; display: flex; flex-direction: column; justify-content: center; }
-        #mobile-menu.active { transform: translateX(0); }
-        .islamic-pattern-bg {
-            background-color: var(--primary-dark);
-            background-image: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-attachment: fixed;
+        /* كروت المقالات المقترحة */
+        .suggested-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(191,149,63,0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: 0.4s;
+            height: 100%;
         }
+        .suggested-card:hover { border-color: var(--gold-solid); background: rgba(191,149,63,0.05); transform: translateY(-5px); }
     </style>
 </head>
 <body>
 
-<!-- الأيقونات العائمة -->
+<!-- الأزرار العائمة -->
 <div class="contact-floating">
     <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
     <a href="tel:+201101076000" class="call-float"><i class="fas fa-phone-alt"></i></a>
 </div>
 
 <!-- الهيدر الموحد -->
-<header class="fixed w-full z-[100] header-glass">
-    <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-            <img src="logo.png" alt="شعار" class="w-20 h-20 object-contain">
+<header class="fixed w-full z-[100] header-glass py-3 px-6">
+    <nav class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" alt="Logo" class="w-14 h-14 object-contain">
             <div class="flex flex-col leading-tight">
-                <h1 class="font-bold gold-text serif-font text-[28px]">محمود عبد الحميد</h1>
-                <p class="text-gray-300 font-medium text-[13px]">المحامي بالنقض والدستورية العليا</p>
+                <h1 class="font-bold gold-text serif-font text-xl">محمود عبد الحميد</h1>
+                <p class="text-gray-400 text-[10px] tracking-widest uppercase">Law Firm</p>
             </div>
         </div>
-        <div class="hidden xl:flex items-center gap-6 font-bold text-sm">
-            <a href="index.html" class="nav-link-gold">الرئيسية</a>
-            <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
-            <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
-            <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
-            <a href="blog.html" class="nav-link-gold" style="border-bottom: 2px solid #bf953f;">المدونة</a>
-            <div class="nav-buttons flex items-center gap-2 mr-2">
-                <a href="client-inquiry.html" class="border border-gold-solid px-3 py-2 rounded-lg text-xs hover:bg-gold-solid hover:text-black transition flex items-center gap-2"><i class="fas fa-gavel"></i> تابع قضيتك</a>
-                <a href="contact.html?tab=consult" class="gold-btn px-4 py-2 rounded-lg text-xs shadow-lg">طلب استشارة</a>
-            </div>
-        </div>
-        <button id="menu-toggle" class="xl:hidden text-2xl gold-text"><i class="fas fa-bars-staggered"></i></button>
+        <a href="blog.html" class="text-gold-solid font-bold text-sm flex items-center gap-2 hover:gap-4 transition-all">
+            <i class="fas fa-arrow-right"></i> العودة للمدونة
+        </a>
     </nav>
 </header>
 
-<!-- الموبايل منيو -->
-<div id="mobile-menu">
-    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text"><i class="fas fa-times"></i></button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center p-10">
-        <a href="index.html" class="nav-link-gold">الرئيسية</a>
-        <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
-        <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
-        <a href="blog.html" class="nav-link-gold">المدونة</a>
-        <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
-        <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="contact.html?tab=consult" class="gold-btn py-4 rounded-xl">طلب استشارة</a>
-    </div>
-</div>
+<!-- محتوى المقال -->
+<main class="pt-40 pb-20 px-6 max-w-4xl mx-auto">
+    <!-- عنوان المقال -->
+    <header class="text-center mb-16">
+        <span class="gold-text uppercase tracking-[0.3em] font-black text-xs mb-3 block">Legal Blog Study</span>
+        <h1 id="article-title" class="serif-font text-4xl md:text-6xl font-black leading-tight text-white mb-6">
+            <!-- سيظهر العنوان هنا -->
+        </h1>
+        <div class="w-24 h-1 bg-gold-solid mx-auto rounded-full"></div>
+    </header>
 
-<!-- هيرو القسم -->
-<section class="min-h-[40vh] flex flex-col items-center justify-center text-center px-6 pt-32 pb-10 islamic-pattern-bg">
-    <h1 class="text-5xl md:text-8xl font-black serif-font gold-text mb-4">المدونة القانونية</h1>
-    <p class="text-white/80 text-lg max-w-2xl mx-auto leading-relaxed italic">نشر المعرفة القانونية.. رسالة وأمانة</p>
-</section>
+    <!-- مكان ظهور نص المقال -->
+    <article id="article-content" class="article-body">
+        <!-- أنيميشن التحميل -->
+        <div class="text-center py-20">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-gold-solid mb-4"></div>
+            <p class="text-gold-solid italic">جاري مراجعة الدراسة القانونية...</p>
+        </div>
+    </article>
 
-<!-- شبكة المقالات -->
-<section class="py-20 px-6 max-w-7xl mx-auto">
-    <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
-        <!-- المحتوى من JS -->
-    </div>
-</section>
+    <!-- قسم المقالات المقترحة -->
+    <section class="mt-32 pt-16 border-t border-white/10">
+        <h3 class="serif-font text-3xl text-gold-solid mb-10 flex items-center gap-4">
+            <i class="fas fa-bookmark text-xl"></i> دراسات قانونية مقترحة
+        </h3>
+        <div id="suggested-posts" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- المقالات المقترحة تظهر هنا -->
+        </div>
+    </section>
+</main>
 
 <!-- الفوتر الملكي -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center mt-12">
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="mb-8">
-            <img src="logo.png" alt="شعار" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90">
-            <h2 class="text-3xl font-black gold-text serif-font mb-2">مؤسسة محمود عبد الحميد</h2>
-            <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
+        <img src="logo.png" class="w-20 h-20 mx-auto mb-6 opacity-80">
+        <h2 class="text-2xl font-black gold-text serif-font mb-4">مؤسسة محمود عبد الحميد للمحاماة</h2>
+        
+        <div class="flex justify-center gap-6 mb-12">
+            <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>
         </div>
         
-        <!-- أيقونات الفوتر الملكية -->
-        <div class="flex justify-center gap-6 mb-10">
-            <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تويتر"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon" title="لينكد إن"><i class="fab fa-linkedin-in"></i></a>
-            <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon" title="بريد إلكتروني"><i class="fas fa-envelope"></i></a>
-            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="footer-social-icon" title="موقعنا"><i class="fas fa-map-marker-alt"></i></a>
-        </div>
-        
-        <div class="flex flex-wrap gap-x-8 gap-y-4 justify-center text-sm text-gray-400 mb-8 font-bold">
-            <a href="index.html" class="hover:text-gold-solid transition">الرئيسية</a>
-            <a href="about.html" class="hover:text-gold-solid transition">عن المؤسسة</a>
-            <a href="specialties.html" class="hover:text-gold-solid transition">تخصصاتنا</a>
-            <a href="contact.html" class="hover:text-gold-solid transition">اتصل بنا</a>
-        </div>
-        
-        <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/20 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
+        <p class="text-gray-600 text-[10px] tracking-widest uppercase border-t border-gold-solid/10 pt-8">
+            جميع الحقوق محفوظة © ٢٠٢٦ - التميز في الاستشارات القانونية
+        </p>
     </div>
 </footer>
 
 <script>
-    // القائمة
-    const menuToggle = document.getElementById('menu-toggle');
-    const menuClose = document.getElementById('menu-close');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuToggle.onclick = () => mobileMenu.classList.add('active');
-    menuClose.onclick = () => mobileMenu.classList.remove('active');
+    async function loadArticleData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug');
+        if(!slug) { window.location.href = 'blog.html'; return; }
 
-    // جلب المقالات من جيت هاب
-    async function loadArticles() {
-        const grid = document.getElementById('blog-grid');
-        const owner = "malegal"; 
+        const owner = "malegal";
         const repo = "mahmoud-legal";
-        const path = "blog/articles";
+        const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/blog/articles/${slug}.md`;
 
         try {
-            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
-            const files = await res.json();
-            grid.innerHTML = '';
+            // 1. جلب محتوى المقال
+            const response = await fetch(rawUrl);
+            if(!response.ok) throw new Error("File not found");
+            const markdown = await response.text();
+
+            // 2. تحديث العنوان والمحتوى
+            const title = decodeURIComponent(slug.replace(/-/g, ' '));
+            document.title = title + " | مدونة محمود عبد الحميد";
+            document.getElementById('article-title').innerText = title;
             
-            files.filter(f => f.name.endsWith('.md')).forEach(file => {
-                const slug = file.name.replace('.md', '');
-                const title = decodeURIComponent(slug.replace(/-/g, ' '));
-                grid.innerHTML += `
-                    <div class="card-glass p-8 group flex flex-col h-full">
-                        <div class="text-gold-solid mb-4 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                             <i class="fas fa-scroll"></i> دراسة قضائية
-                        </div>
-                        <h3 class="text-2xl font-bold mb-6 serif-font leading-relaxed flex-grow line-clamp-2">${title}</h3>
-                        <a href="article.html?slug=${slug}" class="gold-btn w-full block text-center py-4 rounded-xl font-black text-sm uppercase tracking-wider">
-                            استعراض كامل الدراسة
-                        </a>
-                    </div>`;
-            });
-        } catch (e) { 
-            grid.innerHTML = '<p class="text-center col-span-full">عذراً، لم نتمكن من الوصول للمقالات حالياً.</p>'; 
+            // تحويل الـ Markdown إلى HTML نظيف
+            document.getElementById('article-content').innerHTML = marked.parse(markdown);
+
+            // 3. جلب مقالات مقترحة (عشوائية من نفس المجلد)
+            loadSuggestions(owner, repo, slug);
+
+        } catch (error) {
+            document.getElementById('article-content').innerHTML = `
+                <div class="text-center py-20">
+                    <i class="fas fa-exclamation-triangle text-5xl text-gold-solid mb-4"></i>
+                    <h2 class="text-2xl font-bold">عذراً، لم نتمكن من العثور على هذه الدراسة</h2>
+                    <a href="blog.html" class="text-gold-solid underline mt-4 block">العودة للمدونة</a>
+                </div>`;
         }
     }
-    loadArticles();
+
+    async function loadSuggestions(owner, repo, currentSlug) {
+        try {
+            const listRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/blog/articles`);
+            const allFiles = await listRes.json();
+            
+            // استبعاد المقال الحالي واختيار 2 آخرين
+            const suggestions = allFiles
+                .filter(f => !f.name.includes(currentSlug) && f.name.endsWith('.md'))
+                .sort(() => 0.5 - Math.random()) // ترتيب عشوائي
+                .slice(0, 2);
+
+            const sugContainer = document.getElementById('suggested-posts');
+            suggestions.forEach(file => {
+                const sSlug = file.name.replace('.md', '');
+                const sTitle = decodeURIComponent(sSlug.replace(/-/g, ' '));
+                
+                sugContainer.innerHTML += `
+                    <a href="article.html?slug=${sSlug}" class="suggested-card flex flex-col justify-between">
+                        <h4 class="text-white font-bold text-xl serif-font mb-4 leading-relaxed line-clamp-2">${sTitle}</h4>
+                        <span class="text-gold-solid text-xs font-bold uppercase">قراءة الدراسة <i class="fas fa-chevron-left mr-2"></i></span>
+                    </a>`;
+            });
+        } catch (e) { console.error("Could not load suggestions"); }
+    }
+
+    // تشغيل الدالة عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', loadArticleData);
 </script>
+
 </body>
 </html>

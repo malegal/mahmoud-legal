@@ -169,24 +169,39 @@
             transform: scale(1.1); 
         }
         
-        /* أيقونات الفوتر بألوانها الرسمية - بدون واتساب (تمت إزالته) */
+        /* أنماط أيقونات الفوتر الذهبية (محدثة) */
         .footer-social-icon {
-            font-size: 1.5rem;
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.5);
             text-decoration: none;
-            margin: 0 10px;
-            display: inline-block;
+            color: #bf953f;
+            font-size: 1.3rem;
         }
         
-        .footer-social-icon.facebook { color: #1877f2; }
-        .footer-social-icon.linkedin { color: #0a66c2; }
-        .footer-social-icon.twitter { color: #1da1f2; }
-        .footer-social-icon.email { color: #ea4335; }
-        .footer-social-icon.map { color: #ea4335; }  /* أيقونة الموقع */
-        
+        .footer-social-icon i {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .footer-social-icon:hover {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
             transform: translateY(-5px);
-            text-shadow: 0 0 15px currentColor;
+            background: var(--gold-gradient);
+        }
+        
+        .footer-social-icon:hover i {
+            background: none;
+            -webkit-text-fill-color: #000;
+            color: #000;
         }
         
         #mobile-menu { 
@@ -299,7 +314,7 @@
             .hero-buttons a { width: 100%; }
             .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
             .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
-            .footer-social-icon { font-size: 1.3rem; margin: 0 8px; }
+            .footer-social-icon { width: 40px; height: 40px; font-size: 1.1rem; }
         }
         
         ::-webkit-scrollbar { width: 8px; }
@@ -502,7 +517,6 @@
         <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/20 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
     </div>
 </footer>
-
 
 <script>
     const mobileMenu = document.getElementById('mobile-menu');

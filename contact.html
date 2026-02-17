@@ -447,8 +447,8 @@
 
             </div>
 
-            <!-- العمود الأيسر: النماذج -->
-            <div class="lg:col-span-7 reveal-on-scroll" style="transition-delay: 200ms;">
+            <!-- العمود الأيسر: النماذج (أضفنا id للتمرير إليه) -->
+            <div id="contact-forms" class="lg:col-span-7 reveal-on-scroll" style="transition-delay: 200ms;">
                 <div class="card-glass p-1 md:p-8 border-t-4 border-gold-solid h-full relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gold-solid/5 to-transparent pointer-events-none"></div>
                     
@@ -643,14 +643,23 @@
         
         // إذا كان هناك معامل specialty، نضيفه إلى حقل التفاصيل في نموذج الاستشارة
         if (specialtyParam) {
-            // التأكد أننا في تبويب الاستشارة
+            // التأكد أننا في تبويب الاستشارة (إذا كان tab=visit لا نضيف)
             if (tabParam !== 'visit') {
-                // فتح تبويب الاستشارة (بالفعل هو الافتراضي ولكن للتأكيد)
-                switchTab('consult');
+                const consultMessageField = document.getElementById('consultMessage');
+                if (consultMessageField) {
+                    consultMessageField.value = `أرغب في الحصول على استشارة قانونية بخصوص: ${specialtyParam}`;
+                }
             }
-            const consultMessageField = document.getElementById('consultMessage');
-            if (consultMessageField) {
-                consultMessageField.value = `أرغب في الحصول على استشارة قانونية بخصوص: ${specialtyParam}`;
+        }
+
+        // التمرير إلى النماذج إذا كان هناك tab parameter
+        if (tabParam === 'consult' || tabParam === 'visit') {
+            const formsSection = document.getElementById('contact-forms');
+            if (formsSection) {
+                // تأخير بسيط لضمان اكتمال تبديل التبويب ثم التمرير
+                setTimeout(() => {
+                    formsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
             }
         }
 

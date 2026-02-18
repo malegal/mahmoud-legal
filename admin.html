@@ -117,6 +117,7 @@
             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#sessions">الجلسات</button></li>  
             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#searchTab">بحث وتقارير</button></li>  
             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#securityLogs">سجل الاستعلامات</button></li>  
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#aiAssistant">المحامي الآلي</button></li>
         </ul>  
   
         <div class="tab-content">  
@@ -269,6 +270,40 @@
                     <div id="securityLogsResults"></div>  
                 </div>  
             </div>  
+
+            <!-- تبويب المحامي الآلي (AI Legal Assistant) -->
+            <div class="tab-pane fade" id="aiAssistant">
+                <div class="card-glass p-3 p-md-4">
+                    <h5 class="gold-text mb-3"><i class="bi bi-robot"></i> المحامي الآلي - الذكاء الاصطناعي</h5>
+                    <div class="row g-3 mb-3">
+                        <div class="col-12">
+                            <label>مفتاح Groq API</label>
+                            <input type="text" id="groqApiKey" class="form-control" placeholder="أدخل مفتاح API الخاص بك" value="YOUR_GROQ_API_KEY">
+                            <small class="text-white-50">احصل على مفتاح مجاني من groq.com</small>
+                        </div>
+                        <div class="col-12">
+                            <label>موضوع المذكرة / البحث القانوني</label>
+                            <textarea id="aiPrompt" class="form-control" rows="4" placeholder="مثال: اكتب مذكرة دفاع في قضية تبديد منقولات زوجية تتضمن الوقائع والدفوع القانونية...."></textarea>
+                        </div>
+                        <div class="col-12 d-flex gap-2">
+                            <button class="gold-btn btn flex-grow-1 py-3" onclick="generateLegalContent()"><i class="bi bi-stars"></i> إنشاء المحتوى</button>
+                            <button class="btn btn-outline-secondary py-3" onclick="clearAiFields()"><i class="bi bi-eraser"></i> مسح</button>
+                        </div>
+                    </div>
+                    <div id="aiResultContainer" style="display:none;">
+                        <hr class="border-secondary">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="gold-text">النتيجة:</h6>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-success" onclick="saveAsWord()"><i class="bi bi-file-word"></i> Word</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="saveAsPdf()"><i class="bi bi-file-pdf"></i> PDF</button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard()"><i class="bi bi-clipboard"></i> نسخ</button>
+                            </div>
+                        </div>
+                        <div id="aiResult" class="p-3 bg-dark rounded border border-gold" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: 'Amiri', serif; line-height: 1.8;"></div>
+                    </div>
+                </div>
+            </div>
         </div>  
     </div>  
 </div>  
@@ -842,6 +877,105 @@ function addToGoogleCalendar() {
     window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('جلسة: '+s_client.value)}&dates=${start}/${end}`, '_blank');
 }
 function addToGoogleCalendarFromSession(id) { Swal.fire("قريباً", "هذه الميزة قيد التطوير", "info"); }
+
+// ========== المحامي الآلي (AI Legal Assistant) ==========
+let generatedContent = '';
+
+async function generateLegalContent() {
+    const apiKey = document.getElementById('groqApiKey').value.trim();
+    const prompt = document.getElementById('aiPrompt').value.trim();
+
+    if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY') {
+        Swal.fire('تنبيه', 'الرجاء إدخال مفتاح Groq API صحيح', 'warning');
+        return;
+    }
+    if (!prompt) {
+        Swal.fire('تنبيه', 'الرجاء إدخال موضوع المذكرة', 'warning');
+        return;
+    }
+
+    Swal.fire({ title: 'جاري إنشاء المحتوى...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+
+    try {
+        const systemPrompt = `أنت محامي خبير بالنقض والمحاكم العليا المصرية. لديك قدرة فائقة على صياغة المذكرات القانونية والأبحاث بلغة قانونية رصينة وإبداعية. تلتزم بالقانون المصري، وأحكام محكمة النقض، والمحاكم العليا، والفقه القانوني المصري. عند كتابة أي مذكرة أو بحث، تقوم بتضمين المصادر بدقة: ذكر نصوص المواد من القوانين المصرية (مثل قانون الإجراءات الجنائية، القانون المدني، قانون الأحوال الشخصية، إلخ)، وأرقام الطعن وأحكام محكمة النقض (مثلاً: نقض جنائي 15 يناير 2020، الطعن رقم 12345 لسنة 90 قضائية)، وآراء الفقهاء البارزين. أسلوبك مهني، منظم، مقنع، وتستخدم تنسيقاً واضحاً مع العناوين الفرعية.`;
+
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama3-70b-8192', // يمكن تغيير النموذج
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.7,
+                max_tokens: 4000,
+                top_p: 1,
+                stream: false
+            })
+        });
+
+        Swal.close();
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error?.message || 'فشل الاتصال بالخدمة');
+        }
+
+        const data = await response.json();
+        generatedContent = data.choices[0].message.content;
+
+        document.getElementById('aiResult').innerHTML = generatedContent.replace(/\n/g, '<br>');
+        document.getElementById('aiResultContainer').style.display = 'block';
+
+    } catch (err) {
+        Swal.close();
+        Swal.fire('خطأ', err.message, 'error');
+    }
+}
+
+function saveAsWord() {
+    if (!generatedContent) {
+        Swal.fire('تنبيه', 'لا يوجد محتوى للحفظ', 'warning');
+        return;
+    }
+    const blob = new Blob([generatedContent], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `مذكرة_قانونية_${new Date().toLocaleDateString('ar-EG')}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function saveAsPdf() {
+    // يمكن استخدام jsPDF لتحويل النص إلى PDF، لكن حالياً نعرض رسالة
+    Swal.fire('قريباً', 'خاصية حفظ PDF قيد التطوير', 'info');
+}
+
+function copyToClipboard() {
+    if (!generatedContent) {
+        Swal.fire('تنبيه', 'لا يوجد محتوى للنسخ', 'warning');
+        return;
+    }
+    navigator.clipboard.writeText(generatedContent).then(() => {
+        Swal.fire('تم', 'تم نسخ المحتوى إلى الحافظة', 'success');
+    }).catch(() => {
+        Swal.fire('خطأ', 'فشل النسخ', 'error');
+    });
+}
+
+function clearAiFields() {
+    document.getElementById('aiPrompt').value = '';
+    document.getElementById('aiResultContainer').style.display = 'none';
+    document.getElementById('aiResult').innerHTML = '';
+    generatedContent = '';
+}
 
 // ========== دوال PWA ==========
 function installPWA() {

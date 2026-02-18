@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
+        /* نفس الأنماط السابقة */
         :root {
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
@@ -23,7 +24,6 @@
         .serif-font { font-family: 'Amiri', serif; }
         .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         
-        /* تنسيق المحرر */
         .ql-toolbar { background: #f8fafc !important; border-radius: 12px 12px 0 0 !important; border: none !important; direction: ltr; }
         .ql-container { background: #ffffff !important; color: #1a1a1a !important; border-radius: 0 0 12px 12px !important; min-height: 450px; font-size: 1.2rem; border: none !important; }
         .ql-editor { text-align: right; direction: rtl; font-family: 'Amiri', serif; }
@@ -45,7 +45,6 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--gold-solid); border-radius: 10px; }
         
-        /* أنيميشن */
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -93,8 +92,8 @@
                 <input type="password" id="ghTokenInput" placeholder="ghp_..." class="input-dark text-xs">
             </div>
             <div class="space-y-2">
-                <label class="text-xs text-gold-solid font-bold">Google Gemini API Key:</label>
-                <input type="password" id="geminiKeyInput" placeholder="AIza..." class="input-dark text-xs">
+                <label class="text-xs text-gold-solid font-bold">OpenRouter API Key:</label>
+                <input type="password" id="openrouterKeyInput" placeholder="sk-or-v1-..." class="input-dark text-xs">
             </div>
             <button onclick="saveConfig()" class="btn-gold col-span-full py-2 text-xs">حفظ الإعدادات وتحديث الجلسة</button>
         </div>
@@ -172,9 +171,9 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // الإعدادات العامة وحفظ الحالة
+    // الإعدادات العامة
     let GITHUB_TOKEN = localStorage.getItem('mahmoud_token') || "";
-    let GEMINI_KEY = localStorage.getItem('mahmoud_gemini') || "";
+    let OPENROUTER_KEY = localStorage.getItem('mahmoud_openrouter') || "";
     const OWNER = "malegal";
     const REPO = "mahmoud-legal";
     
@@ -187,9 +186,8 @@
         if(document.getElementById('adminPass').value === "mahmoud237") {
             document.getElementById('lock-screen').style.display = 'none';
             document.getElementById('admin-main').classList.remove('hidden');
-            // استرجاع القيم المخزنة للحقول
             document.getElementById('ghTokenInput').value = GITHUB_TOKEN;
-            document.getElementById('geminiKeyInput').value = GEMINI_KEY;
+            document.getElementById('openrouterKeyInput').value = OPENROUTER_KEY;
             loadRemoteContent();
             loadLocalDrafts();
         } else { alert("❌ كلمة السر غير صحيحة"); }
@@ -200,10 +198,10 @@
     
     function saveConfig() {
         GITHUB_TOKEN = document.getElementById('ghTokenInput').value.trim();
-        GEMINI_KEY = document.getElementById('geminiKeyInput').value.trim();
+        OPENROUTER_KEY = document.getElementById('openrouterKeyInput').value.trim();
         
         localStorage.setItem('mahmoud_token', GITHUB_TOKEN);
-        localStorage.setItem('mahmoud_gemini', GEMINI_KEY);
+        localStorage.setItem('mahmoud_openrouter', OPENROUTER_KEY);
         
         alert("✅ تم حفظ الإعدادات بنجاح.");
         togglePanel('settings-panel');
@@ -222,7 +220,7 @@
                 ['link', 'image', 'clean']
             ]
         },
-        placeholder: 'ابدأ بصياغة البحث القانوني أو استشر المحامي الآلي...'
+        placeholder: 'ابدأ بصياغة البحث القانوني...'
     });
 
     // 4. معالجة رفع الصور
@@ -237,11 +235,11 @@
         reader.readAsDataURL(file);
     };
 
-    // 5. المحامي الذكي (Gemini AI) - نسخة محسنة مع تجربة نماذج متعددة
+    // 5. الذكاء الاصطناعي عبر OpenRouter (بدون بطاقة ائتمان)
     async function aiLegalWriter() {
         const title = document.getElementById('postTitle').value;
         if(!title) return alert("يرجى كتابة عنوان للمقال أولاً.");
-        if(!GEMINI_KEY) return alert("يرجى إضافة مفتاح Gemini API من الإعدادات.");
+        if(!OPENROUTER_KEY) return alert("يرجى إضافة مفتاح OpenRouter من الإعدادات.");
 
         const btn = document.getElementById('ai-btn');
         const originalText = btn.innerHTML;
@@ -255,70 +253,63 @@
         2. شرح للمواد القانونية ذات الصلة من التشريع المصري.
         3. أهم المبادئ التي أرستها محكمة النقض المصرية في هذا الشأن.
         4. نصيحة قانونية ختامية.
-        اجعل التنسيق بصيغة HTML (استخدم <h2> للعناوين و <p> للفقرات). استخدم لغة المحامين المحترفين.`;
+        اجعل التنسيق بصيغة HTML (استخدم <h2> للعناوين و <p> للفقرات).`;
 
-        // قائمة النماذج المدعومة (حسب الأولوية)
-        const models = [
-            'gemini-1.5-flash',
-            'gemini-1.5-pro',
-            'gemini-1.0-pro'
-        ];
+        try {
+            // استخدام نموذج مجاني عبر OpenRouter (مثل mistral أو gemini-1.5-flash)
+            const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${OPENROUTER_KEY}`,
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": window.location.origin, // اختياري: يحدد مصدر الطلب
+                    "X-Title": "مؤسسة محمود عبد الحميد" // اختياري
+                },
+                body: JSON.stringify({
+                    "model": "google/gemini-1.5-flash", // يمكنك تغيير النموذج حسب الرصيد
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": promptText
+                        }
+                    ],
+                    "temperature": 0.7,
+                    "max_tokens": 4000
+                })
+            });
 
-        let lastError;
-        let success = false;
-
-        for (const model of models) {
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptText }] }],
-                        safetySettings: [
-                            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-                        ]
-                    })
-                });
-
-                const data = await response.json();
-                if (data.error) throw new Error(data.error.message);
-                if (!data.candidates || data.candidates.length === 0) throw new Error("لم يتم الحصول على رد من الذكاء الاصطناعي.");
-                
-                let aiText = data.candidates[0].content.parts[0].text;
-                
-                // تنظيف النص من علامات ```html أو ```markdown التي قد يضيفها Gemini أحياناً
-                aiText = aiText.replace(/^```html\s*/i, '').replace(/\s*```$/, '');
-                aiText = aiText.replace(/^```markdown\s*/i, '').replace(/\s*```$/, '');
-                
-                // حقن المحتوى في المحرر
-                quill.root.innerHTML = aiText;
-                
-                // ملء بيانات SEO تلقائياً
-                document.getElementById('postSlug').value = title.replace(/\s+/g, '-').replace(/[^\u0621-\u064A0-9-]/g, '');
-                document.getElementById('metaDesc').value = quill.getText().substring(0, 150).trim() + "...";
-                
-                alert(`✅ اكتملت صياغة البحث بنجاح باستخدام النموذج ${model}.`);
-                success = true;
-                break; // خروج من الحلقة بعد النجاح
-            } catch (e) {
-                lastError = e;
-                console.warn(`النموذج ${model} فشل:`, e.message);
-                // استمر في تجربة النموذج التالي
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error.message || JSON.stringify(data.error));
             }
-        }
+            
+            if (!data.choices || data.choices.length === 0) {
+                throw new Error("لم يتم الحصول على رد.");
+            }
 
-        if (!success) {
-            alert("❌ فشل جميع النماذج. آخر خطأ: " + lastError.message);
+            let aiText = data.choices[0].message.content;
+            
+            // تنظيف النص من علامات ```html أو ```markdown إن وجدت
+            aiText = aiText.replace(/^```html\s*/i, '').replace(/\s*```$/, '');
+            aiText = aiText.replace(/^```markdown\s*/i, '').replace(/\s*```$/, '');
+            
+            quill.root.innerHTML = aiText;
+            
+            // ملء بيانات SEO تلقائياً
+            document.getElementById('postSlug').value = title.replace(/\s+/g, '-').replace(/[^\u0621-\u064A0-9-]/g, '');
+            document.getElementById('metaDesc').value = quill.getText().substring(0, 150).trim() + "...";
+            
+            alert("✅ تمت الصياغة بنجاح عبر OpenRouter.");
+        } catch (e) {
+            alert("❌ فشل الذكاء الاصطناعي: " + e.message + "\n\nيرجى التأكد من صحة المفتاح وتوفر الرصيد.");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
         }
-
-        btn.innerHTML = originalText;
-        btn.disabled = false;
     }
 
-    // 6. الحفظ والنشر لـ GitHub
+    // باقي الدوال (saveArticle, loadRemoteContent, ...) كما هي من الكود السابق
     async function saveArticle(folder) {
         if(!GITHUB_TOKEN) return alert("⚠️ يرجى ضبط توكن GitHub في الإعدادات أولاً.");
         
@@ -333,7 +324,6 @@
         btn.innerHTML = '<i class="fas fa-sync animate-spin"></i> جاري الرفع...';
 
         try {
-            // رفع الصورة إذا كانت موجودة
             let imagePath = "images/blog-bg.jpg";
             if(uploadedImageBase64) {
                 const imgName = `post-${Date.now()}.png`;
@@ -345,7 +335,6 @@
                 imagePath = `images/posts/${imgName}`;
             }
 
-            // بناء ملف الـ Markdown
             const mdContent = `---
 title: ${title}
 description: ${meta}
@@ -375,7 +364,6 @@ ${content}`;
         btn.innerHTML = "نشر أونلاين";
     }
 
-    // 7. إدارة الأرشيف (تعديل وحذف)
     async function loadRemoteContent() {
         const listDiv = document.getElementById('remote-list');
         if(!GITHUB_TOKEN) { listDiv.innerHTML = '<p class="text-center text-[10px]">اضبط التوكن أولاً.</p>'; return; }
@@ -406,7 +394,6 @@ ${content}`;
             const res = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${path}`);
             const md = await res.text();
             
-            // تحليل ملف MD (استخراج المحتوى فقط)
             const parts = md.split('---');
             const content = parts.length > 2 ? parts[2].trim() : md;
             
@@ -433,13 +420,12 @@ ${content}`;
         } catch (e) { alert("خطأ في الحذف."); }
     }
 
-    // 8. المسودات المحلية
     function saveLocally() {
         const draft = { title: document.getElementById('postTitle').value, content: quill.root.innerHTML, date: new Date().getTime() };
         let drafts = JSON.parse(localStorage.getItem('local_drafts') || '[]');
         drafts.push(draft);
         localStorage.setItem('local_drafts', JSON.stringify(drafts));
-        alert("💾 تم الحفظ محلياً على هاتفك.");
+        alert("💾 تم الحفظ محلياً.");
         loadLocalDrafts();
     }
 
@@ -459,13 +445,11 @@ ${content}`;
         quill.root.innerHTML = d.content;
     }
 
-    // حالة الشبكة
     window.addEventListener('online', () => { document.getElementById('status-badge').className = "online"; document.getElementById('status-badge').innerText = "متصل"; });
     window.addEventListener('offline', () => { document.getElementById('status-badge').className = "offline"; document.getElementById('status-badge').innerText = "أوفلاين"; });
 
-    // تذكير للمستخدم: يجب فتح الصفحة عبر خادم محلي (وليس كملف مباشر)
     if (window.location.protocol === 'file:') {
-        console.warn('⚠️ يفضل فتح هذه الصفحة عبر خادم محلي (مثل Live Server) لضمان عمل طلبات API بشكل صحيح.');
+        console.warn('⚠️ يفضل فتح الصفحة عبر خادم محلي.');
     }
 </script>
 

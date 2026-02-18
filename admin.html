@@ -274,7 +274,7 @@
             <!-- تبويب المحامي الآلي (AI Legal Assistant) -->
             <div class="tab-pane fade" id="aiAssistant">
                 <div class="card-glass p-3 p-md-4">
-                    <h5 class="gold-text mb-3"><i class="bi bi-robot"></i> المحامي الآلي - الذكاء الاصطناعي</h5>
+                    <h5 class="gold-text mb-3"><i class="bi bi-robot"></i> المحامي الآلي - الذكاء الاصطناعي (Llama 3.3 70B)</h5>
                     <div class="row g-3 mb-3">
                         <div class="col-12">
                             <label>مفتاح Groq API</label>
@@ -636,7 +636,6 @@ function renderSearchResults(data, type) {
                 ${item.decision ? `<div class="mt-2 p-2 bg-dark rounded small"><b>القرار:</b> ${item.decision}</div>` : ''}
             </div>`;
         } else {
-            // تعديل مهم: استخدام onclick على البطاقة مع تمرير item.id
             html += `<div class="case-card" data-case-id="${item.id}">
                 <div class="d-flex justify-content-between">
                     <strong class="case-code">${item.case_code || ''}</strong>
@@ -655,11 +654,9 @@ function renderSearchResults(data, type) {
     });
     container.innerHTML = html;
 
-    // إضافة مستمعي الأحداث بعد إدراج العناصر في DOM
     if(type === "cases") {
         document.querySelectorAll('.case-card[data-case-id]').forEach(card => {
             card.addEventListener('click', function(e) {
-                // التأكد أن النقر لم يأت من زر داخلي
                 if(e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
                     const caseId = this.getAttribute('data-case-id');
                     openCaseDetails(caseId);
@@ -825,9 +822,8 @@ async function deleteSession(id) {
     loadUpcoming('week');
 }
 
-// ========== دالة فتح تفاصيل القضية (معدلة مع طباعة للتأكد) ==========
+// ========== دالة فتح تفاصيل القضية ==========
 async function openCaseDetails(id) {
-    console.log('openCaseDetails called with id:', id); // للتأكد من الاستدعاء
     if (!id) return;
     try {
         const { data: c, error } = await db.from('cases').eq('id', id).single();
@@ -882,7 +878,7 @@ function addToGoogleCalendarFromSession(id) { Swal.fire("قريباً", "هذه 
 let generatedContent = '';
 
 async function generateLegalContent() {
-    const apiKey = document.getElementById('groqApiKey').value.trim();
+    let apiKey = document.getElementById('groqApiKey').value.trim(); // إزالة المسافات البيضاء
     const prompt = document.getElementById('aiPrompt').value.trim();
 
     if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY') {
@@ -891,6 +887,12 @@ async function generateLegalContent() {
     }
     if (!prompt) {
         Swal.fire('تنبيه', 'الرجاء إدخال موضوع المذكرة', 'warning');
+        return;
+    }
+
+    // التحقق من أن المفتاح لا يحتوي على أحرف غير ASCII
+    if (/[^\x00-\x7F]/.test(apiKey)) {
+        Swal.fire('خطأ', 'مفتاح API يحتوي على أحرف غير مسموح بها. تأكد من أن المفتاح يحتوي على أحرف إنجليزية وأرقام فقط.', 'error');
         return;
     }
 
@@ -906,7 +908,7 @@ async function generateLegalContent() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: 'llama3-70b-8192', // يمكن تغيير النموذج
+                model: 'llama-3.3-70b-versatile', // النموذج المطلوب
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: prompt }
@@ -942,11 +944,42 @@ function saveAsWord() {
         Swal.fire('تنبيه', 'لا يوجد محتوى للحفظ', 'warning');
         return;
     }
-    const blob = new Blob([generatedContent], { type: 'application/msword' });
+
+    // تحويل النص إلى HTML مع الحفاظ على التنسيق
+    const formattedContent = generatedContent
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>');
+
+    // إنشاء مستند HTML متكامل مع دعم العربية
+    const htmlContent = `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>مذكرة قانونية</title>
+    <style>
+        body {
+            font-family: 'Amiri', 'Tajawal', serif;
+            line-height: 1.8;
+            padding: 20px;
+            direction: rtl;
+        }
+        h1, h2, h3 {
+            color: #bf953f;
+        }
+    </style>
+</head>
+<body>
+    ${formattedContent}
+</body>
+</html>`;
+
+    const blob = new Blob([htmlContent], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `مذكرة_قانونية_${new Date().toLocaleDateString('ar-EG')}.doc`;
+    a.download = `مذكرة_قانونية_${new Date().toLocaleDateString('ar-EG').replace(/\//g, '-')}.doc`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -954,7 +987,6 @@ function saveAsWord() {
 }
 
 function saveAsPdf() {
-    // يمكن استخدام jsPDF لتحويل النص إلى PDF، لكن حالياً نعرض رسالة
     Swal.fire('قريباً', 'خاصية حفظ PDF قيد التطوير', 'info');
 }
 
@@ -993,7 +1025,6 @@ function installPWA() {
 // تسجيل Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // إنشاء محتوى Service Worker بسيط
         const swContent = `
             self.addEventListener('install', e => {
                 e.waitUntil(
@@ -1040,38 +1071,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sDateField) sDateField.value = nextWeek.toISOString().slice(0, 16);
 });
 
-// ========== التعديلات الإضافية لإصلاح المشكلتين (دون تغيير أي شيء آخر) ==========
-
-// 1. تفويض الأحداث للنقر على بطاقات نتائج البحث
+// تفويض الأحداث للنقر على بطاقات نتائج البحث
 document.getElementById('searchResults').addEventListener('click', function(e) {
-    // البحث عن أقرب عنصر يحمل class case-card (البطاقة نفسها)
     const card = e.target.closest('.case-card[data-case-id]');
-    if (!card) return; // إذا لم يكن النقر على بطاقة
-
-    // التأكد أن النقر لم يأت من زر داخلي (تعديل/حذف)
+    if (!card) return;
     if (e.target.closest('button')) return;
-
     const caseId = card.getAttribute('data-case-id');
     if (caseId) openCaseDetails(caseId);
 });
 
-// 2. تحسين ظهور زر تثبيت PWA
+// تحسين ظهور زر تثبيت PWA
 (function enhancePWA() {
-    // زر التثبيت
     const installBtn = document.getElementById('installBtn');
     if (!installBtn) return;
-
-    // إظهار الزر إذا كان المتصفح يدعم PWA ولم يُلغَ التثبيت مسبقاً
     if (window.matchMedia('(display-mode: standalone)').matches) {
-        // التطبيق مثبت بالفعل
         installBtn.style.display = 'none';
     } else {
-        // التحقق من دعم beforeinstallprompt
         if ('onbeforeinstallprompt' in window) {
-            // سيتم إظهار الزر عند الحدث (الكود الأصلي موجود)
-            // نتركه للحدث الأصلي
+            // سيتم إظهار الزر عند الحدث
         } else {
-            // في بعض المتصفحات قد لا يظهر الحدث، نظهر الزر يدوياً
             installBtn.style.display = 'inline-block';
         }
     }

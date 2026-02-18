@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المستشار الذكي PRO | Groq & GitHub</title>
+    <title>المستشار الذكي PRO | إدارة المحتوى القانوني</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -11,127 +11,133 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        :root { --gold: #d4af37; --dark: #020617; }
-        body { font-family: 'Tajawal', sans-serif; background: var(--dark); color: #e2e8f0; }
+        :root { --bg-dark: #020617; --panel-bg: rgba(30, 41, 59, 0.96); --gold-primary: #d4af37; --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c); }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-dark); color: #e2e8f0; background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 80%); }
         .serif-font { font-family: 'Amiri', serif; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(212,175,55,0.1); }
-        .ql-container { font-size: 1.2rem; height: 500px !important; background: white; color: black; border-radius: 0 0 8px 8px; }
-        .ql-editor { text-align: right; direction: rtl; font-family: 'Amiri', serif; }
-        .btn-gold { background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728); color: #020617; font-weight: bold; transition: 0.3s; }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+        .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+        .ql-container { background: #ffffff !important; color: #000 !important; min-height: 500px; font-size: 1.25rem; border-radius: 0 0 8px 8px !important; }
+        .ql-editor { text-align: right; direction: rtl; font-family: 'Amiri', serif; line-height: 2; padding: 2rem; }
+        .glass-panel { background: var(--panel-bg); backdrop-filter: blur(12px); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 12px; }
+        .input-pro { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px; color: white; width: 100%; }
+        .btn-royal { background: var(--gold-gradient); color: #0f172a; font-weight: bold; padding: 8px 16px; border-radius: 6px; transition: 0.3s; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-royal:hover { transform: translateY(-2px); filter: brightness(1.1); }
         
-        /* Modal Style */
-        #previewModal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.9); padding: 20px; overflow-y: auto; }
+        /* Preview Modal */
+        #previewModal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
     </style>
 </head>
-<body class="bg-slate-950">
+<body>
 
-<!-- قفل الشاشة -->
-<div id="lock-screen" class="fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center">
-    <div class="glass p-10 rounded-2xl max-w-md w-full text-center border-t-4 border-yellow-600">
-        <i class="fas fa-shield-halved text-5xl text-yellow-500 mb-4"></i>
-        <h2 class="text-2xl font-bold mb-6">نظام المستشار القانوني</h2>
-        <input type="password" id="adminPass" placeholder="كلمة المرور" class="w-full p-3 rounded bg-slate-900 border border-slate-700 text-center mb-4 focus:border-yellow-500 outline-none">
-        <button onclick="checkPass()" class="btn-gold w-full py-3 rounded-lg">دخول النظام</button>
+<!-- شاشة القفل -->
+<div id="lock-screen" class="fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center p-4">
+    <div class="glass-panel p-10 max-w-md w-full text-center border-t-2 border-yellow-600 shadow-2xl">
+        <div class="mb-6"><i class="fas fa-scale-balanced text-6xl gold-text"></i></div>
+        <h2 class="text-3xl font-bold text-white mb-2 serif-font">المستشار | Groq System</h2>
+        <input type="password" id="adminPass" placeholder="كلمة المرور" class="input-pro text-center text-xl mb-6">
+        <button onclick="checkPass()" class="btn-royal w-full justify-center py-3">تسجيل الدخول</button>
     </div>
 </div>
 
-<!-- المعاينة -->
-<div id="previewModal">
-    <div class="max-w-4xl mx-auto bg-white text-black p-8 rounded-lg shadow-2xl relative mt-10">
-        <button onclick="closePreview()" class="absolute top-4 left-4 text-red-600 text-2xl"><i class="fas fa-times-circle"></i></button>
-        <div id="previewContent" class="ql-editor"></div>
+<!-- نافذة المعاينة -->
+<div id="previewModal" class="flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-5xl h-[90vh] rounded-xl overflow-hidden flex flex-col shadow-2xl">
+        <div class="bg-gray-100 p-4 flex justify-between items-center border-b">
+            <h3 class="text-black font-bold">معاينة المقال القانوني</h3>
+            <button onclick="closePreview()" class="text-red-600 text-2xl"><i class="fas fa-times-circle"></i></button>
+        </div>
+        <div id="previewBody" class="flex-grow overflow-y-auto p-8 text-black bg-white">
+            <h1 id="previewTitle" class="text-4xl font-bold mb-6 border-b-2 border-yellow-600 pb-4 serif-font"></h1>
+            <div id="previewContent" class="ql-editor"></div>
+        </div>
     </div>
 </div>
 
-<div id="dashboard" class="hidden min-h-screen flex flex-col">
-    <header class="glass sticky top-0 z-50 p-4 border-b border-white/5">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-balance-scale text-yellow-500 text-2xl"></i>
-                <h1 class="font-bold text-xl serif-font hidden md:block">لوحة تحكم المستشار الذكي</h1>
+<div id="dashboard" class="hidden flex flex-col min-h-screen">
+    <header class="border-b border-white/5 bg-[#0f172a]/95 sticky top-0 z-50 p-4">
+        <div class="max-w-[1800px] mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <i class="fas fa-gavel text-yellow-500 text-2xl"></i>
+                <h1 class="font-bold text-xl text-white serif-font">مؤسسة محمود عبد الحميد</h1>
             </div>
             <div class="flex gap-2">
-                <button onclick="toggleSettings()" class="bg-slate-800 p-2 px-4 rounded text-sm"><i class="fas fa-cog"></i> الإعدادات</button>
-                <button onclick="showPreview()" class="bg-blue-600 p-2 px-4 rounded text-sm"><i class="fas fa-eye"></i> معاينة</button>
-                <button onclick="saveToGitHub()" id="publish-btn" class="btn-gold p-2 px-6 rounded text-sm">نشر المقال</button>
+                <button onclick="toggleSettings()" class="bg-slate-800 text-gray-300 px-4 py-2 rounded text-sm transition border border-white/10"><i class="fas fa-cog"></i></button>
+                <button onclick="openPreview()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm flex items-center gap-2"><i class="fas fa-eye"></i> معاينة</button>
+                <button onclick="saveToGitHub(true)" id="draft-btn" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm flex items-center gap-2"><i class="fas fa-file-signature"></i> مسودة</button>
+                <button onclick="saveToGitHub(false)" id="publish-btn" class="btn-royal text-sm"><i class="fas fa-globe"></i> نشر نهائي</button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto w-full p-4 grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- منطقة المحرر -->
-        <div class="lg:col-span-3 space-y-4">
-            <input type="text" id="postTitle" placeholder="عنوان المذكرة أو البحث..." class="w-full bg-transparent text-3xl font-bold border-b-2 border-slate-700 focus:border-yellow-500 outline-none py-2 serif-font">
-            
-            <div class="flex gap-2 items-center bg-slate-900 p-3 rounded-lg border border-indigo-500/30">
-                <button onclick="aiLegalDraft()" id="ai-btn" class="bg-indigo-600 hover:bg-indigo-500 p-2 px-4 rounded flex items-center gap-2">
-                    <i class="fas fa-robot"></i> صياغة ذكية (Groq)
-                </button>
-                <span class="text-xs text-slate-400">استخدم الذكاء الاصطناعي لكتابة مسودة قانونية مقارنة</span>
-            </div>
-
-            <div id="editor-container" class="bg-white rounded-lg shadow-inner">
+    <main class="flex-grow p-6 max-w-[1800px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-9 space-y-4">
+            <div class="glass-panel p-6">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-6 gap-4">
+                    <input type="text" id="postTitle" placeholder="موضوع البحث القانوني المقارن..." class="w-full bg-transparent text-3xl font-bold text-white border-b border-gray-700 focus:border-yellow-500 outline-none pb-3 serif-font">
+                    <button onclick="aiLegalDraft()" id="ai-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg text-sm shadow-xl transition flex items-center gap-2 border border-indigo-400/30">
+                        <i class="fas fa-brain text-lg"></i> 
+                        <div class="text-right"><span class="block font-bold">المحامي الآلي</span><span class="block text-[9px] opacity-80">Groq LPU Speed</span></div>
+                    </button>
+                </div>
                 <div id="editor"></div>
             </div>
         </div>
 
-        <!-- الشريط الجانبي -->
-        <div class="space-y-4">
-            <div class="glass p-4 rounded-xl">
-                <h3 class="text-yellow-500 font-bold mb-4 border-b border-white/10 pb-2">الإعدادات الإضافية</h3>
+        <div class="lg:col-span-3 space-y-4">
+            <div class="glass-panel p-5">
+                <h3 class="text-sm font-bold text-yellow-500 mb-4 border-b border-white/10 pb-2">إعدادات المقال</h3>
                 <div class="space-y-4">
-                    <label class="block">
-                        <span class="text-xs text-gray-400">اسم الملف (Slug)</span>
-                        <input type="text" id="slug" placeholder="legal-article-1" class="w-full bg-black/40 border border-white/10 p-2 rounded text-xs mt-1">
-                    </label>
-                    <label class="block">
-                        <span class="text-xs text-gray-400">صورة المقال</span>
-                        <input type="file" id="imgInput" class="hidden" accept="image/*">
-                        <div onclick="document.getElementById('imgInput').click()" class="h-32 border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center cursor-pointer hover:border-yellow-500">
-                            <img id="previewImg" class="h-full w-full object-cover hidden">
-                            <span id="imgPlaceholder"><i class="fas fa-image text-2xl"></i></span>
-                        </div>
-                    </label>
+                    <div>
+                        <label class="text-[10px] text-gray-400 block mb-1">موديل الذكاء الاصطناعي (Groq Model):</label>
+                        <input type="text" id="modelId" placeholder="مثال: llama-3.3-70b-versatile" class="input-pro text-xs font-mono text-orange-400" list="modelSuggestions">
+                        <datalist id="modelSuggestions">
+                            <option value="llama-3.3-70b-versatile">
+                            <option value="llama3-70b-8192">
+                            <option value="mixtral-8x7b-32768">
+                        </datalist>
+                    </div>
+                    <input type="text" id="slug" placeholder="الرابط (slug-name)" class="input-pro text-xs" dir="ltr">
+                    <textarea id="excerpt" rows="3" placeholder="ملخص المذكرة..." class="input-pro text-xs"></textarea>
                 </div>
             </div>
 
-            <div class="glass p-4 rounded-xl flex-grow h-[400px] flex flex-col">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold">المقالات المنشورة</h3>
-                    <button onclick="loadArticles()" class="text-blue-400"><i class="fas fa-sync"></i></button>
+            <div class="glass-panel p-5 flex flex-col h-[450px]">
+                <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+                    <h3 class="text-sm font-bold text-white">الأرشيف والموسودات</h3>
+                    <button onclick="loadArticles()" class="text-yellow-500 hover:rotate-180 transition-all duration-500"><i class="fas fa-sync-alt"></i></button>
                 </div>
-                <div id="articlesList" class="overflow-y-auto space-y-2 text-sm"></div>
+                <div id="articlesList" class="flex-grow overflow-y-auto space-y-2 custom-scroll pr-1">
+                    <p class="text-xs text-gray-500 text-center mt-10">اضغط تحديث لجلب المقالات</p>
+                </div>
             </div>
         </div>
     </main>
 </div>
 
 <!-- لوحة الإعدادات -->
-<div id="settings-panel" class="hidden fixed inset-0 z-[100] bg-black/80 flex justify-center items-center">
-    <div class="glass p-8 rounded-2xl w-full max-w-md">
-        <h3 class="text-xl font-bold mb-6">إعدادات الربط</h3>
-        <div class="space-y-4 text-sm">
-            <input type="password" id="ghToken" placeholder="GitHub Token" class="w-full p-3 bg-slate-900 rounded">
-            <input type="password" id="groqKey" placeholder="Groq API Key" class="w-full p-3 bg-slate-900 rounded">
-            <input type="text" id="repoOwner" placeholder="Username (malegal)" class="w-full p-3 bg-slate-900 rounded">
-            <input type="text" id="repoName" placeholder="Repo Name" class="w-full p-3 bg-slate-900 rounded">
-            <div class="flex gap-2 mt-6">
-                <button onclick="saveSettings()" class="btn-gold flex-grow py-2 rounded">حفظ</button>
-                <button onclick="toggleSettings()" class="bg-red-900 px-4 rounded">إلغاء</button>
-            </div>
+<div id="settings-panel" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex justify-end">
+    <div class="w-full max-w-md bg-[#1e293b] h-full p-8 shadow-2xl border-l border-yellow-500/20">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-xl font-bold text-white">إعدادات النظام</h3>
+            <button onclick="toggleSettings()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="space-y-4">
+            <input type="text" id="repoOwner" placeholder="Repo Owner (e.g. malegal)" class="input-pro">
+            <input type="text" id="repoName" placeholder="Repo Name" class="input-pro">
+            <input type="password" id="groqKey" placeholder="Groq API Key" class="input-pro">
+            <input type="password" id="ghToken" placeholder="GitHub Token" class="input-pro">
+            <button onclick="saveKeys()" class="btn-royal w-full justify-center py-3 mt-4">حفظ الإعدادات</button>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // الإعدادات الافتراضية
-    let ghToken, groqKey, repoOwner, repoName, currentSha = null, isEditing = false, imageBase64 = null;
+    let ghToken, groqKey, repoOwner, repoName, currentSha = null, isEditing = false;
 
     const quill = new Quill('#editor', {
         theme: 'snow',
-        modules: { toolbar: [[{'header': [1, 2, 3, false]}], ['bold', 'italic', 'underline'], [{'list': 'ordered'}, {'list': 'bullet'}], [{'align': []}, {'direction': 'rtl'}], ['link', 'image', 'clean']] }
+        placeholder: 'ابدأ كتابة المذكرة القانونية...',
+        modules: { toolbar: [[{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }, { 'direction': 'rtl' }], ['link', 'clean']] }
     });
     quill.format('direction', 'rtl');
 
@@ -139,47 +145,48 @@
         if(document.getElementById('adminPass').value === "mahmoud237") {
             document.getElementById('lock-screen').style.display = 'none';
             document.getElementById('dashboard').classList.remove('hidden');
-            loadLocalSettings();
-        } else alert("❌ خطأ!");
+            loadSettings();
+        } else alert("كلمة المرور خاطئة");
     }
 
-    function loadLocalSettings() {
-        ghToken = localStorage.getItem('ghToken');
-        groqKey = localStorage.getItem('groqKey');
-        repoOwner = localStorage.getItem('repoOwner') || 'malegal';
-        repoName = localStorage.getItem('repoName') || 'mahmoud-legal';
+    function loadSettings() {
+        ghToken = localStorage.getItem('m_gh');
+        groqKey = localStorage.getItem('m_groq');
+        repoOwner = localStorage.getItem('m_owner') || "malegal";
+        repoName = localStorage.getItem('m_repo') || "mahmoud-legal";
         
-        document.getElementById('ghToken').value = ghToken;
-        document.getElementById('groqKey').value = groqKey;
+        document.getElementById('ghToken').value = ghToken || '';
+        document.getElementById('groqKey').value = groqKey || '';
         document.getElementById('repoOwner').value = repoOwner;
         document.getElementById('repoName').value = repoName;
-
-        if(ghToken) loadArticles();
     }
 
-    function saveSettings() {
-        localStorage.setItem('ghToken', document.getElementById('ghToken').value);
-        localStorage.setItem('groqKey', document.getElementById('groqKey').value);
-        localStorage.setItem('repoOwner', document.getElementById('repoOwner').value);
-        localStorage.setItem('repoName', document.getElementById('repoName').value);
-        alert("✅ تم الحفظ");
+    function saveKeys() {
+        localStorage.setItem('m_gh', document.getElementById('ghToken').value.trim());
+        localStorage.setItem('m_groq', document.getElementById('groqKey').value.trim());
+        localStorage.setItem('m_owner', document.getElementById('repoOwner').value.trim());
+        localStorage.setItem('m_repo', document.getElementById('repoName').value.trim());
+        alert("تم حفظ الإعدادات بنجاح");
+        toggleSettings();
         location.reload();
     }
 
     function toggleSettings() { document.getElementById('settings-panel').classList.toggle('hidden'); }
 
-    // --- معاينة المقال ---
-    function showPreview() {
-        document.getElementById('previewContent').innerHTML = `<h1>${document.getElementById('postTitle').value}</h1>${quill.root.innerHTML}`;
-        document.getElementById('previewModal').style.display = 'block';
+    // --- المعاينة ---
+    function openPreview() {
+        document.getElementById('previewTitle').innerText = document.getElementById('postTitle').value || "عنوان المقال";
+        document.getElementById('previewContent').innerHTML = quill.root.innerHTML;
+        document.getElementById('previewModal').style.display = 'flex';
     }
     function closePreview() { document.getElementById('previewModal').style.display = 'none'; }
 
-    // --- وظائف الذكاء الاصطناعي ---
+    // --- المحامي الآلي ---
     async function aiLegalDraft() {
         const title = document.getElementById('postTitle').value;
-        if(!groqKey || !title) return alert("⚠️ أدخل العنوان ومفتاح Groq");
-        
+        const model = document.getElementById('modelId').value;
+        if(!groqKey || !title || !model) return alert("⚠️ يرجى إدخال عنوان البحث، مفتاح Groq، واسم النموذج.");
+
         const btn = document.getElementById('ai-btn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الصياغة...';
@@ -189,133 +196,151 @@
                 method: "POST",
                 headers: { "Authorization": `Bearer ${groqKey}`, "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    model: "llama3-70b-8192",
-                    messages: [{ role: "system", content: "أنت مستشار قانوني مصري خبير. اكتب مقالاً بصيغة HTML (استخدم h2 و p) يتضمن تأصيلاً قانونياً مصرياً ومقارنة بالقانون الفرنسي." },
-                               { role: "user", content: `اكتب بحثاً عن: ${title}` }]
+                    model: model,
+                    messages: [
+                        {role: "system", content: "أنت مستشار قانوني مصري رفيع المستوى. اكتب بحثاً قانونياً بأسلوب محكمة النقض مستخدماً HTML للعناوين h2 والفقرات p. اذكر نصوص القانون المصري وقارنها بالقانون الفرنسي."},
+                        {role: "user", content: `اكتب بحثاً مفصلاً عن: ${title}`}
+                    ]
                 })
             });
             const data = await response.json();
-            const content = data.choices[0].message.content.replace(/```html|```/g, '');
-            quill.root.innerHTML = content;
-            document.getElementById('slug').value = title.trim().replace(/\s+/g, '-').toLowerCase();
-        } catch (e) { alert("خطأ في الاتصال بـ Groq"); }
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-robot"></i> صياغة ذكية (Groq)';
+            if(data.error) throw new Error(data.error.message);
+            quill.root.innerHTML = data.choices[0].message.content.replace(/```html|```/g, '');
+            document.getElementById('slug').value = title.trim().replace(/\s+/g, '-');
+        } catch (e) { alert("خطأ: " + e.message); }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-brain text-lg"></i> المحامي الآلي';
     }
 
-    // --- وظائف GitHub (الحفظ والحذف) ---
-    
-    // وظيفة تحويل النص لـ Base64 تدعم العربية بشكل صحيح
+    // --- وظائف GitHub (نشر، مسودة، حذف) ---
     function toUTF8Base64(str) {
         return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
     }
 
-    async function saveToGitHub() {
-        if(!ghToken) return alert("⚠️ ينقصك توكن GitHub");
+    async function saveToGitHub(isDraft) {
+        if(!ghToken) return alert("أدخل توكن GitHub في الإعدادات");
         const title = document.getElementById('postTitle').value;
-        const slug = document.getElementById('slug').value || Date.now();
+        const slug = document.getElementById('slug').value;
         const content = quill.root.innerHTML;
-        const path = `blog/articles/${slug}.md`;
+        if(!title || !slug) return alert("يرجى إكمال العنوان والرابط");
 
-        const btn = document.getElementById('publish-btn');
-        btn.disabled = true; btn.innerText = "جاري النشر...";
+        const path = isDraft ? `blog/drafts/${slug}.md` : `blog/articles/${slug}.md`;
+        const btnId = isDraft ? 'draft-btn' : 'publish-btn';
+        const btn = document.getElementById(btnId);
+        btn.disabled = true;
 
-        const frontmatter = `---
+        const mdContent = `---
 title: "${title}"
 date: "${new Date().toISOString()}"
+description: "${document.getElementById('excerpt').value}"
 layout: post
 ---
 ${content}`;
 
         try {
             const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`, {
-                method: "PUT",
-                headers: { "Authorization": `token ${ghToken}`, "Content-Type": "application/json" },
+                method: 'PUT',
+                headers: { 'Authorization': `token ${ghToken}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: isEditing ? `Update ${slug}` : `Create ${slug}`,
-                    content: toUTF8Base64(frontmatter),
+                    message: isDraft ? "Save Draft" : "Publish Article",
+                    content: toUTF8Base64(mdContent),
                     sha: isEditing ? currentSha : undefined
                 })
             });
 
             if(res.ok) {
-                alert("✅ تم النشر بنجاح على GitHub!");
+                alert(isDraft ? "✅ تم الحفظ في المسودات" : "✅ تم النشر النهائي");
                 resetEditor();
                 loadArticles();
             } else {
-                const err = await res.json();
-                alert(`❌ فشل النشر: ${err.message}`);
+                const errorData = await res.json();
+                alert("خطأ: " + errorData.message);
             }
-        } catch (e) { alert("❌ خطأ تقني: " + e.message); }
-        btn.disabled = false; btn.innerText = "نشر المقال";
+        } catch (e) { alert("فشل الاتصال بـ GitHub"); }
+        btn.disabled = false;
     }
 
     async function loadArticles() {
         const list = document.getElementById('articlesList');
-        list.innerHTML = "جاري التحميل...";
+        list.innerHTML = '<p class="text-center text-xs py-4">جاري التحميل...</p>';
+        
         try {
-            const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog/articles`, {
-                headers: { "Authorization": `token ${ghToken}` }
-            });
-            const files = await res.json();
-            list.innerHTML = files.map(f => `
-                <div class="flex items-center justify-between bg-slate-900 p-2 rounded border border-white/5">
-                    <span class="truncate w-32">${f.name}</span>
-                    <div class="flex gap-2">
-                        <button onclick="editArticle('${f.path}', '${f.sha}')" class="text-blue-400"><i class="fas fa-edit"></i></button>
-                        <button onclick="deleteArticle('${f.path}', '${f.sha}')" class="text-red-400"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
-        } catch (e) { list.innerHTML = "المجلد فارغ أو غير موجود."; }
+            const folders = ['blog/articles', 'blog/drafts'];
+            let html = '';
+            
+            for (let folder of folders) {
+                const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folder}`, {
+                    headers: { 'Authorization': `token ${ghToken}` }
+                });
+                if(!res.ok) continue;
+                const files = await res.json();
+                
+                const typeLabel = folder.includes('drafts') ? 'مسودة' : 'منشور';
+                const typeColor = folder.includes('drafts') ? 'text-orange-400' : 'text-green-400';
+
+                files.forEach(f => {
+                    if(!f.name.endsWith('.md')) return;
+                    const fileName = decodeURIComponent(f.name);
+                    html += `
+                    <div class="flex items-center justify-between bg-black/30 p-2 rounded border border-white/5 hover:border-yellow-500/50 transition">
+                        <div class="truncate w-2/3">
+                            <p class="text-[10px] ${typeColor}">${typeLabel}</p>
+                            <p class="text-xs truncate text-gray-200">${fileName}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editArticle('${f.path}', '${f.sha}')" class="text-blue-400 p-1"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteArticle('${f.path}', '${f.sha}')" class="text-red-500 p-1"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+                });
+            }
+            list.innerHTML = html || '<p class="text-center text-xs py-4 text-gray-500">لا يوجد ملفات</p>';
+        } catch (e) { list.innerHTML = '<p class="text-red-400 text-center text-xs">فشل جلب البيانات</p>'; }
     }
 
     async function deleteArticle(path, sha) {
-        if(!confirm("هل أنت متأكد من حذف هذا المقال نهائياً؟")) return;
+        if(!confirm("هل أنت متأكد من حذف هذا الملف نهائياً من GitHub؟")) return;
         try {
             const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`, {
-                method: "DELETE",
-                headers: { "Authorization": `token ${ghToken}`, "Content-Type": "application/json" },
-                body: JSON.stringify({ message: "Delete post", sha: sha })
+                method: 'DELETE',
+                headers: { 'Authorization': `token ${ghToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: "Delete via Admin", sha: sha })
             });
-            if(res.ok) { alert("🗑️ تم الحذف"); loadArticles(); }
+            if(res.ok) { alert("تم الحذف"); loadArticles(); }
         } catch (e) { alert("فشل الحذف"); }
     }
 
     async function editArticle(path, sha) {
         const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`, {
-            headers: { "Authorization": `token ${ghToken}` }
+            headers: { 'Authorization': `token ${ghToken}` }
         });
         const data = await res.json();
         // فك تشفير المحتوى العربي
         const rawContent = decodeURIComponent(atob(data.content).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
         
         const parts = rawContent.split('---');
-        document.getElementById('postTitle').value = parts[1].match(/title:\s*"(.*)"/)[1];
+        const titleMatch = parts[1].match(/title:\s*"(.*)"/);
+        const descMatch = parts[1].match(/description:\s*"(.*)"/);
+        
+        document.getElementById('postTitle').value = titleMatch ? titleMatch[1] : "";
+        document.getElementById('excerpt').value = descMatch ? descMatch[1] : "";
+        document.getElementById('slug').value = data.name.replace('.md', '');
         quill.root.innerHTML = parts.slice(2).join('---');
-        document.getElementById('slug').value = path.split('/').pop().replace('.md', '');
+        
         currentSha = sha;
         isEditing = true;
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
+        alert("تم تحميل المقال للتعديل");
     }
 
     function resetEditor() {
-        document.getElementById('postTitle').value = "";
-        quill.root.innerHTML = "";
-        document.getElementById('slug').value = "";
+        document.getElementById('postTitle').value = '';
+        document.getElementById('slug').value = '';
+        document.getElementById('excerpt').value = '';
+        quill.root.innerHTML = '';
         isEditing = false;
         currentSha = null;
     }
-
-    // صورة المعاينة
-    document.getElementById('imgInput').addEventListener('change', function(e) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById('previewImg').src = reader.result;
-            document.getElementById('previewImg').classList.remove('hidden');
-            document.getElementById('imgPlaceholder').classList.add('hidden');
-        }
-        reader.readAsDataURL(e.target.files[0]);
-    });
 </script>
 </body>
 </html>

@@ -17,6 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- إضافة مكتبة PDF.js لقراءة الملفات للذكاء الاصطناعي -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <style>
         /* الأنماط كما هي (لم تتغير) */
@@ -84,6 +86,8 @@
             .admin-toolbar h1 { font-size: 0.9rem !important; }
             .nav-tabs .nav-link { font-size: 0.75rem; padding: 8px 12px; }
         }
+        /* تحسين مظهر المخرجات القانونية */
+        #aiResult { font-family: 'Amiri', serif; line-height: 2; font-size: 1.1rem; text-align: justify; }
     </style>
 </head>
 <body>
@@ -91,7 +95,7 @@
 <div class="admin-toolbar">
     <div class="d-flex align-items-center gap-2">
         <i class="bi bi-shield-check text-warning fs-5"></i>
-        <h1 class="gold-text fs-5 fw-bold mb-0">نظام إدارة القضايا | محمود عبد الحميد المحامي</h1>
+        <h1 class="gold-text fs-5 fw-bold mb-0">نظام إدارة القضايا | محمود عبد الحميد للمحاماة</h1>
     </div>
     <button class="gold-btn btn btn-sm px-3" onclick="installPWA()" id="installBtn" style="display:none">تثبيت التطبيق</button>
 </div>
@@ -271,28 +275,43 @@
                 </div>  
             </div>  
 
-            <!-- تبويب المحامي الآلي (AI Legal Assistant) مع Groq -->
+            <!-- تبويب المحامي الآلي (AI Legal Assistant) المطور -->
             <div class="tab-pane fade" id="aiAssistant">
                 <div class="card-glass p-3 p-md-4">
-                    <h5 class="gold-text mb-3"><i class="bi bi-robot"></i> المحامي الآلي - البحث على الإنترنت (Groq + Tavily)</h5>
+                    <h5 class="gold-text mb-3"><i class="bi bi-robot"></i> المحامي الآلي (قانون مصري)</h5>
                     <div class="row g-3 mb-3">
                         <div class="col-12">
                             <label>مفتاح Groq API</label>
                             <input type="text" id="groqApiKey" class="form-control" placeholder="أدخل مفتاح Groq API" value="YOUR_GROQ_API_KEY">
-                            <small class="text-white-50">احصل على مفتاح من console.groq.com</small>
                         </div>
                         <div class="col-12">
-                            <label>مفتاح Tavily API (للبحث على الإنترنت)</label>
+                            <label>مفتاح Tavily API</label>
                             <input type="text" id="tavilyApiKey" class="form-control" placeholder="أدخل مفتاح Tavily API" value="YOUR_TAVILY_API_KEY">
-                            <small class="text-white-50">احصل على مفتاح مجاني من tavily.com</small>
+                        </div>
+                        
+                        <!-- إضافات السياق الجديدة -->
+                        <div class="col-md-6">
+                            <label>اختيار النموذج</label>
+                            <select id="groqModel" class="form-select">
+                                <option value="llama-3.3-70b-versatile">Llama 3.3 (الأفضل للعربية)</option>
+                                <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>استيراد بيانات قضية</label>
+                            <select id="aiCaseSelect" class="form-select">
+                                <option value="">-- اختر قضية لإرفاق بياناتها --</option>
+                                <!-- يتم الملء بالجافاسكريبت -->
+                            </select>
                         </div>
                         <div class="col-12">
-                            <label>نموذج Groq (اختياري)</label>
-                            <input type="text" id="groqModel" class="form-control" placeholder="مثال: llama-3.3-70b-versatile" value="llama-3.3-70b-versatile">
+                            <label>إرفاق ملف (PDF/نصي) للتحليل</label>
+                            <input type="file" id="aiFileInput" class="form-control" accept=".pdf,.txt">
                         </div>
+
                         <div class="col-12">
                             <label>موضوع المذكرة / البحث القانوني</label>
-                            <textarea id="aiPrompt" class="form-control" rows="4" placeholder="مثال: اكتب مذكرة دفاع في قضية تبديد منقولات زوجية تتضمن الوقائع والدفوع القانونية...."></textarea>
+                            <textarea id="aiPrompt" class="form-control" rows="4" placeholder="اكتب طلبك هنا، مثال: اكتب مذكرة دفاع في جنحة ضرب بناءً على التناقض..."></textarea>
                         </div>
                         <div class="col-12 d-flex gap-2">
                             <button class="gold-btn btn flex-grow-1 py-3" onclick="generateLegalContentWithWebSearch()"><i class="bi bi-stars"></i> بحث + إنشاء المحتوى</button>
@@ -305,11 +324,10 @@
                             <h6 class="gold-text">النتيجة:</h6>
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-outline-success" onclick="saveAsWord()"><i class="bi bi-file-word"></i> Word</button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="saveAsPdf()"><i class="bi bi-file-pdf"></i> PDF</button>
                                 <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard()"><i class="bi bi-clipboard"></i> نسخ</button>
                             </div>
                         </div>
-                        <div id="aiResult" class="p-3 bg-dark rounded border border-gold" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: 'Amiri', serif; line-height: 1.8;"></div>
+                        <div id="aiResult" class="p-3 bg-dark rounded border border-gold" style="max-height: 400px; overflow-y: auto; white-space: pre-wrap;"></div>
                     </div>
                 </div>
             </div>
@@ -321,9 +339,15 @@
 <div class="modal fade" id="caseModal" tabindex="-1">  
     <div class="modal-dialog modal-lg">  
         <div class="modal-content bg-dark text-white gold-border">  
-            <div class="modal-header border-secondary"><h5 class="modal-title gold-text">تفاصيل القضية</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>  
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title gold-text">تفاصيل القضية</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>  
             <div class="modal-body" id="caseDetails"></div>  
             <div class="modal-footer border-secondary">  
+                <!-- أزرار التحكم في القضية داخل المودال -->
+                <button class="btn btn-warning" id="modalEditBtn" onclick="openEditFromModal()"><i class="bi bi-pencil"></i> تعديل القضية</button>
+                <button class="btn btn-danger" id="modalDeleteBtn" onclick="deleteCaseFromModal()"><i class="bi bi-trash"></i> حذف القضية</button>
                 <button class="gold-btn btn" onclick="printCasePDF()">طباعة التقرير</button>  
                 <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">إغلاق</button>  
             </div>  
@@ -355,7 +379,6 @@
                 </form>
             </div>
             <div class="modal-footer border-secondary">
-                <button class="btn btn-danger" onclick="confirmDeleteCase()">حذف القضية</button>
                 <button class="gold-btn btn" onclick="updateCase()">حفظ التعديلات</button>
                 <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">إلغاء</button>
             </div>
@@ -418,6 +441,7 @@ function login(){
         updateStatistics();
         loadUpcoming('week');
         loadSecurityLogs();
+        loadCasesForAiSelect(); // تحميل القضايا للذكاء الاصطناعي
     } else { Swal.fire("خطأ","كلمة المرور غير صحيحة","error"); }  
 }
 
@@ -435,10 +459,8 @@ async function updateStatistics() {
 // ========== دوال القضايا والجلسات ==========
 function extractAdminNumber(caseCode) {
     if (!caseCode) return null;
-    // الكود الآن بدون شرطات، مثال: MA26001H7G4D9
-    // الرقم الإداري هو الأرقام الثلاثة بعد السنة (المواضع 5-7)
     if (caseCode.length >= 7) {
-        return caseCode.substring(4, 7); // بعد "MA26" يأخذ 001
+        return caseCode.substring(4, 7);
     }
     return null;
 }
@@ -450,7 +472,6 @@ async function generateCaseCode(caseYear) {
     if (cases && cases.length > 0) {
         cases.forEach(c => {
             if (c.case_code) {
-                // استخراج الرقم التسلسلي من الكود (المواضع 4-6 بعد MA و السنة)
                 const serialPart = c.case_code.substring(4, 7);
                 const serial = parseInt(serialPart, 10);
                 if (!isNaN(serial) && serial > maxSerial) maxSerial = serial;
@@ -459,7 +480,7 @@ async function generateCaseCode(caseYear) {
     }
     const newSerial = (maxSerial + 1).toString().padStart(3, '0');
     const randomPart = Math.random().toString(36).substring(2, 7).toUpperCase();
-    return `MA${yearSuffix}${newSerial}${randomPart}`; // بدون شرطات
+    return `MA${yearSuffix}${newSerial}${randomPart}`;
 }
 
 async function searchByAdminNumber(query) {  
@@ -468,7 +489,6 @@ async function searchByAdminNumber(query) {
         return;  
     }  
     try {
-        // نبحث عن الكود الذي يحتوي على الرقم الإداري (بعد MA والسنة)
         const { data, error } = await db.from('cases').select('*').ilike('case_code', `%${query}%`).limit(5);  
         if (error) return;
         if (data && data.length > 0) {  
@@ -558,10 +578,11 @@ document.getElementById('caseForm').onsubmit = async e => {
 
         const { data, error } = await db.from('cases').insert([caseData]).select().single();
         if (error) {
-            const { data: retryData, error: retryError } = await db.from('cases').insert([caseData]).select();
-            if (retryError) Swal.fire("خطأ", retryError.message, "error");
-            else if (retryData && retryData.length > 0) showSuccessMessage(retryData[0]);
-        } else if (data) showSuccessMessage(data);
+            Swal.fire("خطأ", error.message, "error");
+        } else if (data) {
+            showSuccessMessage(data);
+            loadCasesForAiSelect(); // تحديث قائمة القضايا للذكاء الاصطناعي
+        }
     } catch (err) { Swal.fire("خطأ", "حدث خطأ غير متوقع", "error"); }
 };
 
@@ -591,7 +612,7 @@ async function saveSession() {
     } catch (err) { Swal.fire("خطأ", "حدث خطأ غير متوقع", "error"); }
 }
 
-// ========== دوال البحث وعرض النتائج ==========
+// ========== دوال البحث وعرض النتائج (تم تعديلها لإصلاح النقر) ==========
 async function searchCases(){  
     const t = searchInput.value;  
     if(!t.trim()) return Swal.fire("تنبيه","أدخل كلمة للبحث","warning");  
@@ -630,6 +651,7 @@ async function searchByDateRange() {
     } catch (err) { Swal.close(); }
 }
 
+// === الدالة المسؤولة عن عرض البطاقات مع إصلاح حدث النقر ===
 function renderSearchResults(data, type) {  
     const container = document.getElementById('searchResults');
     if(!data || data.length === 0) { container.innerHTML = '<div class="alert alert-info text-center">لا توجد نتائج</div>'; return; }
@@ -647,9 +669,14 @@ function renderSearchResults(data, type) {
                     <div class="small text-white-50">كود: ${c.case_code || ''}</div>
                 </div>
                 ${item.decision ? `<div class="mt-2 p-2 bg-dark rounded small"><b>القرار:</b> ${item.decision}</div>` : ''}
+                <div class="mt-2 d-flex gap-2">
+                     <button class="btn btn-sm btn-outline-warning" onclick="event.stopPropagation(); loadSessionForEdit('${item.id}')"><i class="bi bi-pencil"></i></button>
+                </div>
             </div>`;
         } else {
-            html += `<div class="case-card" data-case-id="${item.id}">
+            // هنا التغيير الأهم: أزرار التعديل والحذف تحتوي على event.stopPropagation() لمنع تداخل النقر مع فتح المودال
+            // كما أن أزرار التعديل والحذف تم نقلها أيضًا داخل المودال لتحسين التجربة
+            html += `<div class="case-card" onclick="openCaseDetails('${item.id}')">
                 <div class="d-flex justify-content-between">
                     <strong class="case-code">${item.case_code || ''}</strong>
                     <span class="case-status ${getStatusClass(item.last_case_status)}">${item.last_case_status}</span>
@@ -658,9 +685,10 @@ function renderSearchResults(data, type) {
                     <div><b>العميل:</b> ${item.client_name} (${item.client_phone})</div>
                     <div><b>القضية:</b> ${item.case_number}/${item.case_year} - ${item.court_name}</div>
                 </div>
-                <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
-                    <button class="btn btn-sm btn-outline-warning" onclick="loadCaseForEdit('${item.id}')"><i class="bi bi-pencil"></i> تعديل</button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCaseFromSearch('${item.id}')"><i class="bi bi-trash"></i> حذف</button>
+                <div class="mt-2 d-flex gap-2">
+                    <!-- تم إضافة stopPropagation لمنع فتح المودال عند الضغط على الأزرار -->
+                    <button class="btn btn-sm btn-outline-warning" onclick="event.stopPropagation(); loadCaseForEdit('${item.id}')"><i class="bi bi-pencil"></i> تعديل</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); confirmDeleteCaseFromSearch('${item.id}')"><i class="bi bi-trash"></i> حذف</button>
                 </div>
             </div>`;
         }
@@ -693,10 +721,9 @@ async function loadUpcoming(range, btn){
                         <span class="case-status ${getStatusClass(s.case_status)}">${s.case_status}</span>
                     </div>
                     <div class="mt-1">${c.client_name} - قضية ${c.case_number}/${c.case_year}</div>
-                    <div class="mt-2 d-flex gap-2" onclick="event.stopPropagation()">
-                        <button class="btn btn-sm btn-outline-warning" onclick="loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSession('${s.id}')"><i class="bi bi-trash"></i></button>
-                        <button class="btn btn-sm btn-outline-success" onclick="addToGoogleCalendarFromSession('${s.id}')"><i class="bi bi-calendar-plus"></i></button>
+                    <div class="mt-2 d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-warning" onclick="event.stopPropagation(); loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); deleteSession('${s.id}')"><i class="bi bi-trash"></i></button>
                     </div>
                 </div>`;
             }
@@ -752,7 +779,9 @@ async function deleteSecurityLog() {
 
 // ========== دوال التعديل والحذف ==========
 async function loadCaseForEdit(id) {
-    event.stopPropagation();
+    // التأكد من عدم وجود تداخل أحداث
+    if(event) event.stopPropagation();
+    
     const { data } = await db.from('cases').eq('id', id).single();
     if(!data) return;
     window.editingCaseId = id;
@@ -780,36 +809,27 @@ async function updateCase() {
     };
     const { error } = await db.from('cases').update(d).eq('id', window.editingCaseId);
     if(error) Swal.fire("خطأ", error.message, "error");
-    else { Swal.fire("تم", "تم التحديث", "success"); bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide(); searchCases(); }
+    else { 
+        Swal.fire("تم", "تم التحديث", "success"); 
+        bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide(); 
+        // تحديث المودال إذا كان مفتوحاً
+        if(window.currentCaseForPrint && window.currentCaseForPrint.id === window.editingCaseId) {
+             openCaseDetails(window.editingCaseId);
+        }
+        searchCases(); 
+    }
 }
 
-async function confirmDeleteCase() {
-    if(!confirm('حذف القضية وجميع جلساتها؟')) return;
-    await db.from('sessions').delete().eq('case_id', window.editingCaseId);
-    await db.from('cases').delete().eq('id', window.editingCaseId);
-    bootstrap.Modal.getInstance(document.getElementById('editCaseModal')).hide();
-    searchCases();
-}
-
-window.confirmDeleteCaseFromSearch = async function(id) {
-    event.stopPropagation();
+async function confirmDeleteCaseFromSearch(id) {
+    if(event) event.stopPropagation();
     if(!confirm('حذف القضية وجميع جلساتها؟')) return;
     await db.from('sessions').delete().eq('case_id', id);
     await db.from('cases').delete().eq('id', id);
     searchCases();
-};
-
-// دالة جديدة لحذف القضية من المودال بدون الاعتماد على window.editingCaseId
-window.confirmDeleteCaseFromModal = async function(id) {
-    if(!confirm('حذف القضية وجميع جلساتها؟')) return;
-    await db.from('sessions').delete().eq('case_id', id);
-    await db.from('cases').delete().eq('id', id);
-    bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide();
-    searchCases(); // تحديث نتائج البحث
 };
 
 async function loadSessionForEdit(id) {
-    event.stopPropagation();
+    if(event) event.stopPropagation();
     const { data } = await db.from('sessions').eq('id', id).single();
     if(!data) return;
     window.editingSessionId = id;
@@ -823,23 +843,25 @@ async function updateSession() {
     const d = { session_date: edit_session_date.value, case_status: edit_session_case_status.value, decision: edit_decision.value };
     await db.from('sessions').update(d).eq('id', window.editingSessionId);
     bootstrap.Modal.getInstance(document.getElementById('editSessionModal')).hide();
+    
+    // تحديث البيانات في واجهة المستخدم
     loadUpcoming('week');
-}
-
-// تعديل دالة deleteSession لتكون آمنة ولا تعتمد على event
-async function deleteSession(id) {
-    if(!confirm('حذف الجلسة؟')) return;
-    await db.from('sessions').delete().eq('id', id);
-    loadUpcoming('week');
-    // إذا كان المودال مفتوحاً، نعيد تحميل تفاصيل القضية (اختياري)
-    const caseModal = document.getElementById('caseModal');
-    if (caseModal.classList.contains('show')) {
-        const caseId = window.currentCaseForPrint?.id;
-        if (caseId) openCaseDetails(caseId);
+    if (document.getElementById('caseModal').classList.contains('show')) {
+        openCaseDetails(window.currentCaseForPrint.id);
     }
 }
 
-// ========== دالة فتح تفاصيل القضية (معدلة) ==========
+async function deleteSession(id) {
+    if(event) event.stopPropagation();
+    if(!confirm('حذف الجلسة؟')) return;
+    await db.from('sessions').delete().eq('id', id);
+    loadUpcoming('week');
+    if (document.getElementById('caseModal').classList.contains('show')) {
+        openCaseDetails(window.currentCaseForPrint.id);
+    }
+}
+
+// ========== دالة فتح تفاصيل القضية (مع أزرار التحكم) ==========
 async function openCaseDetails(id) {
     if (!id) return;
     try {
@@ -849,22 +871,25 @@ async function openCaseDetails(id) {
         const { data: ss } = await db.from('sessions').eq('case_id', id).order('session_date', { ascending: false });
         window.currentCaseForPrint = { ...c, sessions: ss || [] };
         
-        // بناء HTML لبيانات القضية وأزرار التحكم
+        // بناء HTML لبيانات القضية
         let html = `<div class="p-2">
-            <h4 class="gold-text">${c.case_code || ''}</h4>
-            <p><b>العميل:</b> ${c.client_name} | <b>الخصم:</b> ${c.opponent_name || '-'}</p>
-            <p><b>القضية:</b> ${c.case_number}/${c.case_year} | <b>المحكمة:</b> ${c.court_name}</p>
-            <p><b>الدائرة:</b> ${c.circle || '-'} | <b>النوع:</b> ${c.case_type || '-'}</p>
-            <p><b>موضوع القضية:</b> ${c.case_subject || 'لا يوجد'}</p>
-            <p><b>ملاحظات:</b> ${c.notes || 'لا يوجد'}</p>
-            
-            <div class="d-flex gap-2 mb-3">
-                <button class="btn btn-sm btn-outline-warning" onclick="loadCaseForEdit('${c.id}')"><i class="bi bi-pencil"></i> تعديل القضية</button>
-                <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCaseFromModal('${c.id}')"><i class="bi bi-trash"></i> حذف القضية</button>
+            <h4 class="gold-text text-center mb-3">${c.case_code || ''}</h4>
+            <div class="row g-2">
+                <div class="col-6"><b>العميل:</b> ${c.client_name}</div>
+                <div class="col-6"><b>الصفة:</b> ${c.client_role}</div>
+                <div class="col-6"><b>الخصم:</b> ${c.opponent_name || '-'}</div>
+                <div class="col-6"><b>الهاتف:</b> ${c.client_phone}</div>
+                <div class="col-12"><hr class="border-secondary my-2"></div>
+                <div class="col-6"><b>القضية:</b> ${c.case_number} لسنة ${c.case_year}</div>
+                <div class="col-6"><b>المحكمة:</b> ${c.court_name}</div>
+                <div class="col-6"><b>الدائرة:</b> ${c.circle || '-'}</div>
+                <div class="col-6"><b>النوع:</b> ${c.case_type || '-'}</div>
+                <div class="col-12"><b>موضوع القضية:</b><br><span class="text-white-50">${c.case_subject || 'لا يوجد'}</span></div>
+                <div class="col-12"><b>ملاحظات:</b><br><span class="text-white-50">${c.notes || 'لا يوجد'}</span></div>
             </div>
             
             <hr class="border-secondary">
-            <h6>الجلسات:</h6>`;
+            <h6 class="gold-text">الجلسات:</h6>`;
             
         if (ss && ss.length > 0) {
             ss.forEach(s => {
@@ -894,6 +919,29 @@ async function openCaseDetails(id) {
     }
 }
 
+// دوال مساعدة لزر التعديل والحذف داخل المودال
+function openEditFromModal() {
+    if(window.currentCaseForPrint) {
+        // نغلق مودال التفاصيل ونفتح مودال التعديل
+        // bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide(); // اختياري
+        loadCaseForEdit(window.currentCaseForPrint.id);
+    }
+}
+
+function deleteCaseFromModal() {
+    if(window.currentCaseForPrint) {
+        confirmDeleteCaseFromModal(window.currentCaseForPrint.id);
+    }
+}
+
+window.confirmDeleteCaseFromModal = async function(id) {
+    if(!confirm('حذف القضية وجميع جلساتها؟')) return;
+    await db.from('sessions').delete().eq('case_id', id);
+    await db.from('cases').delete().eq('id', id);
+    bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide();
+    searchCases(); // تحديث نتائج البحث
+};
+
 // ========== دوال إضافية ==========
 async function printCasePDF() {
     const c = window.currentCaseForPrint;
@@ -916,103 +964,128 @@ function addToGoogleCalendar() {
     const end = new Date(new Date(s_date.value).getTime() + 3600000).toISOString().replace(/-|:|\.\d\d\d/g, "");
     window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('جلسة: '+s_client.value)}&dates=${start}/${end}`, '_blank');
 }
-function addToGoogleCalendarFromSession(id) { Swal.fire("قريباً", "هذه الميزة قيد التطوير", "info"); }
 
-// ========== المحامي الآلي مع Groq و Tavily ==========
+
+// ========== الذكاء الاصطناعي مع Groq و Tavily (المطور) ==========
 let generatedContent = '';
 
+// تحميل القضايا في القائمة المنسدلة
+async function loadCasesForAiSelect() {
+    const { data } = await db.from('cases').select('id, client_name, case_number, case_subject').order('created_at', {ascending: false}).limit(20);
+    const select = document.getElementById('aiCaseSelect');
+    select.innerHTML = '<option value="">-- اختر قضية لإرفاق بياناتها --</option>';
+    if(data) {
+        data.forEach(c => {
+            select.innerHTML += `<option value="${c.id}">${c.client_name} - ${c.case_number} (${c.case_subject?.substring(0,20)}...)</option>`;
+        });
+    }
+}
+
+// قراءة محتوى الملف المرفق
+async function readFileContent(file) {
+    if (!file) return "";
+    if (file.type === "text/plain") {
+        return await file.text();
+    } else if (file.type === "application/pdf") {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+        let text = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            text += content.items.map(item => item.str).join(" ") + "\n";
+        }
+        return text;
+    }
+    return "";
+}
+
 async function searchWithTavily(query, apiKey) {
+    // إذا لم يتوفر مفتاح Tavily نرجع نص فارغ بدل الخطأ لتكمل العملية
+    if (!apiKey || apiKey === 'YOUR_TAVILY_API_KEY') return { answer: "", results: [] };
+
     const url = 'https://api.tavily.com/search';
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // مهلة 30 ثانية للبحث
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 api_key: apiKey,
-                query: query,
+                query: query + " قانون مصري احكام نقض",
                 search_depth: 'advanced',
                 include_answer: true,
-                include_raw_content: false,
-                max_results: 5
+                max_results: 3
             }),
             signal: controller.signal
         });
         clearTimeout(timeoutId);
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'فشل البحث في Tavily');
-        }
-        const data = await response.json();
-        return data;
+        if (!response.ok) throw new Error('فشل البحث في Tavily');
+        return await response.json();
     } catch (err) {
         clearTimeout(timeoutId);
-        throw err;
+        console.error("Tavily Error:", err);
+        return { answer: "", results: [] };
     }
 }
 
 async function generateLegalContentWithWebSearch() {
     let groqKey = document.getElementById('groqApiKey').value.trim();
     let tavilyKey = document.getElementById('tavilyApiKey').value.trim();
-    const model = document.getElementById('groqModel').value.trim() || 'llama-3.3-70b-versatile';
+    const model = document.getElementById('groqModel').value || 'llama-3.3-70b-versatile';
     const prompt = document.getElementById('aiPrompt').value.trim();
+    const selectedCaseId = document.getElementById('aiCaseSelect').value;
+    const fileInput = document.getElementById('aiFileInput');
 
-    // التحقق من أن المفاتيح ليست القيم الافتراضية
     if (!groqKey || groqKey === 'YOUR_GROQ_API_KEY') {
-        Swal.fire('تنبيه', 'الرجاء إدخال مفتاح Groq API صحيح (لا تترك القيمة الافتراضية)', 'warning');
+        Swal.fire('تنبيه', 'الرجاء إدخال مفتاح Groq API', 'warning');
         return;
     }
-    if (!tavilyKey || tavilyKey === 'YOUR_TAVILY_API_KEY') {
-        Swal.fire('تنبيه', 'الرجاء إدخال مفتاح Tavily API صحيح (لا تترك القيمة الافتراضية)', 'warning');
-        return;
-    }
-    if (!prompt) {
-        Swal.fire('تنبيه', 'الرجاء إدخال موضوع المذكرة', 'warning');
+    if (!prompt && !selectedCaseId && !fileInput.files.length) {
+        Swal.fire('تنبيه', 'الرجاء إدخال موضوع أو اختيار قضية', 'warning');
         return;
     }
 
-    // التحقق من أن المفاتيح تحتوي فقط على أحرف ASCII (بدون عربي أو مسافات)
-    const isAscii = (str) => /^[\x00-\x7F]*$/.test(str);
-    if (!isAscii(groqKey)) {
-        Swal.fire('خطأ', 'مفتاح Groq API يحتوي على أحرف غير مسموح بها (تأكد من عدم وجود مسافات أو أحرف عربية)', 'error');
-        return;
-    }
-    if (!isAscii(tavilyKey)) {
-        Swal.fire('خطأ', 'مفتاح Tavily API يحتوي على أحرف غير مسموح بها (تأكد من عدم وجود مسافات أو أحرف عربية)', 'error');
-        return;
-    }
-
-    Swal.fire({ title: 'جاري البحث على الإنترنت...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+    Swal.fire({ title: 'جاري التحليل والبحث...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
     try {
-        // 1. البحث باستخدام Tavily
-        const searchResults = await searchWithTavily(prompt, tavilyKey);
+        // 1. تجميع السياق (Context)
+        let contextData = "";
         
+        // بيانات القضية المختارة
+        if (selectedCaseId) {
+            const { data: c } = await db.from('cases').select('*').eq('id', selectedCaseId).single();
+            const { data: s } = await db.from('sessions').select('*').eq('case_id', selectedCaseId);
+            contextData += `\n[بيانات القضية الحالية من النظام]:\nالعميل: ${c.client_name}\nالصفة: ${c.client_role}\nالخصم: ${c.opponent_name}\nنوع القضية: ${c.case_type}\nالوقائع: ${c.case_subject}\nالجلسات: ${JSON.stringify(s)}\n`;
+        }
+
+        // محتوى الملف
+        if (fileInput.files.length > 0) {
+            const fileText = await readFileContent(fileInput.files[0]);
+            contextData += `\n[محتوى المستند المرفق]:\n${fileText.substring(0, 5000)}...\n`;
+        }
+
+        // 2. البحث (Tavily)
         let searchContext = '';
-        if (searchResults.answer) {
-            searchContext += `ملخص البحث: ${searchResults.answer}\n\n`;
-        }
-        if (searchResults.results && searchResults.results.length > 0) {
-            searchContext += 'مصادر إضافية من الإنترنت:\n';
-            searchResults.results.forEach((r, index) => {
-                searchContext += `${index + 1}. ${r.title}: ${r.content}\n`;
-            });
+        if (tavilyKey && tavilyKey !== 'YOUR_TAVILY_API_KEY') {
+            const searchResults = await searchWithTavily(prompt, tavilyKey);
+            if (searchResults.answer) searchContext += `ملخص البحث: ${searchResults.answer}\n`;
+            if (searchResults.results) {
+                searchResults.results.forEach((r, i) => searchContext += `${i+1}. ${r.title}: ${r.content}\n`);
+            }
         }
 
-        Swal.fire({ title: 'جاري إنشاء المحتوى القانوني (قد يستغرق دقيقة)...', didOpen: () => Swal.showLoading() });
+        // 3. Groq Request
+        const systemPrompt = `أنت محامي مصري خبير ومستشار قانوني بالنقض. مهمتك كتابة مذكرات وصياغات قانونية رصينة باللغة العربية الفصحى.
+        القواعد:
+        1. استند حصرياً إلى القوانين المصرية (الجنايات، المدني، المرافعات، الأحوال الشخصية، إلخ).
+        2. اذكر أرقام المواد القانونية وأحكام محكمة النقض المصرية ذات الصلة.
+        3. الصياغة يجب أن تكون مهنية، مقسمة إلى: الوقائع، الدفوع، الطلبات.
+        4. استخدم المعلومات الواردة في [السياق] و [المستندات] و [البحث] لبناء المذكرة.`;
 
-        // 2. إرسال المعلومات إلى Groq مع مهلة 120 ثانية
-        const systemPrompt = `أنت محامي خبير بالنقض والمحاكم العليا المصرية. لديك قدرة فائقة على صياغة المذكرات القانونية والأبحاث بلغة قانونية رصينة وإبداعية. تلتزم بالقانون المصري، وأحكام محكمة النقض، والمحاكم العليا، والفقه القانوني المصري. عند كتابة أي مذكرة أو بحث، تقوم بتضمين المصادر بدقة: ذكر نصوص المواد من القوانين المصرية، وأرقام الطعن وأحكام محكمة النقض، وآراء الفقهاء البارزين. استخدم المعلومات الواردة من البحث على الإنترنت كمصدر للأحداث والوقائع والتطورات الحديثة، وقم بالاستشهاد بها. أسلوبك مهني، منظم، مقنع.`;
-
-        const userPrompt = `المطلوب: ${prompt}\n\nمعلومات حديثة من الإنترنت (استخدمها في الصياغة واستشهد بها عند الاقتضاء):\n${searchContext}`;
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 ثانية
+        const userPrompt = `الموضوع/السؤال: ${prompt}\n\n${contextData}\n\nمعلومات من البحث:\n${searchContext}`;
 
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
@@ -1026,22 +1099,14 @@ async function generateLegalContentWithWebSearch() {
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt }
                 ],
-                temperature: 0.7,
-                max_tokens: 4000,
-                top_p: 1,
-                stream: false
-            }),
-            signal: controller.signal
+                temperature: 0.5,
+                max_tokens: 3000
+            })
         });
 
-        clearTimeout(timeoutId);
         Swal.close();
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error?.message || 'فشل الاتصال بالخدمة');
-        }
-
+        if (!response.ok) throw new Error('فشل الاتصال بـ Groq');
         const data = await response.json();
         generatedContent = data.choices[0].message.content;
 
@@ -1050,79 +1115,46 @@ async function generateLegalContentWithWebSearch() {
 
     } catch (err) {
         Swal.close();
-        if (err.name === 'AbortError') {
-            Swal.fire('خطأ', 'انتهت مهلة الطلب (أكثر من 120 ثانية). حاول مرة أخرى أو استخدم نموذج أسرع.', 'error');
-        } else {
-            Swal.fire('خطأ', err.message, 'error');
-        }
+        Swal.fire('خطأ', err.message, 'error');
     }
 }
 
+// دالة حفظ كملف Word (بدون مكتبات خارجية ثقيلة)
 function saveAsWord() {
-    if (!generatedContent) {
-        Swal.fire('تنبيه', 'لا يوجد محتوى للحفظ', 'warning');
-        return;
-    }
+    if (!generatedContent) return Swal.fire('تنبيه', 'لا يوجد محتوى', 'warning');
 
-    const formattedContent = generatedContent
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/\n/g, '<br>');
+    const htmlContent = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><meta charset='utf-8'><title>مذكرة قانونية</title></head>
+        <body style='font-family: "Traditional Arabic", serif; direction: rtl; text-align: justify; font-size: 14pt;'>
+        ${generatedContent.replace(/\n/g, '<br>')}
+        </body></html>`;
 
-    const htmlContent = `<!DOCTYPE html>
-<html dir="rtl" lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <title>مذكرة قانونية</title>
-    <style>
-        body {
-            font-family: 'Amiri', 'Tajawal', serif;
-            line-height: 1.8;
-            padding: 20px;
-            direction: rtl;
-        }
-        h1, h2, h3 {
-            color: #bf953f;
-        }
-    </style>
-</head>
-<body>
-    ${formattedContent}
-</body>
-</html>`;
-
-    const blob = new Blob([htmlContent], { type: 'application/msword' });
+    const blob = new Blob(['\ufeff', htmlContent], {
+        type: 'application/msword'
+    });
+    
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `مذكرة_قانونية_${new Date().toLocaleDateString('ar-EG').replace(/\//g, '-')}.doc`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function saveAsPdf() {
-    Swal.fire('قريباً', 'خاصية حفظ PDF قيد التطوير', 'info');
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `مذكرة_قانونية_${new Date().toISOString().slice(0,10)}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 function copyToClipboard() {
-    if (!generatedContent) {
-        Swal.fire('تنبيه', 'لا يوجد محتوى للنسخ', 'warning');
-        return;
-    }
-    navigator.clipboard.writeText(generatedContent).then(() => {
-        Swal.fire('تم', 'تم نسخ المحتوى إلى الحافظة', 'success');
-    }).catch(() => {
-        Swal.fire('خطأ', 'فشل النسخ', 'error');
-    });
+    if (!generatedContent) return;
+    navigator.clipboard.writeText(generatedContent);
+    Swal.fire('تم', 'تم النسخ', 'success');
 }
 
 function clearAiFields() {
     document.getElementById('aiPrompt').value = '';
     document.getElementById('aiResultContainer').style.display = 'none';
     document.getElementById('aiResult').innerHTML = '';
+    document.getElementById('aiFileInput').value = '';
+    document.getElementById('aiCaseSelect').value = '';
     generatedContent = '';
 }
 
@@ -1179,38 +1211,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
     const installBtn = document.getElementById('installBtn');
     if (installBtn) installBtn.style.display = 'inline-block';
 });
-
-document.addEventListener('DOMContentLoaded', () => {
-    const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);
-    const sDateField = document.getElementById('s_date');
-    if (sDateField) sDateField.value = nextWeek.toISOString().slice(0, 16);
-
-    // إضافة مستمع حدث لفتح تفاصيل القضية عند النقر على البطاقة (باستخدام التفويض)
-    const searchResults = document.getElementById('searchResults');
-    if (searchResults) {
-        searchResults.addEventListener('click', function(e) {
-            const card = e.target.closest('.case-card[data-case-id]');
-            if (!card) return;
-            if (e.target.closest('button')) return; // منع التداخل مع الأزرار
-            const caseId = card.getAttribute('data-case-id');
-            if (caseId) openCaseDetails(caseId);
-        });
-    }
-});
-
-(function enhancePWA() {
-    const installBtn = document.getElementById('installBtn');
-    if (!installBtn) return;
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        installBtn.style.display = 'none';
-    } else {
-        if ('onbeforeinstallprompt' in window) {
-            // سيتم إظهار الزر عند الحدث
-        } else {
-            installBtn.style.display = 'inline-block';
-        }
-    }
-})();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

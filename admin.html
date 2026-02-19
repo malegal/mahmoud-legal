@@ -666,17 +666,6 @@ function renderSearchResults(data, type) {
         }
     });
     container.innerHTML = html;
-
-    if(type === "cases") {
-        document.querySelectorAll('.case-card[data-case-id]').forEach(card => {
-            card.addEventListener('click', function(e) {
-                if(e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
-                    const caseId = this.getAttribute('data-case-id');
-                    openCaseDetails(caseId);
-                }
-            });
-        });
-    }
 }
 
 function getStatusClass(status) {
@@ -1153,15 +1142,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);
     const sDateField = document.getElementById('s_date');
     if (sDateField) sDateField.value = nextWeek.toISOString().slice(0, 16);
-});
 
-// تفويض الأحداث للنقر على بطاقات نتائج البحث
-document.getElementById('searchResults').addEventListener('click', function(e) {
-    const card = e.target.closest('.case-card[data-case-id]');
-    if (!card) return;
-    if (e.target.closest('button')) return;
-    const caseId = card.getAttribute('data-case-id');
-    if (caseId) openCaseDetails(caseId);
+    // إضافة مستمع حدث لفتح تفاصيل القضية عند النقر على البطاقة (باستخدام التفويض)
+    const searchResults = document.getElementById('searchResults');
+    if (searchResults) {
+        searchResults.addEventListener('click', function(e) {
+            const card = e.target.closest('.case-card[data-case-id]');
+            if (!card) return;
+            if (e.target.closest('button')) return; // منع التداخل مع الأزرار
+            const caseId = card.getAttribute('data-case-id');
+            if (caseId) openCaseDetails(caseId);
+        });
+    }
 });
 
 (function enhancePWA() {

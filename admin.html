@@ -19,7 +19,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        /* الأنماط كما هي */
+        /* الأنماط كما هي (لم تتغير) */
         :root {
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 45%, #b38728 50%, #fbf5b7 55%, #aa771c 100%);
@@ -799,6 +799,15 @@ window.confirmDeleteCaseFromSearch = async function(id) {
     searchCases();
 };
 
+// دالة جديدة لحذف القضية من المودال بدون الاعتماد على window.editingCaseId
+window.confirmDeleteCaseFromModal = async function(id) {
+    if(!confirm('حذف القضية وجميع جلساتها؟')) return;
+    await db.from('sessions').delete().eq('case_id', id);
+    await db.from('cases').delete().eq('id', id);
+    bootstrap.Modal.getInstance(document.getElementById('caseModal')).hide();
+    searchCases(); // تحديث نتائج البحث
+};
+
 async function loadSessionForEdit(id) {
     event.stopPropagation();
     const { data } = await db.from('sessions').eq('id', id).single();
@@ -817,14 +826,20 @@ async function updateSession() {
     loadUpcoming('week');
 }
 
+// تعديل دالة deleteSession لتكون آمنة ولا تعتمد على event
 async function deleteSession(id) {
-    event.stopPropagation();
     if(!confirm('حذف الجلسة؟')) return;
     await db.from('sessions').delete().eq('id', id);
     loadUpcoming('week');
+    // إذا كان المودال مفتوحاً، نعيد تحميل تفاصيل القضية (اختياري)
+    const caseModal = document.getElementById('caseModal');
+    if (caseModal.classList.contains('show')) {
+        const caseId = window.currentCaseForPrint?.id;
+        if (caseId) openCaseDetails(caseId);
+    }
 }
 
-// ========== دالة فتح تفاصيل القضية ==========
+// ========== دالة فتح تفاصيل القضية (معدلة) ==========
 async function openCaseDetails(id) {
     if (!id) return;
     try {
@@ -834,17 +849,44 @@ async function openCaseDetails(id) {
         const { data: ss } = await db.from('sessions').eq('case_id', id).order('session_date', { ascending: false });
         window.currentCaseForPrint = { ...c, sessions: ss || [] };
         
+        // بناء HTML لبيانات القضية وأزرار التحكم
         let html = `<div class="p-2">
             <h4 class="gold-text">${c.case_code || ''}</h4>
             <p><b>العميل:</b> ${c.client_name} | <b>الخصم:</b> ${c.opponent_name || '-'}</p>
             <p><b>القضية:</b> ${c.case_number}/${c.case_year} | <b>المحكمة:</b> ${c.court_name}</p>
+            <p><b>الدائرة:</b> ${c.circle || '-'} | <b>النوع:</b> ${c.case_type || '-'}</p>
+            <p><b>موضوع القضية:</b> ${c.case_subject || 'لا يوجد'}</p>
+            <p><b>ملاحظات:</b> ${c.notes || 'لا يوجد'}</p>
+            
+            <div class="d-flex gap-2 mb-3">
+                <button class="btn btn-sm btn-outline-warning" onclick="loadCaseForEdit('${c.id}')"><i class="bi bi-pencil"></i> تعديل القضية</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteCaseFromModal('${c.id}')"><i class="bi bi-trash"></i> حذف القضية</button>
+            </div>
+            
             <hr class="border-secondary">
-            <h6>الجلسات:</h6>
-            ${(ss || []).map(s => `<div class="mb-2 p-2 bg-dark rounded border-start border-gold">
-                <div class="d-flex justify-content-between small"><b>${new Date(s.session_date).toLocaleDateString('ar-EG')}</b> <span>${s.case_status}</span></div>
-                <div class="mt-1">${s.decision || 'لا يوجد قرار'}</div>
-            </div>`).join('')}
-        </div>`;
+            <h6>الجلسات:</h6>`;
+            
+        if (ss && ss.length > 0) {
+            ss.forEach(s => {
+                html += `<div class="mb-2 p-2 bg-dark rounded border-start border-gold">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small"><b>${new Date(s.session_date).toLocaleString('ar-EG')}</b> <span class="case-status ${getStatusClass(s.case_status)}">${s.case_status}</span></div>
+                            <div class="mt-1">${s.decision || 'لا يوجد قرار'}</div>
+                        </div>
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-sm btn-outline-warning" onclick="event.stopPropagation(); loadSessionForEdit('${s.id}')"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); deleteSession('${s.id}')"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+        } else {
+            html += `<p class="text-muted">لا توجد جلسات مسجلة</p>`;
+        }
+        
+        html += `</div>`;
+        
         document.getElementById('caseDetails').innerHTML = html;
         new bootstrap.Modal(document.getElementById('caseModal')).show();
     } catch (err) {

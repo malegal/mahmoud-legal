@@ -269,13 +269,17 @@
                             <input type="text" id="groqModel" class="form-control" placeholder="مثال: llama-3.3-70b-versatile" value="llama-3.3-70b-versatile">
                         </div>
                         
-                        <!-- التعديل: اختيار القضية بالرقم الإداري -->
+                        <!-- حقل البحث بالرقم الإداري بدلاً من القائمة المنسدلة -->
                         <div class="col-md-6">
-                            <label>استيراد بيانات قضية</label>
-                            <select id="aiCaseSelect" class="form-select">
-                                <option value="">-- اختر قضية (بالرقم الإداري) --</option>
-                            </select>
+                            <label>البحث برقم إداري (مثال: 001)</label>
+                            <div class="input-group">
+                                <input type="text" id="aiCaseSearch" class="form-control" placeholder="أدخل الرقم الإداري">
+                                <button class="btn btn-outline-secondary" type="button" onclick="searchCasesByAdminNumber()"><i class="bi bi-search"></i></button>
+                            </div>
+                            <div id="aiCaseSearchResults" class="mt-2" style="max-height:150px; overflow-y:auto; display:none;"></div>
+                            <div id="selectedAICaseDisplay" class="small text-success mt-1"></div>
                         </div>
+
                         <div class="col-12">
                             <label>إرفاق ملف (PDF/نصي)</label>
                             <input type="file" id="aiFileInput" class="form-control" accept=".pdf,.txt">
@@ -384,6 +388,7 @@ const db = supabase.createClient(SB_URL, SB_KEY);
 let currentCaseId = null;  
 let currentSecurityLogId = null;
 let deferredPrompt;
+let selectedAICaseId = null; // لتخزين معرف القضية المختارة في المحامي الآلي
 
 // دالة مساعدة لاستخراج الرقم الإداري (001 من MA26001...)
 function extractAdminNumber(caseCode) {
@@ -400,7 +405,7 @@ function login(){
         document.getElementById('mainContent').style.display="block";  
         updateStatistics();
         loadUpcoming('week');
-        loadCasesForAiSelect(); 
+        // loadCasesForAiSelect(); لم نعد بحاجة لها
     } else { Swal.fire("خطأ","كلمة المرور غير صحيحة","error"); }  
 }
 
@@ -454,7 +459,6 @@ document.getElementById('caseForm').onsubmit = async e => {
             Swal.fire({ title: "تم الحفظ", text: `الرقم الإداري: ${extractAdminNumber(data.case_code)}`, icon: "success" });
             document.getElementById('caseForm').reset();
             updateStatistics();
-            loadCasesForAiSelect();
         }
     } catch (err) { Swal.fire("خطأ", "حدث خطأ غير متوقع", "error"); }
 };
@@ -485,7 +489,6 @@ function renderSearchResults(data, type) {
     if(!data || data.length === 0) { container.innerHTML = '<div class="alert alert-info text-center">لا توجد نتائج</div>'; return; }
     let html = `<h6 class="mb-3 gold-text">نتائج البحث (${data.length}):</h6>`;  
     data.forEach(item => {
-        // نستخدم item.id مباشرة في استدعاء الدالة لضمان عملها
         if(type === "sessions") {
             const c = item.cases || {};
             html += `<div class="session-card" onclick="openCaseDetails('${c.id}')">
@@ -499,7 +502,7 @@ function renderSearchResults(data, type) {
                 ${item.decision ? `<div class="mt-2 p-2 bg-dark rounded small"><b>القرار:</b> ${item.decision}</div>` : ''}
             </div>`;
         } else {
-            // بطاقة القضية: النقر يفتح التفاصيل فقط
+            // بطاقة القضية: النقر يفتح التفاصيل
             html += `<div class="case-card" onclick="openCaseDetails('${item.id}')">
                 <div class="d-flex justify-content-between">
                     <strong class="case-code">${extractAdminNumber(item.case_code)}</strong>
@@ -639,9 +642,6 @@ async function deleteCaseConfirm(id) {
 
 // ========== تعديل وحذف الجلسة ==========
 async function loadSessionForEdit(id) {
-    // إخفاء مودال القضية مؤقتاً لفتح مودال الجلسة (أو إبقاؤه حسب التفضيل، هنا سنخفيه لتجنب التعارض)
-    // لكن الأفضل في الموبايل إخفاء الأول.
-    // سنستخدم z-index الخاص بـ Bootstrap تلقائياً
     const { data } = await db.from('sessions').eq('id', id).single();
     if(!data) return;
     window.editingSessionId = id;
@@ -740,22 +740,43 @@ async function saveSession() {
     loadUpcoming('week');
 }
 
-// ========== المحامي الآلي (اختيار بالرقم الإداري) ==========
-async function loadCasesForAiSelect() {
-    const { data } = await db.from('cases').select('id, client_name, case_code, case_subject').order('created_at', {ascending: false}).limit(30);
-    const select = document.getElementById('aiCaseSelect');
-    select.innerHTML = '<option value="">-- اختر قضية (بالرقم الإداري) --</option>';
-    if(data) {
+// ========== دوال المحامي الآلي الجديدة: البحث بالرقم الإداري ==========
+async function searchCasesByAdminNumber() {
+    const val = document.getElementById('aiCaseSearch').value.trim();
+    if (!val) return Swal.fire("تنبيه", "أدخل الرقم الإداري", "warning");
+    
+    const { data } = await db.from('cases')
+        .select('id, client_name, case_code, case_subject')
+        .ilike('case_code', `%${val}%`)
+        .limit(5);
+    
+    const resultsDiv = document.getElementById('aiCaseSearchResults');
+    resultsDiv.innerHTML = '';
+    if (data && data.length > 0) {
+        resultsDiv.style.display = 'block';
         data.forEach(c => {
             const adminNum = extractAdminNumber(c.case_code);
-            select.innerHTML += `<option value="${c.id}">[${adminNum}] ${c.client_name}</option>`;
+            resultsDiv.innerHTML += `
+                <div class="case-card p-2 mb-1" onclick="selectAICase('${c.id}', '${c.client_name}', '${adminNum}')">
+                    <strong>${adminNum}</strong> - ${c.client_name}
+                </div>`;
         });
+    } else {
+        resultsDiv.style.display = 'none';
+        Swal.fire("لا توجد نتائج", "لم يتم العثور على قضية بهذا الرقم الإداري", "info");
     }
+}
+
+function selectAICase(id, clientName, adminNum) {
+    selectedAICaseId = id;
+    document.getElementById('selectedAICaseDisplay').innerHTML = `✅ تم اختيار: <strong>${adminNum}</strong> - ${clientName}`;
+    document.getElementById('aiCaseSearchResults').style.display = 'none';
+    document.getElementById('aiCaseSearch').value = adminNum; // عرض الرقم الإداري في الحقل
 }
 
 async function generateLegalContentWithWebSearch() {
     const apiKey = document.getElementById('groqApiKey').value;
-    const model = document.getElementById('groqModel').value; // الحقل النصي
+    const model = document.getElementById('groqModel').value;
     const prompt = document.getElementById('aiPrompt').value;
     
     if(!apiKey || !prompt) return Swal.fire("تنبيه", "تأكد من المفتاح والموضوع", "warning");
@@ -764,10 +785,11 @@ async function generateLegalContentWithWebSearch() {
     
     // تجميع السياق
     let context = "";
-    const caseId = document.getElementById('aiCaseSelect').value;
-    if(caseId) {
-        const { data: c } = await db.from('cases').eq('id', caseId).single();
-        context += `بيانات القضية:\nالعميل: ${c.client_name}\nالصفة: ${c.client_role}\nالخصم: ${c.opponent_name}\nالوقائع: ${c.case_subject}\n`;
+    if (selectedAICaseId) {
+        const { data: c } = await db.from('cases').eq('id', selectedAICaseId).single();
+        if (c) {
+            context += `بيانات القضية:\nالعميل: ${c.client_name}\nالصفة: ${c.client_role}\nالخصم: ${c.opponent_name}\nالوقائع: ${c.case_subject}\n`;
+        }
     }
     
     try {
@@ -802,6 +824,9 @@ function saveAsWord() {
 function clearAiFields() {
     document.getElementById('aiPrompt').value = '';
     document.getElementById('aiResultContainer').style.display = 'none';
+    selectedAICaseId = null;
+    document.getElementById('selectedAICaseDisplay').innerHTML = '';
+    document.getElementById('aiCaseSearch').value = '';
 }
 
 // PWA Logic

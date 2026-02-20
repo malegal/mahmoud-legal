@@ -2,7 +2,7 @@
   "name": "نظام إدارة القضايا | محمود عبد الحميد",
   "short_name": "نظام القضايا",
   "description": "تطبيق إدارة القضايا للمحامي محمود عبد الحميد",
-  "start_url": "/admin.html",
+  "start_url": "admin.html",
   "scope": "/",
   "display": "standalone",
   "background_color": "#020617",

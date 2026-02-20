@@ -1,23 +1,46 @@
-{
-  "name": "نظام إدارة القضايا | محمود عبد الحميد",
-  "short_name": "نظام القضايا",
-  "start_url": "./admin.html",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#020617",
-  "theme_color": "#bf953f",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/malegal/mahmoud-legal/main/logo.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ]
-}
+const CACHE_NAME = 'mahmoud-law-admin-v1';
+// أضف هنا الروابط التي تريد أن تعمل بدون إنترنت
+const urlsToCache = [
+  './admin.html',
+  './manifest-admin.json'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(urlsToCache);
+      })
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.url.includes('supabase.co') || event.request.method !== 'GET') {
+    return;
+  }
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        return response || fetch(event.request);
+      }).catch(() => {
+        return caches.match('./admin.html');
+      })
+  );
+});
+
+self.addEventListener('activate', event => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mahmoud-law-pwa-v1';
+const CACHE_NAME = 'mahmoud-law-pwa-v5';
 const urlsToCache =;
 
 // تثبيت ملفات الكاش (Install)
@@ -9,13 +9,13 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
-  self.skipWaiting();
+  self.skipWaiting(); // تفعيل فوراً
 });
 
 // استراتيجية جلب البيانات (Fetch)
 self.addEventListener('fetch', event => {
-  // استثناء روابط Supabase من الكاش لضمان تحديث البيانات دائماً
-  if (event.request.url.includes('supabase.co')) {
+  // استثناء روابط Supabase والطلبات غير GET من الكاش لضمان تحديث البيانات
+  if (event.request.url.includes('supabase.co') || event.request.method !== 'GET') {
     return;
   }
 
@@ -24,7 +24,8 @@ self.addEventListener('fetch', event => {
       .then(response => {
         return response || fetch(event.request);
       }).catch(() => {
-        return caches.match('./index.html');
+        // في حال انقطاع الإنترنت يتم توجيهه للصفحة الصحيحة
+        return caches.match('./admin.html');
       })
   );
 });

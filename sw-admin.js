@@ -1,8 +1,8 @@
 const CACHE_NAME = 'mahmoud-law-admin-v2'; // زد الرقم عند التحديث
 const urlsToCache = [
   '/',
-  '/admin.html',
-  '/manifest-admin.json',
+  'admin.html',
+  'manifest-admin.json',
   // Bootstrap
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
   'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css',

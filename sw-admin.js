@@ -6,7 +6,6 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
         return cache.addAll(urlsToCache);
       })
   );
@@ -23,11 +22,9 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // إذا كان الملف موجوداً في الكاش، قم بإرجاعه. وإلا اطلبه من الإنترنت
-        return response || fetch(event.request).catch(() => {
-            // في حالة انقطاع الإنترنت تماماً
-            return caches.match('./index.html');
-        });
+        return response || fetch(event.request);
+      }).catch(() => {
+        return caches.match('./index.html');
       })
   );
 });

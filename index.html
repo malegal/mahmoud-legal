@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-dark: #020617; 
+            --primary-dark: #050a1f; /* كحلي غامق عميق وفخم */
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #bf953f;
             --gold-glow: rgba(191, 149, 63, 0.4);
@@ -129,7 +129,7 @@
         
         .black-border-card { 
             border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(2, 6, 23, 0.95);
+            background: rgba(5, 10, 31, 0.95); /* كحلي متناسق مع الخلفية */
         }
         
         /* الأيقونات العائمة */
@@ -226,7 +226,7 @@
         .islamic-pattern-bg {
             background-color: var(--primary-dark);
             background-image: 
-                linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
+                linear-gradient(rgba(5, 10, 31, 0.85), rgba(5, 10, 31, 0.95)),
                 url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             background-attachment: fixed;
         }
@@ -318,10 +318,8 @@
             .footer-social-icon { width: 40px; height: 40px; font-size: 1.1rem; }
         }
         
-        #why-us { background: #01040f !important; }
-        
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-track { background: var(--primary-dark); } /* متناسق مع الخلفية الكحلية */
         ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
 
         /* تأثير تدرج الألوان للصورة الشخصية */
@@ -420,12 +418,10 @@
             </span>
         </h1>
         
-        <!-- النص المعدل: الواو عادية (ليست ذهبية) -->
         <p class="text-white tracking-[0.1em] sm:tracking-[0.2em] font-medium text-lg sm:text-xl md:text-2xl mb-8 md:mb-10">
             المحامي بالنقض <span class="mx-2">و</span> الدستورية العليا
         </p>
         
-        <!-- شريط الخبرة -->
         <div class="flex flex-col items-center gap-6 mb-10">
             <span class="px-6 py-2 border border-gold-solid/50 rounded-full bg-black/50 backdrop-blur-sm text-white text-sm font-bold flex items-center gap-2">
                 <i class="fas fa-star text-yellow-500"></i>
@@ -433,7 +429,6 @@
             </span>
         </div>
         
-        <!-- الأزرار الثلاثة -->
         <div class="flex flex-col sm:flex-row gap-5 justify-center items-center hero-buttons mt-4">
             <a href="contact.html?tab=consult" class="gold-btn px-10 sm:px-12 py-4 rounded-xl text-base sm:text-lg font-black uppercase tracking-widest min-w-[250px]">
                 طلب استشارة
@@ -448,8 +443,8 @@
     </div>
 </section>
 
-<!-- قسم نبذة عن المكتب (معدل حسب الطلب) -->
-<section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
+<!-- قسم نبذة عن المكتب -->
+<section class="py-20 md:py-24 relative z-10">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
             <!-- الجانب الأيمن: النصوص -->
@@ -466,14 +461,14 @@
                 <p class="text-white/80 text-base leading-relaxed">
                     ثقتكم بنا هي مسؤولية نعتز بها، ونسعى دوماً لتكونوا على يقين بأن قضاياكم في أيدٍ أمينة، تضع مصلحتكم فوق كل اعتبار.
                 </p>
-                <!-- الصورة الشخصية (تظهر فقط في الجوال ضمن النصوص) -->
+                <!-- الصورة الشخصية والنصوص المحدثة (تظهر فقط في الجوال) -->
                 <div class="block md:hidden text-center">
                     <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/me.jpg" alt="الأستاذ محمود عبد الحميد" class="w-64 h-64 object-cover rounded-2xl mx-auto border-2 border-gold-solid shadow-2xl auto-colorize" loading="lazy">
-                    <div class="mt-4 space-y-1">
-                        <p class="text-gold-solid font-bold text-lg">المؤسس و المحامي الرئيس</p>
-                        <p class="text-white text-2xl font-black serif-font gold-text">محمود عبد الحميد</p>
-                        <p class="text-gray-300 font-medium">المحامي</p>
-                        <p class="text-gray-300 text-sm">بالنقض و الدستورية العليا</p>
+                    <div class="mt-5 space-y-2">
+                        <p class="text-gold-solid font-bold text-xl">المؤسس والمحامي الرئيس</p>
+                        <p class="text-white text-4xl font-black serif-font gold-text pb-1">محمود عبد الحميد</p>
+                        <p class="text-gray-200 font-bold text-xl">المحامي</p>
+                        <p class="text-gray-300 font-medium text-lg tracking-wide">بالنقض والدستورية العليا</p>
                     </div>
                     <a href="about.html" class="read-more-btn mt-6 group inline-flex">
                         <span>اقرأ المزيد عن المؤسسة</span>
@@ -486,11 +481,11 @@
                 <div class="absolute -inset-4 bg-gradient-to-r from-gold-solid to-yellow-600 rounded-2xl opacity-10 blur-xl"></div>
                 <div class="relative bg-black/40 p-6 rounded-2xl border border-white/10">
                     <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/me.jpg" alt="الأستاذ محمود عبد الحميد" class="rounded-2xl w-full object-cover h-auto border-2 border-gold-solid shadow-2xl auto-colorize" loading="lazy">
-                    <div class="mt-6 text-center space-y-1">
-                        <p class="text-gold-solid font-bold text-xl">المؤسس و المحامي الرئيس</p>
-                        <p class="text-white text-3xl font-black serif-font gold-text">محمود عبد الحميد</p>
-                        <p class="text-gray-300 font-medium text-lg">المحامي</p>
-                        <p class="text-gray-300">بالنقض و الدستورية العليا</p>
+                    <div class="mt-6 text-center space-y-2">
+                        <p class="text-gold-solid font-bold text-2xl">المؤسس والمحامي الرئيس</p>
+                        <p class="text-white text-5xl font-black serif-font gold-text pb-2">محمود عبد الحميد</p>
+                        <p class="text-gray-200 font-bold text-2xl">المحامي</p>
+                        <p class="text-gray-300 font-medium text-xl tracking-wide">بالنقض والدستورية العليا</p>
                     </div>
                     <div class="text-center mt-6">
                         <a href="about.html" class="read-more-btn group">
@@ -512,7 +507,6 @@
             <div class="w-24 h-1 bg-gold-solid mx-auto rounded-full"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- بطاقة خبرة عملية تجاوزت (جديدة - الأولى) -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-chart-line text-3xl gold-text"></i>
@@ -524,7 +518,6 @@
                 </div>
                 <p class="text-white opacity-80 text-center">عاماً من الخبرة في المحاماة</p>
             </div>
-            <!-- بطاقة أكثر من +1500 ملف قانوني (جديدة - الثانية) -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 100ms;">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-briefcase text-3xl gold-text"></i>
@@ -536,7 +529,6 @@
                 </div>
                 <p class="text-white opacity-80 text-center">ملفاً تعاملنا معه باحتراف</p>
             </div>
-            <!-- بقية البطاقات الستة الأصلية -->
             <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 200ms;">
                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gold-solid/20 transition-colors duration-300">
                     <i class="fas fa-gavel text-3xl gold-text"></i>
@@ -583,7 +575,7 @@
     </div>
 </section>
 
-<section id="testimonials" class="section-spacing relative bg-[#020617]">
+<section id="testimonials" class="section-spacing relative">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16 reveal-on-scroll">
             <span class="text-gold-solid text-sm font-bold tracking-widest uppercase">شهادات نعتز بها</span>
@@ -591,7 +583,6 @@
             <p class="text-white opacity-70 max-w-2xl mx-auto">ثقة عملائنا هي الوسام الحقيقي الذي نفخر به. إليك بعض مما قاله موكلونا عن تجربتهم معنا.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
-            <!-- ثلاث شهادات -->
             <div class="card-glass testimonial-card gold-border reveal-on-scroll">
                 <i class="fas fa-quote-left quote-icon"></i>
                 <div class="flex text-yellow-500 mb-4 relative z-10 text-sm">
@@ -650,7 +641,7 @@
     </div>
 </section>
 
-<section class="py-20 relative overflow-hidden bg-[#050a25]/50">
+<section class="py-20 relative overflow-hidden bg-white/5">
     <div class="max-w-7xl mx-auto px-6 text-center relative z-10 reveal-on-scroll">
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-10">اكتشف خدماتنا القانونية المتكاملة</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -674,7 +665,7 @@
 </section>
 
 <!-- الفوتر الذهبي -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/20 text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
             <img src="logo.png" alt="شعار المؤسسة" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90 hover:opacity-100 transition">
@@ -726,9 +717,7 @@
         menuClose.addEventListener('click', closeMenu);
     }
 
-    // عداد الأرقام
     document.addEventListener("DOMContentLoaded", function() {
-        // أنيميشن الظهور
         const observerOptions = {
             threshold: 0.1,
             rootMargin: "0px 0px -50px 0px"
@@ -746,9 +735,7 @@
         const elements = document.querySelectorAll('.reveal-on-scroll');
         elements.forEach(el => observer.observe(el));
         
-        // عداد الخبرة (22 عاماً)
         const expYearsElement = document.getElementById('exp-years-counter');
-        // عداد القضايا الناجحة (1500 ملف)
         const casesSuccessElement = document.getElementById('cases-success-counter');
         
         if (expYearsElement && casesSuccessElement) {
@@ -760,7 +747,6 @@
             const counterObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // بدء عد الخبرة
                         if (!expYearsCounted) {
                             expYearsCounted = true;
                             let current = 0;
@@ -775,7 +761,6 @@
                             }, 50);
                         }
                         
-                        // بدء عد القضايا
                         if (!casesSuccessCounted) {
                             casesSuccessCounted = true;
                             let current = 0;
@@ -799,7 +784,6 @@
             counterObserver.observe(casesSuccessElement);
         }
 
-        // تفعيل تلوين الصور الشخصية بعد 3 ثوانٍ
         setTimeout(function() {
             document.querySelectorAll('.auto-colorize').forEach(img => {
                 img.classList.add('colorized');

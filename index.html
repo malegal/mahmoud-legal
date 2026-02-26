@@ -319,7 +319,7 @@
         }
         
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--primary-dark); } /* متناسق مع الخلفية الكحلية */
+        ::-webkit-scrollbar-track { background: var(--primary-dark); }
         ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
 
         /* تأثير تدرج الألوان للصورة الشخصية */
@@ -447,22 +447,37 @@
 <section class="py-20 md:py-24 relative z-10">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
+            
             <!-- الجانب الأيمن: النصوص -->
-            <div class="space-y-8 reveal-on-scroll">
+            <div class="space-y-6 reveal-on-scroll">
                 <div>
-                    <h6 class="text-gold-solid font-bold tracking-wider mb-2">من نحن</h6>
+                    <h6 class="text-gold-solid font-bold tracking-wider mb-2 text-lg">من نحن</h6>
                     <h2 class="text-3xl md:text-4xl lg:text-5xl font-black serif-font text-white leading-tight">
-                        الدفاع عن الحق <br> <span class="gold-text">شغفنا ورسالتنا</span>
+                        عدالة تنصر إنسانًا <br> <span class="gold-text">وعلم يخلد أثرًا</span>
                     </h2>
                 </div>
-                <p class="text-white text-lg leading-loose text-justify opacity-90">
-                    تأسست مؤسسة محمود عبد الحميد للمحاماة لتمثل نموذجاً للالتزام والاحترافية في عالم القانون. نحن ندرك أن القضايا التي تصل إلى محكمة النقض أو الدستورية العليا تحمل تعقيدات استثنائية، لذا نعتمد على خبرة تمتد لأكثر من عقدين في تحليل الملفات بدقة، وبناء مرافعات قوية، وتقديم استشارات قانونية تحمي حقوق موكلينا وتصون مصالحهم.
-                </p>
-                <p class="text-white/80 text-base leading-relaxed">
-                    ثقتكم بنا هي مسؤولية نعتز بها، ونسعى دوماً لتكونوا على يقين بأن قضاياكم في أيدٍ أمينة، تضع مصلحتكم فوق كل اعتبار.
-                </p>
-                <!-- الصورة الشخصية والنصوص المحدثة (تظهر فقط في الجوال) -->
-                <div class="block md:hidden text-center">
+                
+                <div class="space-y-4 text-justify">
+                    <p class="text-white text-lg leading-loose opacity-95">
+                        مؤسسة محمود عبد الحميد للمحاماة، بخبرة قانونية تمتد لأكثر من عشرين عامًا، نجحنا خلالها في التعامل مع أعقد القضايا أمام مختلف درجات التقاضي، وصولًا إلى محكمة النقض والمحكمة الدستورية العليا.
+                    </p>
+                    <p class="text-white/80 text-lg leading-relaxed">
+                        نعتبر كل قضية مسؤولية مستقلة تستحق دراسة دقيقة وتحليلًا عميقًا، للحفاظ على المركز القانوني لعملائنا وحماية مصالحهم المالية والتجارية.
+                    </p>
+                    <p class="text-white/80 text-lg leading-relaxed">
+                        نعتمد منهجًا منضبطًا يقوم على أصول قانونية راسخة، لنقدم دفاعًا متينًا يعكس الثقة والاحترافية التي تميز مؤسستنا.
+                    </p>
+                </div>
+
+                <!-- رسالة التوجيه الأنيقة -->
+                <div class="mt-6 border-r-4 border-gold-solid pr-4 py-3 bg-white/5 rounded-l-lg shadow-sm">
+                    <p class="text-gray-300 font-medium text-sm md:text-base leading-relaxed">
+                        <span class="text-gold-solid ml-1">◀</span> للاطلاع على رؤيتنا ومنهج عملنا التفصيلي، يُرجى زيارة صفحة عن المؤسسة.
+                    </p>
+                </div>
+
+                <!-- الصورة الشخصية والنصوص (تظهر فقط في الجوال) -->
+                <div class="block md:hidden text-center pt-8">
                     <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/me.jpg" alt="الأستاذ محمود عبد الحميد" class="w-64 h-64 object-cover rounded-2xl mx-auto border-2 border-gold-solid shadow-2xl auto-colorize" loading="lazy">
                     <div class="mt-5 space-y-2">
                         <p class="text-gold-solid font-bold text-xl">المؤسس والمحامي الرئيس</p>
@@ -476,6 +491,7 @@
                     </a>
                 </div>
             </div>
+
             <!-- الجانب الأيسر: الصورة الشخصية + البيانات + الزر (لأجهزة الكمبيوتر) -->
             <div class="relative reveal-on-scroll hidden md:block" style="transition-delay: 200ms;">
                 <div class="absolute -inset-4 bg-gradient-to-r from-gold-solid to-yellow-600 rounded-2xl opacity-10 blur-xl"></div>
@@ -495,6 +511,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>

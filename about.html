@@ -1,222 +1,551 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <!-- تحسين محركات البحث SEO -->
+    <meta name="description" content="تعرف على مؤسسة محمود عبد الحميد للمحاماة - خبرة في النقض والدستورية العليا، رؤية مهنية قائمة على النزاهة والتميز.">
+    <meta name="keywords" content="محامي بالنقض, محامي بالدستورية العليا, استشارات قانونية, مؤسسة محاماة, محمود عبد الحميد">
+    <title>عن المؤسسة | محمود عبد الحميد - المحامي بالنقض والدستورية العليا</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #020617; 
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --gold-solid: #bf953f;
+            --gold-glow: rgba(191, 149, 63, 0.4);
+            --header-height: 90px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: var(--primary-dark); 
+            color: #ffffff;
+            scroll-behavior: smooth; 
+            overflow-x: hidden;
+        }
+        
+        .serif-font { font-family: 'Amiri', serif; }
+        
+        .gold-text { 
+            background: var(--gold-gradient); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .nav-link-gold {
+            background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link-gold:hover {
+            text-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
+            transform: scale(1.05);
+        }
+        
+        .gold-btn { 
+            background: var(--gold-gradient); 
+            color: #000; 
+            font-weight: 800; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 0 15px var(--gold-glow);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .gold-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 0 30px var(--gold-glow); 
+        }
+
+        /* خلفية احتياطية لـ backdrop-filter */
+        .card-glass { 
+            background: rgba(0, 0, 0, 0.9); /* خلفية احتياطية */
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(191, 149, 63, 0.2); 
+            border-radius: 1.5rem; 
+            transition: all 0.4s ease; 
+        }
+        
+        .card-glass:hover { 
+            border-color: rgba(191, 149, 63, 0.8); 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 40px rgba(191, 149, 63, 0.1);
+        }
+        
+        .black-border-card { 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(2, 6, 23, 0.95);
+        }
+        
+        .contact-floating {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        .whatsapp-float, .call-float { 
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .whatsapp-float { background: #25d366; }
+        .call-float { background: #0077b6; }
+        .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
+        
+        .footer-social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid rgba(191, 149, 63, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.5);
+            text-decoration: none;
+            color: #bf953f; 
+            font-size: 1.3rem;
+        }
+        
+        .footer-social-icon i {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-social-icon:hover {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
+            transform: translateY(-5px);
+            background: var(--gold-gradient);
+        }
+        
+        .footer-social-icon:hover i {
+            background: none;
+            -webkit-text-fill-color: #000;
+            color: #000;
+        }
+
+        .header-glass {
+            background: rgba(0, 0, 0, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid;
+            border-image: var(--gold-gradient) 1;
+            box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
+        }
+        
+        .islamic-pattern-bg {
+            background-color: var(--primary-dark);
+            background-image: 
+                linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+
+        .gold-border {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gold-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid transparent;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #bf953f, transparent, #b38728) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .track-case-btn { 
+            background: transparent; 
+            border: 1px solid var(--gold-solid); 
+            color: #fff; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+        }
+        
+        .track-case-btn:hover { 
+            background: var(--gold-gradient); 
+            color: #000; 
+            border-color: transparent; 
+        }
+        
+        .visit-btn {
+            background: transparent;
+            border: 1px solid #ffffff;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .visit-btn:hover {
+            border-color: var(--gold-solid);
+            background: rgba(191, 149, 63, 0.1);
+            color: var(--gold-solid);
+        }
+        
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* تأثير الصور: أبيض وأسود ثم يتلون (مدة 3 ثوانٍ) */
+        .auto-colorize {
+            filter: grayscale(100%);
+            transition: filter 3s ease;
+        }
+        
+        .auto-colorize.colorized, .auto-colorize:hover {
+            filter: grayscale(0%);
+        }
+
+        .founder-card {
+            background: linear-gradient(145deg, rgba(20,20,30,0.9) 0%, rgba(2,6,23,0.95) 100%);
+            border-right: 4px solid var(--gold-solid);
+        }
+
+        #mobile-menu { 
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            transform: translateX(100%); 
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.98);
+        }
+        
+        #mobile-menu.active { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+<!-- الأيقونات العائمة -->
+<div class="contact-floating">
+    <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+    <a href="tel:+201101076000" class="call-float"><i class="fas fa-phone-alt"></i></a>
+</div>
+
+<!-- الهيدر -->
+<header class="fixed w-full z-[100] header-glass">
+    <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <img src="images/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-20 h-20 object-contain" width="80" height="80">
+            <div class="flex flex-col leading-tight">
+                <h1 class="font-bold gold-text serif-font whitespace-nowrap" style="font-size: 28px !important; line-height: 1.3;">محمود عبد الحميد</h1>
+                <p class="text-gray-300 font-medium" style="font-size: 13px !important; line-height: 1.2;">المحامي بالنقض والدستورية العليا</p>
+            </div>
+        </div>
+        <div class="hidden xl:flex items-center gap-6 font-bold text-sm">
+            <a href="index.html" class="nav-link-gold">الرئيسية</a>
+            <a href="about.html" class="nav-link-gold" style="text-decoration: underline; text-decoration-color: #bf953f;">عن المؤسسة</a>
+            <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
+            <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
+            <a href="blog.html" class="nav-link-gold">المدونة</a>
+            
+            <div class="nav-buttons flex items-center gap-2 mr-2">
+                <a href="client-inquiry.html" class="track-case-btn px-3 py-2 rounded-lg text-xs flex items-center gap-2"><i class="fas fa-gavel"></i> تابع قضيتك</a>
+                <a href="contact.html?tab=visit" class="visit-btn px-3 py-2 rounded-lg text-xs">حجز موعد</a>
+                <a href="contact.html?tab=consult" class="gold-btn px-4 py-2 rounded-lg text-xs shadow-lg">طلب استشارة</a>
+            </div>
+        </div>
+        <button id="menu-toggle" class="xl:hidden text-2xl gold-text">
+            <i class="fas fa-bars-staggered"></i>
+        </button>
+    </nav>
+</header>
+
+<!-- القائمة الجانبية للجوال (مطابقة للصفحة الرئيسية) -->
+<div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
+    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="flex flex-col gap-5 text-xl font-bold text-center">
+        <a href="index.html" class="nav-link-gold text-xl" onclick="closeMenu()">الرئيسية</a>
+        <a href="about.html" class="nav-link-gold text-xl" onclick="closeMenu()">عن المؤسسة</a>
+        <a href="specialties.html" class="nav-link-gold text-xl" onclick="closeMenu()">تخصصاتنا</a>
+        <a href="contact.html" class="nav-link-gold text-xl" onclick="closeMenu()">تواصل معنا</a>
+        <a href="blog.html" class="nav-link-gold text-xl" onclick="closeMenu()">المدونة</a>
+        <div class="h-px bg-white/10 w-full my-4"></div>
+        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg" onclick="closeMenu()">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg" onclick="closeMenu()">حجز موعد</a>
+        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg" onclick="closeMenu()">طلب استشارة</a>
+    </div>
+</div>
+
+<!-- قسم الهيرو الداخلي -->
+<section class="min-h-[40vh] flex flex-col items-center justify-center text-center px-6 pt-20 relative overflow-hidden islamic-pattern-bg">
+    <div class="section-content relative z-10 max-w-5xl mx-auto reveal-on-scroll">
+        <div class="inline-block mb-6 relative">
+            <span class="block gold-text text-xs sm:text-sm font-black tracking-[0.3em] uppercase relative z-10">Who We Are</span>
+            <div class="h-px w-full bg-gradient-to-r from-transparent via-gold-solid to-transparent absolute bottom-[-10px]"></div>
+        </div>
+        <h1 class="mb-6">
+            <span class="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black serif-font gold-text leading-tight tracking-wide drop-shadow-2xl">
+                عن المؤسسة
+            </span>
+        </h1>
+    </div>
+</section>
+
+<!-- محتوى الصفحة الرئيسي -->
+<section class="py-20 px-6 max-w-7xl mx-auto">
     
-    body { 
-        font-family: 'Tajawal', sans-serif; 
-        background-color: var(--primary-dark); 
-        color: #ffffff;
-        scroll-behavior: smooth; 
-        overflow-x: hidden;
-    }
+    <!-- الصورة المطلوبة أسفل العنوان مباشرة -->
+    <div class="mb-16 reveal-on-scroll rounded-3xl overflow-hidden shadow-2xl gold-border max-w-4xl mx-auto">
+        <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/15c58adf509349dd45b296db6ac0175a1967ce00/about.png" 
+             class="w-full h-auto object-cover auto-colorize" 
+             alt="صورة تعريفية عن المؤسسة"
+             width="1200" height="630"
+             loading="lazy">
+    </div>
     
-    .serif-font { font-family: 'Amiri', serif; }
+    <!-- 1. تعريف المؤسسة -->
+    <div class="grid lg:grid-cols-2 gap-12 items-center mb-24">
+        <div class="rounded-3xl overflow-hidden reveal-on-scroll shadow-2xl gold-border">
+            <img src="images/about-bg.jpg" class="w-full h-[400px] object-cover auto-colorize" alt="مقر مؤسسة محمود عبد الحميد" width="800" height="400" loading="lazy">
+        </div>
+        
+        <div class="space-y-6 text-white/95 text-lg md:text-xl leading-relaxed text-justify reveal-on-scroll">
+            <p>
+                تُعد <strong class="text-white">مؤسسة محمود عبد الحميد للمحاماة</strong> كيانًا قانونيًا متخصصًا يقدم خدمات قانونية متكاملة للأفراد والشركات، مستندًا إلى خبرة راسخة في التقاضي أمام محكمة النقض والمحكمة الدستورية العليا.
+            </p>
+            <p>
+                نعتمد منهجية عمل دقيقة تقوم على الدراسة المتأنية لكل ملف، وتحليل أبعاده القانونية والعملية، وبناء استراتيجيات مدروسة تهدف إلى حماية المراكز القانونية وصون الحقوق، وتحقيق أفضل النتائج الممكنة في إطار من الالتزام الكامل بأحكام القانون.
+            </p>
+            <p class="font-bold border-r-4 border-gold-solid pr-4 py-2 bg-white/5 rounded-l-lg">
+                نلتزم بالاحترافية والشفافية وسرعة الاستجابة، واضعين مصلحة موكلينا في مقدمة أولوياتنا، باعتبار العلاقة المهنية شراكة قائمة على الثقة والمسؤولية.
+            </p>
+        </div>
+    </div>
+
+    <!-- 2. الرؤية والأهداف -->
+    <div id="vision" class="mb-24">
+        <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">الرؤية والأهداف</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
+                <i class="fas fa-eye text-4xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-3xl font-bold gold-text mb-6">رؤيتنا</h3>
+                <p class="text-white/95 text-lg leading-relaxed">نسعى لأن نكون مؤسسة قانونية مرجعية يُعتمد عليها في تقديم الحلول القانونية المتكاملة، وأن نرسّخ حضورًا مهنيًا قويًا يجمع بين عمق الخبرة القانونية والرؤية الحديثة لممارسة المحاماة.</p>
+                <ul class="mt-6 space-y-3">
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> الريادة في تقديم الخدمات القانونية المتخصصة</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> بناء سمعة مهنية قائمة على الثقة والجودة</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> مواكبة التطورات التشريعية والقضائية الحديثة</li>
+                </ul>
+            </div>
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 150ms;">
+                <i class="fas fa-bullseye text-4xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-3xl font-bold gold-text mb-6">أهدافنا</h3>
+                <ul class="space-y-4 text-white/95 text-lg">
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> تقديم خدمات قانونية دقيقة ومبنية على دراسة متأنية لكل حالة.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> حماية حقوق موكلينا والدفاع عنها بأعلى درجات الاحتراف.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> بناء علاقات طويلة الأمد قائمة على الثقة والشفافية.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> التطوير المستمر للأداء القانوني ومواكبة المستجدات.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> ترسيخ اسم المؤسسة كعنوان للجودة والانضباط.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. المبادئ الأساسية -->
+    <div class="mb-24">
+        <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">مبادئنا الأساسية</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="card-glass p-8 rounded-2xl gold-border group text-center reveal-on-scroll">
+                <i class="fas fa-handshake text-5xl gold-text mb-4 group-hover:scale-110 transition-transform"></i>
+                <h4 class="text-xl font-bold gold-text mb-3">النزاهة</h4>
+                <p class="text-white/85">نلتزم بأعلى معايير النزاهة والأمانة المهنية في كل قضية.</p>
+            </div>
+            <div class="card-glass p-8 rounded-2xl gold-border group text-center reveal-on-scroll" style="transition-delay: 100ms;">
+                <i class="fas fa-lock text-5xl gold-text mb-4 group-hover:scale-110 transition-transform"></i>
+                <h4 class="text-xl font-bold gold-text mb-3">السرية</h4>
+                <p class="text-white/85">نحافظ على سرية معلومات موكلينا وحماية بياناتهم تماماً.</p>
+            </div>
+            <div class="card-glass p-8 rounded-2xl gold-border group text-center reveal-on-scroll" style="transition-delay: 200ms;">
+                <i class="fas fa-balance-scale text-5xl gold-text mb-4 group-hover:scale-110 transition-transform"></i>
+                <h4 class="text-xl font-bold gold-text mb-3">العدالة</h4>
+                <p class="text-white/85">نؤمن بأن العدالة هي غاية القانون، ونسعى لتحقيقها بقوة.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. فريق المؤسسة مع تكبير الاسم -->
+    <div id="team" class="mb-12">
+        <div class="text-center mb-16 reveal-on-scroll">
+            <h2 class="text-4xl md:text-5xl font-black serif-font gold-text inline-block relative">
+                فريق المؤسسة
+                <div class="h-1 w-1/2 bg-gold-solid mx-auto mt-4 rounded-full"></div>
+            </h2>
+        </div>
+
+        <div class="flex flex-col gap-12">
+            <!-- القيادة القانونية -->
+            <div class="founder-card p-8 md:p-12 rounded-3xl reveal-on-scroll relative overflow-hidden flex flex-col lg:flex-row items-center gap-12 shadow-2xl">
+                <i class="fas fa-gavel absolute -left-10 -top-10 text-[200px] opacity-5 text-[#bf953f]"></i>
+                
+                <div class="relative z-10 flex flex-col items-center shrink-0">
+                    <h3 class="text-3xl md:text-4xl font-black gold-text serif-font mb-6 text-center">القيادة القانونية</h3>
+                    <img src="images/me.jpg" class="w-80 h-80 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] object-cover rounded-2xl border-2 border-gold-solid shadow-[0_0_40px_rgba(191,149,63,0.4)] auto-colorize" alt="الأستاذ محمود عبد الحميد - مؤسس ورئيس المكتب" width="400" height="400" loading="lazy">
+                </div>
+                
+                <div class="relative z-10 space-y-4 w-full text-center lg:text-right flex flex-col justify-center">
+                    <!-- الاسم مكبر ويبقى في سطر واحد -->
+                    <h4 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black gold-text serif-font mb-2 leading-tight whitespace-nowrap">الأستاذ / محمود عبد الحميد</h4>
+                    <p class="text-2xl text-white font-bold">المحامي</p>
+                    <p class="text-xl text-gray-300 font-medium border-b border-gray-700 pb-5 inline-block">بالنقض والدستورية العليا</p>
+                    
+                    <div class="text-white/95 text-lg leading-relaxed space-y-4 pt-4">
+                        <p class="flex items-start justify-center lg:justify-start gap-3">
+                            <i class="fas fa-check-circle text-gold-solid mt-1.5 text-xl shrink-0"></i>
+                            <span class="text-justify md:text-right">المؤسس والمدير المسئول عن الإشراف الكامل على جميع الملفات والقضايا بالمكتب.</span>
+                        </p>
+                        <p class="flex items-start justify-center lg:justify-start gap-3">
+                            <i class="fas fa-star text-gold-solid mt-1.5 text-xl shrink-0"></i>
+                            <span class="text-justify md:text-right">خبير في طعون النقض والدستورية، ويضع استراتيجية المكتب القانونية لضمان أعلى مستويات الاحترافية وحماية حقوق العملاء.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- منظومة الدعم الإداري والمتعاونين -->
+            <div class="card-glass p-8 md:p-12 rounded-3xl gold-border reveal-on-scroll relative overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-gold-solid flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(191,149,63,0.15)] bg-black/60">
+                        <i class="fas fa-users-cog text-4xl md:text-5xl gold-text"></i>
+                    </div>
+                    <div class="space-y-4 text-center md:text-right w-full">
+                        <h3 class="text-3xl md:text-4xl font-black gold-text serif-font mb-4">منظومة الدعم الإداري والمتعاونين</h3>
+                        <p class="text-white/95 text-lg md:text-xl leading-relaxed text-justify md:text-right">
+                            يعمل المكتب من خلال منظومة دعم إداري وتنظيمي متكاملة، تضم كوادر متخصصة في إدارة المنصات الرقمية وتنسيق تواصل العملاء، مع مسار تعاون مرن مع مستشارين قانونيين متخصصين عند الحاجة.
+                        </p>
+                        <p class="text-gray-300 text-lg md:text-xl leading-relaxed text-justify md:text-right font-medium">
+                            تهدف هذه المنظومة إلى ضمان سرعة الاستجابة وكفاءة متابعة العملاء وإدارة الملفات بدقة عالية، <span class="text-gold-solid font-bold">وكل ذلك يتم تحت الإشراف المباشر والدقيق للمحامي المسؤول عن المكتب.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. أزرار التواصل -->
+    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-20 reveal-on-scroll">
+        <a href="contact.html?tab=consult" class="gold-btn px-10 py-4 rounded-xl text-lg font-black">طلب استشارة فورية</a>
+        <a href="contact.html?tab=visit" class="visit-btn px-10 py-4 rounded-xl text-lg font-bold">حجز موعد مقابلة</a>
+    </div>
+</section>
+
+<!-- الفوتر (مطابق للصفحة الرئيسية) -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="mb-8">
+            <img src="images/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90 hover:opacity-100 transition" width="96" height="96" loading="lazy">
+            <h2 class="text-3xl font-black gold-text serif-font mb-2">مؤسسة محمود عبد الحميد المحامي</h2>
+            <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
+        </div>
+        
+        <!-- أيقونات التواصل الاجتماعي كاملة -->
+        <div class="flex justify-center gap-6 mb-10">
+            <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تويتر"><i class="fab fa-twitter"></i></a>
+            <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تليجرام"><i class="fab fa-telegram-plane"></i></a>
+            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon" title="لينكد إن"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon" title="البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
+            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="footer-social-icon" title="الموقع الجغرافي"><i class="fas fa-map-marker-alt"></i></a>
+        </div>
+        
+        <div class="flex flex-wrap gap-x-8 gap-y-4 justify-center text-sm text-gray-400 mb-8 font-bold">
+            <a href="index.html" class="hover:text-gold-solid transition">الرئيسية</a>
+            <a href="about.html" class="hover:text-gold-solid transition">عن المؤسسة</a>
+            <a href="specialties.html" class="hover:text-gold-solid transition">تخصصاتنا</a>
+            <a href="contact.html" class="hover:text-gold-solid transition">اتصل بنا</a>
+            <a href="blog.html" class="hover:text-gold-solid transition">المدونة القانونية</a>
+        </div>
+        
+        <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/20 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
+    </div>
+</footer>
+
+<script>
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
     
-    .gold-text { 
-        background: var(--gold-gradient); 
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent; 
-        background-clip: text;
-        text-fill-color: transparent;
+    function closeMenu() {
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
     }
 
-    .nav-link-gold {
-        background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-        transition: all 0.3s ease;
-        position: relative;
+    // جعل الدالة عامة لاستخدامها من onclick
+    window.closeMenu = closeMenu;
+    
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
     }
     
-    .nav-link-gold:hover {
-        text-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
-        transform: scale(1.05);
-    }
-    
-    .gold-btn { 
-        background: var(--gold-gradient); 
-        color: #000; 
-        font-weight: 800; 
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        box-shadow: 0 0 15px var(--gold-glow);
-        border: none;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        z-index: 1;
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
     }
 
-    .gold-btn:hover { 
-        transform: translateY(-3px); 
-        box-shadow: 0 0 30px var(--gold-glow); 
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        
+        // تفعيل تلوين الصور بعد 3 ثوانٍ
+        setTimeout(function() {
+            document.querySelectorAll('.auto-colorize').forEach(img => {
+                img.classList.add('colorized');
+            });
+        }, 3000);
+    });
+</script>
 
-    .card-glass { 
-        background: rgba(20, 20, 30, 0.6);
-        backdrop-filter: blur(10px); 
-        border: 1px solid rgba(191, 149, 63, 0.2); 
-        border-radius: 1.5rem; 
-        transition: all 0.4s ease; 
-    }
-    
-    .card-glass:hover { 
-        border-color: rgba(191, 149, 63, 0.8); 
-        transform: translateY(-8px); 
-        box-shadow: 0 15px 40px rgba(191, 149, 63, 0.1);
-    }
-    
-    .black-border-card { 
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: rgba(2, 6, 23, 0.95);
-    }
-    
-    .contact-floating {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        z-index: 1000;
-    }
-    
-    .whatsapp-float, .call-float { 
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        transition: transform 0.3s ease;
-        text-decoration: none;
-        color: white;
-    }
-    
-    .whatsapp-float { background: #25d366; }
-    .call-float { background: #0077b6; }
-    .whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
-    
-    .footer-social-icon {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        border: 1px solid rgba(191, 149, 63, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        background: rgba(0,0,0,0.5);
-        text-decoration: none;
-        color: #bf953f; 
-        font-size: 1.3rem;
-    }
-    
-    .footer-social-icon:hover {
-        border-color: var(--gold-solid);
-        box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
-        transform: translateY(-5px);
-        background: var(--gold-gradient);
-        color: #000;
-    }
-
-    .header-glass {
-        background: rgba(0, 0, 0, 0.95) !important;
-        backdrop-filter: blur(20px);
-        border-bottom: 2px solid;
-        border-image: var(--gold-gradient) 1;
-        box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
-    }
-    
-    .islamic-pattern-bg {
-        background-color: var(--primary-dark);
-        background-image: 
-            linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
-            url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        background-attachment: fixed;
-    }
-
-    .gold-border {
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .gold-border::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        border: 1px solid transparent;
-        border-radius: 1.5rem;
-        background: linear-gradient(135deg, #bf953f, transparent, #b38728) border-box;
-        -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: destination-out;
-        mask-composite: exclude;
-        pointer-events: none;
-    }
-
-    .track-case-btn { 
-        background: transparent; 
-        border: 1px solid var(--gold-solid); 
-        color: #fff; 
-        font-weight: 600; 
-        transition: all 0.3s ease; 
-    }
-    
-    .track-case-btn:hover { 
-        background: var(--gold-gradient); 
-        color: #000; 
-        border-color: transparent; 
-    }
-    
-    .visit-btn {
-        background: transparent;
-        border: 1px solid #ffffff;
-        color: #fff;
-        transition: all 0.3s ease;
-    }
-    
-    .visit-btn:hover {
-        border-color: var(--gold-solid);
-        background: rgba(191, 149, 63, 0.1);
-        color: var(--gold-solid);
-    }
-    
-    .reveal-on-scroll {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.8s ease-out;
-    }
-    
-    .reveal-on-scroll.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* تأثير الصور: أبيض وأسود ثم يتلون */
-    .auto-colorize {
-        filter: grayscale(100%);
-        transition: filter 2.5s ease;
-    }
-    
-    .auto-colorize.colorized, .auto-colorize:hover {
-        filter: grayscale(0%);
-    }
-
-    /* تنسيق خاص للبطاقة التعريفية للقيادة */
-    .founder-card {
-        background: linear-gradient(145deg, rgba(20,20,30,0.9) 0%, rgba(2,6,23,0.95) 100%);
-        border-right: 4px solid var(--gold-solid);
-    }
-
-    #mobile-menu { 
-        transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
-        transform: translateX(100%); 
-        overflow-y: auto;
-        background: rgba(0, 0, 0, 0.98);
-    }
-    
-    #mobile-menu.active { transform: translateX(0); }
-</style>
+</body>
+</html>

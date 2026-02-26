@@ -169,7 +169,7 @@
             transform: scale(1.1); 
         }
         
-        /* أيقونات الفوتر - تصميم ذهبي (محدث) */
+        /* أيقونات الفوتر - تصميم ذهبي */
         .footer-social-icon {
             width: 45px;
             height: 45px;
@@ -323,6 +323,15 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
+
+        /* تأثير تدرج الألوان للصورة الشخصية */
+        .auto-colorize {
+            filter: grayscale(100%);
+            transition: filter 3s ease;
+        }
+        .auto-colorize.colorized, .auto-colorize:hover {
+            filter: grayscale(0%);
+        }
     </style>
 </head>
 <body>
@@ -439,10 +448,11 @@
     </div>
 </section>
 
-<!-- قسم نبذة عن المكتب (تم إزالة العداد) -->
+<!-- قسم نبذة عن المكتب (معدل حسب الطلب) -->
 <section class="py-20 md:py-24" style="background: linear-gradient(to bottom, #020617, #050a25);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-16 items-center">
+            <!-- الجانب الأيمن: النصوص -->
             <div class="space-y-8 reveal-on-scroll">
                 <div>
                     <h6 class="text-gold-solid font-bold tracking-wider mb-2">من نحن</h6>
@@ -451,16 +461,44 @@
                     </h2>
                 </div>
                 <p class="text-white text-lg leading-loose text-justify opacity-90">
-                    منذ تأسيس مؤسسة محمود عبد الحميد للمحاماة، ونحن نضع نصب أعيننا هدفاً واحداً: تقديم خدمات قانونية استثنائية ترتقي لمستوى توقعات موكلينا. بفضل خبرة تمتد لأكثر من عقدين، نمتلك المعرفة العميقة والرؤية الثاقبة للتعامل مع أعقد القضايا أمام محاكم النقض والدستورية.
+                    تأسست مؤسسة محمود عبد الحميد للمحاماة لتمثل نموذجاً للالتزام والاحترافية في عالم القانون. نحن ندرك أن القضايا التي تصل إلى محكمة النقض أو الدستورية العليا تحمل تعقيدات استثنائية، لذا نعتمد على خبرة تمتد لأكثر من عقدين في تحليل الملفات بدقة، وبناء مرافعات قوية، وتقديم استشارات قانونية تحمي حقوق موكلينا وتصون مصالحهم.
                 </p>
-                <a href="about.html" class="read-more-btn mt-6 group">
-                    <span>اقرأ المزيد عن المؤسسة</span>
-                    <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
-                </a>
+                <p class="text-white/80 text-base leading-relaxed">
+                    ثقتكم بنا هي مسؤولية نعتز بها، ونسعى دوماً لتكونوا على يقين بأن قضاياكم في أيدٍ أمينة، تضع مصلحتكم فوق كل اعتبار.
+                </p>
+                <!-- الصورة الشخصية (تظهر فقط في الجوال ضمن النصوص) -->
+                <div class="block md:hidden text-center">
+                    <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/me.jpg" alt="الأستاذ محمود عبد الحميد" class="w-64 h-64 object-cover rounded-2xl mx-auto border-2 border-gold-solid shadow-2xl auto-colorize" loading="lazy">
+                    <div class="mt-4 space-y-1">
+                        <p class="text-gold-solid font-bold text-lg">المؤسس و المحامي الرئيس</p>
+                        <p class="text-white text-2xl font-black serif-font gold-text">محمود عبد الحميد</p>
+                        <p class="text-gray-300 font-medium">المحامي</p>
+                        <p class="text-gray-300 text-sm">بالنقض و الدستورية العليا</p>
+                    </div>
+                    <a href="about.html" class="read-more-btn mt-6 group inline-flex">
+                        <span>اقرأ المزيد عن المؤسسة</span>
+                        <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
+                    </a>
+                </div>
             </div>
-            <div class="relative reveal-on-scroll" style="transition-delay: 200ms;">
+            <!-- الجانب الأيسر: الصورة الشخصية + البيانات + الزر (لأجهزة الكمبيوتر) -->
+            <div class="relative reveal-on-scroll hidden md:block" style="transition-delay: 200ms;">
                 <div class="absolute -inset-4 bg-gradient-to-r from-gold-solid to-yellow-600 rounded-2xl opacity-10 blur-xl"></div>
-                <img src="images/about-bg.jpg" alt="مكتب المحاماة" class="relative rounded-2xl border border-white/10 shadow-2xl w-full object-cover h-[500px] grayscale hover:grayscale-0 transition-all duration-700">
+                <div class="relative bg-black/40 p-6 rounded-2xl border border-white/10">
+                    <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/me.jpg" alt="الأستاذ محمود عبد الحميد" class="rounded-2xl w-full object-cover h-auto border-2 border-gold-solid shadow-2xl auto-colorize" loading="lazy">
+                    <div class="mt-6 text-center space-y-1">
+                        <p class="text-gold-solid font-bold text-xl">المؤسس و المحامي الرئيس</p>
+                        <p class="text-white text-3xl font-black serif-font gold-text">محمود عبد الحميد</p>
+                        <p class="text-gray-300 font-medium text-lg">المحامي</p>
+                        <p class="text-gray-300">بالنقض و الدستورية العليا</p>
+                    </div>
+                    <div class="text-center mt-6">
+                        <a href="about.html" class="read-more-btn group">
+                            <span>اقرأ المزيد عن المؤسسة</span>
+                            <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -760,6 +798,13 @@
             counterObserver.observe(expYearsElement);
             counterObserver.observe(casesSuccessElement);
         }
+
+        // تفعيل تلوين الصور الشخصية بعد 3 ثوانٍ
+        setTimeout(function() {
+            document.querySelectorAll('.auto-colorize').forEach(img => {
+                img.classList.add('colorized');
+            });
+        }, 3000);
     });
 </script>
 

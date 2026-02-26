@@ -213,21 +213,30 @@
             transform: translateY(0);
         }
 
+        /* تأثير الصور: أبيض وأسود ثم يتلون */
         .auto-colorize {
             filter: grayscale(100%);
-            transition: filter 1.5s ease;
+            transition: filter 2.5s ease;
         }
         
         .auto-colorize.colorized, .auto-colorize:hover {
             filter: grayscale(0%);
         }
 
-        /* تنسيق خاص للبطاقة التعريفية */
+        /* تنسيق خاص للبطاقة التعريفية للقيادة */
         .founder-card {
             background: linear-gradient(145deg, rgba(20,20,30,0.9) 0%, rgba(2,6,23,0.95) 100%);
             border-right: 4px solid var(--gold-solid);
         }
 
+        #mobile-menu { 
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            transform: translateX(100%); 
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.98);
+        }
+        
+        #mobile-menu.active { transform: translateX(0); }
     </style>
 </head>
 <body>
@@ -238,7 +247,7 @@
     <a href="tel:+201101076000" class="call-float"><i class="fas fa-phone-alt"></i></a>
 </div>
 
-<!-- الهيدر (كما هو) -->
+<!-- الهيدر -->
 <header class="fixed w-full z-[100] header-glass">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center gap-4">
@@ -261,8 +270,25 @@
                 <a href="contact.html?tab=consult" class="gold-btn px-4 py-2 rounded-lg text-xs shadow-lg">طلب استشارة</a>
             </div>
         </div>
+        <button id="menu-toggle" class="xl:hidden text-2xl gold-text">
+            <i class="fas fa-bars-staggered"></i>
+        </button>
     </nav>
 </header>
+
+<!-- القائمة الجانبية للجوال -->
+<div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
+    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="flex flex-col gap-5 text-xl font-bold text-center">
+        <a href="index.html" class="nav-link-gold text-xl">الرئيسية</a>
+        <a href="about.html" class="nav-link-gold text-xl">عن المؤسسة</a>
+        <a href="specialties.html" class="nav-link-gold text-xl">تخصصاتنا</a>
+        <a href="contact.html" class="nav-link-gold text-xl">تواصل معنا</a>
+        <a href="blog.html" class="nav-link-gold text-xl">المدونة</a>
+    </div>
+</div>
 
 <!-- قسم الهيرو الداخلي -->
 <section class="min-h-[40vh] flex flex-col items-center justify-center text-center px-6 pt-20 relative overflow-hidden islamic-pattern-bg">
@@ -279,17 +305,16 @@
     </div>
 </section>
 
-<!-- محتوى صفحة عن المؤسسة (الصياغة الجديدة) -->
+<!-- محتوى الصفحة الرئيسي -->
 <section class="py-20 px-6 max-w-7xl mx-auto">
     
-    <!-- فقرة عن المؤسسة مع صورة للمكتب -->
+    <!-- 1. تعريف المؤسسة (بدون عنوان) -->
     <div class="grid lg:grid-cols-2 gap-12 items-center mb-24">
         <div class="rounded-3xl overflow-hidden reveal-on-scroll shadow-2xl gold-border">
             <img src="images/about-bg.jpg" class="w-full h-[400px] object-cover auto-colorize" alt="مقر مؤسسة محمود عبد الحميد">
         </div>
         
         <div class="space-y-6 text-white/90 text-lg md:text-xl leading-relaxed text-justify reveal-on-scroll">
-            <h2 class="font-black text-3xl md:text-4xl gold-text serif-font mb-6">رؤيتنا ومنهجية العمل</h2>
             <p>
                 تُعد <strong class="text-white">مؤسسة محمود عبد الحميد للمحاماة</strong> كيانًا قانونيًا متخصصًا يقدم خدمات قانونية متكاملة للأفراد والشركات، مستندًا إلى خبرة راسخة في التقاضي أمام محكمة النقض والمحكمة الدستورية العليا.
             </p>
@@ -302,65 +327,36 @@
         </div>
     </div>
 
-    <!-- قسم فريق العمل (الصياغة الجديدة) -->
-    <div id="team" class="mt-24">
-        <div class="text-center mb-16 reveal-on-scroll">
-            <h2 class="text-4xl md:text-5xl font-black serif-font gold-text inline-block relative">
-                فريق العمل
-                <div class="h-1 w-1/2 bg-gold-solid mx-auto mt-4 rounded-full"></div>
-            </h2>
-        </div>
-
-        <div class="flex flex-col gap-10">
-            <!-- 1. القيادة القانونية -->
-            <div class="founder-card p-8 md:p-12 rounded-3xl reveal-on-scroll relative overflow-hidden flex flex-col md:flex-row items-center gap-10 shadow-2xl">
-                <!-- أيقونة مائية في الخلفية -->
-                <i class="fas fa-gavel absolute -left-10 -top-10 text-[200px] opacity-5 text-[#bf953f]"></i>
-                
-                <div class="relative z-10 shrink-0">
-                    <img src="me.jpg" class="w-64 h-64 md:w-72 md:h-72 object-cover rounded-2xl border-2 border-gold-solid shadow-[0_0_30px_rgba(191,149,63,0.3)] auto-colorize" alt="الأستاذ محمود عبد الحميد">
-                </div>
-                
-                <div class="relative z-10 space-y-4 text-center md:text-right w-full">
-                    <span class="inline-block px-4 py-1 rounded-full bg-gold-solid/20 text-gold-solid font-bold text-sm mb-2 border border-gold-solid/30">القيادة القانونية</span>
-                    <h3 class="text-4xl font-black gold-text serif-font">الأستاذ / محمود عبد الحميد</h3>
-                    <p class="text-xl text-gray-300 font-bold tracking-wide border-b border-gray-700 pb-4 inline-block">المحامي بالنقض والدستورية العليا</p>
-                    
-                    <div class="text-white/90 text-lg leading-relaxed space-y-3 pt-2">
-                        <p class="flex items-start justify-center md:justify-start gap-3">
-                            <i class="fas fa-check-circle text-gold-solid mt-1.5"></i>
-                            <span>المؤسس والمدير المسؤول عن الإشراف الكامل على جميع الملفات والقضايا بالمكتب.</span>
-                        </p>
-                        <p class="flex items-start justify-center md:justify-start gap-3">
-                            <i class="fas fa-star text-gold-solid mt-1.5"></i>
-                            <span>خبير في قضايا النقض والدستورية، ويضع استراتيجية المكتب القانونية لضمان أعلى مستويات الاحترافية وحماية حقوق العملاء.</span>
-                        </p>
-                    </div>
-                </div>
+    <!-- 2. قسم الرؤية والأهداف -->
+    <div id="vision" class="mb-24">
+        <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">الرؤية والأهداف</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
+                <i class="fas fa-eye text-4xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-3xl font-bold gold-text mb-6">رؤيتنا</h3>
+                <p class="text-white/90 text-lg leading-relaxed">نسعى لأن نكون مؤسسة قانونية مرجعية يُعتمد عليها في تقديم الحلول القانونية المتكاملة، وأن نرسّخ حضورًا مهنيًا قويًا يجمع بين عمق الخبرة القانونية والرؤية الحديثة لممارسة المحاماة.</p>
+                <ul class="mt-6 space-y-3">
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> الريادة في تقديم الخدمات القانونية المتخصصة</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> بناء سمعة مهنية قائمة على الثقة والجودة</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> مواكبة التطورات التشريعية والقضائية الحديثة</li>
+                </ul>
             </div>
-
-            <!-- 2. الدعم الإداري والمتعاونين -->
-            <div class="card-glass p-8 md:p-10 rounded-3xl gold-border reveal-on-scroll relative overflow-hidden">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-gold-solid flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(191,149,63,0.15)] bg-black/60">
-                        <i class="fas fa-users-cog text-4xl md:text-5xl gold-text"></i>
-                    </div>
-                    <div class="space-y-4 text-center md:text-right">
-                        <span class="inline-block px-4 py-1 rounded-full bg-blue-900/40 text-blue-300 font-bold text-sm border border-blue-500/30">الدعم الإداري والمتعاونين</span>
-                        <p class="text-white/90 text-lg md:text-xl leading-relaxed text-justify md:text-right">
-                            يعمل المكتب من خلال منظومة دعم إداري وتنظيمي متكاملة، تضم كوادر متخصصة في إدارة المنصات الرقمية وتنسيق تواصل العملاء، مع مسار تعاون مرن مع مستشارين قانونيين متخصصين عند الحاجة.
-                        </p>
-                        <p class="text-gray-400 text-lg leading-relaxed text-justify md:text-right">
-                            تهدف هذه المنظومة إلى ضمان سرعة الاستجابة وكفاءة متابعة العملاء وإدارة الملفات بدقة عالية، <span class="text-gold-solid font-bold">وكل ذلك يتم تحت الإشراف المباشر والدقيق للمحامي المسؤول عن المكتب.</span>
-                        </p>
-                    </div>
-                </div>
+            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 150ms;">
+                <i class="fas fa-bullseye text-4xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-3xl font-bold gold-text mb-6">أهدافنا</h3>
+                <ul class="space-y-4 text-white/90 text-lg">
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> تقديم خدمات قانونية دقيقة ومبنية على دراسة متأنية لكل حالة.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> حماية حقوق موكلينا والدفاع عنها بأعلى درجات الاحتراف.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> بناء علاقات طويلة الأمد قائمة على الثقة والشفافية.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> التطوير المستمر للأداء القانوني ومواكبة المستجدات.</li>
+                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> ترسيخ اسم المؤسسة كعنوان للجودة والانضباط.</li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <!-- قسم المبادئ (مختصر وأنيق) -->
-    <div class="mt-24">
+    <!-- 3. قسم المبادئ -->
+    <div class="mb-24">
         <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">مبادئنا الأساسية</h2>
         <div class="grid md:grid-cols-3 gap-8">
             <div class="card-glass p-8 rounded-2xl gold-border group text-center reveal-on-scroll">
@@ -381,7 +377,69 @@
         </div>
     </div>
 
-    <!-- أزرار التواصل -->
+    <!-- 4. قسم فريق المؤسسة -->
+    <div id="team" class="mb-12">
+        <div class="text-center mb-16 reveal-on-scroll">
+            <h2 class="text-4xl md:text-5xl font-black serif-font gold-text inline-block relative">
+                فريق المؤسسة
+                <div class="h-1 w-1/2 bg-gold-solid mx-auto mt-4 rounded-full"></div>
+            </h2>
+        </div>
+
+        <div class="flex flex-col gap-12">
+            <!-- القيادة القانونية -->
+            <div class="founder-card p-8 md:p-12 rounded-3xl reveal-on-scroll relative overflow-hidden flex flex-col md:flex-row items-center gap-10 shadow-2xl">
+                <!-- أيقونة مائية في الخلفية -->
+                <i class="fas fa-gavel absolute -left-10 -top-10 text-[200px] opacity-5 text-[#bf953f]"></i>
+                
+                <div class="relative z-10 w-full md:w-1/3 flex flex-col items-center shrink-0">
+                    <!-- الصورة تعود لتأثير التلوين التلقائي (من الأبيض والأسود للألوان) -->
+                    <img src="me.jpg" class="w-64 h-64 md:w-72 md:h-72 object-cover rounded-2xl border-2 border-gold-solid shadow-[0_0_30px_rgba(191,149,63,0.3)] auto-colorize mb-6" alt="الأستاذ محمود عبد الحميد">
+                </div>
+                
+                <div class="relative z-10 w-full md:w-2/3 space-y-4 text-center md:text-right">
+                    <h3 class="text-2xl font-bold text-gray-400 mb-6">القيادة القانونية</h3>
+                    
+                    <!-- الاسم والمسمى مقسم على سطور -->
+                    <h4 class="text-3xl md:text-4xl font-black text-white serif-font">الأستاذ / محمود عبد الحميد</h4>
+                    <p class="text-2xl text-gold-solid font-bold">المحامي</p>
+                    <p class="text-xl text-gray-300 font-medium border-b border-gray-700 pb-4 inline-block">بالنقض والدستورية العليا</p>
+                    
+                    <div class="text-white/90 text-lg leading-relaxed space-y-3 pt-4">
+                        <p class="flex items-start justify-center md:justify-start gap-3">
+                            <i class="fas fa-check-circle text-gold-solid mt-1.5"></i>
+                            <span>المؤسس والمدير المسئول عن الإشراف الكامل على جميع الملفات والقضايا بالمكتب.</span>
+                        </p>
+                        <p class="flex items-start justify-center md:justify-start gap-3">
+                            <i class="fas fa-star text-gold-solid mt-1.5"></i>
+                            <span>خبير في طعون النقض والدستورية، ويضع استراتيجية المكتب القانونية لضمان أعلى مستويات الاحترافية وحماية حقوق العملاء.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- منظومة الدعم الإداري والمتعاونين -->
+            <div class="card-glass p-8 md:p-12 rounded-3xl gold-border reveal-on-scroll relative overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-2 border-gold-solid flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(191,149,63,0.15)] bg-black/60">
+                        <i class="fas fa-users-cog text-4xl md:text-5xl gold-text"></i>
+                    </div>
+                    <div class="space-y-4 text-center md:text-right w-full">
+                        <!-- العنوان بخط ذهبي ملكي -->
+                        <h3 class="text-3xl md:text-4xl font-black gold-text serif-font mb-4">منظومة الدعم الإداري والمتعاونين</h3>
+                        <p class="text-white/90 text-lg md:text-xl leading-relaxed text-justify md:text-right">
+                            يعمل المكتب من خلال منظومة دعم إداري وتنظيمي متكاملة، تضم كوادر متخصصة في إدارة المنصات الرقمية وتنسيق تواصل العملاء، مع مسار تعاون مرن مع مستشارين قانونيين متخصصين عند الحاجة.
+                        </p>
+                        <p class="text-gray-300 text-lg md:text-xl leading-relaxed text-justify md:text-right font-medium">
+                            تهدف هذه المنظومة إلى ضمان سرعة الاستجابة وكفاءة متابعة العملاء وإدارة الملفات بدقة عالية، <span class="text-gold-solid font-bold">وكل ذلك يتم تحت الإشراف المباشر والدقيق للمحامي المسؤول عن المكتب.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. أزرار التواصل -->
     <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-20 reveal-on-scroll">
         <a href="contact.html?tab=consult" class="gold-btn px-10 py-4 rounded-xl text-lg font-black">طلب استشارة فورية</a>
         <a href="contact.html?tab=visit" class="visit-btn px-10 py-4 rounded-xl text-lg font-bold">حجز موعد مقابلة</a>
@@ -404,11 +462,37 @@
             <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>
         </div>
         
+        <div class="flex flex-wrap gap-x-8 gap-y-4 justify-center text-sm text-gray-400 mb-8 font-bold">
+            <a href="index.html" class="hover:text-gold-solid transition">الرئيسية</a>
+            <a href="about.html" class="hover:text-gold-solid transition">عن المؤسسة</a>
+            <a href="specialties.html" class="hover:text-gold-solid transition">تخصصاتنا</a>
+            <a href="contact.html" class="hover:text-gold-solid transition">اتصل بنا</a>
+            <a href="blog.html" class="hover:text-gold-solid transition">المدونة القانونية</a>
+        </div>
+        
         <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/20 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
     </div>
 </footer>
 
 <script>
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    
+    if (menuClose) {
+        menuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
@@ -422,6 +506,7 @@
         
         document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
         
+        // تفعيل تلوين الصور (من الأبيض والأسود للألوان) بعد 5.5 ثواني
         setTimeout(function() {
             document.querySelectorAll('.auto-colorize').forEach(img => {
                 img.classList.add('colorized');

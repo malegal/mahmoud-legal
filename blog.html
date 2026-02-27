@@ -37,8 +37,27 @@
         .footer-social-icon i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .footer-social-icon:hover { border-color: var(--gold-solid); box-shadow: 0 0 20px rgba(191,149,63,0.4); transform: translateY(-5px); background: var(--gold-gradient); }
         .footer-social-icon:hover i { -webkit-text-fill-color: #000; }
-        #mobile-menu { transition: transform 0.4s cubic-bezier(0.25,0.1,0.25,1); transform: translateX(100%); overflow-y: auto; background: rgba(0,0,0,0.98); }
+        
+        /* إصلاح القائمة الجانبية */
+        #mobile-menu { 
+            position: fixed; 
+            top: 0; 
+            right: 0; 
+            width: 100%; 
+            height: 100vh; 
+            z-index: 1000; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            transition: transform 0.4s cubic-bezier(0.25,0.1,0.25,1); 
+            transform: translateX(100%); 
+            overflow-y: auto; 
+            background: rgba(0, 0, 0, 0.85); 
+            backdrop-filter: blur(15px); 
+        }
         #mobile-menu.active { transform: translateX(0); }
+        
         .header-glass { background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid; border-image: var(--gold-gradient) 1; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .islamic-pattern-bg { background-color: var(--primary-dark); background-image: linear-gradient(rgba(5,10,31,0.85), rgba(5,10,31,0.95)), url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-attachment: fixed; }
         @media (max-width: 768px) { .contact-floating { right: 15px; bottom: 15px; gap: 10px; } .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; } }
@@ -81,7 +100,7 @@
 
 <div id="mobile-menu">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text"><i class="fas fa-times"></i></button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center">
+    <div class="flex flex-col gap-5 text-xl font-bold text-center w-full px-6">
         <a href="index.html" class="nav-link-gold">الرئيسية</a>
         <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
         <a href="index.html#why-us" class="nav-link-gold">لماذا تختارنا</a>
@@ -90,13 +109,14 @@
         <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
         <a href="blog.html" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg">تابع قضيتك</a>
-        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg">حجز موعد</a>
-        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg">طلب استشارة</a>
+        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">حجز موعد</a>
+        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">طلب استشارة</a>
     </div>
 </div>
 
-<section class="min-h-[45vh] flex flex-col items-center justify-center text-center px-6 pt-32 islamic-pattern-bg">
+<!-- تم تقليل المساحة بالأعلى إلى min-h-[35vh] و pt-28 -->
+<section class="min-h-[35vh] flex flex-col items-center justify-center text-center px-6 pt-28 islamic-pattern-bg">
     <span class="gold-text uppercase tracking-[0.4em] font-black text-xs mb-2">Legal Blog</span>
     <h1 class="text-5xl md:text-7xl font-black serif-font gold-text">المدونة القانونية</h1>
     <p class="text-white/60 mt-4 max-w-xl text-lg italic">نحو نشر الوعي القانوني بأسلوب علمي رصين</p>
@@ -106,7 +126,8 @@
     <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
 </section>
 
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/20 text-center mt-20">
+<!-- تم تعديل الفوتر ليكون أسود زجاجي شفاف (bg-black/80 backdrop-blur-xl) -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center mt-20">
     <div class="max-w-7xl mx-auto px-6">
         <img src="logo.png" class="w-24 h-24 object-contain mx-auto mb-4">
         <h2 class="text-3xl font-black gold-text serif-font mb-2">مؤسسة محمود عبد الحميد المحامي</h2>
@@ -144,7 +165,11 @@
             const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
             const files = await res.json();
             grid.innerHTML = '';
-            files.filter(f => f.name.endsWith('.md')).forEach(file => {
+            
+            // تم إضافة .reverse() هنا لعكس الترتيب وإظهار المقالات الأحدث أولاً
+            const mdFiles = files.filter(f => f.name.endsWith('.md')).reverse();
+            
+            mdFiles.forEach(file => {
                 const slug = file.name.replace('.md', '');
                 const title = decodeURIComponent(slug.replace(/-/g, ' '));
                 grid.innerHTML += `

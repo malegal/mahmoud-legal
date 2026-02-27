@@ -39,6 +39,10 @@
             text-fill-color: transparent;
         }
 
+        .text-gold-solid {
+            color: var(--gold-solid); /* لون ذهبي صلب للأيقونات */
+        }
+
         .nav-link-gold {
             background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
             -webkit-background-clip: text;
@@ -356,11 +360,15 @@
         </div>
         
         <div class="space-y-4 text-white/95 text-lg md:text-xl leading-relaxed text-justify reveal-on-scroll">
-            <p class="mb-4">
-                تأسست <strong class="text-white">مؤسسة محمود عبد الحميد للمحاماة</strong> انطلاقًا من رؤية راسخة مؤداها أن المحاماة رسالة عدلٍ قبل أن تكون مهنة.
+            <!-- فقرة مع أيقونة ذهبية -->
+            <p class="mb-4 flex items-start gap-3">
+                <i class="fas fa-balance-scale text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                <span>تأسست <strong class="text-white">مؤسسة محمود عبد الحميد للمحاماة</strong> انطلاقًا من رؤية راسخة مؤداها أن المحاماة رسالة عدلٍ قبل أن تكون مهنة.</span>
             </p>
-            <p class="mb-4">
-                وعلى مدار <span class="gold-text font-bold text-2xl">أكثر من عشرين عامًا</span> من العمل القضائي المتواصل، نجحنا في بناء رصيد من الإنجازات والخبرات يتجسد في:
+            <!-- فقرة مع أيقونة ذهبية -->
+            <p class="mb-4 flex items-start gap-3">
+                <i class="fas fa-clock text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                <span>وعلى مدار <span class="gold-text font-bold text-2xl">أكثر من عشرين عامًا</span> من العمل القضائي المتواصل، نجحنا في بناء رصيد من الإنجازات والخبرات يتجسد في:</span>
             </p>
             
             <!-- نقاط الخبرة المضافة بعلامات صح ذهبية -->
@@ -415,22 +423,50 @@
         </div>
     </div>
 
-    <!-- 2. الرؤية والرسالة -->
+    <!-- 2. الرؤية والرسالة (تم تقسيمها إلى نقاط مع أيقونات ذهبية) -->
     <div id="vision-mission" class="mb-24">
         <div class="grid md:grid-cols-2 gap-8">
+            <!-- رؤيتنا -->
             <div class="black-border-card card-glass p-8 md:p-10 rounded-3xl gold-border group reveal-on-scroll">
                 <i class="fas fa-eye text-5xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
                 <h3 class="text-3xl font-black serif-font gold-text mb-4">رؤيتنا</h3>
-                <p class="text-white/95 text-xl leading-relaxed">
-                    أن نرسّخ مكانة مرجعية بين المؤسسات القانونية في مصر بالثبات المهني وقوة الحجة، وأن نقدم نموذجًا حديثًا للمحاماة يجمع بين العمق العلمي والهيبة القضائية والحلول الرقمية المتطورة.
-                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-circle-check text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                        <span class="text-white/95 text-xl leading-relaxed">ترسيخ مكانة مرجعية بين المؤسسات القانونية في مصر بالثبات المهني وقوة الحجة.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-circle-check text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                        <span class="text-white/95 text-xl leading-relaxed">تقديم نموذج حديث للمحاماة يجمع بين العمق العلمي والهيبة القضائية.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-circle-check text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                        <span class="text-white/95 text-xl leading-relaxed">اعتماد الحلول الرقمية المتطورة لخدمة العدالة.</span>
+                    </li>
+                </ul>
             </div>
+            <!-- رسالتنا -->
             <div class="black-border-card card-glass p-8 md:p-10 rounded-3xl gold-border group reveal-on-scroll" style="transition-delay: 150ms;">
                 <i class="fas fa-gem text-5xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
                 <h3 class="text-3xl font-black serif-font gold-text mb-4">رسالتنا</h3>
-                <p class="text-white/95 text-xl leading-relaxed">
-                    تقديم خدمة قانونية استراتيجية دقيقة تحمي المراكز القانونية لعملائنا — أفرادًا وشركات — وتصون مصالحهم المالية والتجارية، مع السعي لتحقيق أفضل النتائج الممكنة في إطار القانون، مدعومة بأدوات رقمية حديثة تعزز الكفاءة وسرعة الأداء.
-                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-circle-check text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                        <span class="text-white/95 text-xl leading-relaxed">تقديم خدمة قانونية استراتيجية دقيقة تحمي المراكز القانونية لعملائنا (أفرادًا وشركات).</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-circle-check text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                        <span class="text-white/95 text-xl leading-relaxed">صون مصالحهم المالية والتجارية بأعلى معايير الاحترافية.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-circle-check text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                        <span class="text-white/95 text-xl leading-relaxed">السعي لتحقيق أفضل النتائج الممكنة في إطار القانون.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-circle-check text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
+                        <span class="text-white/95 text-xl leading-relaxed">استخدام أدوات رقمية حديثة تعزز الكفاءة وسرعة الأداء.</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -483,7 +519,7 @@
         </div>
     </div>
 
-    <!-- 4. أهدافنا -->
+    <!-- 4. أهدافنا (تم تحويل الأرقام إلى أيقونات ذهبية) -->
     <div class="mb-24 reveal-on-scroll">
         <div class="card-glass gold-border p-8 md:p-12 rounded-3xl relative overflow-hidden">
             <!-- خلفية زخرفية -->
@@ -494,24 +530,25 @@
             </h2>
             
             <div class="grid md:grid-cols-2 gap-x-12 gap-y-6 relative z-10">
+                <!-- كل هدف بأيقونة ذهبية بدلاً من الرقم -->
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">1</div>
+                    <i class="fas fa-circle-check text-gold-solid text-2xl shrink-0 mt-1 gold-glow-icon"></i>
                     <p class="text-white/90 text-lg md:text-xl">حماية حقوق عملائنا والدفاع عنها بأعلى درجات الاحتراف، حتى قبل نشوب أي نزاع.</p>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">2</div>
+                    <i class="fas fa-circle-check text-gold-solid text-2xl shrink-0 mt-1 gold-glow-icon"></i>
                     <p class="text-white/90 text-lg md:text-xl">بناء علاقات طويلة الأمد قائمة على الثقة والشفافية.</p>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">3</div>
+                    <i class="fas fa-circle-check text-gold-solid text-2xl shrink-0 mt-1 gold-glow-icon"></i>
                     <p class="text-white/90 text-lg md:text-xl">تقديم معاملة راقية ومخصصة لكل عميل.</p>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">4</div>
+                    <i class="fas fa-circle-check text-gold-solid text-2xl shrink-0 mt-1 gold-glow-icon"></i>
                     <p class="text-white/90 text-lg md:text-xl">التطوير المستمر علميًا وتقنيًا لخدمة عملائنا.</p>
                 </div>
                 <div class="flex items-start gap-4 md:col-span-2">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">5</div>
+                    <i class="fas fa-circle-check text-gold-solid text-2xl shrink-0 mt-1 gold-glow-icon"></i>
                     <p class="text-white/90 text-lg md:text-xl font-bold gold-text">ترسيخ مكانة المؤسسة كمرجع للجودة والانضباط المهني.</p>
                 </div>
             </div>
@@ -530,7 +567,6 @@
                     إيمانًا بأن العدالة في عصرنا الحديث تحتاج إلى أدوات عصرية، قمنا بدمج التكنولوجيا في صميم عملنا القانوني لخدمة عملائنا بكفاءة:
                 </p>
                 
-                <!-- تم تحويل النص إلى نقاط مع علامات ذهبية متطورة -->
                 <ul class="space-y-5 mb-4">
                     <li class="flex items-start gap-4">
                         <div class="w-8 h-8 rounded-full bg-gold-solid/20 border border-gold-solid flex items-center justify-center shrink-0 mt-1 shadow-[0_0_8px_rgba(191,149,63,0.3)]">
@@ -556,7 +592,7 @@
             <div class="lg:col-span-2 reveal-on-scroll" style="transition-delay: 200ms;">
                 <div class="quote-box rounded-2xl">
                     <p class="text-2xl md:text-3xl font-black serif-font text-white leading-relaxed">
-                        "وتظل الثقة التي يمنحنا إياها عملاؤنا أمانة نؤديها بعلم وتجرد ووقار."
+                        "وتظل الثقة التي يمنحها إيانا عملاؤنا أمانة نؤديها بعلم وتجرد ووقار."
                     </p>
                 </div>
             </div>

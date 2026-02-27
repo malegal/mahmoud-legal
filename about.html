@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <!-- تحسين محركات البحث SEO -->
-    <meta name="description" content="تعرف على مؤسسة محمود عبد الحميد للمحاماة - خبرة في النقض والدستورية العليا، رؤية مهنية قائمة على النزاهة والتميز.">
-    <meta name="keywords" content="محامي بالنقض, محامي بالدستورية العليا, استشارات قانونية, مؤسسة محاماة, محمود عبد الحميد">
+    <meta name="description" content="تعرف على مؤسسة محمود عبد الحميد للمحاماة - خبرة أكثر من 20 عاماً في النقض والدستورية العليا، رؤية مهنية قائمة على النزاهة، والتحول الرقمي في خدمة العدالة.">
+    <meta name="keywords" content="محامي بالنقض, محامي بالدستورية العليا, استشارات قانونية, مؤسسة محاماة, محمود عبد الحميد, التحول الرقمي في المحاماة">
     <title>عن المؤسسة | محمود عبد الحميد - المحامي بالنقض والدستورية العليا</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -71,9 +71,8 @@
             box-shadow: 0 0 30px var(--gold-glow); 
         }
 
-        /* خلفية احتياطية لـ backdrop-filter */
+        /* خلفية الكروت الزجاجية */
         .card-glass { 
-            background: rgba(0, 0, 0, 0.9); /* خلفية احتياطية */
             background: rgba(20, 20, 30, 0.6);
             backdrop-filter: blur(10px); 
             border: 1px solid rgba(191, 149, 63, 0.2); 
@@ -83,7 +82,7 @@
         
         .card-glass:hover { 
             border-color: rgba(191, 149, 63, 0.8); 
-            transform: translateY(-8px); 
+            transform: translateY(-5px); 
             box-shadow: 0 15px 40px rgba(191, 149, 63, 0.1);
         }
         
@@ -183,7 +182,7 @@
             width: 100%;
             height: 100%;
             border: 1px solid transparent;
-            border-radius: 1.5rem;
+            border-radius: inherit;
             background: linear-gradient(135deg, #bf953f, transparent, #b38728) border-box;
             -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: destination-out;
@@ -252,6 +251,24 @@
         }
         
         #mobile-menu.active { transform: translateX(0); }
+        
+        /* تنسيق خاص للاقتباس */
+        .quote-box {
+            position: relative;
+            padding: 2rem;
+            border-right: 4px solid var(--gold-solid);
+            background: linear-gradient(to left, rgba(191, 149, 63, 0.1), transparent);
+        }
+        .quote-box::before {
+            content: '\201D';
+            position: absolute;
+            top: -20px;
+            right: 10px;
+            font-size: 6rem;
+            color: rgba(191, 149, 63, 0.2);
+            font-family: serif;
+            line-height: 1;
+        }
     </style>
 </head>
 <body>
@@ -291,7 +308,7 @@
     </nav>
 </header>
 
-<!-- القائمة الجانبية للجوال (مطابقة للصفحة الرئيسية) -->
+<!-- القائمة الجانبية للجوال -->
 <div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
@@ -317,7 +334,7 @@
             <div class="h-px w-full bg-gradient-to-r from-transparent via-gold-solid to-transparent absolute bottom-[-10px]"></div>
         </div>
         <h1 class="mb-6">
-            <span class="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black serif-font gold-text leading-tight tracking-wide drop-shadow-2xl">
+            <span class="block text-5xl sm:text-6xl md:text-7xl font-black serif-font gold-text leading-tight tracking-wide drop-shadow-2xl">
                 عن المؤسسة
             </span>
         </h1>
@@ -325,79 +342,179 @@
 </section>
 
 <!-- محتوى الصفحة الرئيسي -->
-<section class="py-20 px-6 max-w-7xl mx-auto">
+<section class="py-20 px-6 max-w-7xl mx-auto overflow-hidden">
     
-    <!-- 1. تعريف المؤسسة -->
+    <!-- 1. تعريف المؤسسة والمنهجية -->
     <div class="grid lg:grid-cols-2 gap-12 items-center mb-24">
-        <!-- تم تعديل كلاسات الصورة لتظهر كاملة (w-full h-auto) -->
         <div class="rounded-3xl overflow-hidden reveal-on-scroll shadow-2xl gold-border flex items-center justify-center bg-black/40">
             <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/about.png" class="w-full h-auto auto-colorize" alt="مقر مؤسسة محمود عبد الحميد" loading="lazy">
         </div>
         
         <div class="space-y-6 text-white/95 text-lg md:text-xl leading-relaxed text-justify reveal-on-scroll">
             <p>
-                تُعد <strong class="text-white">مؤسسة محمود عبد الحميد للمحاماة</strong> كيانًا قانونيًا متخصصًا يقدم خدمات قانونية متكاملة للأفراد والشركات، مستندًا إلى خبرة راسخة في التقاضي أمام محكمة النقض والمحكمة الدستورية العليا.
+                تأسست <strong class="text-white">مؤسسة محمود عبد الحميد للمحاماة</strong> انطلاقًا من رؤية راسخة مؤداها أن المحاماة رسالة عدلٍ قبل أن تكون مهنة.
             </p>
             <p>
-                نعتمد منهجية عمل دقيقة تقوم على الدراسة المتأنية لكل ملف، وتحليل أبعاده القانونية والعملية، وبناء استراتيجيات مدروسة تهدف إلى حماية المراكز القانونية وصون الحقوق، وتحقيق أفضل النتائج الممكنة في إطار من الالتزام الكامل بأحكام القانون.
+                وعلى مدار <span class="gold-text font-bold text-2xl">أكثر من عشرين عامًا</span> من العمل القضائي المتواصل، مارسنا الدفاع أمام مختلف درجات التقاضي، وصولًا إلى محكمة النقض والمحكمة الدستورية العليا، مكتسبين خبرة عميقة في فهم منهج القضاء، وصياغة الأسانيد المحكمة، وبناء الاستراتيجيات الدفاعية المتكاملة.
             </p>
-            <p class="font-bold border-r-4 border-gold-solid pr-4 py-2 bg-white/5 rounded-l-lg">
-                نلتزم بالاحترافية والشفافية وسرعة الاستجابة، واضعين مصلحة موكلينا في مقدمة أولوياتنا، باعتبار العلاقة المهنية شراكة قائمة على الثقة والمسؤولية.
-            </p>
+            
+            <!-- منهجنا -->
+            <div class="mt-8 bg-white/5 p-6 rounded-2xl border-r-4 border-gold-solid">
+                <h3 class="text-2xl font-black gold-text mb-4 serif-font flex items-center gap-2">
+                    <i class="fas fa-balance-scale-right"></i> منهجنا
+                </h3>
+                <p class="mb-4 text-gray-300">نعتمد منهجًا علميًا منضبطًا يقوم على:</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <span>دراسة متأنية لكل ملف قبل اتخاذ أي إجراء.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <span>تحليل شامل للوقائع والمستندات وربطها بالمبادئ القضائية المستقرة.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <span>تقييم دقيق للمخاطر القانونية والمالية.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <span>وضع استراتيجية واضحة ومتكاملة لكل قضية أو استشارة.</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <!-- 2. الرؤية والأهداف -->
-    <div id="vision" class="mb-24">
-        <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">الرؤية والأهداف</h2>
+    <!-- 2. الرؤية والرسالة -->
+    <div id="vision-mission" class="mb-24">
         <div class="grid md:grid-cols-2 gap-8">
-            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll">
-                <i class="fas fa-eye text-4xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
-                <h3 class="text-3xl font-bold gold-text mb-6">رؤيتنا</h3>
-                <p class="text-white/95 text-lg leading-relaxed">نسعى لأن نكون مؤسسة قانونية مرجعية يُعتمد عليها في تقديم الحلول القانونية المتكاملة، وأن نرسّخ حضورًا مهنيًا قويًا يجمع بين عمق الخبرة القانونية والرؤية الحديثة لممارسة المحاماة.</p>
-                <ul class="mt-6 space-y-3">
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> الريادة في تقديم الخدمات القانونية المتخصصة</li>
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> بناء سمعة مهنية قائمة على الثقة والجودة</li>
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> مواكبة التطورات التشريعية والقضائية الحديثة</li>
-                </ul>
+            <div class="black-border-card card-glass p-8 md:p-10 rounded-3xl gold-border group reveal-on-scroll">
+                <i class="fas fa-eye text-5xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-3xl font-black serif-font gold-text mb-4">رؤيتنا</h3>
+                <p class="text-white/95 text-xl leading-relaxed">
+                    أن نرسّخ مكانة مرجعية بين المؤسسات القانونية في مصر بالثبات المهني وقوة الحجة، وأن نقدم نموذجًا حديثًا للمحاماة يجمع بين العمق العلمي والهيبة القضائية والحلول الرقمية المتطورة.
+                </p>
             </div>
-            <div class="black-border-card card-glass p-8 rounded-2xl gold-border group reveal-on-scroll" style="transition-delay: 150ms;">
-                <i class="fas fa-bullseye text-4xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
-                <h3 class="text-3xl font-bold gold-text mb-6">أهدافنا</h3>
-                <ul class="space-y-4 text-white/95 text-lg">
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> تقديم خدمات قانونية دقيقة ومبنية على دراسة متأنية لكل حالة.</li>
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> حماية حقوق موكلينا والدفاع عنها بأعلى درجات الاحتراف.</li>
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> بناء علاقات طويلة الأمد قائمة على الثقة والشفافية.</li>
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> التطوير المستمر للأداء القانوني ومواكبة المستجدات.</li>
-                    <li class="flex items-start"><i class="fas fa-check gold-text ml-3 mt-1"></i> ترسيخ اسم المؤسسة كعنوان للجودة والانضباط.</li>
-                </ul>
+            <div class="black-border-card card-glass p-8 md:p-10 rounded-3xl gold-border group reveal-on-scroll" style="transition-delay: 150ms;">
+                <i class="fas fa-gem text-5xl gold-text mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-3xl font-black serif-font gold-text mb-4">رسالتنا</h3>
+                <p class="text-white/95 text-xl leading-relaxed">
+                    تقديم خدمة قانونية استراتيجية دقيقة تحمي المراكز القانونية لعملائنا — أفرادًا وشركات — وتصون مصالحهم المالية والتجارية، مع السعي لتحقيق أفضل النتائج الممكنة في إطار القانون، مدعومة بأدوات رقمية حديثة تعزز الكفاءة وسرعة الأداء.
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- 3. المبادئ الأساسية -->
+    <!-- 3. المبادئ والقيم -->
     <div class="mb-24">
-        <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">مبادئنا الأساسية</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="card-glass p-8 rounded-2xl gold-border group text-center reveal-on-scroll">
-                <i class="fas fa-handshake text-5xl gold-text mb-4 group-hover:scale-110 transition-transform"></i>
-                <h4 class="text-xl font-bold gold-text mb-3">النزاهة</h4>
-                <p class="text-white/85">نلتزم بأعلى معايير النزاهة والأمانة المهنية في كل قضية.</p>
+        <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">قيمنا المؤسسية</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="card-glass p-6 rounded-2xl gold-border group flex items-center gap-4 reveal-on-scroll">
+                <div class="w-14 h-14 rounded-full bg-gold-solid/10 flex items-center justify-center shrink-0 group-hover:bg-gold-solid transition-colors duration-300">
+                    <i class="fas fa-handshake text-2xl gold-text group-hover:text-black transition-colors duration-300"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">النزاهة والالتزام</h4>
             </div>
-            <div class="card-glass p-8 rounded-2xl gold-border group text-center reveal-on-scroll" style="transition-delay: 100ms;">
-                <i class="fas fa-lock text-5xl gold-text mb-4 group-hover:scale-110 transition-transform"></i>
-                <h4 class="text-xl font-bold gold-text mb-3">السرية</h4>
-                <p class="text-white/85">نحافظ على سرية معلومات موكلينا وحماية بياناتهم تماماً.</p>
+            
+            <div class="card-glass p-6 rounded-2xl gold-border group flex items-center gap-4 reveal-on-scroll" style="transition-delay: 100ms;">
+                <div class="w-14 h-14 rounded-full bg-gold-solid/10 flex items-center justify-center shrink-0 group-hover:bg-gold-solid transition-colors duration-300">
+                    <i class="fas fa-crosshairs text-2xl gold-text group-hover:text-black transition-colors duration-300"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">الدقة والانضباط</h4>
             </div>
-            <div class="card-glass p-8 rounded-2xl gold-border group text-center reveal-on-scroll" style="transition-delay: 200ms;">
-                <i class="fas fa-balance-scale text-5xl gold-text mb-4 group-hover:scale-110 transition-transform"></i>
-                <h4 class="text-xl font-bold gold-text mb-3">العدالة</h4>
-                <p class="text-white/85">نؤمن بأن العدالة هي غاية القانون، ونسعى لتحقيقها بقوة.</p>
+
+            <div class="card-glass p-6 rounded-2xl gold-border group flex items-center gap-4 reveal-on-scroll" style="transition-delay: 200ms;">
+                <div class="w-14 h-14 rounded-full bg-gold-solid/10 flex items-center justify-center shrink-0 group-hover:bg-gold-solid transition-colors duration-300">
+                    <i class="fas fa-user-shield text-2xl gold-text group-hover:text-black transition-colors duration-300"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">السرية التامة والاحترام</h4>
+            </div>
+
+            <div class="card-glass p-6 rounded-2xl gold-border group flex items-center gap-4 reveal-on-scroll" style="transition-delay: 300ms;">
+                <div class="w-14 h-14 rounded-full bg-gold-solid/10 flex items-center justify-center shrink-0 group-hover:bg-gold-solid transition-colors duration-300">
+                    <i class="fas fa-scale-balanced text-2xl gold-text group-hover:text-black transition-colors duration-300"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">المسؤولية المهنية</h4>
+            </div>
+
+            <div class="card-glass p-6 rounded-2xl gold-border group flex items-center gap-4 reveal-on-scroll" style="transition-delay: 400ms;">
+                <div class="w-14 h-14 rounded-full bg-gold-solid/10 flex items-center justify-center shrink-0 group-hover:bg-gold-solid transition-colors duration-300">
+                    <i class="fas fa-gavel text-2xl gold-text group-hover:text-black transition-colors duration-300"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">الثبات في المبدأ وقوة الحجة</h4>
+            </div>
+
+            <div class="card-glass p-6 rounded-2xl gold-border group flex items-center gap-4 reveal-on-scroll" style="transition-delay: 500ms;">
+                <div class="w-14 h-14 rounded-full bg-gold-solid/10 flex items-center justify-center shrink-0 group-hover:bg-gold-solid transition-colors duration-300">
+                    <i class="fas fa-lightbulb text-2xl gold-text group-hover:text-black transition-colors duration-300"></i>
+                </div>
+                <h4 class="text-xl font-bold text-white">الابتكار في خدمة العدالة</h4>
             </div>
         </div>
     </div>
 
-    <!-- 4. فريق المؤسسة مع تكبير الاسم (تم حذف الصورة الشخصية فقط) -->
+    <!-- 4. أهدافنا -->
+    <div class="mb-24 reveal-on-scroll">
+        <div class="card-glass gold-border p-8 md:p-12 rounded-3xl relative overflow-hidden">
+            <!-- خلفية زخرفية -->
+            <i class="fas fa-bullseye absolute -right-10 -bottom-10 text-[150px] opacity-5 text-[#bf953f]"></i>
+            
+            <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-8 flex items-center gap-3 relative z-10">
+                <i class="fas fa-flag-checkered text-3xl"></i> أهدافنا
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-6 relative z-10">
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">1</div>
+                    <p class="text-white/90 text-lg md:text-xl">حماية حقوق عملائنا والدفاع عنها بأعلى درجات الاحتراف، حتى قبل نشوب أي نزاع.</p>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">2</div>
+                    <p class="text-white/90 text-lg md:text-xl">بناء علاقات طويلة الأمد قائمة على الثقة والشفافية.</p>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">3</div>
+                    <p class="text-white/90 text-lg md:text-xl">تقديم معاملة راقية ومخصصة لكل عميل.</p>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">4</div>
+                    <p class="text-white/90 text-lg md:text-xl">التطوير المستمر علميًا وتقنيًا لخدمة عملائنا.</p>
+                </div>
+                <div class="flex items-start gap-4 md:col-span-2">
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">5</div>
+                    <p class="text-white/90 text-lg md:text-xl font-bold gold-text">ترسيخ مكانة المؤسسة كمرجع للجودة والانضباط المهني.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. التحول الرقمي (القسم الجديد) -->
+    <div class="mb-24">
+        <div class="grid lg:grid-cols-5 gap-8 items-center">
+            <div class="lg:col-span-3 card-glass p-8 md:p-10 rounded-3xl reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3">
+                    <i class="fas fa-microchip"></i> التحول الرقمي
+                </h2>
+                <p class="text-white/95 text-xl leading-relaxed text-justify mb-6">
+                    إيمانًا بأن العدالة في عصرنا الحديث تحتاج إلى أدوات عصرية، طوّرنا نظام متابعة إلكتروني يتيح لعملائنا متابعة قضاياهم بشفافية وسرعة. 
+                </p>
+                <p class="text-white/95 text-xl leading-relaxed text-justify">
+                    كما نوظف تقنيات <span class="gold-text font-bold">الذكاء الاصطناعي</span> كأدوات مساندة لتحليل البيانات القانونية وتعزيز كفاءة العمل، مع الالتزام التام بأخلاقيات المهنة وأصولها.
+                </p>
+            </div>
+            
+            <div class="lg:col-span-2 reveal-on-scroll" style="transition-delay: 200ms;">
+                <div class="quote-box rounded-2xl">
+                    <p class="text-2xl md:text-3xl font-black serif-font text-white leading-relaxed">
+                        "وتظل الثقة التي يمنحنا إياها عملاؤنا أمانة نؤديها بعلم وتجرد ووقار."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. فريق المؤسسة -->
     <div id="team" class="mb-12">
         <div class="text-center mb-16 reveal-on-scroll">
             <h2 class="text-4xl md:text-5xl font-black serif-font gold-text inline-block relative">
@@ -407,12 +524,11 @@
         </div>
 
         <div class="flex flex-col gap-12">
-            <!-- القيادة القانونية (بدون الصورة الشخصية) -->
+            <!-- القيادة القانونية -->
             <div class="founder-card p-8 md:p-12 rounded-3xl reveal-on-scroll relative overflow-hidden flex flex-col lg:flex-row items-center gap-12 shadow-2xl">
                 <i class="fas fa-gavel absolute -left-10 -top-10 text-[200px] opacity-5 text-[#bf953f]"></i>
                 
                 <div class="relative z-10 w-full text-center lg:text-right flex flex-col justify-center">
-                    <!-- الاسم مكبر ويبقى في سطر واحد -->
                     <h4 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black gold-text serif-font mb-2 leading-tight whitespace-nowrap">الأستاذ / محمود عبد الحميد</h4>
                     <p class="text-2xl text-white font-bold">المحامي</p>
                     <p class="text-xl text-gray-300 font-medium border-b border-gray-700 pb-5 inline-block">بالنقض والدستورية العليا</p>
@@ -450,14 +566,14 @@
         </div>
     </div>
 
-    <!-- 5. أزرار التواصل -->
+    <!-- أزرار التواصل -->
     <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-20 reveal-on-scroll">
         <a href="contact.html?tab=consult" class="gold-btn px-10 py-4 rounded-xl text-lg font-black">طلب استشارة فورية</a>
         <a href="contact.html?tab=visit" class="visit-btn px-10 py-4 rounded-xl text-lg font-bold">حجز موعد مقابلة</a>
     </div>
 </section>
 
-<!-- الفوتر (مطابق للصفحة الرئيسية) -->
+<!-- الفوتر -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
@@ -466,7 +582,6 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات التواصل الاجتماعي كاملة -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تويتر"><i class="fab fa-twitter"></i></a>
@@ -498,7 +613,6 @@
         document.body.style.overflow = '';
     }
 
-    // جعل الدالة عامة لاستخدامها من onclick
     window.closeMenu = closeMenu;
     
     if (menuToggle) {
@@ -525,7 +639,6 @@
         
         document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
         
-        // تفعيل تلوين الصور بعد 3 ثوانٍ
         setTimeout(function() {
             document.querySelectorAll('.auto-colorize').forEach(img => {
                 img.classList.add('colorized');

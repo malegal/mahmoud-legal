@@ -37,7 +37,6 @@
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
             background-clip: text;
-            text-fill-color: transparent;
         }
 
         .nav-link-gold {
@@ -171,25 +170,21 @@
             color: var(--gold-solid);
         }
         
+        /* القائمة الجانبية (مثل المدونة) */
         #mobile-menu { 
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.98);
-            z-index: 110;
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(15px); 
+            z-index: 200; 
             transform: translateX(100%); 
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
         }
-        
-        #mobile-menu.active { 
-            transform: translateX(0);
-        }
+        #mobile-menu.active { transform: translateX(0); }
         
         .reveal-on-scroll {
             opacity: 0;
@@ -236,7 +231,6 @@
             transform: translateX(-5px);
         }
         
-        /* أنماط أيقونات الفوتر الذهبية */
         .footer-social-icon {
             width: 45px;
             height: 45px;
@@ -274,14 +268,19 @@
 
         .hidden { display: none !important; }
 
+        /* إزاحة قسم النماذج عند النزول السلس حتى لا يغطيه الهيدر الثابت */
+        #contact-forms {
+            scroll-margin-top: 120px;
+        }
+
         @media (max-width: 768px) {
             .header-glass nav { padding: 10px 15px !important; }
-            .hero-buttons { flex-direction: column; gap: 15px; }
-            .hero-buttons a { width: 100%; }
+            .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
+            .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
         }
         
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-track { background: var(--primary-dark); }
         ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
     </style>
 </head>
@@ -332,20 +331,23 @@
     </nav>
 </header>
 
-<div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
+<!-- القائمة الجانبية للجوال (مطابقة للمدونة) -->
+<div id="mobile-menu">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
     </button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center">
-        <a href="index.html" onclick="closeMenu()" class="nav-link-gold text-xl">الرئيسية</a>
-        <a href="about.html" onclick="closeMenu()" class="nav-link-gold text-xl">عن المؤسسة</a>
-        <a href="index.html#why-us" onclick="closeMenu()" class="nav-link-gold text-xl">لماذا تختارنا</a>
-        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-xl">تخصصاتنا</a>
-        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-xl">تواصل معنا</a>
+    <div class="flex flex-col gap-5 text-xl font-bold text-center w-full px-6">
+        <a href="index.html" class="nav-link-gold">الرئيسية</a>
+        <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
+        <a href="index.html#why-us" class="nav-link-gold">لماذا تختارنا</a>
+        <a href="index.html#testimonials" class="nav-link-gold">آراء العملاء</a>
+        <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
+        <a href="contact.html" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">تواصل معنا</a>
+        <a href="blog.html" class="nav-link-gold">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">تابع قضيتك</a>
-        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg">حجز موعد</a>
-        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg">طلب استشارة</a>
+        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">حجز موعد</a>
+        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">طلب استشارة</a>
     </div>
 </div>
 
@@ -409,7 +411,7 @@
                         </div>
                     </div>
 
-                    <!-- البريد الإلكتروني (جديد) -->
+                    <!-- البريد الإلكتروني -->
                     <div class="contact-info-item group">
                         <div class="w-12 h-12 rounded-full border border-gold-solid/30 flex items-center justify-center group-hover:bg-gold-solid group-hover:text-black transition-all duration-300 flex-shrink-0">
                             <i class="fas fa-envelope text-xl text-gold-solid group-hover:text-black"></i>
@@ -419,7 +421,6 @@
                             <p class="text-gray-300 text-sm ltr" style="direction: ltr;">ma.law.firm@outlook.com</p>
                         </div>
                     </div>
-                </div>
 
                     <!-- ساعات العمل -->
                     <div class="contact-info-item group">
@@ -432,6 +433,7 @@
                             <p class="text-gray-500 text-xs mt-1">الجمعة: مغلق</p>
                         </div>
                     </div>
+                </div>
 
                 <!-- الخريطة المضمنة -->
                 <div class="rounded-2xl overflow-hidden border border-gold-solid/20 h-64 w-full relative group shadow-2xl">
@@ -447,7 +449,7 @@
                     </a>
                 </div>
 
-                <!-- أيقونات التواصل السريع (مع لينكد إن) -->
+                <!-- أيقونات التواصل السريع -->
                 <div class="pt-4 border-t border-white/10 text-center">
                     <h4 class="text-white font-bold mb-4 text-xl">تابعنا على المنصات:</h4>
                     <div class="flex gap-4 justify-center flex-wrap">
@@ -461,12 +463,12 @@
 
             </div>
 
-            <!-- العمود الأيسر: النماذج (أضفنا id للتمرير إليه) -->
+            <!-- العمود الأيسر: النماذج -->
             <div id="contact-forms" class="lg:col-span-7 reveal-on-scroll" style="transition-delay: 200ms;">
-                <div class="card-glass p-1 md:p-8 border-t-4 border-gold-solid h-full relative overflow-hidden">
+                <div class="card-glass p-4 md:p-8 border-t-4 border-gold-solid h-full relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gold-solid/5 to-transparent pointer-events-none"></div>
                     
-                    <div class="relative z-10 p-4">
+                    <div class="relative z-10 p-2 md:p-4">
                         <!-- أزرار التبويب -->
                         <div class="flex bg-black/40 p-1.5 rounded-xl mb-8 border border-white/5">
                             <button onclick="switchTab('consult')" id="btn-consult" class="tab-btn active flex-1 py-3 rounded-lg font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2">
@@ -545,8 +547,8 @@
     </div>
 </section>
 
-<!-- الفوتر (مع أيقونات ذهبية وتويتر العصفورة) -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
+<!-- الفوتر الزجاجي الأسود -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
             <img src="logo.png" alt="شعار المؤسسة" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90 hover:opacity-100 transition">
@@ -554,7 +556,6 @@
             <p class="text-gray-400 font-medium">التميز في المحاماة والاستشارات القانونية</p>
         </div>
         
-        <!-- أيقونات الفوتر الذهبية (مع تويتر العصفورة) -->
         <div class="flex justify-center gap-6 mb-10">
             <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
             <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon" title="تويتر"><i class="fab fa-twitter"></i></a>
@@ -577,7 +578,7 @@
 </footer>
 
 <script>
-    // قائمة الموبايل
+    // القائمة الجانبية
     const mobileMenu = document.getElementById('mobile-menu');
     const menuToggle = document.getElementById('menu-toggle');
     const menuClose = document.getElementById('menu-close');
@@ -599,10 +600,6 @@
     if (menuClose) {
         menuClose.addEventListener('click', closeMenu);
     }
-    
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-        link.addEventListener('click', closeMenu);
-    });
 
     // تبديل النماذج
     function switchTab(tab) {
@@ -611,16 +608,16 @@
         const btnConsult = document.getElementById('btn-consult');
         const btnVisit = document.getElementById('btn-visit');
 
-        if (tab === 'consult') {
-            consultForm.classList.remove('hidden');
-            visitForm.classList.add('hidden');
-            btnConsult.classList.add('active');
-            btnVisit.classList.remove('active');
-        } else {
+        if (tab === 'visit') {
             visitForm.classList.remove('hidden');
             consultForm.classList.add('hidden');
             btnVisit.classList.add('active');
             btnConsult.classList.remove('active');
+        } else {
+            consultForm.classList.remove('hidden');
+            visitForm.classList.add('hidden');
+            btnConsult.classList.add('active');
+            btnVisit.classList.remove('active');
         }
     }
 
@@ -643,44 +640,41 @@
         const elements = document.querySelectorAll('.reveal-on-scroll');
         elements.forEach(el => observer.observe(el));
         
-        // التعامل مع روابط التبويب الخارجية ومعامل specialty
+        // التعامل التلقائي مع النماذج عبر الرابط (URL Parameters)
         const urlParams = new URLSearchParams(window.location.search);
         const tabParam = urlParams.get('tab');
         const specialtyParam = urlParams.get('specialty');
         
-        // ضبط التبويب
+        // ضبط التبويب بناءً على الرابط
         if (tabParam === 'visit') {
             switchTab('visit');
-        } else {
+        } else if (tabParam === 'consult') {
             switchTab('consult');
         }
         
-        // إذا كان هناك معامل specialty، نضيفه إلى حقل التفاصيل في نموذج الاستشارة
-        if (specialtyParam) {
-            // التأكد أننا في تبويب الاستشارة (إذا كان tab=visit لا نضيف)
-            if (tabParam !== 'visit') {
-                const consultMessageField = document.getElementById('consultMessage');
-                if (consultMessageField) {
-                    consultMessageField.value = `أرغب في الحصول على استشارة قانونية بخصوص: ${specialtyParam}`;
-                }
+        // إضافة التخصص في الرسالة إن وجد
+        if (specialtyParam && tabParam !== 'visit') {
+            const consultMessageField = document.getElementById('consultMessage');
+            if (consultMessageField) {
+                consultMessageField.value = `أرغب في الحصول على استشارة قانونية بخصوص: ${specialtyParam}`;
             }
         }
 
-        // التمرير إلى النماذج إذا كان هناك tab parameter
+        // التمرير الذكي التلقائي إلى قسم النماذج إذا تم استدعاءه من الخارج
         if (tabParam === 'consult' || tabParam === 'visit') {
-            const formsSection = document.getElementById('contact-forms');
-            if (formsSection) {
-                // تأخير بسيط لضمان اكتمال تبديل التبويب ثم التمرير
-                setTimeout(() => {
+            setTimeout(() => {
+                const formsSection = document.getElementById('contact-forms');
+                if (formsSection) {
                     formsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-            }
+                }
+            }, 300); // تأخير بسيط لضمان تحميل وتجهيز الصفحة
         }
 
+        // عدم السماح باختيار تاريخ سابق لليوم في الحجز
         const today = new Date().toISOString().split('T')[0];
         document.querySelectorAll('input[type="date"]').forEach(input => input.min = today);
 
-        // إرسال النماذج للواتساب
+        // إرسال البيانات للواتساب
         document.getElementById('consultForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('consultName').value;

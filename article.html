@@ -41,13 +41,11 @@
         .visit-btn:hover { border-color: var(--gold-solid); background: rgba(191,149,63,0.1); color: var(--gold-solid); }
         .header-glass { background: rgba(0, 0, 0, 0.98) !important; border-bottom: 2px solid; border-image: var(--gold-gradient) 1; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 
-        /* تعديل الإطار ليأخذ عرض الشاشة بالكامل بدون خلفية أو تظليل */
         .article-content-box {
             width: 100%; max-width: 100%; margin: 0; background: transparent; padding: 0 5%;
             box-shadow: none; border: none; transition: all 0.5s;
         }
         
-        /* جعل النص في المنتصف بحجم مقروء حتى في الشاشات العريضة جداً */
         .article-inner-container {
             max-width: 1200px; margin: 0 auto;
         }
@@ -63,7 +61,7 @@
         }
         .share-sidebar { position: fixed; top: 50%; left: 0; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 90; }
         .share-btn { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 0 5px 5px 0; transition: 0.3s; }
-        .bg-whatsapp { background: #25d366; } .bg-telegram { background: #0088cc; }
+        .bg-whatsapp { background: #25d366; } .bg-telegram { background: #0088cc; } .bg-facebook { background: #1877f2; }
 
         .cta-box {
             background: var(--primary-dark); border: 2px solid var(--gold-solid);
@@ -91,8 +89,9 @@
 
 <!-- أزرار المشاركة الجانبية -->
 <div class="share-sidebar">
-    <a href="#" id="share-wa" target="_blank" class="share-btn bg-whatsapp"><i class="fab fa-whatsapp"></i></a>
-    <a href="#" id="share-tg" target="_blank" class="share-btn bg-telegram"><i class="fab fa-telegram-plane"></i></a>
+    <a href="#" id="share-fb" target="_blank" class="share-btn bg-facebook" title="مشاركة عبر فيسبوك"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" id="share-wa" target="_blank" class="share-btn bg-whatsapp" title="مشاركة عبر واتساب"><i class="fab fa-whatsapp"></i></a>
+    <a href="#" id="share-tg" target="_blank" class="share-btn bg-telegram" title="مشاركة عبر تليجرام"><i class="fab fa-telegram-plane"></i></a>
 </div>
 
 <!-- تبديل الوضع -->
@@ -146,7 +145,7 @@
     </div>
 </div>
 
-<!-- المحتوى الرئيسي للمقال (بدون إطار ممتد بعرض الشاشة) -->
+<!-- المحتوى الرئيسي للمقال -->
 <main class="pt-40 pb-20 w-full">
     <div class="article-content-box">
         <div id="loader" class="text-center py-20"><div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-gold-solid"></div></div>
@@ -161,7 +160,7 @@
 
             <h1 id="article-title" class="text-4xl md:text-5xl font-bold serif-font mb-8 border-b border-gray-300 dark:border-gray-700 pb-8 leading-tight"></h1>
             
-            <!-- حاوية الصورة (تظهر فقط إذا وُجدت) -->
+            <!-- حاوية الصورة -->
             <div id="article-image" class="mb-10 text-center"></div>
 
             <div id="article-content" class="markdown-body article-text"></div>
@@ -193,7 +192,7 @@
     </div>
 </main>
 
-<!-- الفوتر الملكي (أسود زجاجي) -->
+<!-- الفوتر الملكي -->
 <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center mt-10">
     <div class="max-w-7xl mx-auto px-6">
         <img src="logo.png" class="w-24 h-24 object-contain mx-auto mb-4">
@@ -234,7 +233,7 @@
         themeBtn.innerHTML = isNight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
     };
 
-    // تحميل المقال ومعالجة البيانات وإخفاء الكلمات البرمجية
+    // تحميل المقال ومعالجة البيانات
     async function fetchArticle() {
         const slug = new URLSearchParams(window.location.search).get('slug');
         if (!slug) return;
@@ -246,7 +245,6 @@
             let title = '';
             let image = '';
 
-            // 1. مسح وإخفاء الميتا داتا (---) إن وُجدت في أول المقال
             const yamlMatch = md.match(/^---\s*[\s\S]*?\s*---/);
             if (yamlMatch) {
                 const yamlContent = yamlMatch[0];
@@ -256,10 +254,9 @@
                 const imageMatch = yamlContent.match(/image:\s*(.*)/i);
                 if (imageMatch) image = imageMatch[1].replace(/['"]/g, '').trim();
                 
-                md = md.replace(/^---\s*[\s\S]*?\s*---/, ''); // حذفها بالكامل من المقال
+                md = md.replace(/^---\s*[\s\S]*?\s*---/, ''); 
             }
 
-            // 2. تصفية السطور المتبقية في حالة وجود title: أو image: بدون (---)
             const lines = md.split('\n');
             const filteredLines =[];
             for (let line of lines) {
@@ -267,32 +264,29 @@
                 
                 if (lowerLine.startsWith('title:')) {
                     if (!title) title = line.substring(line.indexOf(':') + 1).replace(/['"]/g, '').trim();
-                    continue; // لا تضف هذا السطر للمقال
+                    continue; 
                 }
                 
                 if (lowerLine.startsWith('image:')) {
                     if (!image) image = line.substring(line.indexOf(':') + 1).replace(/['"]/g, '').trim();
-                    continue; // لا تضف هذا السطر للمقال
+                    continue; 
                 }
                 
                 filteredLines.push(line);
             }
             
-            md = filteredLines.join('\n'); // إعادة تجميع المقال النظيف
+            md = filteredLines.join('\n'); 
 
-            // إذا لم نجد عنواناً، نأخذه من رابط الصفحة (slug)
             if (!title) title = decodeURIComponent(slug.replace(/-/g, ' '));
             
             document.getElementById('article-title').textContent = title;
             
-            // عرض الصورة إذا وجدت
             if (image) {
                 document.getElementById('article-image').innerHTML = `<img src="${image}" alt="صورة المقال" class="max-w-full h-auto rounded-xl border border-gold-solid/30 shadow-2xl mx-auto max-h-[500px] object-cover">`;
             }
 
             document.getElementById('article-content').innerHTML = marked.parse(md);
             
-            // حساب وقت القراءة
             const words = md.split(/\s+/).length;
             document.getElementById('read-time').textContent = Math.ceil(words / 200);
 
@@ -300,6 +294,7 @@
             const url = encodeURIComponent(window.location.href);
             document.getElementById('share-wa').href = `https://wa.me/?text=${encodeURIComponent(title)}%20${url}`;
             document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${encodeURIComponent(title)}`;
+            document.getElementById('share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
 
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('article-wrapper').classList.remove('hidden');

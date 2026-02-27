@@ -269,6 +269,11 @@
             font-family: serif;
             line-height: 1;
         }
+        
+        /* تأثير لمعان للعلامات الذهبية */
+        .gold-glow-icon {
+            filter: drop-shadow(0 0 6px rgba(191, 149, 63, 0.6));
+        }
     </style>
 </head>
 <body>
@@ -350,35 +355,59 @@
             <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/about.png" class="w-full h-auto auto-colorize" alt="مقر مؤسسة محمود عبد الحميد" loading="lazy">
         </div>
         
-        <div class="space-y-6 text-white/95 text-lg md:text-xl leading-relaxed text-justify reveal-on-scroll">
-            <p>
+        <div class="space-y-4 text-white/95 text-lg md:text-xl leading-relaxed text-justify reveal-on-scroll">
+            <p class="mb-4">
                 تأسست <strong class="text-white">مؤسسة محمود عبد الحميد للمحاماة</strong> انطلاقًا من رؤية راسخة مؤداها أن المحاماة رسالة عدلٍ قبل أن تكون مهنة.
             </p>
-            <p>
-                وعلى مدار <span class="gold-text font-bold text-2xl">أكثر من عشرين عامًا</span> من العمل القضائي المتواصل، مارسنا الدفاع أمام مختلف درجات التقاضي، وصولًا إلى محكمة النقض والمحكمة الدستورية العليا، مكتسبين خبرة عميقة في فهم منهج القضاء، وصياغة الأسانيد المحكمة، وبناء الاستراتيجيات الدفاعية المتكاملة.
+            <p class="mb-4">
+                وعلى مدار <span class="gold-text font-bold text-2xl">أكثر من عشرين عامًا</span> من العمل القضائي المتواصل، نجحنا في بناء رصيد من الإنجازات والخبرات يتجسد في:
             </p>
             
+            <!-- نقاط الخبرة المضافة بعلامات صح ذهبية -->
+            <ul class="space-y-4 mb-8">
+                <li class="flex items-start gap-3">
+                    <i class="fas fa-check text-gold-solid mt-2 text-xl shrink-0 gold-glow-icon"></i>
+                    <span class="text-white/90">ممارسة الدفاع أمام مختلف درجات التقاضي، وصولًا إلى محكمة النقض والمحكمة الدستورية العليا.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fas fa-check text-gold-solid mt-2 text-xl shrink-0 gold-glow-icon"></i>
+                    <span class="text-white/90">اكتساب خبرة عميقة في فهم منهج القضاء وطرق تكييف الدعاوى.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fas fa-check text-gold-solid mt-2 text-xl shrink-0 gold-glow-icon"></i>
+                    <span class="text-white/90">صياغة الأسانيد القانونية المحكمة والمذكرات الدفاعية ببراعة.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fas fa-check text-gold-solid mt-2 text-xl shrink-0 gold-glow-icon"></i>
+                    <span class="text-white/90">بناء الاستراتيجيات الدفاعية المتكاملة لحماية حقوق الموكلين.</span>
+                </li>
+            </ul>
+            
             <!-- منهجنا -->
-            <div class="mt-8 bg-white/5 p-6 rounded-2xl border-r-4 border-gold-solid">
-                <h3 class="text-2xl font-black gold-text mb-4 serif-font flex items-center gap-2">
-                    <i class="fas fa-balance-scale-right"></i> منهجنا
+            <div class="mt-8 bg-white/5 p-6 rounded-2xl border-r-4 border-gold-solid relative overflow-hidden">
+                <div class="absolute -left-10 -bottom-10 opacity-5">
+                    <i class="fas fa-balance-scale-right text-9xl text-gold-solid"></i>
+                </div>
+                <h3 class="text-2xl font-black gold-text mb-4 serif-font flex items-center gap-2 relative z-10">
+                    <i class="fas fa-gavel"></i> منهجنا العلمي
                 </h3>
-                <p class="mb-4 text-gray-300">نعتمد منهجًا علميًا منضبطًا يقوم على:</p>
-                <ul class="space-y-3">
+                <p class="mb-4 text-gray-300 relative z-10">نعتمد منهجًا علميًا منضبطًا يقوم على:</p>
+                
+                <ul class="space-y-3 relative z-10">
                     <li class="flex items-start gap-3">
-                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <i class="fas fa-dot-circle text-gold-solid mt-1.5 text-sm shrink-0 drop-shadow-[0_0_5px_rgba(191,149,63,0.8)]"></i>
                         <span>دراسة متأنية لكل ملف قبل اتخاذ أي إجراء.</span>
                     </li>
                     <li class="flex items-start gap-3">
-                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <i class="fas fa-dot-circle text-gold-solid mt-1.5 text-sm shrink-0 drop-shadow-[0_0_5px_rgba(191,149,63,0.8)]"></i>
                         <span>تحليل شامل للوقائع والمستندات وربطها بالمبادئ القضائية المستقرة.</span>
                     </li>
                     <li class="flex items-start gap-3">
-                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <i class="fas fa-dot-circle text-gold-solid mt-1.5 text-sm shrink-0 drop-shadow-[0_0_5px_rgba(191,149,63,0.8)]"></i>
                         <span>تقييم دقيق للمخاطر القانونية والمالية.</span>
                     </li>
                     <li class="flex items-start gap-3">
-                        <i class="fas fa-check-circle text-gold-solid mt-1.5 text-lg shrink-0"></i>
+                        <i class="fas fa-dot-circle text-gold-solid mt-1.5 text-sm shrink-0 drop-shadow-[0_0_5px_rgba(191,149,63,0.8)]"></i>
                         <span>وضع استراتيجية واضحة ومتكاملة لكل قضية أو استشارة.</span>
                     </li>
                 </ul>
@@ -466,42 +495,62 @@
             
             <div class="grid md:grid-cols-2 gap-x-12 gap-y-6 relative z-10">
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">1</div>
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">1</div>
                     <p class="text-white/90 text-lg md:text-xl">حماية حقوق عملائنا والدفاع عنها بأعلى درجات الاحتراف، حتى قبل نشوب أي نزاع.</p>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">2</div>
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">2</div>
                     <p class="text-white/90 text-lg md:text-xl">بناء علاقات طويلة الأمد قائمة على الثقة والشفافية.</p>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">3</div>
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">3</div>
                     <p class="text-white/90 text-lg md:text-xl">تقديم معاملة راقية ومخصصة لكل عميل.</p>
                 </div>
                 <div class="flex items-start gap-4">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">4</div>
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">4</div>
                     <p class="text-white/90 text-lg md:text-xl">التطوير المستمر علميًا وتقنيًا لخدمة عملائنا.</p>
                 </div>
                 <div class="flex items-start gap-4 md:col-span-2">
-                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1">5</div>
+                    <div class="w-8 h-8 rounded-full bg-gold-solid text-black flex items-center justify-center font-bold shrink-0 mt-1 shadow-[0_0_10px_rgba(191,149,63,0.5)]">5</div>
                     <p class="text-white/90 text-lg md:text-xl font-bold gold-text">ترسيخ مكانة المؤسسة كمرجع للجودة والانضباط المهني.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 5. التحول الرقمي (القسم الجديد) -->
+    <!-- 5. التحول الرقمي -->
     <div class="mb-24">
         <div class="grid lg:grid-cols-5 gap-8 items-center">
             <div class="lg:col-span-3 card-glass p-8 md:p-10 rounded-3xl reveal-on-scroll">
                 <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3">
                     <i class="fas fa-microchip"></i> التحول الرقمي
                 </h2>
+                
                 <p class="text-white/95 text-xl leading-relaxed text-justify mb-6">
-                    إيمانًا بأن العدالة في عصرنا الحديث تحتاج إلى أدوات عصرية، طوّرنا نظام متابعة إلكتروني يتيح لعملائنا متابعة قضاياهم بشفافية وسرعة. 
+                    إيمانًا بأن العدالة في عصرنا الحديث تحتاج إلى أدوات عصرية، قمنا بدمج التكنولوجيا في صميم عملنا القانوني لخدمة عملائنا بكفاءة:
                 </p>
-                <p class="text-white/95 text-xl leading-relaxed text-justify">
-                    كما نوظف تقنيات <span class="gold-text font-bold">الذكاء الاصطناعي</span> كأدوات مساندة لتحليل البيانات القانونية وتعزيز كفاءة العمل، مع الالتزام التام بأخلاقيات المهنة وأصولها.
-                </p>
+                
+                <!-- تم تحويل النص إلى نقاط مع علامات ذهبية متطورة -->
+                <ul class="space-y-5 mb-4">
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-gold-solid/20 border border-gold-solid flex items-center justify-center shrink-0 mt-1 shadow-[0_0_8px_rgba(191,149,63,0.3)]">
+                            <i class="fas fa-laptop-code text-gold-solid text-sm"></i>
+                        </div>
+                        <p class="text-white/90 text-lg md:text-xl"><strong class="gold-text">نظام متابعة إلكتروني:</strong> يتيح لعملائنا متابعة سير قضاياهم بشفافية وسرعة من أي مكان.</p>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-gold-solid/20 border border-gold-solid flex items-center justify-center shrink-0 mt-1 shadow-[0_0_8px_rgba(191,149,63,0.3)]">
+                            <i class="fas fa-brain text-gold-solid text-sm"></i>
+                        </div>
+                        <p class="text-white/90 text-lg md:text-xl"><strong class="gold-text">الذكاء الاصطناعي:</strong> نوظف تقنياته كأدوات مساندة لتحليل البيانات القانونية الضخمة وتعزيز دقة وكفاءة العمل.</p>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-gold-solid/20 border border-gold-solid flex items-center justify-center shrink-0 mt-1 shadow-[0_0_8px_rgba(191,149,63,0.3)]">
+                            <i class="fas fa-shield-alt text-gold-solid text-sm"></i>
+                        </div>
+                        <p class="text-white/90 text-lg md:text-xl"><strong class="gold-text">الالتزام التام:</strong> يتم كل ذلك مع الحفاظ الصارم على سرية البيانات وأخلاقيات المهنة وأصولها.</p>
+                    </li>
+                </ul>
             </div>
             
             <div class="lg:col-span-2 reveal-on-scroll" style="transition-delay: 200ms;">
@@ -535,11 +584,11 @@
                     
                     <div class="text-white/95 text-lg leading-relaxed space-y-4 pt-4">
                         <p class="flex items-start justify-center lg:justify-start gap-3">
-                            <i class="fas fa-check-circle text-gold-solid mt-1.5 text-xl shrink-0"></i>
+                            <i class="fas fa-check-circle text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
                             <span class="text-justify md:text-right">المؤسس والمدير المسئول عن الإشراف الكامل على جميع الملفات والقضايا بالمكتب.</span>
                         </p>
                         <p class="flex items-start justify-center lg:justify-start gap-3">
-                            <i class="fas fa-star text-gold-solid mt-1.5 text-xl shrink-0"></i>
+                            <i class="fas fa-star text-gold-solid mt-1.5 text-xl shrink-0 gold-glow-icon"></i>
                             <span class="text-justify md:text-right">خبير في طعون النقض والدستورية، ويضع استراتيجية المكتب القانونية لضمان أعلى مستويات الاحترافية وحماية حقوق العملاء.</span>
                         </p>
                     </div>

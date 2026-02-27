@@ -19,7 +19,6 @@
         .ql-editor { text-align: right; direction: rtl; font-family: 'Amiri', serif; }
         .btn-gold { background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728); color: #020617; font-weight: 700; transition: 0.3s; }
         
-        /* تحسين للموبايل */
         @media (max-width: 768px) {
             .ql-container { min-height: 300px; }
             header h1 { font-size: 1rem; }
@@ -64,6 +63,7 @@
                 <button onclick="toggleSettings()" class="bg-slate-800 p-2 px-3 rounded text-sm"><i class="fas fa-cog"></i></button>
                 <button onclick="openPreview()" class="bg-blue-600 p-2 px-3 rounded text-sm"><i class="fas fa-eye"></i></button>
                 <button onclick="saveToGitHub(false)" id="publish-btn" class="btn-gold p-2 px-4 rounded text-sm">نشر</button>
+                <button onclick="publishToFacebook()" class="bg-blue-600 p-2 px-3 rounded text-sm"><i class="fab fa-facebook"></i> فيسبوك</button>
             </div>
         </div>
     </header>
@@ -158,6 +158,13 @@
                     <input type="text" id="repoName" class="w-full p-2 bg-slate-900 rounded border border-white/5 text-sm">
                 </div>
             </div>
+            
+            <!-- فقط حقل Base URL لمشاركة فيسبوك -->
+            <div>
+                <label class="text-[10px] text-gray-400">Website Base URL</label>
+                <input type="text" id="baseUrl" placeholder="https://malegal.github.io" class="w-full p-2 bg-slate-900 rounded border border-white/5 text-sm">
+            </div>
+            
             <button onclick="saveKeys()" class="btn-gold w-full py-3 rounded-lg mt-4">حفظ وإغلاق</button>
         </div>
     </div>
@@ -167,6 +174,7 @@
 <script>
     // المتغيرات العامة
     let ghToken, groqKey, openrouterKey, tavilyKey, repoOwner, repoName;
+    let baseUrl;  // فقط الرابط الأساسي للموقع
     let currentSha = null, isEditing = false;
 
     const quill = new Quill('#editor', {
@@ -191,6 +199,7 @@
         tavilyKey = localStorage.getItem('m_tavily') || "";
         repoOwner = localStorage.getItem('m_owner') || "malegal";
         repoName = localStorage.getItem('m_repo') || "mahmoud-legal";
+        baseUrl = localStorage.getItem('m_base_url') || "https://malegal.github.io";
         
         document.getElementById('ghToken').value = ghToken;
         document.getElementById('groqKey').value = groqKey;
@@ -198,6 +207,7 @@
         document.getElementById('tavilyKey').value = tavilyKey;
         document.getElementById('repoOwner').value = repoOwner;
         document.getElementById('repoName').value = repoName;
+        document.getElementById('baseUrl').value = baseUrl;
         
         if(ghToken) loadArticles();
     }
@@ -210,6 +220,7 @@
         tavilyKey = document.getElementById('tavilyKey').value.trim();
         repoOwner = document.getElementById('repoOwner').value.trim();
         repoName = document.getElementById('repoName').value.trim();
+        baseUrl = document.getElementById('baseUrl').value.trim();
 
         localStorage.setItem('m_gh', ghToken);
         localStorage.setItem('m_groq', groqKey);
@@ -217,6 +228,7 @@
         localStorage.setItem('m_tavily', tavilyKey);
         localStorage.setItem('m_owner', repoOwner);
         localStorage.setItem('m_repo', repoName);
+        localStorage.setItem('m_base_url', baseUrl);
 
         alert("✅ تم الحفظ بنجاح");
         toggleSettings();
@@ -255,14 +267,13 @@
         return data.results.map(r => `- ${r.title}: ${r.content}`).join("\n");
     }
 
-    // صياغة بواسطة الذكاء الاصطناعي (تدعم OpenRouter و Groq و Tavily)
+    // صياغة بواسطة الذكاء الاصطناعي
     async function aiLegalDraft() {
         const title = document.getElementById('postTitle').value;
         const model = document.getElementById('modelId').value;
         const provider = document.getElementById('providerSelect').value;
         const useTavily = document.getElementById('useTavily').checked;
 
-        // التحقق من المدخلات
         if (!title || !model) return alert("⚠️ العنوان واسم النموذج مطلوبان");
         if (provider === 'openrouter' && !openrouterKey) return alert("⚠️ مفتاح OpenRouter مطلوب");
         if (provider === 'groq' && !groqKey) return alert("⚠️ مفتاح Groq مطلوب");
@@ -278,14 +289,12 @@
                 tavilyResults = await searchTavily(title + " قانون مصر");
             }
 
-            // بناء الرسائل
             const systemMessage = `أنت محامي مصري خبير، لغتك العربية فصيحة وقانونية رصينة. تهتم بذكر المصادر والتوثيق الدقيق للمعلومات (قانون مدني، مراجع فقهية، أحكام نقض). اكتب مقالاً قانونياً متكاملاً بتنسيق HTML جميل.`;
             let userMessage = `اكتب بحثاً قانونياً عن: ${title}`;
             if (tavilyResults) {
                 userMessage += `\n\nاستخدم المعلومات الحديثة التالية كمراجع إن أمكن:\n${tavilyResults}`;
             }
 
-            // اختيار API
             let endpoint, apiKey, payload;
             if (provider === 'openrouter') {
                 endpoint = "https://openrouter.ai/api/v1/chat/completions";
@@ -309,7 +318,6 @@
                 };
             }
 
-            // استدعاء API
             const res = await fetch(endpoint, {
                 method: "POST",
                 headers: {
@@ -326,11 +334,9 @@
 
             const data = await res.json();
             let content = data.choices[0].message.content;
-            // إزالة أي علامات ```html إن وجدت
             content = content.replace(/```html|```/g, '');
             quill.root.innerHTML = content;
 
-            // إنشاء slug تلقائي
             document.getElementById('slug').value = title.trim().replace(/\s+/g, '-');
         } catch (e) {
             alert("❌ خطأ: " + e.message);
@@ -444,6 +450,19 @@ ${quill.root.innerHTML}`;
         document.getElementById('slug').value = '';
         quill.root.innerHTML = '';
         isEditing = false; currentSha = null;
+    }
+
+    // دالة النشر على فيسبوك باستخدام Share Dialog (بدون API)
+    function publishToFacebook() {
+        const slug = document.getElementById('slug').value;
+        if (!slug) return alert("الرجاء إدخال slug أولاً");
+        if (!baseUrl) return alert("الرجاء إعداد Website Base URL في الإعدادات");
+
+        const url = `${baseUrl}/blog/articles/${slug}.html`;  // افتراض أن مقالاتك منشورة بهذا المسار
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        
+        // فتح نافذة مشاركة فيسبوك
+        window.open(shareUrl, '_blank', 'width=600,height=400');
     }
 </script>
 </body>

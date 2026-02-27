@@ -20,9 +20,9 @@
             --header-height: 90px;
         }
 
-        body { background-color: var(--paper-bg); color: var(--paper-text); font-family: 'Tajawal', sans-serif; transition: background 0.5s, color 0.5s; }
+        body { background-color: var(--paper-bg); color: var(--paper-text); font-family: 'Tajawal', sans-serif; transition: background 0.5s, color 0.5s; overflow-x: hidden; }
         body.night-mode { background-color: #0f172a; color: #e2e8f0; }
-        body.night-mode .article-content-box { background-color: #1e293b; color: #e2e8f0; border-color: #334155; }
+        body.night-mode .article-content-box { background-color: transparent; border: none; }
         body.night-mode .markdown-body { color: #cbd5e1; }
         body.night-mode .cta-box { background-color: #1e293b; border-color: var(--gold-solid); }
 
@@ -41,15 +41,22 @@
         .visit-btn:hover { border-color: var(--gold-solid); background: rgba(191,149,63,0.1); color: var(--gold-solid); }
         .header-glass { background: rgba(0, 0, 0, 0.98) !important; border-bottom: 2px solid; border-image: var(--gold-gradient) 1; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 
+        /* تعديل الإطار ليأخذ عرض الشاشة بالكامل بدون خلفية أو تظليل */
         .article-content-box {
-            max-width: 1000px; margin: 40px auto; background: #ffffff; padding: 50px;
-            border-radius: 4px; box-shadow: 0 4px 30px rgba(0,0,0,0.03); transition: all 0.5s;
+            width: 100%; max-width: 100%; margin: 0; background: transparent; padding: 0 5%;
+            box-shadow: none; border: none; transition: all 0.5s;
         }
+        
+        /* جعل النص في المنتصف بحجم مقروء حتى في الشاشات العريضة جداً */
+        .article-inner-container {
+            max-width: 1200px; margin: 0 auto;
+        }
+
         .markdown-body { font-family: 'Amiri', serif; font-size: 1.6rem; line-height: 2.2; text-align: justify; }
         .markdown-body h2 { color: var(--gold-solid); margin-top: 2rem; font-weight: 700; }
 
         .mode-toggle {
-            position: fixed; bottom: 110px; left: 30px; width: 50px; height: 50px;
+            position: fixed; bottom: 30px; left: 30px; width: 50px; height: 50px;
             background: var(--gold-gradient); color: #000; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
             z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -60,10 +67,10 @@
 
         .cta-box {
             background: var(--primary-dark); border: 2px solid var(--gold-solid);
-            padding: 30px; border-radius: 15px; margin-top: 50px; text-align: center; color: white;
+            padding: 40px 20px; border-radius: 15px; margin-top: 60px; text-align: center; color: white;
         }
 
-        #mobile-menu { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); z-index: 200; transform: translateX(100%); transition: 0.4s; display: flex; flex-direction: column; justify-content: center; }
+        #mobile-menu { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); z-index: 200; transform: translateX(100%); transition: 0.4s; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         #mobile-menu.active { transform: translateX(0); }
 
         .footer-social-icon { width: 45px; height: 45px; border-radius: 50%; border: 1px solid rgba(191,149,63,0.3); display: flex; align-items: center; justify-content: center; transition: 0.3s; background: rgba(0,0,0,0.5); color: #bf953f; font-size: 1.3rem; }
@@ -71,28 +78,16 @@
         .footer-social-icon:hover { border-color: var(--gold-solid); box-shadow: 0 0 20px rgba(191,149,63,0.4); transform: translateY(-5px); background: var(--gold-gradient); }
         .footer-social-icon:hover i { -webkit-text-fill-color: #000; }
 
-        .contact-floating { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
-        .whatsapp-float, .call-float { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.3s; color: white; }
-        .whatsapp-float { background: #25d366; } .call-float { background: #0077b6; }
-
         @media (max-width: 768px) {
-            .article-content-box { padding: 25px; margin: 15px; }
             .share-sidebar { top: auto; bottom: 20px; left: 50%; transform: translateX(-50%); flex-direction: row; }
             .share-btn { border-radius: 50%; }
-            .mode-toggle { left: auto; right: 30px; bottom: 180px; }
-            .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
-            .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
+            .mode-toggle { left: auto; right: 20px; bottom: 90px; }
+            .markdown-body { font-size: 1.3rem; }
         }
         ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--primary-dark); } ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
     </style>
 </head>
 <body>
-
-<!-- أيقونات واتساب واتصال عائمة -->
-<div class="contact-floating">
-    <a href="https://wa.me/201101076000" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
-    <a href="tel:+201101076000" class="call-float"><i class="fas fa-phone-alt"></i></a>
-</div>
 
 <!-- أزرار المشاركة الجانبية -->
 <div class="share-sidebar">
@@ -105,7 +100,7 @@
     <i class="fas fa-moon"></i>
 </div>
 
-<!-- الهيدر الكامل (مطابق للصفحة الرئيسية) -->
+<!-- الهيدر الكامل -->
 <header class="fixed w-full z-[100] header-glass dark-section">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center gap-4">
@@ -136,7 +131,7 @@
 <!-- القائمة الجانبية للجوال -->
 <div id="mobile-menu">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text"><i class="fas fa-times"></i></button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center">
+    <div class="flex flex-col gap-5 text-xl font-bold text-center w-full px-6">
         <a href="index.html" class="nav-link-gold">الرئيسية</a>
         <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
         <a href="index.html#why-us" class="nav-link-gold">لماذا تختارنا</a>
@@ -145,18 +140,18 @@
         <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
         <a href="blog.html" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg">تابع قضيتك</a>
-        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg">حجز موعد</a>
-        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg">طلب استشارة</a>
+        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">حجز موعد</a>
+        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">طلب استشارة</a>
     </div>
 </div>
 
-<!-- المحتوى الرئيسي للمقال -->
-<main class="pt-40 pb-20 px-4">
+<!-- المحتوى الرئيسي للمقال (بدون إطار ممتد بعرض الشاشة) -->
+<main class="pt-40 pb-20 w-full">
     <div class="article-content-box">
         <div id="loader" class="text-center py-20"><div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-gold-solid"></div></div>
 
-        <div id="article-wrapper" class="hidden">
+        <div id="article-wrapper" class="hidden article-inner-container">
             <!-- وقت القراءة والميتا -->
             <div class="flex items-center gap-4 text-sm text-gold-solid mb-4 font-bold serif-font">
                 <span><i class="far fa-clock ml-1"></i> <span id="read-time">0</span> دقيقة قراءة</span>
@@ -164,15 +159,15 @@
                 <span>دراسة قانونية متخصصة</span>
             </div>
 
-            <h1 id="article-title" class="text-4xl md:text-5xl font-bold serif-font mb-8 border-b border-gray-100 pb-8 leading-tight"></h1>
+            <h1 id="article-title" class="text-4xl md:text-5xl font-bold serif-font mb-8 border-b border-gray-300 dark:border-gray-700 pb-8 leading-tight"></h1>
             
             <!-- حاوية الصورة (تظهر فقط إذا وُجدت) -->
-            <div id="article-image" class="mb-8 text-center"></div>
+            <div id="article-image" class="mb-10 text-center"></div>
 
             <div id="article-content" class="markdown-body article-text"></div>
 
-            <!-- زر العودة إلى المدونة (في الأسفل) -->
-            <div class="text-center mt-12">
+            <!-- زر العودة إلى المدونة -->
+            <div class="text-center mt-16 border-t border-gray-300 dark:border-gray-700 pt-10">
                 <a href="blog.html" class="inline-block gold-btn px-8 py-3 rounded-full text-base font-bold shadow-lg">
                     <i class="fas fa-arrow-right ml-2"></i> العودة إلى المدونة
                 </a>
@@ -180,26 +175,26 @@
 
             <!-- دعوة للاستشارة -->
             <div class="cta-box serif-font">
-                <h3 class="text-2xl gold-text mb-4">هل لديك تساؤل قانوني حول هذا الموضوع؟</h3>
-                <p class="mb-6 opacity-80">يمكنك الحصول على استشارة قانونية دقيقة ومباشرة من الأستاذ محمود عبد الحميد</p>
-                <a href="contact.html" class="bg-gradient-to-r from-gold-solid to-yellow-600 px-8 py-3 rounded-full text-black font-black hover:scale-105 transition-transform inline-block">احجز استشارتك الآن</a>
+                <h3 class="text-3xl gold-text mb-4 font-bold">هل لديك تساؤل قانوني حول هذا الموضوع؟</h3>
+                <p class="mb-8 opacity-80 text-lg">يمكنك الحصول على استشارة قانونية دقيقة ومباشرة من الأستاذ محمود عبد الحميد</p>
+                <a href="contact.html" class="bg-gradient-to-r from-gold-solid to-yellow-600 px-10 py-4 rounded-full text-black font-black hover:scale-105 transition-transform inline-block">احجز استشارتك الآن</a>
             </div>
 
             <!-- النشرة البريدية -->
-            <div class="mt-12 bg-gray-100 dark:bg-black/20 p-8 rounded-lg text-center border border-gold-solid/20">
-                <h4 class="font-bold mb-2">انضم للنشرة القانونية</h4>
-                <p class="text-sm opacity-70 mb-4">تصلك أهم أحكام النقض والتشريعات الجديدة فور صدورها</p>
-                <div class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-                    <input type="email" placeholder="بريدك الإلكتروني" class="flex-grow px-4 py-2 rounded border focus:outline-gold-solid text-black">
-                    <button class="bg-black text-gold-solid px-6 py-2 rounded font-bold border border-gold-solid">اشترك</button>
+            <div class="mt-12 bg-gray-200/50 dark:bg-black/40 p-10 rounded-2xl text-center border border-gold-solid/20 backdrop-blur-sm">
+                <h4 class="font-bold mb-3 text-xl">انضم للنشرة القانونية</h4>
+                <p class="text-base opacity-80 mb-6">تصلك أهم أحكام النقض والتشريعات الجديدة فور صدورها</p>
+                <div class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+                    <input type="email" placeholder="بريدك الإلكتروني" class="flex-grow px-5 py-3 rounded-lg border focus:outline-gold-solid text-black text-left" dir="ltr">
+                    <button class="bg-black text-gold-solid px-8 py-3 rounded-lg font-bold border border-gold-solid transition hover:bg-gold-solid hover:text-black">اشترك</button>
                 </div>
             </div>
         </div>
     </div>
 </main>
 
-<!-- الفوتر الملكي (مطابق للصفحة الرئيسية) -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/20 text-center mt-20">
+<!-- الفوتر الملكي (أسود زجاجي) -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center mt-10">
     <div class="max-w-7xl mx-auto px-6">
         <img src="logo.png" class="w-24 h-24 object-contain mx-auto mb-4">
         <h2 class="text-3xl font-black gold-text serif-font mb-2">مؤسسة محمود عبد الحميد المحامي</h2>
@@ -239,7 +234,7 @@
         themeBtn.innerHTML = isNight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
     };
 
-    // تحميل المقال ومعالجة metadata
+    // تحميل المقال ومعالجة البيانات وإخفاء الكلمات البرمجية
     async function fetchArticle() {
         const slug = new URLSearchParams(window.location.search).get('slug');
         if (!slug) return;
@@ -248,32 +243,51 @@
             const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/blog/articles/${slug}.md`);
             let md = await res.text();
             
-            // استخراج title و image من أول الأسطر إن وجدا
             let title = '';
             let image = '';
+
+            // 1. مسح وإخفاء الميتا داتا (---) إن وُجدت في أول المقال
+            const yamlMatch = md.match(/^---\s*[\s\S]*?\s*---/);
+            if (yamlMatch) {
+                const yamlContent = yamlMatch[0];
+                const titleMatch = yamlContent.match(/title:\s*(.*)/i);
+                if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+                
+                const imageMatch = yamlContent.match(/image:\s*(.*)/i);
+                if (imageMatch) image = imageMatch[1].replace(/['"]/g, '').trim();
+                
+                md = md.replace(/^---\s*[\s\S]*?\s*---/, ''); // حذفها بالكامل من المقال
+            }
+
+            // 2. تصفية السطور المتبقية في حالة وجود title: أو image: بدون (---)
             const lines = md.split('\n');
-            const filteredLines = [];
+            const filteredLines =[];
             for (let line of lines) {
-                if (line.trim().startsWith('title:')) {
-                    title = line.replace('title:', '').trim();
-                    continue; // لا نضيف هذا السطر للمحتوى
+                const lowerLine = line.trim().toLowerCase();
+                
+                if (lowerLine.startsWith('title:')) {
+                    if (!title) title = line.substring(line.indexOf(':') + 1).replace(/['"]/g, '').trim();
+                    continue; // لا تضف هذا السطر للمقال
                 }
-                if (line.trim().startsWith('image:')) {
-                    image = line.replace('image:', '').trim();
-                    continue; // لا نضيف هذا السطر
+                
+                if (lowerLine.startsWith('image:')) {
+                    if (!image) image = line.substring(line.indexOf(':') + 1).replace(/['"]/g, '').trim();
+                    continue; // لا تضف هذا السطر للمقال
                 }
+                
                 filteredLines.push(line);
             }
-            md = filteredLines.join('\n');
+            
+            md = filteredLines.join('\n'); // إعادة تجميع المقال النظيف
 
-            // إذا لم نجد title في metadata، نأخذه من slug
+            // إذا لم نجد عنواناً، نأخذه من رابط الصفحة (slug)
             if (!title) title = decodeURIComponent(slug.replace(/-/g, ' '));
             
             document.getElementById('article-title').textContent = title;
             
             // عرض الصورة إذا وجدت
             if (image) {
-                document.getElementById('article-image').innerHTML = `<img src="${image}" alt="صورة المقال" class="max-w-full h-auto rounded-lg border-2 border-gold-solid mx-auto">`;
+                document.getElementById('article-image').innerHTML = `<img src="${image}" alt="صورة المقال" class="max-w-full h-auto rounded-xl border border-gold-solid/30 shadow-2xl mx-auto max-h-[500px] object-cover">`;
             }
 
             document.getElementById('article-content').innerHTML = marked.parse(md);
@@ -291,7 +305,7 @@
             document.getElementById('article-wrapper').classList.remove('hidden');
         } catch (e) {
             console.error("Error loading article", e);
-            document.getElementById('loader').innerHTML = '<p class="text-red-500">فشل تحميل المقال</p>';
+            document.getElementById('loader').innerHTML = '<p class="text-red-500 font-bold text-xl">نعتذر، فشل تحميل المقال. يرجى التأكد من الرابط أو المحاولة لاحقاً.</p>';
         }
     }
     fetchArticle();

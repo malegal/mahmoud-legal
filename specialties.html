@@ -256,18 +256,19 @@
         .track-case-btn:hover { background: var(--gold-gradient); color: #000; border-color: transparent; }
         .visit-btn:hover { border-color: var(--gold-solid); background: rgba(191, 149, 63, 0.1); color: var(--gold-solid); }
         
-        /* القائمة الجانبية */
+        /* القائمة الجانبية - محدثة لتطابق صفحة تواصل معنا */
         #mobile-menu { 
-            position: fixed;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background: rgba(0, 0, 0, 0.98);
-            z-index: 110;
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(15px); 
+            z-index: 200; 
             transform: translateX(100%); 
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
         }
         #mobile-menu.active { transform: translateX(0); }
         
@@ -293,6 +294,8 @@
             .header-glass nav { padding: 10px 15px !important; }
             .hero-buttons { flex-direction: column; gap: 15px; }
             .hero-buttons a { width: 100%; }
+            .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
+            .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
         }
         
         ::-webkit-scrollbar { width: 8px; }
@@ -347,21 +350,23 @@
     </nav>
 </header>
 
-<div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
+<!-- القائمة الجانبية للجوال (مطابقة لصفحة تواصل معنا) -->
+<div id="mobile-menu">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
     </button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center">
-        <a href="index.html" onclick="closeMenu()" class="nav-link-gold text-xl">الرئيسية</a>
-        <a href="about.html" onclick="closeMenu()" class="nav-link-gold text-xl">عن المؤسسة</a>
-        <a href="index.html#why-us" onclick="closeMenu()" class="nav-link-gold text-xl">لماذا تختارنا</a>
-        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-xl">تخصصاتنا</a>
-        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-xl">تواصل معنا</a>
-        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold text-xl">المدونة</a>
+    <div class="flex flex-col gap-5 text-xl font-bold text-center w-full px-6">
+        <a href="index.html" onclick="closeMenu()" class="nav-link-gold">الرئيسية</a>
+        <a href="about.html" onclick="closeMenu()" class="nav-link-gold">عن المؤسسة</a>
+        <a href="index.html#why-us" onclick="closeMenu()" class="nav-link-gold">لماذا تختارنا</a>
+        <a href="index.html#testimonials" onclick="closeMenu()" class="nav-link-gold">آراء العملاء</a>
+        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">تخصصاتنا</a>
+        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold">تواصل معنا</a>
+        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">تابع قضيتك</a>
-        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg">حجز موعد</a>
-        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg">طلب استشارة</a>
+        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">حجز موعد</a>
+        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">طلب استشارة</a>
     </div>
 </div>
 
@@ -531,8 +536,8 @@
     </div>
 </div>
 
-<!-- الفوتر الموحد (مطابق لصفحة تواصل معنا) -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
+<!-- الفوتر (مطابق لصفحة تواصل معنا) -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
             <img src="logo.png" alt="شعار المؤسسة" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90 hover:opacity-100 transition">
@@ -761,10 +766,6 @@
     if (menuClose) {
         menuClose.addEventListener('click', closeMenu);
     }
-    
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-        link.addEventListener('click', closeMenu);
-    });
 
     // أنيميشن الظهور
     document.addEventListener("DOMContentLoaded", function() {

@@ -247,13 +247,20 @@
             border-right: 4px solid var(--gold-solid);
         }
 
+        /* القائمة الجانبية - محدثة لتطابق صفحة تواصل معنا */
         #mobile-menu { 
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(15px); 
+            z-index: 200; 
             transform: translateX(100%); 
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.98);
+            transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
         }
-        
         #mobile-menu.active { transform: translateX(0); }
         
         /* تنسيق خاص للاقتباس */
@@ -317,21 +324,21 @@
     </nav>
 </header>
 
-<!-- القائمة الجانبية للجوال -->
-<div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
+<!-- القائمة الجانبية للجوال (مطابقة لصفحة تواصل معنا) -->
+<div id="mobile-menu">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
     </button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center">
-        <a href="index.html" class="nav-link-gold text-xl" onclick="closeMenu()">الرئيسية</a>
-        <a href="about.html" class="nav-link-gold text-xl" onclick="closeMenu()">عن المؤسسة</a>
-        <a href="specialties.html" class="nav-link-gold text-xl" onclick="closeMenu()">تخصصاتنا</a>
-        <a href="contact.html" class="nav-link-gold text-xl" onclick="closeMenu()">تواصل معنا</a>
-        <a href="blog.html" class="nav-link-gold text-xl" onclick="closeMenu()">المدونة</a>
+    <div class="flex flex-col gap-5 text-xl font-bold text-center w-full px-6">
+        <a href="index.html" onclick="closeMenu()" class="nav-link-gold">الرئيسية</a>
+        <a href="about.html" onclick="closeMenu()" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">عن المؤسسة</a>
+        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold">تخصصاتنا</a>
+        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold">تواصل معنا</a>
+        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg" onclick="closeMenu()">تابع قضيتك</a>
-        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg" onclick="closeMenu()">حجز موعد</a>
-        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg" onclick="closeMenu()">طلب استشارة</a>
+        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">حجز موعد</a>
+        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">طلب استشارة</a>
     </div>
 </div>
 
@@ -680,8 +687,8 @@
     </div>
 </section>
 
-<!-- الفوتر -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-[#000000] text-center relative mt-12">
+<!-- الفوتر (مطابق لصفحة تواصل معنا) -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
             <img src="https://raw.githubusercontent.com/malegal/mahmoud-legal/cde493c8595f39ae6a4dd13a8e5ad005b803d7d8/logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90 hover:opacity-100 transition" width="96" height="96" loading="lazy">
@@ -716,11 +723,11 @@
     const menuClose = document.getElementById('menu-close');
     
     function closeMenu() {
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = '';
+        if(mobileMenu) {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
-
-    window.closeMenu = closeMenu;
     
     if (menuToggle) {
         menuToggle.addEventListener('click', () => {

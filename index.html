@@ -204,13 +204,20 @@
             color: #000;
         }
         
+        /* القائمة الجانبية (مطابقة لصفحة تواصل معنا) */
         #mobile-menu { 
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(15px); 
+            z-index: 200; 
             transform: translateX(100%); 
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.98);
+            transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
         }
-        
         #mobile-menu.active { transform: translateX(0); }
         
         section { scroll-margin-top: var(--header-height); position: relative; overflow: hidden; }
@@ -377,27 +384,23 @@
     </nav>
 </header>
 
-<div id="mobile-menu" class="fixed inset-0 z-[110] p-8 lg:hidden flex flex-col justify-center">
+<!-- القائمة الجانبية للجوال (مطابقة لصفحة تواصل معنا) -->
+<div id="mobile-menu">
     <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text">
         <i class="fas fa-times"></i>
     </button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center">
-        <a href="about.html" onclick="closeMenu()" class="nav-link-gold text-xl">عن المؤسسة</a>
-        <a href="#why-us" onclick="closeMenu()" class="nav-link-gold text-xl">لماذا تختارنا</a>
-        <a href="#testimonials" onclick="closeMenu()" class="nav-link-gold text-xl">آراء العملاء</a>
-        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold text-xl">تخصصاتنا</a>
-        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold text-xl">تواصل معنا</a>
-        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold text-xl">المدونة</a>
+    <div class="flex flex-col gap-5 text-xl font-bold text-center w-full px-6">
+        <a href="index.html" onclick="closeMenu()" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">الرئيسية</a>
+        <a href="about.html" onclick="closeMenu()" class="nav-link-gold">عن المؤسسة</a>
+        <a href="#why-us" onclick="closeMenu()" class="nav-link-gold">لماذا تختارنا</a>
+        <a href="#testimonials" onclick="closeMenu()" class="nav-link-gold">آراء العملاء</a>
+        <a href="specialties.html" onclick="closeMenu()" class="nav-link-gold">تخصصاتنا</a>
+        <a href="contact.html" onclick="closeMenu()" class="nav-link-gold">تواصل معنا</a>
+        <a href="blog.html" onclick="closeMenu()" class="nav-link-gold">المدونة</a>
         <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg">
-             تابع قضيتك
-        </a>
-        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg">
-             حجز موعد
-        </a>
-        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg">
-             طلب استشارة
-        </a>
+        <a href="client-inquiry.html" onclick="closeMenu()" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">تابع قضيتك</a>
+        <a href="contact.html?tab=visit" onclick="closeMenu()" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">حجز موعد</a>
+        <a href="contact.html?tab=consult" onclick="closeMenu()" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">طلب استشارة</a>
     </div>
 </div>
 
@@ -681,8 +684,8 @@
     </div>
 </section>
 
-<!-- الفوتر الذهبي -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/20 text-center relative mt-12">
+<!-- الفوتر (مطابق لصفحة تواصل معنا) -->
+<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center relative mt-12">
     <div class="max-w-7xl mx-auto px-6 relative z-10">
         <div class="mb-8">
             <img src="logo.png" alt="شعار المؤسسة" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90 hover:opacity-100 transition">

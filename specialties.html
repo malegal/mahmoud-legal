@@ -799,7 +799,7 @@
         }
 
         .panel h3 {
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 1.2vw, 1.15rem);
             font-weight: 900;
             color: #fff;
             margin-bottom: 4px;
@@ -811,7 +811,7 @@
         }
 
         .panel p {
-            font-size: 0.75rem;
+            font-size: clamp(0.7rem, 0.8vw, 0.8rem);
             color: rgba(255, 255, 255, 0.25);
             line-height: 1.9;
             margin-bottom: 16px;
@@ -1261,6 +1261,7 @@
            RESPONSIVE – متطابق تماماً مع صفحة عن المؤسسة
            ========================================================== */
 
+        /* Large Screens (1441px+) */
         @media (min-width: 1441px) {
             .hero {
                 min-height: 80vh;
@@ -1276,8 +1277,13 @@
             .panel p {
                 font-size: 0.8rem;
             }
+            .container {
+                max-width: 1280px;
+                margin: 0 auto;
+            }
         }
 
+        /* Laptop Standard (1025px - 1440px) */
         @media (max-width: 1440px) and (min-width: 1025px) {
             .hero {
                 min-height: 72vh;
@@ -1291,10 +1297,10 @@
                 min-height: 220px;
             }
             .panel h3 {
-                font-size: 1rem;
+                font-size: clamp(0.95rem, 1.1vw, 1.05rem);
             }
             .panel p {
-                font-size: 0.7rem;
+                font-size: clamp(0.65rem, 0.7vw, 0.75rem);
             }
             .panel .panel-icon {
                 width: 42px;
@@ -1319,6 +1325,7 @@
             }
         }
 
+        /* Tablet & Small Laptop (769px - 1024px) */
         @media (max-width: 1024px) {
             .hero {
                 min-height: 65vh;
@@ -1373,6 +1380,7 @@
             }
         }
 
+        /* Mobile (up to 768px) */
         @media (max-width: 768px) {
             .hero {
                 min-height: 55vh;
@@ -1481,6 +1489,7 @@
             }
         }
 
+        /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -1624,7 +1633,7 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                <!-- 1 -->
+                <!-- 1. المنازعات المدنية -->
                 <div class="panel reveal reveal-d1" data-specialty="civil">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1636,7 +1645,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 2 -->
+                <!-- 2. المنازعات التجارية -->
                 <div class="panel reveal reveal-d2" data-specialty="commercial">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1648,7 +1657,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 3 -->
+                <!-- 3. قضايا الأحوال الشخصية -->
                 <div class="panel reveal reveal-d3" data-specialty="family">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1660,7 +1669,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 4 -->
+                <!-- 4. القضايا الجنائية -->
                 <div class="panel reveal reveal-d1" data-specialty="criminal">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1672,7 +1681,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 5 -->
+                <!-- 5. المنازعات الإدارية -->
                 <div class="panel reveal reveal-d2" data-specialty="admin">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1684,7 +1693,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 6 -->
+                <!-- 6. صياغة العقود -->
                 <div class="panel reveal reveal-d3" data-specialty="contracts">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1696,7 +1705,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 7 -->
+                <!-- 7. قانون العمل -->
                 <div class="panel reveal reveal-d1" data-specialty="labor">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1708,7 +1717,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 8 -->
+                <!-- 8. التحكيم والوساطة -->
                 <div class="panel reveal reveal-d2" data-specialty="arbitration">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -1720,7 +1729,7 @@
                     <span class="panel-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- 9 -->
+                <!-- 9. المحكمة الدستورية العليا -->
                 <div class="panel reveal reveal-d3" data-specialty="constitutional">
                     <div class="panel-reflection"></div>
                     <div class="panel-glow"></div>
@@ -2021,7 +2030,7 @@
             };
 
             // ============================================================
-            // ELEMENTS – جميع العناصر موحدة مع صفحة عن المؤسسة
+            // ELEMENTS
             // ============================================================
             const panels = document.querySelectorAll('.panel');
             const modal = document.getElementById('luxury-modal');
@@ -2033,7 +2042,7 @@
             const ctaBtn = document.getElementById('main-cta');
 
             // ============================================================
-            // BUILD MODAL – متطابق مع صفحة عن المؤسسة
+            // BUILD MODAL
             // ============================================================
             function buildModal(key) {
                 const d = data[key];
@@ -2091,7 +2100,7 @@
             }
 
             // ============================================================
-            // OPEN / CLOSE MODAL – متطابق
+            // OPEN / CLOSE MODAL
             // ============================================================
             let lastFocused = null;
 
@@ -2113,7 +2122,7 @@
             }
 
             // ============================================================
-            // EVENTS – متطابقة مع صفحة عن المؤسسة
+            // EVENTS
             // ============================================================
             panels.forEach(p => {
                 p.addEventListener('click', () => {
@@ -2147,7 +2156,7 @@
             });
 
             // ============================================================
-            // CTA RIPPLE – متطابق
+            // CTA RIPPLE
             // ============================================================
             if (ctaBtn) {
                 ctaBtn.addEventListener('click', function(e) {
@@ -2166,7 +2175,7 @@
             }
 
             // ============================================================
-            // MOBILE MENU – متطابق
+            // MOBILE MENU
             // ============================================================
             const mobileMenu = document.getElementById('mobile-menu');
             const menuToggle = document.getElementById('menu-toggle');
@@ -2188,7 +2197,7 @@
             }
 
             // ============================================================
-            // REVEAL ON SCROLL – متطابق
+            // REVEAL ON SCROLL
             // ============================================================
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -2202,7 +2211,7 @@
             document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
             // ============================================================
-            // FAQ – متطابق
+            // FAQ
             // ============================================================
             const faqItems = document.querySelectorAll('.faq-item');
             faqItems.forEach(item => {
@@ -2215,7 +2224,7 @@
             });
 
             // ============================================================
-            // SCROLL PROGRESS – متطابق
+            // SCROLL PROGRESS
             // ============================================================
             document.addEventListener('scroll', () => {
                 const scrollTop = window.scrollY;
@@ -2225,7 +2234,7 @@
             });
 
             // ============================================================
-            // CURSOR GLOW – متطابق
+            // CURSOR GLOW
             // ============================================================
             document.addEventListener('mousemove', (e) => {
                 cursorGlow.style.left = e.clientX + 'px';
@@ -2238,7 +2247,7 @@
             });
 
             // ============================================================
-            // STATS COUNTER – متطابق
+            // STATS COUNTER
             // ============================================================
             const statObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -2274,7 +2283,7 @@
             statNumbers.forEach(el => statObserver.observe(el));
 
             // ============================================================
-            // PARALLAX – متطابق
+            // PARALLAX
             // ============================================================
             const heroGeo = document.querySelector('.hero-geo');
             if (heroGeo) {

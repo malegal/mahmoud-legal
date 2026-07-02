@@ -1,0 +1,318 @@
+:root {
+    --primary-dark: #050a1f;
+    --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+    --gold-solid: #bf953f;
+    --gold-glow: rgba(191, 149, 63, 0.4);
+    --header-height: 90px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { 
+    font-family: 'Tajawal', sans-serif; 
+    background-color: var(--primary-dark); 
+    color: #ffffff;
+    scroll-behavior: smooth; 
+    overflow-x: hidden;
+}
+
+.serif-font { font-family: 'Amiri', serif; }
+
+.gold-text { 
+    background: var(--gold-gradient); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.nav-link-gold {
+    background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link-gold:hover {
+    text-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
+    transform: scale(1.05);
+}
+
+.gold-btn { 
+    background: var(--gold-gradient); 
+    color: #000; 
+    font-weight: 800; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    box-shadow: 0 0 15px var(--gold-glow);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.gold-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transition: 0.5s;
+    z-index: 2;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
+.gold-btn:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 0 30px var(--gold-glow); 
+}
+
+.read-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.read-more-btn span, .read-more-btn i {
+    background: var(--gold-gradient); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+}
+
+.read-more-btn:hover, .read-more-btn:active {
+    border-color: var(--gold-solid);
+    box-shadow: 0 0 20px rgba(191, 149, 63, 0.2);
+    background: rgba(191, 149, 63, 0.05);
+}
+
+.card-glass { 
+    background: rgba(20, 20, 30, 0.6);
+    backdrop-filter: blur(10px); 
+    border: 1px solid rgba(191, 149, 63, 0.2); 
+    border-radius: 1.5rem; 
+    transition: all 0.4s ease; 
+}
+
+.card-glass:hover { 
+    border-color: rgba(191, 149, 63, 0.8); 
+    transform: translateY(-8px); 
+    box-shadow: 0 15px 40px rgba(191, 149, 63, 0.1);
+}
+
+.black-border-card { 
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(5, 10, 31, 0.95);
+}
+
+.contact-floating {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.whatsapp-float, .call-float { 
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    color: white;
+}
+
+.whatsapp-float { background: #25d366; }
+.call-float { background: #0077b6; }
+
+.whatsapp-float:hover, .call-float:hover { transform: scale(1.1); }
+
+.footer-social-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid rgba(191, 149, 63, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    background: rgba(0,0,0,0.5);
+    text-decoration: none;
+    color: #bf953f;
+    font-size: 1.3rem;
+}
+
+.footer-social-icon i {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.footer-social-icon:hover {
+    border-color: var(--gold-solid);
+    box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
+    transform: translateY(-5px);
+    background: var(--gold-gradient);
+}
+
+.footer-social-icon:hover i {
+    background: none;
+    -webkit-text-fill-color: #000;
+    color: #000;
+}
+
+#mobile-menu { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.95); 
+    backdrop-filter: blur(15px); 
+    z-index: 200; 
+    transform: translateX(100%); 
+    transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+}
+#mobile-menu.active { transform: translateX(0); }
+
+section { scroll-margin-top: var(--header-height); position: relative; overflow: hidden; }
+
+.header-glass {
+    background: rgba(0, 0, 0, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border-bottom: 2px solid;
+    border-image: var(--gold-gradient) 1;
+    box-shadow: 0 10px 30px rgba(0,0,0, 0.8);
+}
+
+.islamic-pattern-bg {
+    background-color: var(--primary-dark);
+    background-image: 
+        linear-gradient(rgba(5, 10, 31, 0.85), rgba(5, 10, 31, 0.95)),
+        url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+}
+
+.gold-border {
+    position: relative;
+    overflow: hidden;
+}
+
+.gold-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid transparent;
+    border-radius: 1.5rem;
+    background: linear-gradient(135deg, #bf953f, transparent, #b38728) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.section-spacing { padding-top: 6rem; padding-bottom: 6rem; }
+
+.track-case-btn { 
+    background: transparent; 
+    border: 1px solid var(--gold-solid); 
+    color: #fff; 
+    font-weight: 600; 
+    transition: all 0.3s ease; 
+}
+
+.track-case-btn:hover { 
+    background: var(--gold-gradient); 
+    color: #000; 
+    border-color: transparent; 
+}
+
+.visit-btn {
+    background: transparent;
+    border: 1px solid #ffffff;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.visit-btn:hover {
+    border-color: var(--gold-solid);
+    background: rgba(191, 149, 63, 0.1);
+    color: var(--gold-solid);
+}
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.testimonial-card {
+    position: relative;
+    padding: 2rem;
+    height: 100%;
+}
+
+.quote-icon {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 4rem;
+    color: rgba(191, 149, 63, 0.1);
+    font-family: serif;
+    line-height: 1;
+}
+
+.auto-colorize {
+    filter: grayscale(100%);
+    transition: filter 3s ease;
+}
+.auto-colorize.colorized, .auto-colorize:hover {
+    filter: grayscale(0%);
+}
+
+@media (max-width: 768px) {
+    .header-glass nav { padding: 10px 15px !important; }
+    #hero h1 span { font-size: 3.5rem !important; }
+    .section-spacing { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+    .hero-buttons { flex-direction: column; gap: 15px; }
+    .hero-buttons a { width: 100%; }
+    .contact-floating { right: 15px; bottom: 15px; gap: 10px; }
+    .whatsapp-float, .call-float { width: 50px; height: 50px; font-size: 25px; }
+    .footer-social-icon { width: 40px; height: 40px; font-size: 1.1rem; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--primary-dark); }
+::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }

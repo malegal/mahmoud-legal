@@ -49,7 +49,7 @@
 
     <style>
         /* ==========================================================
-           ROOT – نظام التصميم الموحد مع صفحة "عن المؤسسة"
+           ROOT – نظام التصميم الموحد (متطابق مع صفحة عن المؤسسة)
            ========================================================== */
         :root {
             --bg-deep: #020617;
@@ -99,7 +99,7 @@
         }
 
         /* ==========================================================
-           TYPOGRAPHY – متطابقة مع صفحة "عن المؤسسة"
+           TYPOGRAPHY – متطابقة مع صفحة عن المؤسسة
            ========================================================== */
         .gold-text {
             background: linear-gradient(135deg, #D4AF37 0%, #F5E6A3 25%, #C9A030 50%, #F5E6A3 75%, #D4AF37 100%);
@@ -156,7 +156,7 @@
         }
 
         /* ==========================================================
-           LUXURY BUTTONS – متطابقة مع صفحة "عن المؤسسة"
+           LUXURY BUTTONS – متطابقة مع صفحة عن المؤسسة
            ========================================================== */
         .gold-btn {
             display: inline-block;
@@ -231,7 +231,7 @@
         }
 
         /* ==========================================================
-           HEADER, FOOTER, MOBILE MENU – موحدة
+           HEADER – متطابق مع صفحة عن المؤسسة
            ========================================================== */
         .nav-link {
             color: rgba(255, 255, 255, 0.35);
@@ -312,6 +312,9 @@
             box-shadow: 0 8px 30px rgba(212, 175, 55, 0.02);
         }
 
+        /* ==========================================================
+           MOBILE MENU
+           ========================================================== */
         #mobile-menu {
             position: fixed;
             inset: 0;
@@ -329,6 +332,9 @@
             transform: translateX(0);
         }
 
+        /* ==========================================================
+           FLOATING CONTACT – متطابق
+           ========================================================== */
         .contact-float {
             position: fixed;
             bottom: 24px;
@@ -364,6 +370,9 @@
             box-shadow: 0 12px 50px rgba(0, 0, 0, 0.4);
         }
 
+        /* ==========================================================
+           FOOTER – متطابق مع صفحة عن المؤسسة
+           ========================================================== */
         .footer-icon {
             width: 38px;
             height: 38px;
@@ -413,7 +422,7 @@
         }
 
         /* ==========================================================
-           REVEAL – ظهور سينمائي موحد
+           REVEAL – متطابق
            ========================================================== */
         .reveal {
             opacity: 0;
@@ -445,7 +454,7 @@
         }
 
         /* ==========================================================
-           HERO – سينمائي مع بارالاكس خفيف (موحد)
+           HERO – متطابق تماماً مع صفحة عن المؤسسة
            ========================================================== */
         .hero {
             position: relative;
@@ -582,7 +591,7 @@
         }
 
         /* ==========================================================
-           LUXURY INTRO – موحد مع صفحة "عن المؤسسة"
+           LUXURY INTRO – متطابق مع صفحة عن المؤسسة
            ========================================================== */
         .luxury-intro {
             padding: 40px 24px 16px;
@@ -609,8 +618,43 @@
         }
 
         /* ==========================================================
-           PANELS – Premium Cards متطابقة مع صفحة "عن المؤسسة"
+           STATS – متطابق مع صفحة عن المؤسسة
            ========================================================== */
+        .stats-section {
+            padding: 48px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.6rem;
+            font-weight: 900;
+            font-family: var(--font-serif);
+            background: linear-gradient(135deg, #D4AF37, #F5E6A3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            display: inline-block;
+            min-width: 45px;
+        }
+        .stat-label {
+            font-size: 0.65rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.10);
+            letter-spacing: 0.06em;
+            margin-top: 2px;
+        }
+
+        /* ==========================================================
+           PANELS – Premium Cards متطابقة مع صفحة عن المؤسسة
+           ========================================================== */
+        .panels-section {
+            padding: 80px 24px 96px;
+            background: linear-gradient(180deg, #020617 0%, #06041a 100%);
+        }
+
         .panel {
             position: relative;
             background: var(--glass-bg);
@@ -801,34 +845,11 @@
         }
 
         /* ==========================================================
-           STATS – عداد فاخر
-           ========================================================== */
-        .stat-number {
-            font-size: 2.6rem;
-            font-weight: 900;
-            font-family: var(--font-serif);
-            background: linear-gradient(135deg, #D4AF37, #F5E6A3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-            display: inline-block;
-            min-width: 45px;
-        }
-        .stat-label {
-            font-size: 0.65rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.10);
-            letter-spacing: 0.06em;
-            margin-top: 2px;
-        }
-
-        /* ==========================================================
-           WHY SECTION – لماذا يختارنا العملاء (موحد)
+           WHY SECTION – لماذا يختارنا العملاء (متطابق)
            ========================================================== */
         .why-section {
-            padding: 50px 24px 60px;
-            background: rgba(0, 0, 0, 0.15);
+            padding: 64px 24px 80px;
+            background: rgba(0, 0, 0, 0.12);
             border-top: 1px solid rgba(212, 175, 55, 0.005);
             border-bottom: 1px solid rgba(212, 175, 55, 0.005);
         }
@@ -872,20 +893,20 @@
         }
 
         /* ==========================================================
-           METHODOLOGY – منهجية العمل (موحد)
+           METHODOLOGY – متطابق مع صفحة عن المؤسسة
            ========================================================== */
         .methodology-section {
-            padding: 50px 24px 60px;
-            background: rgba(0, 0, 0, 0.2);
+            padding: 64px 24px 80px;
+            background: rgba(0, 0, 0, 0.15);
             border-top: 1px solid rgba(212, 175, 55, 0.005);
             border-bottom: 1px solid rgba(212, 175, 55, 0.005);
         }
 
         /* ==========================================================
-           CTA – دعوة للتواصل (موحد)
+           CTA – متطابق مع صفحة عن المؤسسة
            ========================================================== */
         .cta {
-            padding: 60px 24px;
+            padding: 72px 24px;
             position: relative;
             overflow: hidden;
             background: linear-gradient(180deg, rgba(2, 6, 23, 1) 0%, rgba(8, 4, 26, 1) 100%);
@@ -927,16 +948,16 @@
         }
 
         /* ==========================================================
-           FAQ – الأسئلة الشائعة (موحد)
+           FAQ – متطابق مع صفحة عن المؤسسة
            ========================================================== */
         .faq {
-            padding: 50px 24px 60px;
+            padding: 64px 24px 80px;
             max-width: 720px;
             margin: 0 auto;
         }
         .faq .faq-title {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 36px;
         }
         .faq-item {
             border-bottom: 1px solid rgba(255, 255, 255, 0.003);
@@ -995,7 +1016,7 @@
         }
 
         /* ==========================================================
-           SCROLL PROGRESS & CURSOR – موحد
+           SCROLL PROGRESS & CURSOR – متطابق
            ========================================================== */
         #scroll-progress {
             position: fixed;
@@ -1026,7 +1047,7 @@
         }
 
         /* ==========================================================
-           MODAL – نافذة منبثقة فاخرة (موحد)
+           MODAL – متطابق مع صفحة عن المؤسسة
            ========================================================== */
         .luxury-modal {
             position: fixed;
@@ -1237,10 +1258,9 @@
         }
 
         /* ==========================================================
-           RESPONSIVE – شامل لجميع الشاشات (مضبوط تماماً)
+           RESPONSIVE – متطابق تماماً مع صفحة عن المؤسسة
            ========================================================== */
 
-        /* شاشات كبيرة جداً (أكبر من 1440px) */
         @media (min-width: 1441px) {
             .hero {
                 min-height: 80vh;
@@ -1256,13 +1276,8 @@
             .panel p {
                 font-size: 0.8rem;
             }
-            .container {
-                max-width: 1280px;
-                margin: 0 auto;
-            }
         }
 
-        /* شاشات اللاب توب القياسية (1025px - 1440px) */
         @media (max-width: 1440px) and (min-width: 1025px) {
             .hero {
                 min-height: 72vh;
@@ -1304,7 +1319,6 @@
             }
         }
 
-        /* شاشات التابلت واللاب توب الصغيرة (769px - 1024px) */
         @media (max-width: 1024px) {
             .hero {
                 min-height: 65vh;
@@ -1359,7 +1373,6 @@
             }
         }
 
-        /* شاشات الموبايل (حتى 768px) */
         @media (max-width: 768px) {
             .hero {
                 min-height: 55vh;
@@ -1468,7 +1481,6 @@
             }
         }
 
-        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -1581,7 +1593,7 @@
     </section>
 
     <!-- STATS -->
-    <section class="py-12 border-y border-white/5 bg-black/30" aria-label="إحصائيات">
+    <section class="stats-section" aria-label="إحصائيات">
         <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
             <div class="reveal reveal-d1">
                 <div class="stat-number" data-count="22">0</div>
@@ -1603,7 +1615,7 @@
     </section>
 
     <!-- PANELS -->
-    <section class="py-20 md:py-24 px-6 bg-gradient-to-b from-[#020617] to-[#06041a]" aria-label="التخصصات">
+    <section class="panels-section" aria-label="التخصصات">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16 reveal">
                 <span class="text-gold-primary text-xs font-bold tracking-[0.25em] uppercase english-font" style="color:rgba(212,175,55,0.08);">Practice Areas</span>
@@ -1856,6 +1868,9 @@
         (function() {
             "use strict";
 
+            // ============================================================
+            // DATA – محتوى التخصصات (خاص بصفحة تخصصاتنا)
+            // ============================================================
             const data = {
                 civil: {
                     title: "المنازعات المدنية",
@@ -2005,6 +2020,9 @@
                 }
             };
 
+            // ============================================================
+            // ELEMENTS – جميع العناصر موحدة مع صفحة عن المؤسسة
+            // ============================================================
             const panels = document.querySelectorAll('.panel');
             const modal = document.getElementById('luxury-modal');
             const modalClose = document.getElementById('modal-close');
@@ -2014,6 +2032,9 @@
             const statNumbers = document.querySelectorAll('.stat-number');
             const ctaBtn = document.getElementById('main-cta');
 
+            // ============================================================
+            // BUILD MODAL – متطابق مع صفحة عن المؤسسة
+            // ============================================================
             function buildModal(key) {
                 const d = data[key];
                 if (!d) return;
@@ -2069,6 +2090,9 @@
                 `;
             }
 
+            // ============================================================
+            // OPEN / CLOSE MODAL – متطابق
+            // ============================================================
             let lastFocused = null;
 
             function openModal(key) {
@@ -2088,6 +2112,9 @@
                 }
             }
 
+            // ============================================================
+            // EVENTS – متطابقة مع صفحة عن المؤسسة
+            // ============================================================
             panels.forEach(p => {
                 p.addEventListener('click', () => {
                     const key = p.getAttribute('data-specialty');
@@ -2119,6 +2146,9 @@
                 }
             });
 
+            // ============================================================
+            // CTA RIPPLE – متطابق
+            // ============================================================
             if (ctaBtn) {
                 ctaBtn.addEventListener('click', function(e) {
                     const rect = this.getBoundingClientRect();
@@ -2135,6 +2165,9 @@
                 });
             }
 
+            // ============================================================
+            // MOBILE MENU – متطابق
+            // ============================================================
             const mobileMenu = document.getElementById('mobile-menu');
             const menuToggle = document.getElementById('menu-toggle');
             const menuCloseBtn = document.getElementById('menu-close');
@@ -2154,6 +2187,9 @@
                 menuCloseBtn.addEventListener('click', closeMenu);
             }
 
+            // ============================================================
+            // REVEAL ON SCROLL – متطابق
+            // ============================================================
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2165,6 +2201,9 @@
 
             document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+            // ============================================================
+            // FAQ – متطابق
+            // ============================================================
             const faqItems = document.querySelectorAll('.faq-item');
             faqItems.forEach(item => {
                 const q = item.querySelector('.faq-q');
@@ -2175,6 +2214,9 @@
                 });
             });
 
+            // ============================================================
+            // SCROLL PROGRESS – متطابق
+            // ============================================================
             document.addEventListener('scroll', () => {
                 const scrollTop = window.scrollY;
                 const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -2182,6 +2224,9 @@
                 scrollProgress.style.width = progress + '%';
             });
 
+            // ============================================================
+            // CURSOR GLOW – متطابق
+            // ============================================================
             document.addEventListener('mousemove', (e) => {
                 cursorGlow.style.left = e.clientX + 'px';
                 cursorGlow.style.top = e.clientY + 'px';
@@ -2192,6 +2237,9 @@
                 cursorGlow.classList.remove('active');
             });
 
+            // ============================================================
+            // STATS COUNTER – متطابق
+            // ============================================================
             const statObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2225,6 +2273,9 @@
 
             statNumbers.forEach(el => statObserver.observe(el));
 
+            // ============================================================
+            // PARALLAX – متطابق
+            // ============================================================
             const heroGeo = document.querySelector('.hero-geo');
             if (heroGeo) {
                 document.addEventListener('scroll', () => {

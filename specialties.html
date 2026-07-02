@@ -99,7 +99,7 @@
         }
 
         /* ==========================================================
-           TYPOGRAPHY – هرمية تحريرية مع مسافات فاخرة
+           TYPOGRAPHY – هرمية قابلة للتكيف
            ========================================================== */
         .gold-text {
             background: linear-gradient(135deg, #D4AF37 0%, #F5E6A3 25%, #C9A030 50%, #F5E6A3 75%, #D4AF37 100%);
@@ -109,7 +109,7 @@
         }
 
         .heading-hero {
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
             font-weight: 900;
             line-height: 1.05;
             letter-spacing: -0.02em;
@@ -117,7 +117,7 @@
         }
 
         .heading-primary {
-            font-size: clamp(2.2rem, 4.2vw, 3.6rem);
+            font-size: clamp(2rem, 3.8vw, 3.2rem);
             font-weight: 900;
             line-height: 1.2;
             letter-spacing: -0.01em;
@@ -125,45 +125,45 @@
         }
 
         .heading-secondary {
-            font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+            font-size: clamp(1.4rem, 2.2vw, 2rem);
             font-weight: 800;
             line-height: 1.3;
             font-family: var(--font-serif);
         }
 
         .body-large {
-            font-size: clamp(1rem, 1.1vw, 1.1rem);
+            font-size: clamp(0.95rem, 1vw, 1.05rem);
             font-weight: 300;
-            line-height: 2.4;
+            line-height: 2.2;
             color: rgba(255, 255, 255, 0.45);
             letter-spacing: 0.02em;
         }
 
         .body-base {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 300;
-            line-height: 2.2;
+            line-height: 2;
             color: rgba(255, 255, 255, 0.30);
             letter-spacing: 0.02em;
         }
 
         .body-small {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 300;
-            line-height: 2.1;
+            line-height: 1.9;
             color: rgba(255, 255, 255, 0.20);
             letter-spacing: 0.04em;
         }
 
         /* ==========================================================
-           LUXURY BUTTONS – متأثر بـ Rolls Royce
+           LUXURY BUTTONS
            ========================================================== */
         .gold-btn {
             display: inline-block;
             background: linear-gradient(135deg, #D4AF37 0%, #F5E6A3 30%, #C9A030 60%, #D4AF37 100%);
             color: #0B1120;
             font-weight: 800;
-            padding: 16px 48px;
+            padding: 14px 40px;
             border-radius: 8px;
             border: none;
             cursor: pointer;
@@ -173,7 +173,7 @@
             overflow: hidden;
             text-decoration: none;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             will-change: transform, box-shadow;
@@ -193,7 +193,7 @@
         }
 
         .gold-btn:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15), 0 12px 60px rgba(212, 175, 55, 0.06);
         }
 
@@ -231,14 +231,14 @@
         }
 
         /* ==========================================================
-           HEADER
+           HEADER, FOOTER, MOBILE MENU (موروث مع تحسين المسافات)
            ========================================================== */
         .nav-link {
             color: rgba(255, 255, 255, 0.35);
             font-weight: 600;
             transition: color 0.5s var(--ease-luxury);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 0.06em;
             position: relative;
         }
@@ -280,9 +280,9 @@
             border: 1px solid rgba(255, 255, 255, 0.02);
             color: rgba(255, 255, 255, 0.40);
             font-weight: 600;
-            padding: 8px 18px;
+            padding: 6px 14px;
             border-radius: 6px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             transition: all 0.5s var(--ease-luxury);
             text-decoration: none;
             letter-spacing: 0.04em;
@@ -299,9 +299,9 @@
             color: #0B1120;
             border: none;
             font-weight: 800;
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 6px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             transition: all 0.5s var(--ease-luxury);
             text-decoration: none;
             letter-spacing: 0.04em;
@@ -312,9 +312,6 @@
             box-shadow: 0 8px 30px rgba(212, 175, 55, 0.02);
         }
 
-        /* ==========================================================
-           MOBILE MENU
-           ========================================================== */
         #mobile-menu {
             position: fixed;
             inset: 0;
@@ -332,52 +329,44 @@
             transform: translateX(0);
         }
 
-        /* ==========================================================
-           FLOATING CONTACT
-           ========================================================== */
         .contact-float {
             position: fixed;
-            bottom: 32px;
-            right: 32px;
+            bottom: 24px;
+            right: 24px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             z-index: 1000;
         }
 
         .contact-float a {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+            font-size: 18px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
             transition: all 0.5s var(--ease-luxury);
             text-decoration: none;
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.01);
         }
-
         .contact-float .wa {
             background: #25d366;
         }
         .contact-float .call {
             background: #0077b6;
         }
-
         .contact-float a:hover {
             transform: scale(1.06) translateY(-3px);
             box-shadow: 0 12px 50px rgba(0, 0, 0, 0.4);
         }
 
-        /* ==========================================================
-           FOOTER
-           ========================================================== */
         .footer-icon {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             border: 1px solid rgba(212, 175, 55, 0.02);
             display: flex;
@@ -387,14 +376,12 @@
             background: rgba(0, 0, 0, 0.2);
             text-decoration: none;
         }
-
         .footer-icon i {
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
-
         .footer-icon:hover {
             border-color: rgba(212, 175, 55, 0.06);
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.01);
@@ -402,7 +389,7 @@
         }
 
         .signature-name {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 900;
             letter-spacing: -0.02em;
             background: linear-gradient(135deg, #D4AF37, #F5E6A3, #C9A030);
@@ -411,16 +398,14 @@
             background-clip: text;
             font-family: var(--font-serif);
         }
-
         .signature-sub {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 300;
             color: rgba(255, 255, 255, 0.10);
             letter-spacing: 0.08em;
         }
-
         .signature-since {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             color: rgba(212, 175, 55, 0.10);
             letter-spacing: 0.15em;
@@ -428,20 +413,18 @@
         }
 
         /* ==========================================================
-           REVEAL – ظهور سينمائي متتابع
+           REVEAL
            ========================================================== */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1.2s var(--ease-luxury), transform 1.2s var(--ease-luxury);
+            transform: translateY(25px);
+            transition: opacity 1s var(--ease-luxury), transform 1s var(--ease-luxury);
             will-change: transform, opacity;
         }
-
         .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
-
         .reveal-d1 {
             transition-delay: 0.1s;
         }
@@ -462,16 +445,16 @@
         }
 
         /* ==========================================================
-           HERO – مع Parallax خفيف و Depth
+           HERO – متكيف مع شاشات اللاب توب
            ========================================================== */
         .hero {
             position: relative;
-            min-height: 80vh;
+            min-height: 75vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 140px 24px 60px;
+            padding: 110px 24px 40px;
             overflow: hidden;
             background: var(--bg-deep);
         }
@@ -491,7 +474,6 @@
             transform: scale(1.5);
             will-change: transform;
         }
-
         @keyframes geoDrift {
             0% {
                 transform: scale(1.5) translateY(0) rotate(0deg);
@@ -503,8 +485,8 @@
 
         .hero-ambient {
             position: absolute;
-            width: 600px;
-            height: 600px;
+            width: 500px;
+            height: 500px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(212, 175, 55, 0.004) 0%, transparent 70%);
             top: 10%;
@@ -514,11 +496,10 @@
             animation: ambientDrift 22s ease-in-out infinite alternate;
             will-change: transform;
         }
-
         .hero-ambient-2 {
             position: absolute;
-            width: 500px;
-            height: 500px;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(212, 175, 55, 0.002) 0%, transparent 70%);
             bottom: 10%;
@@ -528,7 +509,6 @@
             animation: ambientDrift2 26s ease-in-out infinite alternate;
             will-change: transform;
         }
-
         @keyframes ambientDrift {
             0% {
                 transform: scale(1) translate(0, 0);
@@ -539,7 +519,6 @@
                 opacity: 0.5;
             }
         }
-
         @keyframes ambientDrift2 {
             0% {
                 transform: scale(1) translate(0, 0);
@@ -554,28 +533,28 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 880px;
+            max-width: 820px;
         }
 
         .hero-eyebrow {
             display: inline-block;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             font-weight: 700;
             letter-spacing: 0.5em;
             text-transform: uppercase;
             color: rgba(212, 175, 55, 0.12);
             border: 1px solid rgba(212, 175, 55, 0.01);
-            padding: 6px 20px;
+            padding: 4px 16px;
             border-radius: 50px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             font-family: var(--font-english);
         }
 
         .hero-divider {
-            width: 50px;
+            width: 40px;
             height: 1.5px;
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
-            margin: 16px auto 20px;
+            margin: 14px auto 18px;
             border-radius: 2px;
             opacity: 0.12;
         }
@@ -584,21 +563,19 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 6px;
-            margin-top: 24px;
+            gap: 4px;
+            margin-top: 18px;
         }
-
         .hero-tag {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.01);
-            padding: 4px 16px;
+            padding: 3px 12px;
             border-radius: 50px;
             letter-spacing: 0.06em;
             transition: all 0.4s var(--ease-luxury);
         }
-
         .hero-tag:hover {
             color: var(--gold-primary);
             border-color: rgba(212, 175, 55, 0.02);
@@ -608,33 +585,31 @@
            LUXURY INTRO
            ========================================================== */
         .luxury-intro {
-            padding: 60px 24px 20px;
-            max-width: 880px;
+            padding: 40px 24px 16px;
+            max-width: 800px;
             margin: 0 auto;
             text-align: center;
         }
-
         .luxury-intro .intro-text {
-            font-size: clamp(1.1rem, 1.4vw, 1.4rem);
+            font-size: clamp(1rem, 1.2vw, 1.2rem);
             font-weight: 300;
-            line-height: 2.4;
+            line-height: 2.2;
             color: rgba(255, 255, 255, 0.30);
             letter-spacing: 0.04em;
-            max-width: 720px;
+            max-width: 680px;
             margin: 0 auto;
         }
-
         .luxury-intro .intro-divider {
-            width: 60px;
+            width: 50px;
             height: 1.5px;
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
-            margin: 28px auto 0;
+            margin: 20px auto 0;
             border-radius: 2px;
             opacity: 0.06;
         }
 
         /* ==========================================================
-           PANELS – Premium Cards with Depth, Dynamic Border, Reflection
+           PANELS – Premium Cards (حجم مثالي للاب توب)
            ========================================================== */
         .panel {
             position: relative;
@@ -642,18 +617,17 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             border-radius: 14px;
-            padding: 36px 32px;
+            padding: 28px 24px;
             transition: all 0.8s var(--ease-luxury);
             cursor: pointer;
             overflow: hidden;
-            min-height: 280px;
+            min-height: 240px;
             display: flex;
             flex-direction: column;
             will-change: transform, box-shadow;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.01);
         }
 
-        /* Dynamic Border */
         .panel::before {
             content: '';
             position: absolute;
@@ -668,20 +642,17 @@
             transition: all 0.8s var(--ease-luxury);
             opacity: 0.2;
         }
-
         .panel.is-hover::before {
             opacity: 1;
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), transparent 50%, rgba(212, 175, 55, 0.08));
         }
 
-        /* Multi-layer Shadow for Depth */
         .panel.is-hover {
-            transform: translateY(-6px);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.03), 0 0 60px rgba(212, 175, 55, 0.005);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.03), 0 0 60px rgba(212, 175, 55, 0.005);
             background: rgba(11, 17, 32, 0.55);
         }
 
-        /* Moving Highlight / Reflection */
         .panel .panel-reflection {
             position: absolute;
             top: -100%;
@@ -694,7 +665,6 @@
             transition: all 0.9s var(--ease-luxury);
             opacity: 0;
         }
-
         .panel.is-hover .panel-reflection {
             top: 0;
             left: 0;
@@ -712,7 +682,6 @@
             transition: opacity 0.9s var(--ease-luxury);
             pointer-events: none;
         }
-
         .panel.is-hover .panel-glow {
             opacity: 1;
         }
@@ -726,15 +695,13 @@
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
             transition: width 0.9s var(--ease-luxury);
         }
-
         .panel.is-hover .panel-line {
             width: 100%;
         }
 
-        /* Premium Glass Icon (Metallic Gold) */
         .panel .panel-icon {
-            width: 52px;
-            height: 52px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             background: rgba(11, 17, 32, 0.25);
             backdrop-filter: blur(4px);
@@ -744,39 +711,36 @@
             align-items: center;
             justify-content: center;
             transition: all 0.7s var(--ease-luxury);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             flex-shrink: 0;
-            box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.005), 0 0 20px rgba(212, 175, 55, 0.001);
+            box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.005);
         }
-
         .panel.is-hover .panel-icon {
             border-color: rgba(212, 175, 55, 0.06);
             box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.02), 0 0 40px rgba(212, 175, 55, 0.005);
             transform: translateY(-2px);
         }
-
         .panel .panel-icon i {
-            font-size: 18px;
+            font-size: 16px;
             transition: all 0.7s ease;
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.01));
         }
-
         .panel.is-hover .panel-icon i {
             filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.04));
         }
 
         .panel .panel-badge {
             position: absolute;
-            top: 16px;
-            left: 16px;
-            font-size: 0.4rem;
+            top: 12px;
+            left: 12px;
+            font-size: 0.35rem;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            padding: 2px 10px;
+            padding: 2px 8px;
             border-radius: 50px;
             background: rgba(212, 175, 55, 0.01);
             border: 1px solid rgba(212, 175, 55, 0.01);
@@ -784,7 +748,6 @@
             transition: all 0.6s var(--ease-luxury);
             font-family: var(--font-english);
         }
-
         .panel.is-hover .panel-badge {
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
             color: #0B1120;
@@ -792,23 +755,22 @@
         }
 
         .panel h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 900;
             color: #fff;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             transition: color 0.6s var(--ease-luxury);
             letter-spacing: -0.01em;
         }
-
         .panel.is-hover h3 {
             color: var(--gold-primary);
         }
 
         .panel p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: rgba(255, 255, 255, 0.25);
-            line-height: 2;
-            margin-bottom: 20px;
+            line-height: 1.9;
+            margin-bottom: 16px;
             flex-grow: 1;
             font-weight: 300;
             letter-spacing: 0.02em;
@@ -817,8 +779,8 @@
         .panel .panel-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.6rem;
+            gap: 6px;
+            font-size: 0.55rem;
             font-weight: 700;
             color: var(--gold-primary);
             transition: all 0.6s var(--ease-luxury);
@@ -826,26 +788,23 @@
             margin-top: auto;
             opacity: 0.5;
         }
-
         .panel.is-hover .panel-link {
-            gap: 14px;
+            gap: 12px;
             opacity: 1;
         }
-
         .panel .panel-link i {
             transition: transform 0.6s ease;
-            font-size: 10px;
+            font-size: 9px;
         }
-
         .panel.is-hover .panel-link i {
             transform: translateX(-4px);
         }
 
         /* ==========================================================
-           STATS – Counter Luxury
+           STATS
            ========================================================== */
         .stat-number {
-            font-size: 3rem;
+            font-size: 2.6rem;
             font-weight: 900;
             font-family: var(--font-serif);
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
@@ -854,11 +813,10 @@
             background-clip: text;
             line-height: 1.1;
             display: inline-block;
-            min-width: 50px;
+            min-width: 45px;
         }
-
         .stat-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 300;
             color: rgba(255, 255, 255, 0.10);
             letter-spacing: 0.06em;
@@ -869,68 +827,61 @@
            WHY SECTION
            ========================================================== */
         .why-section {
-            padding: 60px 24px 80px;
+            padding: 50px 24px 60px;
             background: rgba(0, 0, 0, 0.15);
             border-top: 1px solid rgba(212, 175, 55, 0.005);
             border-bottom: 1px solid rgba(212, 175, 55, 0.005);
         }
-
         .why-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 24px;
-            max-width: 960px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            max-width: 900px;
             margin: 0 auto;
         }
-
         .why-item {
             text-align: center;
-            padding: 16px 12px;
+            padding: 14px 10px;
             transition: all 0.5s var(--ease-luxury);
             border: 1px solid rgba(212, 175, 55, 0.005);
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.005);
         }
-
         .why-item:hover {
             transform: translateY(-3px);
             border-color: rgba(212, 175, 55, 0.015);
         }
-
         .why-item .why-icon {
-            font-size: 16px;
+            font-size: 14px;
             color: var(--gold-primary);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             opacity: 0.4;
         }
-
         .why-item h4 {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: #fff;
             margin-bottom: 2px;
             letter-spacing: 0.02em;
         }
-
         .why-item p {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: rgba(255, 255, 255, 0.15);
             font-weight: 300;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         /* ==========================================================
            CTA
            ========================================================== */
         .cta {
-            padding: 80px 24px;
+            padding: 60px 24px;
             position: relative;
             overflow: hidden;
             background: linear-gradient(180deg, rgba(2, 6, 23, 1) 0%, rgba(8, 4, 26, 1) 100%);
             border-top: 1px solid rgba(212, 175, 55, 0.005);
             border-bottom: 1px solid rgba(212, 175, 55, 0.005);
         }
-
         .cta .cta-pattern {
             position: absolute;
             inset: 0;
@@ -943,7 +894,6 @@
             background-size: 200px 200px;
             animation: ctaBgDrift 80s linear infinite;
         }
-
         @keyframes ctaBgDrift {
             0% {
                 transform: translateY(0);
@@ -952,45 +902,39 @@
                 transform: translateY(-60px);
             }
         }
-
         .cta-content {
             position: relative;
             z-index: 2;
-            max-width: 640px;
+            max-width: 600px;
             margin: 0 auto;
             text-align: center;
         }
-
         .cta-content p {
             color: rgba(255, 255, 255, 0.18);
-            font-size: 0.95rem;
-            line-height: 2.2;
-            margin-bottom: 28px;
+            font-size: 0.9rem;
+            line-height: 2;
+            margin-bottom: 24px;
         }
 
         /* ==========================================================
            FAQ
            ========================================================== */
         .faq {
-            padding: 60px 24px 80px;
-            max-width: 780px;
+            padding: 50px 24px 60px;
+            max-width: 720px;
             margin: 0 auto;
         }
-
         .faq .faq-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
-
         .faq-item {
             border-bottom: 1px solid rgba(255, 255, 255, 0.003);
-            padding: 16px 0;
+            padding: 14px 0;
         }
-
         .faq-item:last-child {
             border-bottom: none;
         }
-
         .faq-q {
             display: flex;
             justify-content: space-between;
@@ -1000,56 +944,48 @@
             transition: all 0.4s var(--ease-luxury);
             gap: 16px;
         }
-
         .faq-q:hover {
             color: var(--gold-primary);
         }
-
         .faq-q span {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #fff;
             transition: color 0.3s ease;
         }
-
         .faq-q i {
             color: rgba(212, 175, 55, 0.04);
             transition: transform 0.6s var(--ease-luxury);
-            font-size: 13px;
+            font-size: 12px;
             flex-shrink: 0;
         }
-
         .faq-item.active .faq-q i {
             transform: rotate(180deg);
             color: var(--gold-primary);
         }
-
         .faq-item.active .faq-q span {
             color: var(--gold-primary);
         }
-
         .faq-a {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.7s var(--ease-luxury), opacity 0.5s ease;
             opacity: 0;
         }
-
         .faq-item.active .faq-a {
             max-height: 200px;
             opacity: 1;
         }
-
         .faq-a p {
             color: rgba(255, 255, 255, 0.10);
-            font-size: 0.85rem;
-            line-height: 2.2;
+            font-size: 0.8rem;
+            line-height: 2;
             padding-top: 6px;
             padding-bottom: 2px;
         }
 
         /* ==========================================================
-           SCROLL PROGRESS
+           SCROLL PROGRESS & CURSOR
            ========================================================== */
         #scroll-progress {
             position: fixed;
@@ -1062,14 +998,10 @@
             transition: width 0.05s linear;
             opacity: 0.08;
         }
-
-        /* ==========================================================
-           CURSOR INTERACTION
-           ========================================================== */
         .cursor-glow {
             position: fixed;
-            width: 300px;
-            height: 300px;
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(212, 175, 55, 0.005) 0%, transparent 70%);
             pointer-events: none;
@@ -1079,13 +1011,12 @@
             opacity: 0;
             will-change: transform, opacity;
         }
-
         .cursor-glow.active {
             opacity: 1;
         }
 
         /* ==========================================================
-           MODAL – Luxury Independent Page Feel
+           MODAL
            ========================================================== */
         .luxury-modal {
             position: fixed;
@@ -1100,35 +1031,31 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.7s var(--ease-luxury);
-            padding: 24px;
+            padding: 20px;
         }
-
         .luxury-modal.active {
             opacity: 1;
             pointer-events: all;
         }
-
         .luxury-modal.active .modal-box {
             transform: scale(1) translateY(0);
-            box-shadow: 0 0 160px rgba(0, 0, 0, 0.4), 0 0 80px rgba(212, 175, 55, 0.003);
+            box-shadow: 0 0 120px rgba(0, 0, 0, 0.4), 0 0 60px rgba(212, 175, 55, 0.003);
         }
-
         .modal-box {
             background: rgba(8, 8, 18, 0.92);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             border: 1px solid rgba(212, 175, 55, 0.015);
-            border-radius: 20px;
+            border-radius: 18px;
             width: 100%;
-            max-width: 820px;
+            max-width: 780px;
             max-height: 90vh;
             overflow-y: auto;
             transform: scale(0.95) translateY(18px);
             transition: transform 0.8s var(--ease-luxury), box-shadow 0.8s var(--ease-luxury);
-            box-shadow: 0 0 120px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.4);
             position: relative;
         }
-
         .modal-box::-webkit-scrollbar {
             width: 2px;
         }
@@ -1142,26 +1069,25 @@
 
         .modal-close {
             position: sticky;
-            top: 14px;
-            left: 14px;
+            top: 12px;
+            left: 12px;
             float: left;
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid rgba(255, 255, 255, 0.01);
             color: rgba(255, 255, 255, 0.08);
-            font-size: 16px;
+            font-size: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.5s var(--ease-luxury);
             z-index: 10;
-            margin: 14px;
+            margin: 12px;
             backdrop-filter: blur(4px);
         }
-
         .modal-close:hover {
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
             color: #0B1120;
@@ -1170,21 +1096,19 @@
         }
 
         .modal-body {
-            padding: 16px 34px 44px;
+            padding: 14px 28px 36px;
         }
-
         .modal-body .modal-header {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
+            gap: 14px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.02);
         }
-
         .modal-body .modal-icon-wrap {
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background: rgba(11, 17, 32, 0.25);
             backdrop-filter: blur(4px);
@@ -1193,246 +1117,153 @@
             align-items: center;
             justify-content: center;
         }
-
         .modal-body .modal-icon-wrap i {
-            font-size: 22px;
+            font-size: 18px;
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .modal-body h2 {
-            font-size: clamp(1.8rem, 3.8vw, 2.8rem);
+            font-size: clamp(1.6rem, 3.2vw, 2.4rem);
             font-weight: 900;
             font-family: var(--font-serif);
             letter-spacing: -0.02em;
         }
-
         .modal-body .modal-desc {
             color: rgba(255, 255, 255, 0.30);
-            font-size: 0.95rem;
-            line-height: 2.2;
-            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 2;
+            margin-bottom: 16px;
         }
-
         .modal-body .modal-divider {
-            width: 40px;
+            width: 32px;
             height: 1.5px;
             background: linear-gradient(135deg, #D4AF37, #F5E6A3);
-            margin: 0 0 20px 0;
+            margin: 0 0 16px 0;
             border-radius: 2px;
             opacity: 0.08;
         }
-
         .modal-body .serv-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin: 12px 0 20px;
+            gap: 6px;
+            margin: 10px 0 16px;
         }
-
         .modal-body .serv-item {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid rgba(255, 255, 255, 0.005);
             border-radius: 8px;
-            padding: 10px 14px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.4s var(--ease-luxury);
         }
-
         .modal-body .serv-item:hover {
             background: rgba(212, 175, 55, 0.005);
             border-color: rgba(212, 175, 55, 0.01);
         }
-
         .modal-body .serv-item i {
             color: var(--gold-primary);
-            font-size: 12px;
-            width: 16px;
+            font-size: 11px;
+            width: 14px;
             text-align: center;
             opacity: 0.5;
         }
-
         .modal-body .serv-item span {
             color: rgba(255, 255, 255, 0.40);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
-
         .modal-body .highlight {
             background: rgba(212, 175, 55, 0.005);
             border-right: 2px solid var(--gold-primary);
-            padding: 14px 18px;
+            padding: 12px 16px;
             border-radius: 0 8px 8px 0;
-            margin: 12px 0;
+            margin: 10px 0;
         }
-
         .modal-body .highlight h5 {
             color: #fff;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-bottom: 2px;
         }
-
         .modal-body .highlight p {
             color: rgba(255, 255, 255, 0.20);
-            font-size: 0.85rem;
-            line-height: 2;
+            font-size: 0.8rem;
+            line-height: 1.9;
         }
-
         .modal-body .timeline {
             display: flex;
             flex-direction: column;
             gap: 2px;
-            margin: 12px 0 16px;
-            padding-right: 16px;
+            margin: 10px 0 14px;
+            padding-right: 14px;
         }
-
         .modal-body .timeline .step {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 4px 0;
+            gap: 12px;
+            padding: 3px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.003);
         }
-
         .modal-body .timeline .step:last-child {
             border-bottom: none;
         }
-
         .modal-body .timeline .step-num {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 900;
             color: var(--gold-primary);
             font-family: var(--font-serif);
-            min-width: 24px;
+            min-width: 20px;
             opacity: 0.10;
         }
-
         .modal-body .timeline .step-text {
             color: rgba(255, 255, 255, 0.25);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
-
         .modal-body .timeline .step-text strong {
             color: #fff;
             font-weight: 600;
         }
 
         /* ==========================================================
-           RESPONSIVE
+           RESPONSIVE – شامل لجميع الشاشات
            ========================================================== */
-        @media (max-width: 992px) {
+
+        /* شاشات كبيرة جداً (أكبر من 1440px) */
+        @media (min-width: 1441px) {
             .hero {
-                min-height: 70vh;
-                padding: 120px 20px 60px;
+                min-height: 80vh;
+                padding: 150px 24px 60px;
             }
-            .modal-body .serv-grid {
-                grid-template-columns: 1fr;
+            .panel {
+                padding: 36px 32px;
+                min-height: 280px;
             }
-            .stat-number {
-                font-size: 2.5rem;
+            .panel h3 {
+                font-size: 1.2rem;
             }
-            .why-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .panel p {
+                font-size: 0.8rem;
+            }
+            .container {
+                max-width: 1280px;
+                margin: 0 auto;
             }
         }
 
-        @media (max-width: 768px) {
+        /* شاشات اللاب توب القياسية (1025px - 1440px) */
+        @media (max-width: 1440px) and (min-width: 1025px) {
             .hero {
-                min-height: 60vh;
-                padding: 100px 16px 50px;
+                min-height: 72vh;
+                padding: 110px 24px 40px;
             }
             .heading-hero {
-                font-size: clamp(2.4rem, 10vw, 3.6rem);
-            }
-            .heading-primary {
-                font-size: clamp(1.8rem, 6vw, 2.6rem);
+                font-size: clamp(2.8rem, 6.5vw, 5rem);
             }
             .panel {
                 padding: 24px 20px;
-                min-height: 230px;
-            }
-            .panel .panel-icon {
-                width: 44px;
-                height: 44px;
-            }
-            .panel .panel-icon i {
-                font-size: 16px;
-            }
-            .panel .panel-badge {
-                top: 10px;
-                left: 10px;
-                font-size: 0.35rem;
-                padding: 2px 8px;
-            }
-            .contact-float {
-                bottom: 16px;
-                right: 16px;
-                gap: 10px;
-            }
-            .contact-float a {
-                width: 42px;
-                height: 42px;
-                font-size: 18px;
-            }
-            .modal-body {
-                padding: 12px 16px 32px;
-            }
-            .modal-close {
-                top: 8px;
-                left: 8px;
-                width: 34px;
-                height: 34px;
-                font-size: 14px;
-                margin: 8px;
-            }
-            .faq {
-                padding: 40px 16px 56px;
-            }
-            .cta {
-                padding: 56px 16px;
-            }
-            .why-section {
-                padding: 40px 16px 56px;
-            }
-            .luxury-intro {
-                padding: 40px 16px 16px;
-            }
-            .luxury-intro .intro-text {
-                font-size: 1rem;
-            }
-            .hero-tags {
-                gap: 4px;
-            }
-            .hero-tag {
-                font-size: 0.4rem;
-                padding: 3px 12px;
-            }
-            .stat-number {
-                font-size: 2rem;
-            }
-            .signature-name {
-                font-size: 1.6rem;
-            }
-            .why-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .panel {
-                padding: 18px 16px;
-                min-height: 200px;
-            }
-            .panel .panel-icon {
-                width: 38px;
-                height: 38px;
-            }
-            .panel .panel-icon i {
-                font-size: 14px;
+                min-height: 220px;
             }
             .panel h3 {
                 font-size: 1rem;
@@ -1440,8 +1271,122 @@
             .panel p {
                 font-size: 0.7rem;
             }
+            .panel .panel-icon {
+                width: 42px;
+                height: 42px;
+            }
+            .panel .panel-icon i {
+                font-size: 15px;
+            }
             .stat-number {
-                font-size: 1.6rem;
+                font-size: 2.2rem;
+            }
+            .luxury-intro .intro-text {
+                font-size: 1rem;
+            }
+            .gold-btn {
+                padding: 12px 32px;
+                font-size: 0.75rem;
+            }
+            .why-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+        }
+
+        /* شاشات التابلت واللاب توب الصغيرة (769px - 1024px) */
+        @media (max-width: 1024px) {
+            .hero {
+                min-height: 65vh;
+                padding: 100px 20px 40px;
+            }
+            .heading-hero {
+                font-size: clamp(2.6rem, 7vw, 4.2rem);
+            }
+            .heading-primary {
+                font-size: clamp(1.8rem, 4vw, 2.8rem);
+            }
+            .panel {
+                padding: 22px 18px;
+                min-height: 200px;
+            }
+            .panel h3 {
+                font-size: 0.95rem;
+            }
+            .panel p {
+                font-size: 0.7rem;
+            }
+            .panel .panel-icon {
+                width: 40px;
+                height: 40px;
+            }
+            .panel .panel-icon i {
+                font-size: 14px;
+            }
+            .panel .panel-badge {
+                font-size: 0.3rem;
+                padding: 2px 6px;
+                top: 10px;
+                left: 10px;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .why-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .gold-btn {
+                padding: 12px 28px;
+                font-size: 0.7rem;
+            }
+            .modal-body .serv-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-float a {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+
+        /* شاشات الموبايل (حتى 768px) */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 55vh;
+                padding: 90px 16px 30px;
+            }
+            .heading-hero {
+                font-size: clamp(2.2rem, 8vw, 3.2rem);
+            }
+            .heading-primary {
+                font-size: clamp(1.6rem, 5vw, 2.2rem);
+            }
+            .panel {
+                padding: 18px 16px;
+                min-height: 180px;
+            }
+            .panel h3 {
+                font-size: 0.9rem;
+            }
+            .panel p {
+                font-size: 0.65rem;
+            }
+            .panel .panel-icon {
+                width: 36px;
+                height: 36px;
+                margin-bottom: 12px;
+            }
+            .panel .panel-icon i {
+                font-size: 13px;
+            }
+            .panel .panel-badge {
+                font-size: 0.3rem;
+                padding: 2px 6px;
+                top: 8px;
+                left: 8px;
+            }
+            .stat-number {
+                font-size: 1.8rem;
                 min-width: 36px;
             }
             .stat-label {
@@ -1451,16 +1396,65 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 12px;
             }
-            .modal-body .serv-grid {
-                grid-template-columns: 1fr;
+            .why-item {
+                padding: 10px;
+            }
+            .why-item h4 {
+                font-size: 0.7rem;
+            }
+            .why-item p {
+                font-size: 0.55rem;
+            }
+            .gold-btn {
+                padding: 10px 24px;
+                font-size: 0.65rem;
+                width: 100%;
+            }
+            .luxury-intro {
+                padding: 30px 16px 10px;
+            }
+            .luxury-intro .intro-text {
+                font-size: 0.9rem;
+            }
+            .cta-content p {
+                font-size: 0.8rem;
+            }
+            .modal-body {
+                padding: 12px 16px 24px;
             }
             .modal-body .modal-header {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 8px;
             }
-            .gold-btn {
-                padding: 14px 28px;
-                font-size: 0.75rem;
+            .modal-body .serv-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-close {
+                top: 8px;
+                left: 8px;
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+                margin: 8px;
+            }
+            .contact-float {
+                bottom: 16px;
+                right: 16px;
+                gap: 8px;
+            }
+            .contact-float a {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            .signature-name {
+                font-size: 1.4rem;
+            }
+            .header-btn,
+            .header-btn-gold {
+                font-size: 0.55rem;
+                padding: 4px 10px;
             }
         }
 
@@ -1502,16 +1496,16 @@
     <!-- HEADER -->
     <header class="fixed w-full z-[100] header-glass" role="banner">
         <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 md:gap-4">
                 <a href="index.html" aria-label="الرئيسية">
-                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-20 h-20 object-contain" width="80" height="80" loading="lazy" />
+                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-16 h-16 md:w-20 md:h-20 object-contain" width="80" height="80" loading="lazy" />
                 </a>
                 <div>
-                    <span class="font-bold gold-text serif text-2xl">محمود عبد الحميد</span>
-                    <p class="text-gray-700 text-sm font-light">المحامي بالنقض والدستورية العليا</p>
+                    <span class="font-bold gold-text serif text-xl md:text-2xl">محمود عبد الحميد</span>
+                    <p class="text-gray-700 text-xs md:text-sm font-light">المحامي بالنقض والدستورية العليا</p>
                 </div>
             </div>
-            <div class="hidden xl:flex items-center gap-6">
+            <div class="hidden xl:flex items-center gap-4">
                 <a href="index.html" class="nav-link">الرئيسية</a>
                 <a href="about.html" class="nav-link">عن المؤسسة</a>
                 <a href="specialties.html" class="nav-link active">تخصصاتنا</a>
@@ -1553,7 +1547,7 @@
             <span class="hero-eyebrow">Our Expertise</span>
             <h1 class="heading-hero gold-text">تخصصاتنا<br />القانونية</h1>
             <div class="hero-divider"></div>
-            <p class="body-large" style="max-width:640px;margin:0 auto;">
+            <p class="body-large" style="max-width:600px;margin:0 auto;">
                 نمثل الأفراد والشركات والمؤسسات أمام جميع المحاكم المصرية،
                 بخبرة تمتد لأكثر من <strong style="color:#fff;">22 عاماً</strong> من التميز القضائي.
             </p>
@@ -1577,8 +1571,8 @@
     </section>
 
     <!-- STATS -->
-    <section class="py-14 border-y border-white/5 bg-black/30" aria-label="إحصائيات">
-        <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
+    <section class="py-12 border-y border-white/5 bg-black/30" aria-label="إحصائيات">
+        <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
             <div class="reveal reveal-d1">
                 <div class="stat-number" data-count="22">0</div>
                 <p class="stat-label">عاماً من الخبرة</p>
@@ -1599,15 +1593,15 @@
     </section>
 
     <!-- PANELS -->
-    <section class="py-28 md:py-32 px-6 bg-gradient-to-b from-[#020617] to-[#06041a]" aria-label="التخصصات">
+    <section class="py-20 md:py-24 px-6 bg-gradient-to-b from-[#020617] to-[#06041a]" aria-label="التخصصات">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal">
+            <div class="text-center mb-16 reveal">
                 <span class="text-gold-primary text-xs font-bold tracking-[0.25em] uppercase english-font" style="color:rgba(212,175,55,0.08);">Practice Areas</span>
                 <h2 class="heading-primary gold-text mt-2">مجالات خبرتنا</h2>
                 <div class="w-14 h-px bg-gold-primary/6 mx-auto mt-4"></div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                 <!-- 1 -->
                 <div class="panel reveal reveal-d1" data-specialty="civil">
                     <div class="panel-reflection"></div>
@@ -1721,7 +1715,7 @@
 
     <!-- WHY CLIENTS CHOOSE US -->
     <section class="why-section" aria-label="لماذا يختارنا العملاء">
-        <div class="text-center mb-12 reveal">
+        <div class="text-center mb-10 reveal">
             <span class="text-gold-primary text-xs font-bold tracking-[0.25em] uppercase english-font" style="color:rgba(212,175,55,0.08);">Why Choose Us</span>
             <h2 class="heading-primary gold-text mt-2">لماذا يختارك العملاء؟</h2>
             <div class="w-14 h-px bg-gold-primary/6 mx-auto mt-4"></div>
@@ -1752,18 +1746,18 @@
     </section>
 
     <!-- METHODOLOGY -->
-    <section class="py-20 px-6 bg-black/30 border-y border-white/5" aria-label="منهجية العمل">
+    <section class="py-16 px-6 bg-black/30 border-y border-white/5" aria-label="منهجية العمل">
         <div class="max-w-5xl mx-auto text-center reveal">
             <span class="text-gold-primary text-xs font-bold tracking-[0.25em] uppercase english-font" style="color:rgba(212,175,55,0.08);">Methodology</span>
             <h2 class="heading-primary gold-text mt-2">كيف نبني كل قضية</h2>
-            <div class="w-12 h-px bg-gold-primary/6 mx-auto mt-4 mb-12"></div>
-            <div class="grid md:grid-cols-3 gap-10 text-right">
-                <div><span class="text-3xl serif gold-text opacity-8 font-black">01</span><h4 class="text-base font-bold text-white mt-1">مراجعة القضية</h4><p class="body-small">فهم شامل للوقائع والمستندات والأهداف.</p></div>
-                <div><span class="text-3xl serif gold-text opacity-8 font-black">02</span><h4 class="text-base font-bold text-white mt-1">التحليل القانوني</h4><p class="body-small">دراسة النصوص والمبادئ القضائية ذات الصلة.</p></div>
-                <div><span class="text-3xl serif gold-text opacity-8 font-black">03</span><h4 class="text-base font-bold text-white mt-1">تقييم البدائل</h4><p class="body-small">عرض الخيارات مع بيان المزايا والمخاطر.</p></div>
-                <div><span class="text-3xl serif gold-text opacity-8 font-black">04</span><h4 class="text-base font-bold text-white mt-1">الإستراتيجية</h4><p class="body-small">وضع خطة قانونية مخصصة لكل حالة.</p></div>
-                <div><span class="text-3xl serif gold-text opacity-8 font-black">05</span><h4 class="text-base font-bold text-white mt-1">التمثيل والمتابعة</h4><p class="body-small">إدارة الإجراءات والتواصل المستمر.</p></div>
-                <div><span class="text-3xl serif gold-text opacity-8 font-black">06</span><h4 class="text-base font-bold text-white mt-1">أفضل نتيجة</h4><p class="body-small">السعي لتحقيق النتيجة المثلى في إطار القانون.</p></div>
+            <div class="w-12 h-px bg-gold-primary/6 mx-auto mt-4 mb-10"></div>
+            <div class="grid md:grid-cols-3 gap-8 text-right">
+                <div><span class="text-2xl serif gold-text opacity-8 font-black">01</span><h4 class="text-base font-bold text-white mt-1">مراجعة القضية</h4><p class="body-small">فهم شامل للوقائع والمستندات والأهداف.</p></div>
+                <div><span class="text-2xl serif gold-text opacity-8 font-black">02</span><h4 class="text-base font-bold text-white mt-1">التحليل القانوني</h4><p class="body-small">دراسة النصوص والمبادئ القضائية ذات الصلة.</p></div>
+                <div><span class="text-2xl serif gold-text opacity-8 font-black">03</span><h4 class="text-base font-bold text-white mt-1">تقييم البدائل</h4><p class="body-small">عرض الخيارات مع بيان المزايا والمخاطر.</p></div>
+                <div><span class="text-2xl serif gold-text opacity-8 font-black">04</span><h4 class="text-base font-bold text-white mt-1">الإستراتيجية</h4><p class="body-small">وضع خطة قانونية مخصصة لكل حالة.</p></div>
+                <div><span class="text-2xl serif gold-text opacity-8 font-black">05</span><h4 class="text-base font-bold text-white mt-1">التمثيل والمتابعة</h4><p class="body-small">إدارة الإجراءات والتواصل المستمر.</p></div>
+                <div><span class="text-2xl serif gold-text opacity-8 font-black">06</span><h4 class="text-base font-bold text-white mt-1">أفضل نتيجة</h4><p class="body-small">السعي لتحقيق النتيجة المثلى في إطار القانون.</p></div>
             </div>
         </div>
     </section>
@@ -1808,17 +1802,17 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="pt-14 pb-8 border-t border-gold-primary/10 bg-black/90 text-center" role="contentinfo">
+    <footer class="pt-12 pb-6 border-t border-gold-primary/10 bg-black/90 text-center" role="contentinfo">
         <div class="max-w-7xl mx-auto px-6">
-            <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد للمحاماة" class="w-20 h-20 object-contain mx-auto mb-4 opacity-40" width="80" height="80" loading="lazy" />
+            <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد للمحاماة" class="w-16 h-16 md:w-20 md:h-20 object-contain mx-auto mb-4 opacity-40" width="80" height="80" loading="lazy" />
 
-            <div class="mb-6">
+            <div class="mb-4">
                 <div class="signature-name">محمود عبد الحميد</div>
                 <p class="signature-sub">المحامي بالنقض والدستورية العليا</p>
                 <p class="signature-since mt-1">منذ ٢٠٠٤</p>
             </div>
 
-            <div class="flex justify-center gap-5 mb-8">
+            <div class="flex justify-center gap-4 mb-6">
                 <a href="https://www.facebook.com/malegal" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
                 <a href="https://x.com/mahmoud_a_hamyd" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
                 <a href="https://t.me/mahmoud_a_hamyd" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="تليجرام"><i class="fab fa-telegram-plane"></i></a>
@@ -1827,7 +1821,7 @@
                 <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" rel="noopener noreferrer" class="footer-icon" aria-label="الموقع الجغرافي"><i class="fas fa-map-marker-alt"></i></a>
             </div>
 
-            <nav class="flex flex-wrap gap-x-8 gap-y-3 justify-center text-xs text-gray-700 mb-6 font-medium">
+            <nav class="flex flex-wrap gap-x-6 gap-y-2 justify-center text-xs text-gray-700 mb-4 font-medium">
                 <a href="index.html" class="hover:text-gold-primary transition">الرئيسية</a>
                 <a href="about.html" class="hover:text-gold-primary transition">عن المؤسسة</a>
                 <a href="specialties.html" class="hover:text-gold-primary transition">تخصصاتنا</a>
@@ -1835,7 +1829,7 @@
                 <a href="blog.html" class="hover:text-gold-primary transition">المدونة القانونية</a>
             </nav>
 
-            <p class="text-gray-800 text-xs uppercase tracking-widest border-t border-gold-primary/10 pt-6">جميع الحقوق محفوظة © ٢٠٢٦</p>
+            <p class="text-gray-800 text-xs uppercase tracking-widest border-t border-gold-primary/10 pt-4">جميع الحقوق محفوظة © ٢٠٢٦</p>
         </div>
     </footer>
 
@@ -2030,8 +2024,8 @@
                     <div class="modal-divider"></div>
                     <p class="modal-desc">${d.desc}</p>
 
-                    <div class="border-b border-white/5 pb-5 mb-5">
-                        <h5 class="text-gold-primary font-bold mb-3 text-xs tracking-wide"><i class="fas fa-list-ul ml-2"></i> الخدمات المقدمة</h5>
+                    <div class="border-b border-white/5 pb-4 mb-4">
+                        <h5 class="text-gold-primary font-bold mb-2 text-xs tracking-wide"><i class="fas fa-list-ul ml-2"></i> الخدمات المقدمة</h5>
                         <div class="serv-grid">${servicesHtml}</div>
                     </div>
 
@@ -2040,24 +2034,24 @@
                         <p>${d.whyChoose}</p>
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-3 my-5">
-                        <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                    <div class="grid md:grid-cols-2 gap-3 my-4">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
                             <h6 class="text-gold-primary font-bold text-xs mb-1"><i class="fas fa-sitemap ml-2"></i> نهجنا</h6>
                             <p class="text-white/20 text-xs leading-relaxed">${d.approach}</p>
                         </div>
-                        <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/5">
                             <h6 class="text-gold-primary font-bold text-xs mb-1"><i class="fas fa-folder-open ml-2"></i> الحالات النموذجية</h6>
                             <p class="text-white/20 text-xs leading-relaxed">${d.typical}</p>
                         </div>
                     </div>
 
-                    <div class="border-t border-white/5 pt-5 mb-5">
-                        <h5 class="text-gold-primary font-bold mb-3 text-xs tracking-wide"><i class="fas fa-clock ml-2"></i> العملية القانونية</h5>
+                    <div class="border-t border-white/5 pt-4 mb-4">
+                        <h5 class="text-gold-primary font-bold mb-2 text-xs tracking-wide"><i class="fas fa-clock ml-2"></i> العملية القانونية</h5>
                         <div class="timeline">${timelineHtml}</div>
                     </div>
 
                     <a href="contact.html?tab=consult&specialty=${encodeURIComponent(d.title)}"
-                       class="gold-btn w-full py-3.5 rounded-xl text-base font-black block text-center">
+                       class="gold-btn w-full py-3 rounded-xl text-base font-black block text-center">
                         طلب استشارة في هذا التخصص
                         <span class="btn-shine"></span>
                         <span class="btn-shadow-move"></span>
@@ -2221,7 +2215,6 @@
 
             statNumbers.forEach(el => statObserver.observe(el));
 
-            // Parallax for Hero Geometry
             const heroGeo = document.querySelector('.hero-geo');
             if (heroGeo) {
                 document.addEventListener('scroll', () => {

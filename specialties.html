@@ -25,10 +25,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- البيانات المنظمة Schema.org (خاصة بالصفحة) -->
+    <!-- Schema.org -->
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -51,13 +50,16 @@
 
     <style>
         /* ==========================================================
-           ROOT – نظام التصميم الموحد (متطابق مع about.html)
+           ROOT – ثوابت التصميم (متطابقة مع about.html)
            ========================================================== */
         :root {
             --primary-dark: #020617;
             --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             --gold-solid: #bf953f;
             --gold-glow: rgba(191, 149, 63, 0.4);
+            --gold-soft: rgba(191, 149, 63, 0.08);
+            --font-serif: 'Amiri', serif;
+            --font-primary: 'Tajawal', sans-serif;
         }
 
         * {
@@ -66,16 +68,21 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
         body {
-            font-family: 'Tajawal', sans-serif;
+            font-family: var(--font-primary);
             background-color: var(--primary-dark);
             color: #fff;
-            scroll-behavior: smooth;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         .serif-font {
-            font-family: 'Amiri', serif;
+            font-family: var(--font-serif);
         }
 
         .gold-text {
@@ -85,47 +92,200 @@
             background-clip: text;
         }
 
+        .text-gold-solid {
+            color: var(--gold-solid);
+        }
+
+        /* ==========================================================
+           HEADER – متطابق مع about.html
+           ========================================================== */
+        .header-glass {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 2px solid;
+            border-image: var(--gold-gradient) 1;
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-link-gold {
+            background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .nav-link-gold::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--gold-gradient);
+            transition: width 0.4s ease;
+        }
+
+        .nav-link-gold:hover::after {
+            width: 100%;
+        }
+        .nav-link-gold:hover {
+            text-shadow: 0 0 20px rgba(191, 149, 63, 0.3);
+        }
+
+        .track-case-btn {
+            background: transparent;
+            border: 1px solid var(--gold-solid);
+            color: #fff;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .track-case-btn:hover {
+            background: var(--gold-gradient);
+            color: #000;
+            border-color: transparent;
+        }
+
+        .visit-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .visit-btn:hover {
+            border-color: var(--gold-solid);
+            background: rgba(191, 149, 63, 0.05);
+            color: var(--gold-solid);
+        }
+
         .gold-btn {
             background: var(--gold-gradient);
             color: #000;
             font-weight: 800;
-            transition: 0.3s;
-            box-shadow: 0 0 15px var(--gold-glow);
+            transition: all 0.4s ease;
+            box-shadow: 0 0 20px rgba(191, 149, 63, 0.1);
             border: none;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .gold-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 30px var(--gold-glow);
+            box-shadow: 0 0 40px rgba(191, 149, 63, 0.2);
         }
 
-        .card-glass {
-            background: rgba(20, 20, 30, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(191, 149, 63, 0.2);
-            border-radius: 1.5rem;
-            transition: 0.4s;
-        }
-
-        .card-glass:hover {
-            border-color: rgba(191, 149, 63, 0.8);
-            transform: translateY(-5px);
-        }
-
-        .header-glass {
+        /* ==========================================================
+           MOBILE MENU – متطابق مع about.html
+           ========================================================== */
+        #mobile-menu {
+            position: fixed;
+            inset: 0;
             background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 2px solid;
-            border-image: var(--gold-gradient) 1;
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 200;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
+        #mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* ==========================================================
+           FLOATING CONTACT – متطابق مع about.html
+           ========================================================== */
+        .contact-floating {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            z-index: 1000;
+        }
+
+        .whatsapp-float,
+        .call-float {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .whatsapp-float {
+            background: #25d366;
+        }
+        .call-float {
+            background: #0077b6;
+        }
+
+        .whatsapp-float:hover,
+        .call-float:hover {
+            transform: scale(1.08);
+        }
+
+        /* ==========================================================
+           FOOTER – متطابق مع about.html
+           ========================================================== */
+        .footer-social-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(191, 149, 63, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+        }
+
+        .footer-social-icon i {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.1rem;
+        }
+
+        .footer-social-icon:hover {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 30px rgba(191, 149, 63, 0.05);
+            transform: translateY(-4px);
+        }
+
+        /* ==========================================================
+           BACKGROUND & PATTERNS – متطابق مع about.html
+           ========================================================== */
         .islamic-pattern-bg {
             background-color: var(--primary-dark);
             background-image:
                 linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
                 url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23bf953f' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             background-attachment: fixed;
+            background-size: cover;
         }
 
         .gold-border {
@@ -139,17 +299,35 @@
             inset: 0;
             border: 1px solid transparent;
             border-radius: inherit;
-            background: linear-gradient(135deg, #bf953f, transparent, #b38728) border-box;
+            background: linear-gradient(135deg, rgba(191, 149, 63, 0.15), transparent 40%, rgba(191, 149, 63, 0.05)) border-box;
             -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: destination-out;
             mask-composite: exclude;
             pointer-events: none;
         }
 
+        .card-glass {
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(191, 149, 63, 0.06);
+            border-radius: 1.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .card-glass:hover {
+            border-color: rgba(191, 149, 63, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ==========================================================
+           REVEAL ON SCROLL – متطابق مع about.html
+           ========================================================== */
         .reveal-on-scroll {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s ease-out;
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .reveal-on-scroll.is-visible {
@@ -157,6 +335,9 @@
             transform: translateY(0);
         }
 
+        /* ==========================================================
+           AUTO-COLORIZE – متطابق مع about.html
+           ========================================================== */
         .auto-colorize {
             filter: grayscale(100%);
             transition: filter 3s ease;
@@ -166,190 +347,96 @@
             filter: grayscale(0%);
         }
 
-        #mobile-menu {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(15px);
-            z-index: 200;
-            transform: translateX(100%);
-            transition: 0.4s;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        /* ==========================================================
+           STATS – متطابق مع about.html
+           ========================================================== */
+        .stats-section {
+            padding: 48px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.12);
         }
 
-        #mobile-menu.active {
-            transform: translateX(0);
-        }
-
-        .contact-floating {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 1000;
-        }
-
-        .whatsapp-float,
-        .call-float {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s;
-            text-decoration: none;
-            color: #fff;
-        }
-
-        .whatsapp-float {
-            background: #25d366;
-        }
-        .call-float {
-            background: #0077b6;
-        }
-
-        .whatsapp-float:hover,
-        .call-float:hover {
-            transform: scale(1.1);
-        }
-
-        .footer-social-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: 1px solid rgba(191, 149, 63, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-            background: rgba(0, 0, 0, 0.5);
-            color: #bf953f;
-            font-size: 1.3rem;
-        }
-
-        .footer-social-icon i {
+        .stat-number {
+            font-size: 2.6rem;
+            font-weight: 900;
+            font-family: var(--font-serif);
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            display: inline-block;
+            min-width: 50px;
         }
 
-        .footer-social-icon:hover {
-            border-color: var(--gold-solid);
-            box-shadow: 0 0 20px rgba(191, 149, 63, 0.4);
-            transform: translateY(-5px);
-            background: var(--gold-gradient);
+        .stat-label {
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.15);
+            letter-spacing: 0.04em;
+            margin-top: 4px;
         }
 
-        .footer-social-icon:hover i {
-            background: none;
-            -webkit-text-fill-color: #000;
-            color: #000;
-        }
-
-        .track-case-btn {
-            background: transparent;
-            border: 1px solid var(--gold-solid);
-            color: #fff;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .track-case-btn:hover {
-            background: var(--gold-gradient);
-            color: #000;
-            border-color: transparent;
-        }
-
-        .visit-btn {
-            background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
-            transition: 0.3s;
-        }
-
-        .visit-btn:hover {
-            border-color: var(--gold-solid);
-            background: rgba(191, 149, 63, 0.1);
-            color: var(--gold-solid);
-        }
-
-        .quote-box {
-            position: relative;
-            padding: 2rem;
-            border-right: 4px solid var(--gold-solid);
-            background: linear-gradient(to left, rgba(191, 149, 63, 0.1), transparent);
-        }
-
-        .quote-box::before {
-            content: '\201D';
-            position: absolute;
-            top: -20px;
-            right: 10px;
-            font-size: 6rem;
-            color: rgba(191, 149, 63, 0.2);
-            font-family: serif;
-            line-height: 1;
-        }
-
-        .nav-link-gold {
-            background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link-gold:hover {
-            text-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
-            transform: scale(1.05);
-        }
-
-        .founder-card {
-            background: linear-gradient(145deg, rgba(20, 20, 30, 0.9) 0%, rgba(2, 6, 23, 0.95) 100%);
-            border-right: 4px solid var(--gold-solid);
-        }
-
-        .text-gold-solid {
-            color: var(--gold-solid);
-        }
-
-        .gold-glow-icon {
-            filter: drop-shadow(0 0 6px rgba(191, 149, 63, 0.6));
-        }
-
-        /* تنسيق بطاقات التخصصات (مطابق لبطاقات "من نخدم؟" ولكن مع تعديلات طفيفة) */
+        /* ==========================================================
+           SPECIALTY CARDS – نظام Grid احترافي
+           ========================================================== */
         .specialty-card {
-            transition: 0.3s;
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(191, 149, 63, 0.05);
+            border-radius: 1.25rem;
+            padding: 28px 24px;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 240px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .specialty-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold-gradient);
+            transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .specialty-card:hover::after {
+            width: 100%;
         }
 
         .specialty-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(191, 149, 63, 0.6);
+            border-color: rgba(191, 149, 63, 0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 60px rgba(191, 149, 63, 0.02);
+            background: rgba(20, 20, 30, 0.65);
         }
 
         .specialty-card .icon-wrap {
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: rgba(191, 149, 63, 0.12);
+            background: rgba(191, 149, 63, 0.06);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.3s;
+            margin-bottom: 16px;
+            transition: all 0.5s ease;
+            flex-shrink: 0;
         }
 
         .specialty-card:hover .icon-wrap {
-            background: var(--gold-solid);
+            background: var(--gold-gradient);
+            box-shadow: 0 0 30px rgba(191, 149, 63, 0.1);
+            transform: scale(1.02);
         }
 
         .specialty-card:hover .icon-wrap i {
@@ -357,49 +444,87 @@
         }
 
         .specialty-card .icon-wrap i {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--gold-solid);
-            transition: 0.3s;
+            transition: all 0.5s ease;
         }
 
-        /* ==========================================================
-           STYLES FOR STATS SECTION (مطابق لـ about.html)
-           ========================================================== */
-        .stats-section {
-            padding: 48px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            background: rgba(0, 0, 0, 0.15);
+        .specialty-card .card-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+            transition: color 0.4s ease;
+            line-height: 1.3;
         }
 
-        .stat-number {
-            font-size: 2.6rem;
-            font-weight: 900;
-            font-family: var(--serif-font);
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-            display: inline-block;
-            min-width: 45px;
+        .specialty-card:hover .card-title {
+            color: var(--gold-solid);
         }
 
-        .stat-label {
-            font-size: 0.65rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.10);
+        .specialty-card .card-desc {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.8;
+            flex-grow: 1;
+            margin-bottom: 16px;
+        }
+
+        .specialty-card .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--gold-solid);
+            transition: all 0.4s ease;
+            margin-top: auto;
+            opacity: 0.6;
+        }
+
+        .specialty-card:hover .card-link {
+            opacity: 1;
+            gap: 12px;
+        }
+
+        .specialty-card .card-link i {
+            transition: transform 0.4s ease;
+            font-size: 10px;
+        }
+
+        .specialty-card:hover .card-link i {
+            transform: translateX(-4px);
+        }
+
+        .specialty-card .card-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            font-size: 0.45rem;
+            font-weight: 700;
             letter-spacing: 0.06em;
-            margin-top: 2px;
+            text-transform: uppercase;
+            padding: 3px 12px;
+            border-radius: 50px;
+            background: rgba(191, 149, 63, 0.04);
+            border: 1px solid rgba(191, 149, 63, 0.04);
+            color: rgba(191, 149, 63, 0.25);
+            transition: all 0.5s ease;
+        }
+
+        .specialty-card:hover .card-badge {
+            background: var(--gold-gradient);
+            color: #000;
+            border-color: transparent;
         }
 
         /* ==========================================================
-           MODAL – نافذة منبثقة (خاصة بالتخصصات)
+           LUXURY MODAL – خاص بالتخصصات
            ========================================================== */
         .luxury-modal {
             position: fixed;
             inset: 0;
-            background: rgba(2, 6, 23, 0.88);
+            background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             z-index: 3000;
@@ -408,8 +533,8 @@
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.7s var(--ease-luxury);
-            padding: 20px;
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 24px;
         }
 
         .luxury-modal.active {
@@ -419,22 +544,21 @@
 
         .luxury-modal.active .modal-box {
             transform: scale(1) translateY(0);
-            box-shadow: 0 0 120px rgba(0, 0, 0, 0.4), 0 0 60px rgba(212, 175, 55, 0.003);
         }
 
         .modal-box {
             background: rgba(8, 8, 18, 0.92);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid rgba(212, 175, 55, 0.015);
-            border-radius: 18px;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(191, 149, 63, 0.04);
+            border-radius: 20px;
             width: 100%;
             max-width: 780px;
             max-height: 90vh;
             overflow-y: auto;
-            transform: scale(0.95) translateY(18px);
-            transition: transform 0.8s var(--ease-luxury), box-shadow 0.8s var(--ease-luxury);
-            box-shadow: 0 0 100px rgba(0, 0, 0, 0.4);
+            transform: scale(0.95) translateY(16px);
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease;
+            box-shadow: 0 0 120px rgba(0, 0, 0, 0.4);
             position: relative;
         }
 
@@ -454,125 +578,136 @@
             top: 12px;
             left: 12px;
             float: left;
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.01);
-            border: 1px solid rgba(255, 255, 255, 0.01);
-            color: rgba(255, 255, 255, 0.08);
-            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.5s var(--ease-luxury);
+            transition: all 0.4s ease;
             z-index: 10;
             margin: 12px;
-            backdrop-filter: blur(4px);
         }
 
         .modal-close:hover {
             background: var(--gold-gradient);
-            color: #0B1120;
+            color: #000;
             transform: rotate(90deg);
             border-color: transparent;
         }
 
         .modal-body {
-            padding: 14px 28px 36px;
+            padding: 12px 28px 32px;
         }
+
         .modal-body .modal-header {
             display: flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 14px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.02);
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(191, 149, 63, 0.02);
         }
+
         .modal-body .modal-icon-wrap {
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: rgba(11, 17, 32, 0.25);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(212, 175, 55, 0.02);
+            background: rgba(191, 149, 63, 0.02);
             display: flex;
             align-items: center;
             justify-content: center;
         }
+
         .modal-body .modal-icon-wrap i {
             font-size: 18px;
             color: var(--gold-solid);
         }
+
         .modal-body h2 {
-            font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+            font-size: clamp(1.6rem, 3.2vw, 2.2rem);
             font-weight: 900;
-            font-family: var(--serif-font);
-            letter-spacing: -0.02em;
+            font-family: var(--font-serif);
         }
+
         .modal-body .modal-desc {
-            color: rgba(255, 255, 255, 0.30);
+            color: rgba(255, 255, 255, 0.35);
             font-size: 0.9rem;
             line-height: 2;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
+
         .modal-body .modal-divider {
             width: 32px;
             height: 1.5px;
             background: var(--gold-gradient);
-            margin: 0 0 16px 0;
+            margin: 0 0 14px 0;
             border-radius: 2px;
-            opacity: 0.08;
+            opacity: 0.06;
         }
+
         .modal-body .serv-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6px;
-            margin: 10px 0 16px;
+            margin: 10px 0 14px;
         }
+
         .modal-body .serv-item {
             background: rgba(255, 255, 255, 0.01);
-            border: 1px solid rgba(255, 255, 255, 0.005);
+            border: 1px solid rgba(255, 255, 255, 0.01);
             border-radius: 8px;
             padding: 8px 12px;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.4s var(--ease-luxury);
+            transition: all 0.3s ease;
         }
+
         .modal-body .serv-item:hover {
-            background: rgba(212, 175, 55, 0.005);
-            border-color: rgba(212, 175, 55, 0.01);
+            background: rgba(191, 149, 63, 0.01);
+            border-color: rgba(191, 149, 63, 0.02);
         }
+
         .modal-body .serv-item i {
             color: var(--gold-solid);
             font-size: 11px;
             width: 14px;
             text-align: center;
-            opacity: 0.5;
+            opacity: 0.4;
         }
+
         .modal-body .serv-item span {
-            color: rgba(255, 255, 255, 0.40);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 0.75rem;
         }
+
         .modal-body .highlight {
-            background: rgba(212, 175, 55, 0.005);
+            background: rgba(191, 149, 63, 0.01);
             border-right: 2px solid var(--gold-solid);
-            padding: 12px 16px;
+            padding: 10px 16px;
             border-radius: 0 8px 8px 0;
             margin: 10px 0;
         }
+
         .modal-body .highlight h5 {
             color: #fff;
             font-weight: 700;
             font-size: 0.8rem;
             margin-bottom: 2px;
         }
+
         .modal-body .highlight p {
-            color: rgba(255, 255, 255, 0.20);
+            color: rgba(255, 255, 255, 0.2);
             font-size: 0.8rem;
-            line-height: 1.9;
+            line-height: 1.8;
         }
+
         .modal-body .timeline {
             display: flex;
             flex-direction: column;
@@ -580,129 +715,516 @@
             margin: 10px 0 14px;
             padding-right: 14px;
         }
+
         .modal-body .timeline .step {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 3px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.003);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.01);
         }
+
         .modal-body .timeline .step:last-child {
             border-bottom: none;
         }
+
         .modal-body .timeline .step-num {
             font-size: 0.45rem;
             font-weight: 900;
             color: var(--gold-solid);
-            font-family: var(--serif-font);
+            font-family: var(--font-serif);
             min-width: 20px;
-            opacity: 0.10;
+            opacity: 0.08;
         }
+
         .modal-body .timeline .step-text {
             color: rgba(255, 255, 255, 0.25);
             font-size: 0.75rem;
         }
+
         .modal-body .timeline .step-text strong {
             color: #fff;
             font-weight: 600;
         }
 
         /* ==========================================================
-           RESPONSIVE – متطابق مع about.html
+           RESPONSIVE – نظام شامل لجميع الشاشات
            ========================================================== */
-        @media (max-width: 768px) {
-            .hero {
-                min-height: 40vh;
-                padding-top: 100px;
+
+        /* Container system */
+        .container-custom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        /* Spacing system */
+        .section-spacing {
+            padding-top: 96px;
+            padding-bottom: 96px;
+        }
+
+        .section-spacing-sm {
+            padding-top: 64px;
+            padding-bottom: 64px;
+        }
+
+        /* ==========================================================
+           MEDIA QUERIES – استجابة كاملة
+           ========================================================== */
+
+        /* 1920px+ */
+        @media (min-width: 1921px) {
+            .container-custom {
+                max-width: 1440px;
             }
-            .heading-hero {
-                font-size: clamp(2.2rem, 8vw, 3.2rem);
+            .hero-title {
+                font-size: 5.5rem;
             }
-            .heading-primary {
-                font-size: clamp(1.6rem, 5vw, 2.2rem);
+        }
+
+        /* 1600px - 1920px */
+        @media (max-width: 1920px) and (min-width: 1601px) {
+            .container-custom {
+                max-width: 1280px;
             }
-            .card-glass {
-                padding: 18px 16px;
+            .hero-title {
+                font-size: 5rem;
+            }
+        }
+
+        /* 1536px - 1600px */
+        @media (max-width: 1600px) and (min-width: 1537px) {
+            .container-custom {
+                max-width: 1200px;
+            }
+            .hero-title {
+                font-size: 4.8rem;
+            }
+        }
+
+        /* 1440px - 1536px */
+        @media (max-width: 1536px) and (min-width: 1441px) {
+            .container-custom {
+                max-width: 1200px;
+            }
+            .hero-title {
+                font-size: 4.5rem;
+            }
+        }
+
+        /* 1366px - 1440px (لاب توب قياسي) */
+        @media (max-width: 1440px) and (min-width: 1367px) {
+            .container-custom {
+                max-width: 1100px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .hero-title {
+                font-size: 4.2rem;
+            }
+            .section-spacing {
+                padding-top: 80px;
+                padding-bottom: 80px;
+            }
+            .specialty-card {
+                padding: 24px 20px;
+                min-height: 220px;
+            }
+            .specialty-card .card-title {
+                font-size: 1.05rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.75rem;
+            }
+            .stat-number {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* 1280px - 1366px (لاب توب متوسط) */
+        @media (max-width: 1366px) and (min-width: 1281px) {
+            .container-custom {
+                max-width: 1040px;
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+            .hero-title {
+                font-size: 4rem;
+            }
+            .section-spacing {
+                padding-top: 72px;
+                padding-bottom: 72px;
+            }
+            .specialty-card {
+                padding: 22px 18px;
+                min-height: 210px;
+            }
+            .specialty-card .card-title {
+                font-size: 1rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.7rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        /* 1024px - 1280px (لاب توب صغير / تابلت كبير) */
+        @media (max-width: 1280px) and (min-width: 1025px) {
+            .container-custom {
+                max-width: 960px;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .hero-title {
+                font-size: 3.8rem;
+            }
+            .section-spacing {
+                padding-top: 64px;
+                padding-bottom: 64px;
+            }
+            .specialty-card {
+                padding: 20px 16px;
+                min-height: 200px;
+            }
+            .specialty-card .card-title {
+                font-size: 0.95rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.7rem;
             }
             .stat-number {
                 font-size: 1.8rem;
+            }
+            .specialty-card .icon-wrap {
+                width: 40px;
+                height: 40px;
+            }
+            .specialty-card .icon-wrap i {
+                font-size: 1rem;
+            }
+        }
+
+        /* 992px - 1024px (تابلت) */
+        @media (max-width: 1024px) and (min-width: 993px) {
+            .container-custom {
+                max-width: 900px;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            .section-spacing {
+                padding-top: 56px;
+                padding-bottom: 56px;
+            }
+            .specialty-card {
+                padding: 18px 16px;
+                min-height: 190px;
+            }
+            .specialty-card .card-title {
+                font-size: 0.9rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.65rem;
+            }
+            .stat-number {
+                font-size: 1.6rem;
+            }
+            .specialty-card .icon-wrap {
+                width: 36px;
+                height: 36px;
+            }
+            .specialty-card .icon-wrap i {
+                font-size: 0.9rem;
+            }
+            .specialty-card .card-badge {
+                font-size: 0.35rem;
+                padding: 2px 8px;
+            }
+        }
+
+        /* 768px - 992px (تابلت صغير) */
+        @media (max-width: 992px) and (min-width: 769px) {
+            .container-custom {
+                max-width: 720px;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .hero-title {
+                font-size: 3.2rem;
+            }
+            .section-spacing {
+                padding-top: 48px;
+                padding-bottom: 48px;
+            }
+            .specialty-card {
+                padding: 16px 14px;
+                min-height: 180px;
+            }
+            .specialty-card .card-title {
+                font-size: 0.85rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.6rem;
+            }
+            .stat-number {
+                font-size: 1.4rem;
                 min-width: 36px;
             }
             .stat-label {
                 font-size: 0.55rem;
             }
+            .specialty-card .icon-wrap {
+                width: 32px;
+                height: 32px;
+                margin-bottom: 10px;
+            }
+            .specialty-card .icon-wrap i {
+                font-size: 0.8rem;
+            }
+            .specialty-card .card-badge {
+                font-size: 0.3rem;
+                padding: 2px 6px;
+            }
             .contact-floating {
-                bottom: 16px;
-                right: 16px;
+                bottom: 20px;
+                right: 20px;
                 gap: 10px;
             }
             .whatsapp-float,
             .call-float {
-                width: 48px;
-                height: 48px;
-                font-size: 24px;
-            }
-            .modal-body {
-                padding: 12px 16px 24px;
-            }
-            .modal-body .modal-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            .modal-body .serv-grid {
-                grid-template-columns: 1fr;
-            }
-            .modal-close {
-                top: 8px;
-                left: 8px;
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-                margin: 8px;
-            }
-            .signature-name {
-                font-size: 1.4rem;
+                width: 46px;
+                height: 46px;
+                font-size: 22px;
             }
         }
 
-        @media (max-width: 480px) {
+        /* 640px - 768px (موبايل كبير) */
+        @media (max-width: 768px) and (min-width: 641px) {
+            .container-custom {
+                max-width: 580px;
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            .section-spacing {
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+            .specialty-card {
+                padding: 14px 12px;
+                min-height: 170px;
+            }
+            .specialty-card .card-title {
+                font-size: 0.8rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.55rem;
+                line-height: 1.6;
+            }
             .stat-number {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
                 min-width: 30px;
             }
             .stat-label {
                 font-size: 0.5rem;
             }
-            .card-glass {
-                padding: 14px 12px;
+            .specialty-card .icon-wrap {
+                width: 28px;
+                height: 28px;
+                margin-bottom: 8px;
+            }
+            .specialty-card .icon-wrap i {
+                font-size: 0.7rem;
+            }
+            .specialty-card .card-badge {
+                font-size: 0.25rem;
+                padding: 1px 6px;
+                top: 8px;
+                left: 8px;
+            }
+            .modal-body {
+                padding: 10px 14px 20px;
             }
             .modal-body .serv-grid {
                 grid-template-columns: 1fr;
             }
+            .modal-close {
+                top: 6px;
+                left: 6px;
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+                margin: 6px;
+            }
+            .contact-floating {
+                bottom: 14px;
+                right: 14px;
+                gap: 8px;
+            }
+            .whatsapp-float,
+            .call-float {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
         }
 
-        /* ==========================================================
-           ANIMATION & UTILITIES (مطابق لـ about.html)
-           ========================================================== */
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
+        /* 480px - 640px (موبايل متوسط) */
+        @media (max-width: 640px) and (min-width: 481px) {
+            .container-custom {
+                max-width: 440px;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            .hero-title {
+                font-size: 2.4rem;
+            }
+            .section-spacing {
+                padding-top: 32px;
+                padding-bottom: 32px;
+            }
+            .specialty-card {
+                padding: 12px 10px;
+                min-height: 160px;
+            }
+            .specialty-card .card-title {
+                font-size: 0.75rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.5rem;
+                line-height: 1.5;
+                margin-bottom: 10px;
+            }
+            .specialty-card .card-link {
+                font-size: 0.55rem;
+            }
+            .stat-number {
+                font-size: 1rem;
+                min-width: 24px;
+            }
+            .stat-label {
+                font-size: 0.45rem;
+            }
+            .specialty-card .icon-wrap {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 6px;
+            }
+            .specialty-card .icon-wrap i {
+                font-size: 0.6rem;
+            }
+            .specialty-card .card-badge {
+                font-size: 0.2rem;
+                padding: 1px 4px;
+                top: 6px;
+                left: 6px;
+            }
+            .modal-body .modal-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .modal-body .serv-grid {
+                grid-template-columns: 1fr;
+            }
+            .gold-btn {
+                padding: 12px 24px;
+                font-size: 0.75rem;
+            }
         }
 
-        .reveal-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .auto-colorize {
-            filter: grayscale(100%);
-            transition: filter 3s ease;
-        }
-
-        .auto-colorize.colorized {
-            filter: grayscale(0%);
+        /* 360px - 480px (موبايل صغير) */
+        @media (max-width: 480px) {
+            .container-custom {
+                max-width: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+            .section-spacing {
+                padding-top: 28px;
+                padding-bottom: 28px;
+            }
+            .specialty-card {
+                padding: 10px 8px;
+                min-height: 150px;
+            }
+            .specialty-card .card-title {
+                font-size: 0.7rem;
+            }
+            .specialty-card .card-desc {
+                font-size: 0.45rem;
+                line-height: 1.4;
+                margin-bottom: 8px;
+            }
+            .specialty-card .card-link {
+                font-size: 0.5rem;
+            }
+            .stat-number {
+                font-size: 0.9rem;
+                min-width: 20px;
+            }
+            .stat-label {
+                font-size: 0.4rem;
+            }
+            .specialty-card .icon-wrap {
+                width: 20px;
+                height: 20px;
+                margin-bottom: 4px;
+            }
+            .specialty-card .icon-wrap i {
+                font-size: 0.5rem;
+            }
+            .specialty-card .card-badge {
+                font-size: 0.2rem;
+                padding: 1px 4px;
+                top: 4px;
+                left: 4px;
+            }
+            .modal-body {
+                padding: 8px 10px 16px;
+            }
+            .modal-body .serv-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-close {
+                top: 4px;
+                left: 4px;
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+                margin: 4px;
+            }
+            .gold-btn {
+                padding: 10px 16px;
+                font-size: 0.65rem;
+            }
+            .contact-floating {
+                bottom: 10px;
+                right: 10px;
+                gap: 6px;
+            }
+            .whatsapp-float,
+            .call-float {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+            .footer-social-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 0.9rem;
+            }
         }
 
         /* Reduced motion */
@@ -714,12 +1236,60 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
+            .specialty-card:hover {
+                transform: none !important;
+            }
+            .specialty-card:hover .icon-wrap {
+                transform: none !important;
+            }
+        }
+
+        /* ==========================================================
+           HELPERS – أدوات مساعدة
+           ========================================================== */
+        .no-horizontal-scroll {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        .equal-height-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .equal-height-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 18px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .equal-height-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .equal-height-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .equal-height-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- ========== أيقونات التواصل العائمة ========== -->
+    <!-- ========== FLOATING CONTACT ========== -->
     <div class="contact-floating">
         <a href="https://wa.me/201101076000" target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="واتساب">
             <i class="fab fa-whatsapp"></i>
@@ -729,12 +1299,12 @@
         </a>
     </div>
 
-    <!-- ========== الهيدر ========== -->
+    <!-- ========== HEADER ========== -->
     <header class="fixed w-full z-[100] header-glass" role="banner">
-        <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <nav class="container-custom py-3 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <a href="index.html" aria-label="الرئيسية">
-                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد للمحاماة" class="w-20 h-20 object-contain" width="80" height="80" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/1a1a2e/bf953f?text=شعار'" />
+                    <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد" class="w-20 h-20 object-contain" width="80" height="80" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80/1a1a2e/bf953f?text=شعار'" />
                 </a>
                 <div>
                     <span class="font-bold gold-text serif-font text-2xl">محمود عبد الحميد</span>
@@ -745,7 +1315,7 @@
             <div class="hidden xl:flex items-center gap-6 text-sm font-bold">
                 <a href="index.html" class="nav-link-gold">الرئيسية</a>
                 <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
-                <a href="specialties.html" class="nav-link-gold underline decoration-[#bf953f]" aria-current="page">تخصصاتنا</a>
+                <a href="specialties.html" class="nav-link-gold underline decoration-[#bf953f] decoration-2" aria-current="page">تخصصاتنا</a>
                 <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
                 <a href="blog.html" class="nav-link-gold">المدونة</a>
                 <div class="flex gap-2 mr-2">
@@ -763,7 +1333,7 @@
         </nav>
     </header>
 
-    <!-- ========== القائمة الجانبية ========== -->
+    <!-- ========== MOBILE MENU ========== -->
     <div id="mobile-menu" role="dialog" aria-modal="true">
         <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text" aria-label="إغلاق القائمة">
             <i class="fas fa-times"></i>
@@ -774,30 +1344,31 @@
             <a href="specialties.html" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto" data-close-menu aria-current="page">تخصصاتنا</a>
             <a href="contact.html" class="nav-link-gold" data-close-menu>تواصل معنا</a>
             <a href="blog.html" class="nav-link-gold" data-close-menu>المدونة</a>
-            <div class="h-px bg-white/10 w-full my-4"></div>
+            <div class="h-px bg-white/5 w-full my-4"></div>
             <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto" data-close-menu>تابع قضيتك</a>
             <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto" data-close-menu>حجز موعد</a>
             <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto" data-close-menu>طلب استشارة</a>
         </div>
     </div>
 
-    <!-- ========== الهيرو ========== -->
-    <section class="min-h-[40vh] flex items-center justify-center text-center px-6 pt-20 islamic-pattern-bg" aria-labelledby="page-title">
-        <div class="reveal-on-scroll">
+    <!-- ========== HERO ========== -->
+    <section class="min-h-[40vh] flex items-center justify-center text-center px-6 pt-24 pb-8 islamic-pattern-bg" aria-labelledby="page-title">
+        <div class="reveal-on-scroll max-w-4xl mx-auto">
             <span class="block gold-text text-xs sm:text-sm font-black tracking-[0.3em] uppercase">Our Expertise</span>
-            <h1 id="page-title" class="text-4xl sm:text-5xl md:text-6xl font-black serif-font gold-text drop-shadow-2xl">
+            <h1 id="page-title" class="hero-title text-4xl sm:text-5xl md:text-6xl font-black serif-font gold-text drop-shadow-2xl">
                 تخصصاتنا القانونية
             </h1>
-            <p class="text-white/80 text-lg max-w-3xl mx-auto mt-4 leading-relaxed">
+            <div class="w-12 h-0.5 bg-gold-solid/20 mx-auto mt-4 mb-4"></div>
+            <p class="text-white/70 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
                 نمثل الأفراد والشركات والمؤسسات أمام جميع المحاكم المصرية،
                 بخبرة تمتد لأكثر من <strong class="text-white">22 عاماً</strong> من التميز القضائي.
             </p>
         </div>
     </section>
 
-    <!-- ========== الإحصائيات (مطابقة لـ about.html) ========== -->
+    <!-- ========== STATS ========== -->
     <section class="stats-section" aria-label="إحصائيات">
-        <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
+        <div class="container-custom grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
             <div class="reveal-on-scroll">
                 <div class="stat-number" data-count="22">0</div>
                 <p class="stat-label">عاماً من الخبرة</p>
@@ -817,15 +1388,15 @@
         </div>
     </section>
 
-    <!-- ========== المحتوى الرئيسي ========== -->
-    <main class="py-20 px-6 max-w-7xl mx-auto overflow-hidden">
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="section-spacing container-custom">
 
-        <!-- ===== 1. مقدمة التخصصات ===== -->
-        <article class="grid lg:grid-cols-2 gap-12 items-center mb-24">
-            <div class="rounded-3xl overflow-hidden reveal-on-scroll shadow-2xl gold-border bg-black/40">
+        <!-- ===== مقدمة التخصصات ===== -->
+        <div class="grid lg:grid-cols-2 gap-12 items-center mb-24">
+            <div class="rounded-3xl overflow-hidden reveal-on-scroll shadow-2xl gold-border bg-black/30">
                 <img src="about.png" alt="مؤسسة محمود عبد الحميد للمحاماة" class="w-full h-auto auto-colorize" loading="lazy" width="800" height="500" onerror="this.onerror=null;this.src='https://via.placeholder.com/800x500/1a1a2e/bf953f?text=%D8%AA%D8%AE%D8%B5%D8%B5%D8%A7%D8%AA'">
             </div>
-            <div class="space-y-5 text-white/95 text-lg md:text-xl leading-relaxed text-justify reveal-on-scroll">
+            <div class="space-y-5 text-white/90 text-lg leading-relaxed text-justify reveal-on-scroll">
                 <h2 class="text-3xl md:text-4xl font-black serif-font gold-text">مجالات خبرتنا</h2>
                 <p>
                     تقدم مؤسسة محمود عبد الحميد للمحاماة خدمات قانونية متكاملة تغطي مختلف التخصصات القانونية،
@@ -841,227 +1412,231 @@
                     مع الالتزام بأخلاقيات المهنة والسرية التامة.
                 </p>
             </div>
-        </article>
+        </div>
 
-        <!-- ===== 2. فلسفة التعامل مع القضايا ===== -->
-        <section class="mb-24">
-            <div class="grid lg:grid-cols-2 gap-8">
-                <div class="card-glass p-8 md:p-10 gold-border reveal-on-scroll">
-                    <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3">
-                        <i class="fas fa-lightbulb text-gold-solid"></i> فلسفتنا في التعامل
-                    </h2>
-                    <p class="text-white/95 text-lg md:text-xl leading-relaxed text-justify">
-                        نؤمن أن كل قضية فريدة بطبيعتها، ولذلك لا نعتمد على حلول جاهزة أو نماذج موحدة.
-                        بل ندرس كل ملف بصورة مستقلة، ونحلل جوانبه القانونية بدقة، لنضع استراتيجية
-                        مخصصة تحقق أفضل النتائج الممكنة.
-                    </p>
-                    <p class="text-white/95 text-lg md:text-xl leading-relaxed text-justify mt-4">
-                        كما نؤمن بأن دور المحامي يتجاوز التمثيل القضائي، ليشمل تقديم الرأي القانوني،
-                        وإدارة المخاطر، والمساهمة في حماية الحقوق قبل نشوء النزاعات.
-                    </p>
-                </div>
-
-                <div class="card-glass p-8 md:p-10 gold-border reveal-on-scroll" style="transition-delay:150ms">
-                    <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3">
-                        <i class="fas fa-sitemap text-gold-solid"></i> منهجية العمل
-                    </h2>
-                    <p class="text-white/90 text-lg leading-relaxed text-justify mb-6">
-                        نتبع منهجية قانونية منظمة في التعامل مع كل ملف، تشمل:
-                    </p>
-                    <div class="space-y-4">
-                        <div>
-                            <h3 class="text-xl font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-2xl">١</span> دراسة الملف</h3>
-                            <p class="text-white/80 text-base pr-8">فهم شامل للوقائع والمستندات والمركز القانوني.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-2xl">٢</span> التحليل القانوني</h3>
-                            <p class="text-white/80 text-base pr-8">مراجعة النصوص والمبادئ القضائية ذات الصلة.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-2xl">٣</span> تقييم الخيارات</h3>
-                            <p class="text-white/80 text-base pr-8">تحليل البدائل وتقدير المخاطر والفوائد.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-2xl">٤</span> الإستراتيجية</h3>
-                            <p class="text-white/80 text-base pr-8">وضع خطة قانونية تتناسب مع أهداف العميل.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-2xl">٥</span> التنفيذ والمتابعة</h3>
-                            <p class="text-white/80 text-base pr-8">إدارة الإجراءات وإبقاء العميل على اطلاع.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== 3. ما يميز خدماتنا ===== -->
-        <section class="mb-24 reveal-on-scroll">
-            <div class="card-glass gold-border p-8 md:p-12 rounded-3xl relative overflow-hidden">
-                <i class="fas fa-gem absolute -right-10 -bottom-10 text-[150px] opacity-5 text-[#bf953f]"></i>
-                <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3 relative z-10">
-                    <i class="fas fa-medal text-gold-solid"></i> ما يميز خدماتنا
+        <!-- ===== فلسفة التعامل ===== -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-24">
+            <div class="card-glass p-8 md:p-10 gold-border reveal-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3">
+                    <i class="fas fa-lightbulb text-gold-solid"></i> فلسفتنا في التعامل
                 </h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0 gold-glow-icon"></i>
-                        <p class="text-white/90 text-base md:text-lg leading-relaxed">دراسة متعمقة لكل قضية قبل تقديم أي إجراء.</p>
+                <p class="text-white/90 text-lg md:text-xl leading-relaxed text-justify">
+                    نؤمن أن كل قضية فريدة بطبيعتها، ولذلك لا نعتمد على حلول جاهزة أو نماذج موحدة.
+                    بل ندرس كل ملف بصورة مستقلة، ونحلل جوانبه القانونية بدقة، لنضع استراتيجية
+                    مخصصة تحقق أفضل النتائج الممكنة.
+                </p>
+                <p class="text-white/90 text-lg md:text-xl leading-relaxed text-justify mt-4">
+                    كما نؤمن بأن دور المحامي يتجاوز التمثيل القضائي، ليشمل تقديم الرأي القانوني،
+                    وإدارة المخاطر، والمساهمة في حماية الحقوق قبل نشوء النزاعات.
+                </p>
+            </div>
+
+            <div class="card-glass p-8 md:p-10 gold-border reveal-on-scroll" style="transition-delay:150ms">
+                <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3">
+                    <i class="fas fa-sitemap text-gold-solid"></i> منهجية العمل
+                </h2>
+                <p class="text-white/80 text-lg leading-relaxed text-justify mb-6">
+                    نتبع منهجية قانونية منظمة في التعامل مع كل ملف، تشمل:
+                </p>
+                <div class="space-y-3">
+                    <div>
+                        <h3 class="text-lg font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-xl">١</span> دراسة الملف</h3>
+                        <p class="text-white/60 text-sm pr-8">فهم شامل للوقائع والمستندات والمركز القانوني.</p>
                     </div>
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0 gold-glow-icon"></i>
-                        <p class="text-white/90 text-base md:text-lg leading-relaxed">حلول قانونية مبتكرة وليست نمطية.</p>
+                    <div>
+                        <h3 class="text-lg font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-xl">٢</span> التحليل القانوني</h3>
+                        <p class="text-white/60 text-sm pr-8">مراجعة النصوص والمبادئ القضائية ذات الصلة.</p>
                     </div>
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0 gold-glow-icon"></i>
-                        <p class="text-white/90 text-base md:text-lg leading-relaxed">اعتماد على المبادئ القضائية المستقرة وأحكام النقض.</p>
+                    <div>
+                        <h3 class="text-lg font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-xl">٣</span> تقييم الخيارات</h3>
+                        <p class="text-white/60 text-sm pr-8">تحليل البدائل وتقدير المخاطر والفوائد.</p>
                     </div>
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0 gold-glow-icon"></i>
-                        <p class="text-white/90 text-base md:text-lg leading-relaxed">عرض بدائل قانونية مع توضيح مزايا ومخاطر كل خيار.</p>
+                    <div>
+                        <h3 class="text-lg font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-xl">٤</span> الإستراتيجية</h3>
+                        <p class="text-white/60 text-sm pr-8">وضع خطة قانونية تتناسب مع أهداف العميل.</p>
                     </div>
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0 gold-glow-icon"></i>
-                        <p class="text-white/90 text-base md:text-lg leading-relaxed">متابعة منظمة وإبقاء العميل على اطلاع دائم.</p>
+                    <div>
+                        <h3 class="text-lg font-bold gold-text flex items-center gap-2"><span class="text-gold-solid text-xl">٥</span> التنفيذ والمتابعة</h3>
+                        <p class="text-white/60 text-sm pr-8">إدارة الإجراءات وإبقاء العميل على اطلاع.</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- ===== 4. التخصصات (بطاقات) ===== -->
+        <!-- ===== ما يميز خدماتنا ===== -->
+        <div class="card-glass gold-border p-8 md:p-12 rounded-3xl relative overflow-hidden mb-24 reveal-on-scroll">
+            <i class="fas fa-gem absolute -right-10 -bottom-10 text-[150px] opacity-5 text-[#bf953f]"></i>
+            <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3 relative z-10">
+                <i class="fas fa-medal text-gold-solid"></i> ما يميز خدماتنا
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0"></i>
+                    <p class="text-white/80 text-base md:text-lg leading-relaxed">دراسة متعمقة لكل قضية قبل تقديم أي إجراء.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0"></i>
+                    <p class="text-white/80 text-base md:text-lg leading-relaxed">حلول قانونية مبتكرة وليست نمطية.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0"></i>
+                    <p class="text-white/80 text-base md:text-lg leading-relaxed">اعتماد على المبادئ القضائية المستقرة وأحكام النقض.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0"></i>
+                    <p class="text-white/80 text-base md:text-lg leading-relaxed">عرض بدائل قانونية مع توضيح مزايا ومخاطر كل خيار.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-circle-check text-gold-solid text-xl mt-1 shrink-0"></i>
+                    <p class="text-white/80 text-base md:text-lg leading-relaxed">متابعة منظمة وإبقاء العميل على اطلاع دائم.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== التخصصات ===== -->
         <section class="mb-24">
             <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12 reveal-on-scroll">تخصصاتنا القانونية</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6">
-                <!-- بطاقة 1: المنازعات المدنية -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="civil">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-gavel"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">المنازعات المدنية</h3>
-                    <p class="text-white/70 text-sm">تمثيل الأفراد والشركات في النزاعات المدنية والعقارية والتعاقدية.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+
+            <div class="equal-height-grid">
+                <!-- 1. المنازعات المدنية -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="civil">
+                    <span class="card-badge">الأكثر طلباً</span>
+                    <div class="icon-wrap"><i class="fas fa-gavel"></i></div>
+                    <h3 class="card-title">المنازعات المدنية</h3>
+                    <p class="card-desc">تمثيل الأفراد والشركات في النزاعات المدنية والعقارية والتعاقدية.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 2: المنازعات التجارية -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="commercial" style="transition-delay:100ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-balance-scale"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">المنازعات التجارية</h3>
-                    <p class="text-white/70 text-sm">حل النزاعات التجارية، قضايا الشركات، والأوراق التجارية.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 2. المنازعات التجارية -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="commercial" style="transition-delay:100ms">
+                    <span class="card-badge">الشركات</span>
+                    <div class="icon-wrap"><i class="fas fa-balance-scale"></i></div>
+                    <h3 class="card-title">المنازعات التجارية</h3>
+                    <p class="card-desc">حل النزاعات التجارية، قضايا الشركات، والأوراق التجارية.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 3: الأحوال الشخصية -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="family" style="transition-delay:200ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-users"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">الأحوال الشخصية</h3>
-                    <p class="text-white/70 text-sm">قضايا الأسرة، الطلاق، النفقة، الحضانة، والميراث.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 3. الأحوال الشخصية -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="family" style="transition-delay:200ms">
+                    <span class="card-badge">الأسرة</span>
+                    <div class="icon-wrap"><i class="fas fa-users"></i></div>
+                    <h3 class="card-title">الأحوال الشخصية</h3>
+                    <p class="card-desc">قضايا الأسرة، الطلاق، النفقة، الحضانة، والميراث.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 4: القضايا الجنائية -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="criminal" style="transition-delay:300ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-shield-alt"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">القضايا الجنائية</h3>
-                    <p class="text-white/70 text-sm">الدفاع في القضايا الجنائية الكبرى والجنح والطعن بالنقض.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 4. القضايا الجنائية -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="criminal" style="transition-delay:300ms">
+                    <span class="card-badge">الدفاع</span>
+                    <div class="icon-wrap"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="card-title">القضايا الجنائية</h3>
+                    <p class="card-desc">الدفاع في القضايا الجنائية الكبرى والجنح والطعن بالنقض.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 5: المنازعات الإدارية -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="admin" style="transition-delay:400ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-building"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">المنازعات الإدارية</h3>
-                    <p class="text-white/70 text-sm">الطعن في القرارات الإدارية والتعويضات ضد الجهات الحكومية.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 5. المنازعات الإدارية -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="admin" style="transition-delay:400ms">
+                    <span class="card-badge">الحكومي</span>
+                    <div class="icon-wrap"><i class="fas fa-building"></i></div>
+                    <h3 class="card-title">المنازعات الإدارية</h3>
+                    <p class="card-desc">الطعن في القرارات الإدارية والتعويضات ضد الجهات الحكومية.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 6: صياغة العقود -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="contracts" style="transition-delay:500ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-file-contract"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">صياغة العقود</h3>
-                    <p class="text-white/70 text-sm">إعداد ومراجعة العقود التجارية وعقود الاستثمار.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 6. صياغة العقود -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="contracts" style="transition-delay:500ms">
+                    <span class="card-badge">استشاري</span>
+                    <div class="icon-wrap"><i class="fas fa-file-contract"></i></div>
+                    <h3 class="card-title">صياغة العقود</h3>
+                    <p class="card-desc">إعداد ومراجعة العقود التجارية وعقود الاستثمار.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 7: قانون العمل -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="labor" style="transition-delay:600ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-briefcase"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">قانون العمل</h3>
-                    <p class="text-white/70 text-sm">تمثيل العمال وأصحاب العمل في قضايا الفصل والمستحقات.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 7. قانون العمل -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="labor" style="transition-delay:600ms">
+                    <span class="card-badge">العمال</span>
+                    <div class="icon-wrap"><i class="fas fa-briefcase"></i></div>
+                    <h3 class="card-title">قانون العمل</h3>
+                    <p class="card-desc">تمثيل العمال وأصحاب العمل في قضايا الفصل والمستحقات.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 8: التحكيم والوساطة -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="arbitration" style="transition-delay:700ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-hand-holding-usd"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">التحكيم والوساطة</h3>
-                    <p class="text-white/70 text-sm">حل النزاعات التجارية والاستثمارية عبر التحكيم.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 8. التحكيم والوساطة -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="arbitration" style="transition-delay:700ms">
+                    <span class="card-badge">بدائل التقاضي</span>
+                    <div class="icon-wrap"><i class="fas fa-hand-holding-usd"></i></div>
+                    <h3 class="card-title">التحكيم والوساطة</h3>
+                    <p class="card-desc">حل النزاعات التجارية والاستثمارية عبر التحكيم.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
 
-                <!-- بطاقة 9: الدستورية العليا -->
-                <div class="specialty-card card-glass p-6 rounded-2xl gold-border text-center reveal-on-scroll" data-specialty="constitutional" style="transition-delay:800ms">
-                    <div class="icon-wrap mx-auto mb-3"><i class="fas fa-university"></i></div>
-                    <h3 class="text-lg font-bold text-white mb-1">الدستورية العليا</h3>
-                    <p class="text-white/70 text-sm">الطعون بعدم دستورية القوانين أمام المحكمة الدستورية العليا.</p>
-                    <span class="text-gold-solid text-xs font-bold mt-2 inline-block">اكتشف المزيد →</span>
+                <!-- 9. الدستورية العليا -->
+                <div class="specialty-card reveal-on-scroll" data-specialty="constitutional" style="transition-delay:800ms">
+                    <span class="card-badge">دستوري</span>
+                    <div class="icon-wrap"><i class="fas fa-university"></i></div>
+                    <h3 class="card-title">الدستورية العليا</h3>
+                    <p class="card-desc">الطعون بعدم دستورية القوانين أمام المحكمة الدستورية العليا.</p>
+                    <span class="card-link">اكتشف المزيد <i class="fas fa-arrow-left"></i></span>
                 </div>
             </div>
         </section>
 
-        <!-- ===== 5. لماذا يختارنا العملاء ===== -->
+        <!-- ===== لماذا يختارنا العملاء ===== -->
         <section class="mb-24 reveal-on-scroll">
             <h2 class="text-4xl md:text-5xl font-black serif-font gold-text text-center mb-12">لماذا يختارنا العملاء؟</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
                 <div class="card-glass p-6 rounded-2xl gold-border text-center">
                     <i class="fas fa-clock text-3xl gold-text mb-2"></i>
                     <h4 class="text-white font-bold">خبرة تتجاوز 22 عاماً</h4>
-                    <p class="text-white/60 text-sm">سنوات من التميز القضائي</p>
+                    <p class="text-white/50 text-sm">سنوات من التميز القضائي</p>
                 </div>
                 <div class="card-glass p-6 rounded-2xl gold-border text-center">
                     <i class="fas fa-gavel text-3xl gold-text mb-2"></i>
                     <h4 class="text-white font-bold">جميع درجات التقاضي</h4>
-                    <p class="text-white/60 text-sm">من المحاكم الجزئية إلى الدستورية</p>
+                    <p class="text-white/50 text-sm">من المحاكم الجزئية إلى الدستورية</p>
                 </div>
                 <div class="card-glass p-6 rounded-2xl gold-border text-center">
                     <i class="fas fa-bullseye text-3xl gold-text mb-2"></i>
                     <h4 class="text-white font-bold">حلول قانونية استراتيجية</h4>
-                    <p class="text-white/60 text-sm">خطط مخصصة لكل قضية</p>
+                    <p class="text-white/50 text-sm">خطط مخصصة لكل قضية</p>
                 </div>
                 <div class="card-glass p-6 rounded-2xl gold-border text-center">
                     <i class="fas fa-lock text-3xl gold-text mb-2"></i>
                     <h4 class="text-white font-bold">سرية واحترافية كاملة</h4>
-                    <p class="text-white/60 text-sm">حماية المعلومات والخصوصية</p>
+                    <p class="text-white/50 text-sm">حماية المعلومات والخصوصية</p>
                 </div>
             </div>
         </section>
 
-        <!-- ===== 6. التزامنا ===== -->
-        <section class="mb-12 reveal-on-scroll">
-            <div class="card-glass gold-border p-8 md:p-12 rounded-3xl relative overflow-hidden">
-                <i class="fas fa-handshake absolute -right-10 -bottom-10 text-[150px] opacity-5 text-[#bf953f]"></i>
-                <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3 relative z-10">
-                    <i class="fas fa-check-circle text-gold-solid"></i> التزامنا تجاه عملائنا
-                </h2>
-                <div class="space-y-4 relative z-10">
-                    <p class="text-white/95 text-lg md:text-xl leading-relaxed text-justify">
-                        تلتزم مؤسسة محمود عبد الحميد للمحاماة بتقديم خدمات قانونية تقوم على العلم والخبرة والانضباط،
-                        مع احترام خصوصية العملاء والمحافظة على سرية المعلومات، والعمل وفق أحكام القانون وأخلاقيات مهنة المحاماة.
-                    </p>
-                    <p class="text-white/90 text-lg md:text-xl leading-relaxed text-justify">
-                        ونؤمن بأن الثقة التي يمنحها العميل لمؤسستنا هي مسؤولية مهنية وأخلاقية تستوجب بذل أقصى درجات
-                        العناية والاجتهاد في كل قضية أو استشارة.
-                    </p>
-                </div>
+        <!-- ===== التزامنا ===== -->
+        <div class="card-glass gold-border p-8 md:p-12 rounded-3xl relative overflow-hidden mb-12 reveal-on-scroll">
+            <i class="fas fa-handshake absolute -right-10 -bottom-10 text-[150px] opacity-5 text-[#bf953f]"></i>
+            <h2 class="text-3xl md:text-4xl font-black serif-font gold-text mb-6 flex items-center gap-3 relative z-10">
+                <i class="fas fa-check-circle text-gold-solid"></i> التزامنا تجاه عملائنا
+            </h2>
+            <div class="space-y-4 relative z-10">
+                <p class="text-white/90 text-lg md:text-xl leading-relaxed text-justify">
+                    تلتزم مؤسسة محمود عبد الحميد للمحاماة بتقديم خدمات قانونية تقوم على العلم والخبرة والانضباط،
+                    مع احترام خصوصية العملاء والمحافظة على سرية المعلومات، والعمل وفق أحكام القانون وأخلاقيات مهنة المحاماة.
+                </p>
+                <p class="text-white/80 text-lg md:text-xl leading-relaxed text-justify">
+                    ونؤمن بأن الثقة التي يمنحها العميل لمؤسستنا هي مسؤولية مهنية وأخلاقية تستوجب بذل أقصى درجات
+                    العناية والاجتهاد في كل قضية أو استشارة.
+                </p>
             </div>
-        </section>
+        </div>
 
         <!-- ===== أزرار التواصل ===== -->
-        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-20 reveal-on-scroll">
+        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8 reveal-on-scroll">
             <a href="contact.html?tab=consult" class="gold-btn px-10 py-4 rounded-xl text-lg font-black">طلب استشارة فورية</a>
             <a href="contact.html?tab=visit" class="visit-btn px-10 py-4 rounded-xl text-lg font-bold">حجز موعد مقابلة</a>
         </div>
     </main>
 
-    <!-- ========== الفوتر ========== -->
-    <footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center" role="contentinfo">
-        <div class="max-w-7xl mx-auto px-6">
-            <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد للمحاماة" class="w-24 h-24 object-contain mx-auto mb-4 opacity-90" width="96" height="96" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/96x96/1a1a2e/bf953f?text=شعار'" />
+    <!-- ========== FOOTER ========== -->
+    <footer class="pt-16 pb-8 border-t border-gold-solid/20 bg-black/80 backdrop-blur-xl text-center" role="contentinfo">
+        <div class="container-custom">
+            <img src="logo.png" alt="شعار مؤسسة محمود عبد الحميد للمحاماة" class="w-24 h-24 object-contain mx-auto mb-4 opacity-80" width="96" height="96" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/96x96/1a1a2e/bf953f?text=شعار'" />
             <h2 class="text-3xl font-black gold-text serif-font">مؤسسة محمود عبد الحميد المحامي</h2>
             <p class="text-gray-400 font-medium mb-8">التميز في المحاماة والاستشارات القانونية</p>
             <div class="flex justify-center gap-6 mb-10">
@@ -1079,11 +1654,11 @@
                 <a href="contact.html" class="hover:text-gold-solid transition">اتصل بنا</a>
                 <a href="blog.html" class="hover:text-gold-solid transition">المدونة القانونية</a>
             </nav>
-            <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/20 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
+            <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/10 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
         </div>
     </footer>
 
-    <!-- ========== المودال (خاص بالتخصصات) ========== -->
+    <!-- ========== LUXURY MODAL ========== -->
     <div id="luxury-modal" class="luxury-modal" role="dialog" aria-modal="true">
         <div class="modal-box">
             <button id="modal-close" class="modal-close" aria-label="إغلاق"><i class="fas fa-times"></i></button>
@@ -1091,13 +1666,13 @@
         </div>
     </div>
 
-    <!-- ========== السكريبت ========== -->
+    <!-- ========== JAVASCRIPT ========== -->
     <script>
         (function() {
             "use strict";
 
             // ============================================================
-            // DATA – التخصصات (خاصة بصفحة تخصصاتنا)
+            // DATA – التخصصات
             // ============================================================
             const specialtiesData = {
                 civil: {
@@ -1255,6 +1830,7 @@
             const modal = document.getElementById('luxury-modal');
             const modalClose = document.getElementById('modal-close');
             const modalContent = document.getElementById('modal-content');
+            const statNumbers = document.querySelectorAll('.stat-number');
 
             // ============================================================
             // BUILD MODAL
@@ -1337,22 +1913,23 @@
             // ============================================================
             // EVENTS
             // ============================================================
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const key = card.getAttribute('data-specialty');
+            cards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    var key = this.getAttribute('data-specialty');
                     openModal(key);
                 });
             });
 
             modalClose.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-            document.addEventListener('keydown', (e) => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+            document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') closeModal();
                 if (modal.classList.contains('active')) {
-                    const focusable = modal.querySelectorAll(
-                        'button, a, [tabindex]:not([tabindex="-1"])');
-                    const first = focusable[0];
-                    const last = focusable[focusable.length - 1];
+                    var focusable = modal.querySelectorAll('button, a, [tabindex]:not([tabindex="-1"])');
+                    var first = focusable[0];
+                    var last = focusable[focusable.length - 1];
                     if (e.key === 'Tab') {
                         if (e.shiftKey && document.activeElement === first) {
                             e.preventDefault();
@@ -1368,18 +1945,19 @@
             // ============================================================
             // MOBILE MENU
             // ============================================================
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuToggle = document.getElementById('menu-toggle');
-            const menuCloseBtn = document.getElementById('menu-close');
+            var mobileMenu = document.getElementById('mobile-menu');
+            var menuToggle = document.getElementById('menu-toggle');
+            var menuCloseBtn = document.getElementById('menu-close');
 
-            // closeMenu function needed for inline onclick
             window.closeMenu = function() {
-                if (mobileMenu) { mobileMenu.classList.remove('active');
-                    document.body.style.overflow = ''; }
+                if (mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             };
 
             if (menuToggle) {
-                menuToggle.addEventListener('click', () => {
+                menuToggle.addEventListener('click', function() {
                     mobileMenu.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 });
@@ -1388,35 +1966,37 @@
                 menuCloseBtn.addEventListener('click', closeMenu);
             }
 
-            // Close menu via data-close-menu attribute
-            document.querySelectorAll('[data-close-menu]').forEach(el => el.addEventListener('click', closeMenu));
+            document.querySelectorAll('[data-close-menu]').forEach(function(el) {
+                el.addEventListener('click', closeMenu);
+            });
 
             // ============================================================
-            // REVEAL ON SCROLL (مطابق لـ about.html)
+            // REVEAL ON SCROLL
             // ============================================================
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+            document.querySelectorAll('.reveal-on-scroll').forEach(function(el) {
+                observer.observe(el);
+            });
 
             // ============================================================
-            // STATS COUNTER (مطابق لـ about.html)
+            // STATS COUNTER
             // ============================================================
-            const statNumbers = document.querySelectorAll('.stat-number');
-            const statObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+            var statObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
-                        const el = entry.target;
-                        const target = parseInt(el.getAttribute('data-count'), 10);
+                        var el = entry.target;
+                        var target = parseInt(el.getAttribute('data-count'), 10);
                         if (isNaN(target) || target === 0) return;
-                        let startTime = null;
-                        const duration = 2000;
+                        var startTime = null;
+                        var duration = 2000;
 
                         function easeOut(t) {
                             return 1 - Math.pow(1 - t, 3);
@@ -1424,9 +2004,9 @@
 
                         function updateCounter(timestamp) {
                             if (!startTime) startTime = timestamp;
-                            const progress = Math.min((timestamp - startTime) / duration, 1);
-                            const easedProgress = easeOut(progress);
-                            const current = Math.floor(easedProgress * target);
+                            var progress = Math.min((timestamp - startTime) / duration, 1);
+                            var easedProgress = easeOut(progress);
+                            var current = Math.floor(easedProgress * target);
                             el.textContent = current;
                             if (progress < 1) {
                                 requestAnimationFrame(updateCounter);
@@ -1440,14 +2020,19 @@
                 });
             }, { threshold: 0.3 });
 
-            statNumbers.forEach(el => statObserver.observe(el));
+            statNumbers.forEach(function(el) {
+                statObserver.observe(el);
+            });
 
             // ============================================================
-            // AUTO-COLORIZE IMAGES (مطابق لـ about.html)
+            // AUTO-COLORIZE
             // ============================================================
-            setTimeout(() => {
-                document.querySelectorAll('.auto-colorize').forEach(img => img.classList.add('colorized'));
+            setTimeout(function() {
+                document.querySelectorAll('.auto-colorize').forEach(function(img) {
+                    img.classList.add('colorized');
+                });
             }, 3000);
+
         })();
     </script>
 </body>

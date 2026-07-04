@@ -259,7 +259,7 @@
         }
 
         /* ==========================================================
-               HEADER
+               HEADER (مع زر "اتصل بنا")
                ========================================================== */
         .site-header {
             position: fixed;
@@ -384,6 +384,25 @@
             transform: translateY(-2px);
         }
 
+        /* === زر "اتصل بنا" الجديد في الهيدر === */
+        .header-actions .btn-contact {
+            padding: 8px 18px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            background: transparent;
+            transition: all 0.4s var(--ease-out);
+            font-family: var(--font-ar);
+        }
+        .header-actions .btn-contact:hover {
+            border-color: var(--matte-gold);
+            background: rgba(176, 141, 87, 0.08);
+            color: var(--matte-gold);
+            transform: translateY(-2px);
+        }
+
         .menu-toggle {
             display: none;
             font-size: 1.4rem;
@@ -445,7 +464,7 @@
             flex-direction: column;
             gap: 0.6rem;
             width: 100%;
-            max-width: 240px;
+            max-width: 260px;
             margin-top: 0.5rem;
         }
         .mobile-menu .actions .btn-gold {
@@ -460,6 +479,7 @@
             width: 100%;
             text-align: center;
             border-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
         }
 
         /* ==========================================================
@@ -608,6 +628,8 @@
             padding: 4px 16px;
             border-radius: 6px;
             transition: all 0.4s var(--ease-out);
+            background: transparent;
+            cursor: pointer;
         }
         .action-card .btn-action:hover {
             background: var(--matte-gold);
@@ -702,7 +724,7 @@
         }
 
         /* ==========================================================
-               ABOUT + WHY (مدمجين)
+               ABOUT + WHY
                ========================================================== */
         .about-why-grid {
             display: grid;
@@ -805,7 +827,7 @@
         }
 
         /* ==========================================================
-               PRACTICE AREAS (تم التعديل: مجالات الممارسة القانونية)
+               PRACTICE AREAS
                ========================================================== */
         .practice-grid {
             display: grid;
@@ -966,7 +988,7 @@
         }
 
         /* ==========================================================
-               EXPERIENCE / SECTORS (تم التعديل: القطاعات التي نخدمها)
+               EXPERIENCE / SECTORS
                ========================================================== */
         .experience-grid {
             display: grid;
@@ -1131,163 +1153,7 @@
         }
 
         /* ==========================================================
-               MODAL
-               ========================================================== */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 3000;
-            background: rgba(11, 17, 27, 0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal {
-            background: var(--pure-white);
-            border-radius: 16px;
-            max-width: 560px;
-            width: 100%;
-            padding: 2.5rem 2rem;
-            position: relative;
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.2);
-            animation: modalFade 0.4s var(--ease-out);
-        }
-        @keyframes modalFade {
-            from {
-                opacity: 0;
-                transform: scale(0.96) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            font-size: 1.5rem;
-            color: rgba(34, 34, 34, 0.3);
-            background: none;
-            border: none;
-            transition: color 0.3s ease;
-        }
-        .modal-close:hover {
-            color: var(--charcoal);
-        }
-        .modal h2 {
-            font-family: var(--font-serif);
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--charcoal);
-            margin-bottom: 0.2rem;
-        }
-        .modal .sub {
-            font-size: 0.9rem;
-            color: rgba(34, 34, 34, 0.5);
-            font-weight: 300;
-            margin-bottom: 1.5rem;
-        }
-        .modal .form-group {
-            margin-bottom: 1rem;
-        }
-        .modal .form-group label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: rgba(34, 34, 34, 0.6);
-            margin-bottom: 0.2rem;
-        }
-        .modal .form-group input,
-        .modal .form-group select {
-            width: 100%;
-            padding: 0.6rem 0.8rem;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: var(--font-ar);
-            background: var(--light-gray);
-            transition: border-color 0.3s ease;
-        }
-        .modal .form-group input:focus,
-        .modal .form-group select:focus {
-            outline: none;
-            border-color: var(--matte-gold);
-            box-shadow: 0 0 0 2px rgba(176, 141, 87, 0.1);
-        }
-        .modal .btn-submit {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            background: var(--matte-gold);
-            color: #000;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-            cursor: pointer;
-            margin-top: 0.5rem;
-        }
-        .modal .btn-submit:hover {
-            background: #c4a06a;
-        }
-
-        .modal-success {
-            display: none;
-            text-align: center;
-            padding: 1rem 0;
-        }
-        .modal-success.active {
-            display: block;
-        }
-        .modal-success .icon {
-            font-size: 3rem;
-            color: var(--matte-gold);
-            margin-bottom: 0.5rem;
-        }
-        .modal-success h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--charcoal);
-            margin-bottom: 0.3rem;
-        }
-        .modal-success p {
-            color: rgba(34, 34, 34, 0.5);
-            font-weight: 300;
-            line-height: 1.7;
-            font-size: 0.95rem;
-            margin-bottom: 1.2rem;
-        }
-        .modal-success .btn-whatsapp-success {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            background: var(--deep-navy);
-            color: #fff;
-            font-weight: 700;
-            border: 1px solid transparent;
-            transition: all 0.4s var(--ease-out);
-        }
-        .modal-success .btn-whatsapp-success i {
-            font-size: 1.2rem;
-            color: #fff;
-        }
-        .modal-success .btn-whatsapp-success:hover {
-            border-color: var(--matte-gold);
-            background: #1a3a5c;
-            transform: translateY(-2px);
-        }
-
-        /* ==========================================================
-               FLOATING WHATSAPP (مُحسَّن: أخضر مع خلفية متغيرة)
+               FLOATING WHATSAPP (فقط واتساب)
                ========================================================== */
         .float-whatsapp {
             position: fixed;
@@ -1306,6 +1172,8 @@
             background: rgba(37, 211, 102, 0.85);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
+            text-decoration: none;
+            color: #fff;
         }
         .float-whatsapp i {
             font-size: 1.8rem;
@@ -1370,6 +1238,9 @@
                 display: none;
             }
             .header-actions .btn-appointment {
+                display: none;
+            }
+            .header-actions .btn-contact {
                 display: none;
             }
             .menu-toggle {
@@ -1457,9 +1328,6 @@
                 max-width: 300px;
                 text-align: center;
             }
-            .modal {
-                padding: 1.8rem 1.2rem;
-            }
             .float-whatsapp {
                 width: 44px;
                 height: 44px;
@@ -1511,14 +1379,14 @@
 <body>
 
     <!-- ==========================================================
-    FLOATING WHATSAPP (أخضر مع خلفية متغيرة عبر JS)
+    FLOATING WHATSAPP (فقط واتساب – بدون زر اتصال)
     ========================================================== -->
     <a href="https://wa.me/201101076000" target="_blank" rel="noopener" class="float-whatsapp" id="whatsappFloat" aria-label="تواصل عبر واتساب">
         <i class="fab fa-whatsapp"></i>
     </a>
 
     <!-- ==========================================================
-    HEADER
+    HEADER (مع زر "اتصل بنا")
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -1538,14 +1406,15 @@
         </nav>
 
         <div class="header-actions">
-            <button class="btn-consult" id="openModalBtn">طلب استشارة</button>
-            <button class="btn-appointment" onclick="openModal('appointment')">حجز موعد</button>
+            <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-consult">طلب استشارة</a>
+            <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-appointment">حجز موعد</a>
+            <a href="https://alostazlaw.vercel.app/contact.html" class="btn-contact">اتصل بنا</a>
             <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
         </div>
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU
+    MOBILE MENU (مع زر "اتصل بنا")
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -1557,14 +1426,15 @@
             <a href="https://alostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
             <div class="divider"></div>
             <div class="actions">
-                <button class="btn-gold" onclick="closeMobileMenu(); openModal('consultation');">طلب استشارة</button>
-                <button class="btn-outline-white" onclick="closeMobileMenu(); openModal('appointment');">حجز موعد</button>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-gold" onclick="closeMobileMenu()">طلب استشارة</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-outline-white" onclick="closeMobileMenu()">حجز موعد</a>
+                <a href="https://alostazlaw.vercel.app/contact.html" class="btn-outline-white" onclick="closeMobileMenu()">اتصل بنا</a>
             </div>
         </nav>
     </div>
 
     <!-- ==========================================================
-    HERO
+    HERO – مع أزرار موجهة إلى صفحة "اتصل بنا"
     ========================================================== -->
     <section class="hero" aria-label="الصفحة الرئيسية – بوابة الوصول إلى الخدمات القانونية">
         <div class="hero-bg">
@@ -1582,27 +1452,30 @@
                 خبرة قضائية راسخة في النقض والدستورية العليا، نضعها بين يديك لحماية أعمالك، واستثماراتك، ومستقبلك القانوني.
             </p>
 
+            <!-- ==========================================================
+            ACTION GATEWAY – ثلاثة مسارات → contact.html مع باراميترات
+            ========================================================== -->
             <div class="action-gateway">
-                <div class="action-card">
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="action-card" style="text-decoration:none; display:block;">
                     <span class="icon"><i class="fas fa-calendar-check"></i></span>
                     <h3>حجز موعد استشارة</h3>
                     <p>لقاء أولي مع الأستاذ محمود عبد الحميد لمناقشة قضيتك وتقييم الموقف القانوني.</p>
-                    <button class="btn-action" onclick="openModal('appointment')">حجز موعد</button>
-                </div>
+                    <span class="btn-action">حجز موعد</span>
+                </a>
 
-                <div class="action-card">
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="action-card" style="text-decoration:none; display:block;">
                     <span class="icon"><i class="fas fa-file-signature"></i></span>
                     <h3>طلب استشارة قانونية</h3>
                     <p>تحليل أولي لقضيتك وتقديم رؤية قانونية واضحة حول الخيارات المتاحة.</p>
-                    <button class="btn-action" onclick="openModal('consultation')">طلب استشارة</button>
-                </div>
+                    <span class="btn-action">طلب استشارة</span>
+                </a>
 
-                <div class="action-card">
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=representation" class="action-card" style="text-decoration:none; display:block;">
                     <span class="icon"><i class="fas fa-gavel"></i></span>
                     <h3>طلب تمثيل قانوني</h3>
                     <p>تولي قضيتك بالكامل، من التحليل ووضع الاستراتيجية إلى التمثيل والمتابعة.</p>
-                    <button class="btn-action" onclick="openModal('representation')">طلب تمثيل</button>
-                </div>
+                    <span class="btn-action">طلب تمثيل</span>
+                </a>
             </div>
         </div>
     </section>
@@ -1628,7 +1501,7 @@
     </section>
 
     <!-- ==========================================================
-    ABOUT + WHY (مدمجين مع النصوص الجديدة)
+    ABOUT + WHY
     ========================================================== -->
     <section class="section section-light" aria-label="عن المؤسسة ولماذا تختارنا">
         <div class="section-inner">
@@ -1647,11 +1520,7 @@
 
                 <div class="about-content reveal" style="transition-delay:0.15s;">
                     <span class="eyebrow" style="display:block;font-size:0.6rem;font-weight:800;letter-spacing:0.25em;text-transform:uppercase;color:var(--matte-gold);opacity:0.5;margin-bottom:0.2rem;">● المؤسسة</span>
-                    
-                    <!-- === تم التعديل هنا: جملة جديدة === -->
                     <h2>خبرة قانونية تُرسخ الثقة،<br /><span class="gold-text">وحلولٌ تحمي المصالح والاستثمارات</span></h2>
-                    
-                    <!-- === تم التعديل هنا: فقرة وصفية جديدة === -->
                     <p>
                         نؤمن بأن العمل القانوني المتميز يبدأ بفهمٍ عميق للوقائع، وصياغة استراتيجية قانونية دقيقة، ثم تقديم تمثيل قانوني مهني ونزيه يهدف إلى حماية مصالح عملائنا وتحقيق أفضل النتائج الممكنة.
                     </p>
@@ -1681,13 +1550,12 @@
     </section>
 
     <!-- ==========================================================
-    PRACTICE AREAS (تم التعديل: مجالات الممارسة القانونية)
+    PRACTICE AREAS
     ========================================================== -->
     <section class="section section-gray" aria-label="مجالات الممارسة القانونية">
         <div class="section-inner">
             <div class="section-head reveal">
                 <span class="eyebrow">● الممارسة</span>
-                <!-- === تم التعديل هنا: العنوان === -->
                 <h2>مجالات الممارسة القانونية</h2>
                 <p>نقدم حلولاً قانونية متكاملة في التخصصات التالية، بدءاً من الاستشارة وصولاً إلى التمثيل القضائي.</p>
             </div>
@@ -1820,13 +1688,12 @@
     </section>
 
     <!-- ==========================================================
-    EXPERIENCE / SECTORS (تم التعديل: القطاعات التي نخدمها)
+    EXPERIENCE / SECTORS
     ========================================================== -->
     <section class="section section-light" aria-label="القطاعات التي نخدمها">
         <div class="section-inner">
             <div class="section-head reveal">
                 <span class="eyebrow">● القطاعات</span>
-                <!-- === تم التعديل هنا: العنوان والوصف === -->
                 <h2>القطاعات التي نخدمها</h2>
                 <p>نفهم الطبيعة القانونية والعملية للقطاعات التي نعمل معها، ونقدم حلولًا قانونية تتناسب مع احتياجات كل قطاع.</p>
             </div>
@@ -1852,7 +1719,7 @@
     </section>
 
     <!-- ==========================================================
-    FINAL CTA
+    FINAL CTA – مع روابط إلى contact.html
     ========================================================== -->
     <section class="cta-section" aria-label="دعوة للتواصل">
         <div class="section-inner reveal">
@@ -1861,9 +1728,9 @@
             <p>سواء كنت ترغب في حجز موعد، طلب استشارة، أو تولي قضيتك بالكامل، فريقنا مستعد لمساعدتك.</p>
 
             <div class="cta-actions">
-                <button class="btn-gold" onclick="openModal('appointment')">حجز موعد استشارة</button>
-                <button class="btn-outline-gold" onclick="openModal('consultation')">طلب استشارة قانونية</button>
-                <button class="btn-outline-navy" onclick="openModal('representation')">طلب تمثيل قانوني</button>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-gold">حجز موعد استشارة</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-outline-gold">طلب استشارة قانونية</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=representation" class="btn-outline-navy">طلب تمثيل قانوني</a>
             </div>
         </div>
     </section>
@@ -1897,9 +1764,9 @@
 
             <div class="footer-col">
                 <h4>خدمات</h4>
-                <a href="#" onclick="openModal('appointment'); return false;">حجز موعد</a>
-                <a href="#" onclick="openModal('consultation'); return false;">استشارة قانونية</a>
-                <a href="#" onclick="openModal('representation'); return false;">تمثيل قانوني</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment">حجز موعد</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult">استشارة قانونية</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=representation">تمثيل قانوني</a>
             </div>
 
             <div class="footer-col">
@@ -1917,68 +1784,6 @@
     </footer>
 
     <!-- ==========================================================
-    MODAL
-    ========================================================== -->
-    <div class="modal-overlay" id="consultModal" role="dialog" aria-modal="true">
-        <div class="modal">
-            <button class="modal-close" id="modalClose" aria-label="إغلاق النافذة"><i class="fas fa-times"></i></button>
-
-            <div id="modalForm">
-                <h2 id="modalTitle">طلب استشارة قانونية</h2>
-                <p class="sub" id="modalSub">املأ البيانات التالية وسيتواصل معك فريق المؤسسة في أقرب وقت.</p>
-
-                <form id="consultForm" novalidate>
-                    <div class="form-group">
-                        <label for="fullName">الاسم الكامل</label>
-                        <input type="text" id="fullName" name="name" placeholder="مثال: أحمد محمد" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">رقم الهاتف</label>
-                        <input type="tel" id="phone" name="phone" placeholder="مثال: 01012345678" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="legalMatter">نوع الخدمة المطلوبة</label>
-                        <select id="legalMatter" name="matter" required>
-                            <option value="appointment">حجز موعد استشارة</option>
-                            <option value="consultation">طلب استشارة قانونية</option>
-                            <option value="representation">طلب تمثيل قانوني</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="caseType">نوع القضية (اختياري)</label>
-                        <select id="caseType" name="caseType">
-                            <option value="">اختر إن أردت</option>
-                            <option value="civil">منازعات مدنية</option>
-                            <option value="commercial">منازعات تجارية</option>
-                            <option value="corporate">خدمات قانونية للشركات</option>
-                            <option value="contracts">صياغة عقود</option>
-                            <option value="compensation">قضايا تعويضات</option>
-                            <option value="administrative">منازعات إدارية</option>
-                            <option value="family">قضايا الأسرة</option>
-                            <option value="constitutional">طعن دستوري</option>
-                            <option value="other">أخرى</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-submit">إرسال الطلب</button>
-                </form>
-            </div>
-
-            <div class="modal-success" id="modalSuccess">
-                <div class="icon"><i class="fas fa-check-circle"></i></div>
-                <h3>شكراً لتواصلكم</h3>
-                <p>
-                    تم استلام طلبكم، وسيتواصل معكم فريق المؤسسة في أقرب وقت (خلال 24 ساعة عمل).
-                    <br />
-                    ولمن يرغب في التواصل الفوري، يمكنه متابعة المحادثة عبر واتساب.
-                </p>
-                <a href="https://wa.me/201101076000" target="_blank" rel="noopener" class="btn-whatsapp-success">
-                    <i class="fab fa-whatsapp"></i> متابعة عبر واتساب
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================================
     FONT AWESOME
     ========================================================== -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -1989,58 +1794,6 @@
     <script>
         (function() {
             'use strict';
-
-            // ==========================================================
-            // FLOATING WHATSAPP – تغيير الخلفية حسب التمرير
-            // ==========================================================
-            const whatsappFloat = document.getElementById('whatsappFloat');
-
-            function updateWhatsAppBackground() {
-                const scrollY = window.scrollY;
-                const windowHeight = window.innerHeight;
-                const docHeight = document.documentElement.scrollHeight;
-                const maxScroll = docHeight - windowHeight;
-
-                // حساب نسبة التمرير (0 إلى 1)
-                const progress = maxScroll > 0 ? scrollY / maxScroll : 0;
-
-                // تعريف التدرج اللوني للخلفية بناءً على التمرير
-                // البداية: شفاف على نيڤي غامق (مناسب للهيرو)
-                // الوسط: أخضر واتساب شبه صلب (مناسب للأقسام الفاتحة)
-                // النهاية: أخضر داكن مع لمسة نيڤي (مناسب للفوتر)
-
-                let bgColor;
-                let shadowColor;
-
-                if (progress < 0.3) {
-                    // المنطقة العلوية (هيرو + تراست بار)
-                    const t = progress / 0.3;
-                    const alpha = 0.5 + t * 0.3;
-                    bgColor = `rgba(37, 211, 102, ${alpha})`;
-                    shadowColor = `rgba(37, 211, 102, ${0.1 + t * 0.2})`;
-                } else if (progress < 0.7) {
-                    // المنطقة الوسطى (المحتوى الفاتح)
-                    const t = (progress - 0.3) / 0.4;
-                    const alpha = 0.8 + t * 0.2;
-                    bgColor = `rgba(37, 211, 102, ${alpha})`;
-                    shadowColor = `rgba(37, 211, 102, ${0.3 + t * 0.2})`;
-                } else {
-                    // المنطقة السفلية (فوتر)
-                    const t = (progress - 0.7) / 0.3;
-                    const alpha = 1 - t * 0.15;
-                    bgColor = `rgba(18, 140, 126, ${alpha})`;
-                    shadowColor = `rgba(18, 140, 126, ${0.5 - t * 0.3})`;
-                }
-
-                whatsappFloat.style.background = bgColor;
-                whatsappFloat.style.boxShadow = `0 4px 30px ${shadowColor}`;
-            }
-
-            // استدعاء عند التمرير وعند التحميل
-            window.addEventListener('scroll', updateWhatsAppBackground, { passive: true });
-            window.addEventListener('resize', updateWhatsAppBackground, { passive: true });
-            // تحديث أولي
-            setTimeout(updateWhatsAppBackground, 100);
 
             // ==========================================================
             // HEADER SCROLL
@@ -2087,88 +1840,6 @@
 
             document.querySelectorAll('.reveal').forEach(function(el) {
                 revealObserver.observe(el);
-            });
-
-            // ==========================================================
-            // MODAL
-            // ==========================================================
-            const modal = document.getElementById('consultModal');
-            const modalForm = document.getElementById('modalForm');
-            const modalSuccess = document.getElementById('modalSuccess');
-            const consultForm = document.getElementById('consultForm');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalSub = document.getElementById('modalSub');
-            const serviceSelect = document.getElementById('legalMatter');
-
-            const serviceLabels = {
-                'appointment': {
-                    title: 'حجز موعد استشارة',
-                    sub: 'حدد موعداً للقاء الأول مع الأستاذ محمود عبد الحميد.'
-                },
-                'consultation': {
-                    title: 'طلب استشارة قانونية',
-                    sub: 'احصل على تحليل أولي لقضيتك ورؤية قانونية واضحة.'
-                },
-                'representation': {
-                    title: 'طلب تمثيل قانوني',
-                    sub: 'تولي قضيتك بالكامل من التحليل إلى التمثيل والمتابعة.'
-                }
-            };
-
-            window.openModal = function(type) {
-                if (type && serviceLabels[type]) {
-                    modalTitle.textContent = serviceLabels[type].title;
-                    modalSub.textContent = serviceLabels[type].sub;
-                    serviceSelect.value = type;
-                } else {
-                    modalTitle.textContent = 'طلب استشارة قانونية';
-                    modalSub.textContent = 'املأ البيانات التالية وسيتواصل معك فريق المؤسسة.';
-                    serviceSelect.value = 'consultation';
-                }
-
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                modalForm.style.display = 'block';
-                modalSuccess.classList.remove('active');
-                consultForm.reset();
-                serviceSelect.value = serviceSelect.value || 'consultation';
-            };
-
-            function closeModal() {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            document.querySelectorAll('.btn-consult').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    openModal('consultation');
-                });
-            });
-
-            document.getElementById('modalClose').addEventListener('click', closeModal);
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) closeModal();
-            });
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-            });
-
-            consultForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const name = document.getElementById('fullName').value.trim();
-                const phone = document.getElementById('phone').value.trim();
-                const matter = serviceSelect.value;
-
-                if (!name || !phone) {
-                    alert('يرجى ملء الاسم ورقم الهاتف.');
-                    return;
-                }
-
-                modalForm.style.display = 'none';
-                modalSuccess.classList.add('active');
-
-                console.log('Form submitted:', { name, phone, matter });
             });
 
         })();

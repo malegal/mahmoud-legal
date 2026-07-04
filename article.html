@@ -1,325 +1,1154 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>جاري تحميل الدراسة... | محمود عبد الحميد</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
+
+    <!-- سيتم تعيينها ديناميكياً عبر JavaScript -->
+    <title id="page-title">جاري تحميل المقال...</title>
+    <meta id="page-description" name="description" content="تحليل قانوني متخصص في مجال القانون المصري." />
+    <link rel="canonical" id="canonical-url" href="https://alostazlaw.vercel.app/article.html" />
+
+    <!-- Open Graph – سيتم تحديثها ديناميكياً -->
+    <meta id="og-title" property="og:title" content="جاري تحميل المقال..." />
+    <meta id="og-description" property="og:description" content="تحليل قانوني متخصص في مجال القانون المصري." />
+    <meta property="og:type" content="article" />
+    <meta id="og-url" property="og:url" content="https://alostazlaw.vercel.app/article.html" />
+    <meta id="og-image" property="og:image" content="https://alostazlaw.vercel.app/about.png" />
+    <meta property="og:locale" content="ar_EG" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- marked.js لتحويل Markdown إلى HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
+    </script>
+    <!-- DOMPurify لتنقية المحتوى ومنع XSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js">
+    </script>
 
     <style>
+        /* ==========================================================
+               ROOT – الهوية البصرية الموحدة
+               ========================================================== */
         :root {
-            --primary-dark: #050a1f;
-            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            --gold-solid: #bf953f;
-            --paper-bg: #fcfaf2;
-            --paper-text: #1a1a1a;
-            --header-height: 90px;
+            --very-dark-navy: #0B111B;
+            --deep-navy: #102A43;
+            --warm-off-white: #FAFAF8;
+            --pure-white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --charcoal: #222222;
+            --matte-gold: #B08D57;
+            --footer-navy: #0B1F35;
+            --font-ar: 'Tajawal', sans-serif;
+            --font-serif: 'Amiri', serif;
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        body { background-color: var(--paper-bg); color: var(--paper-text); font-family: 'Tajawal', sans-serif; transition: background 0.5s, color 0.5s; overflow-x: hidden; }
-        body.night-mode { background-color: #0f172a; color: #e2e8f0; }
-        body.night-mode .article-content-box { background-color: transparent; border: none; }
-        body.night-mode .markdown-body { color: #cbd5e1; }
-        body.night-mode .cta-box { background-color: #1e293b; border-color: var(--gold-solid); }
-
-        .serif-font { font-family: 'Amiri', serif; }
-        .dark-section { background-color: var(--primary-dark) !important; color: white !important; }
-        .gold-text { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .nav-link-gold { background: linear-gradient(to bottom, #d4af37, #fcf6ba, #aa771c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; transition: 0.3s; }
-        .nav-link-gold:hover { text-shadow: 0 0 15px rgba(191,149,63,0.6); transform: scale(1.05); }
-        .gold-btn { background: var(--gold-gradient); color: #000; font-weight: 800; transition: 0.4s; box-shadow: 0 0 15px rgba(191,149,63,0.4); border: none; cursor: pointer; position: relative; overflow: hidden; z-index: 1; }
-        .gold-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); transition: 0.5s; animation: shimmer 3s infinite; }
-        @keyframes shimmer { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
-        .gold-btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(191,149,63,0.6); }
-        .track-case-btn { background: transparent; border: 1px solid var(--gold-solid); color: #fff; font-weight: 600; transition: 0.3s; }
-        .track-case-btn:hover { background: var(--gold-gradient); color: #000; border-color: transparent; }
-        .visit-btn { background: transparent; border: 1px solid #ffffff; color: #fff; transition: 0.3s; }
-        .visit-btn:hover { border-color: var(--gold-solid); background: rgba(191,149,63,0.1); color: var(--gold-solid); }
-        .header-glass { background: rgba(0, 0, 0, 0.98) !important; border-bottom: 2px solid; border-image: var(--gold-gradient) 1; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-
-        .article-content-box {
-            width: 100%; max-width: 100%; margin: 0; background: transparent; padding: 0 5%;
-            box-shadow: none; border: none; transition: all 0.5s;
-        }
-        
-        .article-inner-container {
-            max-width: 1200px; margin: 0 auto;
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .markdown-body { font-family: 'Amiri', serif; font-size: 1.6rem; line-height: 2.2; text-align: justify; }
-        .markdown-body h2 { color: var(--gold-solid); margin-top: 2rem; font-weight: 700; }
-
-        .mode-toggle {
-            position: fixed; bottom: 30px; left: 30px; width: 50px; height: 50px;
-            background: var(--gold-gradient); color: #000; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
-        .share-sidebar { position: fixed; top: 50%; left: 0; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 90; }
-        .share-btn { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; color: white; border-radius: 0 5px 5px 0; transition: 0.3s; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
-        .share-btn:hover { width: 55px; }
-        
-        /* ألوان أزرار المشاركة */
-        .bg-whatsapp { background: #25d366; } 
-        .bg-telegram { background: #0088cc; } 
-        .bg-facebook { background: #1877f2; }
-        .bg-linkedin { background: #0a66c2; }
-        .bg-twitter { background: #1da1f2; }
-
-        .cta-box {
-            background: var(--primary-dark); border: 2px solid var(--gold-solid);
-            padding: 40px 20px; border-radius: 15px; margin-top: 60px; text-align: center; color: white;
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        #mobile-menu { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); z-index: 200; transform: translateX(100%); transition: 0.4s; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #mobile-menu.active { transform: translateX(0); }
-
-        .footer-social-icon { width: 45px; height: 45px; border-radius: 50%; border: 1px solid rgba(191,149,63,0.3); display: flex; align-items: center; justify-content: center; transition: 0.3s; background: rgba(0,0,0,0.5); color: #bf953f; font-size: 1.3rem; }
-        .footer-social-icon i { background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .footer-social-icon:hover { border-color: var(--gold-solid); box-shadow: 0 0 20px rgba(191,149,63,0.4); transform: translateY(-5px); background: var(--gold-gradient); }
-        .footer-social-icon:hover i { -webkit-text-fill-color: #000; }
-
-        @media (max-width: 768px) {
-            .share-sidebar { top: auto; bottom: 20px; left: 50%; transform: translateX(-50%); flex-direction: row; gap: 10px; }
-            .share-btn { border-radius: 50%; width: 40px; height: 40px; }
-            .share-btn:hover { width: 40px; transform: translateY(-3px); }
-            .mode-toggle { left: auto; right: 20px; bottom: 80px; width: 45px; height: 45px; }
-            .markdown-body { font-size: 1.3rem; }
+        body {
+            font-family: var(--font-ar);
+            background-color: var(--warm-off-white);
+            color: var(--charcoal);
+            overflow-x: hidden;
+            line-height: 1.7;
+            direction: rtl;
         }
-        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--primary-dark); } ::-webkit-scrollbar-thumb { background: #bf953f; border-radius: 4px; }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--warm-off-white);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--matte-gold);
+            border-radius: 10px;
+        }
+
+        .serif {
+            font-family: var(--font-serif);
+        }
+        .gold-text {
+            color: var(--matte-gold);
+        }
+
+        /* ==========================================================
+               BUTTONS (مطابقة لباقي الصفحات)
+               ========================================================== */
+        .btn-gold {
+            display: inline-block;
+            background: var(--matte-gold);
+            color: #000;
+            font-weight: 700;
+            padding: 16px 40px;
+            border-radius: 8px;
+            border: none;
+            transition: all 0.4s var(--ease-out);
+            text-align: center;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 20px rgba(176, 141, 87, 0.15);
+            cursor: pointer;
+            position: relative;
+        }
+        .btn-gold:hover {
+            background: #c4a06a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(176, 141, 87, 0.25);
+        }
+
+        .btn-outline-gold {
+            display: inline-block;
+            border: 1px solid var(--matte-gold);
+            color: var(--matte-gold);
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            transition: all 0.4s var(--ease-out);
+            text-align: center;
+            font-size: 0.85rem;
+            background: transparent;
+            cursor: pointer;
+        }
+        .btn-outline-gold:hover {
+            background: var(--matte-gold);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(176, 141, 87, 0.15);
+        }
+
+        .btn-outline-white {
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 8px;
+            transition: all 0.4s var(--ease-out);
+            text-align: center;
+            font-size: 0.9rem;
+            background: transparent;
+            cursor: pointer;
+        }
+        .btn-outline-white:hover {
+            border-color: var(--matte-gold);
+            color: var(--matte-gold);
+            background: rgba(176, 141, 87, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================
+               HEADER – مطابق لبقية الصفحات
+               ========================================================== */
+        .site-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: transparent;
+            transition: all 0.5s var(--ease-out);
+        }
+        .site-header.scrolled {
+            background: rgba(11, 17, 27, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(176, 141, 87, 0.08);
+            height: 64px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .header-brand img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            filter: brightness(0.9);
+        }
+        .header-brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .header-brand-text .name {
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #fff;
+            font-family: var(--font-serif);
+            letter-spacing: 0.02em;
+        }
+        .header-brand-text .sub {
+            font-size: 0.5rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.08em;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .header-nav a {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 2px;
+            text-decoration: none;
+        }
+        .header-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.5s var(--ease-out);
+        }
+        .header-nav a:hover::after,
+        .header-nav a.active::after {
+            width: 100%;
+        }
+        .header-nav a:hover,
+        .header-nav a.active {
+            color: #fff;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .header-actions .btn-consult {
+            padding: 8px 18px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 6px;
+            background: var(--matte-gold);
+            color: #000;
+            transition: all 0.4s var(--ease-out);
+            border: none;
+            cursor: pointer;
+        }
+        .header-actions .btn-consult:hover {
+            background: #c4a06a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(176, 141, 87, 0.2);
+        }
+
+        .header-actions .btn-appointment {
+            padding: 8px 18px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            background: transparent;
+            transition: all 0.4s var(--ease-out);
+            font-family: var(--font-ar);
+            cursor: pointer;
+        }
+        .header-actions .btn-appointment:hover {
+            border-color: var(--matte-gold);
+            color: var(--matte-gold);
+            background: rgba(176, 141, 87, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .header-actions .btn-phone {
+            padding: 8px 18px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            background: transparent;
+            transition: all 0.4s var(--ease-out);
+            font-family: var(--font-ar);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+        }
+        .header-actions .btn-phone:hover {
+            border-color: var(--matte-gold);
+            background: rgba(176, 141, 87, 0.08);
+            color: var(--matte-gold);
+            transform: translateY(-2px);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.4rem;
+            color: #fff;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(11, 17, 27, 0.98);
+            backdrop-filter: blur(30px);
+            transform: translateX(100%);
+            transition: transform 0.6s var(--ease-in-out);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        .mobile-menu-close {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            font-size: 2rem;
+            color: #fff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .mobile-menu nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.8rem;
+        }
+        .mobile-menu nav a {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+        .mobile-menu nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .mobile-menu nav a:hover::after {
+            width: 100%;
+        }
+        .mobile-menu nav a:hover {
+            color: #fff;
+        }
+        .mobile-menu .divider {
+            width: 50px;
+            height: 1px;
+            background: rgba(176, 141, 87, 0.15);
+            margin: 0.5rem 0;
+        }
+        .mobile-menu .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            width: 100%;
+            max-width: 260px;
+            margin-top: 0.5rem;
+        }
+        .mobile-menu .actions .btn-gold {
+            padding: 14px;
+            font-size: 0.9rem;
+            width: 100%;
+            text-align: center;
+        }
+        .mobile-menu .actions .btn-outline-white {
+            padding: 14px;
+            font-size: 0.9rem;
+            width: 100%;
+            text-align: center;
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* ==========================================================
+               ARTICLE CONTENT
+               ========================================================== */
+        .article-wrapper {
+            padding: 120px 2rem 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .article-wrapper .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: rgba(34, 34, 34, 0.4);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+        .article-wrapper .article-meta .divider {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--matte-gold);
+            opacity: 0.3;
+        }
+
+        .article-wrapper .article-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--charcoal);
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            padding-bottom: 1.5rem;
+        }
+
+        .article-wrapper .article-image {
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(176, 141, 87, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .article-wrapper .article-image img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        .article-wrapper .article-body {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            line-height: 2;
+            color: rgba(34, 34, 34, 0.8);
+        }
+        .article-wrapper .article-body h2 {
+            color: var(--matte-gold);
+            font-weight: 700;
+            margin-top: 2rem;
+            font-size: 1.6rem;
+        }
+        .article-wrapper .article-body h3 {
+            color: var(--charcoal);
+            font-weight: 700;
+            margin-top: 1.5rem;
+            font-size: 1.3rem;
+        }
+        .article-wrapper .article-body ul,
+        .article-wrapper .article-body ol {
+            padding-right: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .article-wrapper .article-body blockquote {
+            border-right: 3px solid var(--matte-gold);
+            padding-right: 1.2rem;
+            margin: 1.2rem 0;
+            font-style: italic;
+            color: rgba(34, 34, 34, 0.6);
+        }
+        .article-wrapper .article-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .article-wrapper .article-body table th,
+        .article-wrapper .article-body table td {
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 0.5rem 0.8rem;
+            text-align: right;
+        }
+        .article-wrapper .article-body table th {
+            background: var(--light-gray);
+            font-weight: 700;
+        }
+
+        /* ==========================================================
+               ARTICLE CTA
+               ========================================================== */
+        .article-cta {
+            margin-top: 3rem;
+            padding: 2.5rem 2rem;
+            background: var(--deep-navy);
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;
+        }
+        .article-cta h3 {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .article-cta p {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .article-cta .btn-gold {
+            background: var(--matte-gold);
+            color: #000;
+            font-weight: 700;
+            padding: 12px 36px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            transition: all 0.4s var(--ease-out);
+        }
+        .article-cta .btn-gold:hover {
+            background: #c4a06a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(176, 141, 87, 0.25);
+        }
+
+        /* ==========================================================
+               FLOATING WHATSAPP
+               ========================================================== */
+        .float-whatsapp {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 500;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s var(--ease-out);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(37, 211, 102, 0.85);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            text-decoration: none;
+            color: #fff;
+        }
+        .float-whatsapp i {
+            font-size: 1.8rem;
+            color: #fff;
+            transition: transform 0.4s ease;
+        }
+        .float-whatsapp:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 40px rgba(37, 211, 102, 0.3);
+            background: #25d366;
+            border-color: #25d366;
+        }
+        .float-whatsapp:hover i {
+            transform: scale(1.05);
+        }
+
+        /* ==========================================================
+               SHARE BUTTONS (جانبية)
+               ========================================================== */
+        .share-sidebar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 90;
+        }
+        .share-btn {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-radius: 0 6px 6px 0;
+            transition: all 0.3s var(--ease-out);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            text-decoration: none;
+        }
+        .share-btn:hover {
+            width: 52px;
+        }
+        .share-btn.bg-whatsapp {
+            background: #25d366;
+        }
+        .share-btn.bg-telegram {
+            background: #0088cc;
+        }
+        .share-btn.bg-facebook {
+            background: #1877f2;
+        }
+        .share-btn.bg-linkedin {
+            background: #0a66c2;
+        }
+        .share-btn.bg-twitter {
+            background: #1da1f2;
+        }
+
+        /* ==========================================================
+               FOOTER – مطابق لبقية الصفحات
+               ========================================================== */
+        .site-footer {
+            background: var(--footer-navy);
+            padding: 3rem 2rem 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2.5rem;
+        }
+        .footer-brand img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+        .footer-brand h3 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .footer-brand p {
+            font-size: 0.8rem;
+            font-weight: 300;
+            margin-top: 0.1rem;
+            opacity: 0.6;
+        }
+        .footer-brand .social {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+        .footer-brand .social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s var(--ease-out);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+        .footer-brand .social a:hover {
+            border-color: var(--matte-gold);
+            color: var(--matte-gold);
+            transform: translateY(-3px);
+        }
+
+        .footer-col h4 {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #fff;
+            margin-bottom: 0.8rem;
+        }
+        .footer-col a {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 300;
+            padding: 0.2rem 0;
+            transition: color 0.3s ease;
+            opacity: 0.7;
+            position: relative;
+        }
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .footer-col a:hover::after {
+            width: 100%;
+        }
+        .footer-col a:hover {
+            color: var(--matte-gold);
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            font-size: 0.6rem;
+            opacity: 0.3;
+        }
+
+        /* ==========================================================
+               RESPONSIVE
+               ========================================================== */
+        @media (max-width: 820px) {
+            .header-nav {
+                display: none;
+            }
+            .header-actions .btn-appointment,
+            .header-actions .btn-phone {
+                display: none;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .site-header {
+                padding: 0 1rem;
+                height: 64px;
+            }
+            .site-header.scrolled {
+                height: 60px;
+            }
+
+            .article-wrapper {
+                padding: 100px 1rem 3rem;
+            }
+
+            .share-sidebar {
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                flex-direction: row;
+                gap: 10px;
+            }
+            .share-btn {
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+            }
+            .share-btn:hover {
+                width: 40px;
+                transform: translateY(-3px);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .float-whatsapp {
+                width: 44px;
+                height: 44px;
+                bottom: 1rem;
+                left: 1rem;
+            }
+            .float-whatsapp i {
+                font-size: 1.2rem;
+            }
+            .header-brand-text .name {
+                font-size: 0.8rem;
+            }
+            .header-brand-text .sub {
+                font-size: 0.45rem;
+            }
+            .header-brand img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .article-wrapper .article-title {
+                font-size: 1.8rem;
+            }
+            .article-wrapper .article-body {
+                font-size: 1rem;
+            }
+            .article-cta {
+                padding: 1.8rem 1.2rem;
+            }
+            .article-cta h3 {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- أزرار المشاركة الجانبية -->
-<div class="share-sidebar">
-    <a href="#" id="share-fb" target="_blank" class="share-btn bg-facebook" title="مشاركة عبر فيسبوك"><i class="fab fa-facebook-f"></i></a>
-    <a href="#" id="share-x" target="_blank" class="share-btn bg-twitter" title="مشاركة عبر تويتر"><i class="fab fa-twitter"></i></a>
-    <a href="#" id="share-in" target="_blank" class="share-btn bg-linkedin" title="مشاركة عبر لينكد إن"><i class="fab fa-linkedin-in"></i></a>
-    <a href="#" id="share-wa" target="_blank" class="share-btn bg-whatsapp" title="مشاركة عبر واتساب"><i class="fab fa-whatsapp"></i></a>
-    <a href="#" id="share-tg" target="_blank" class="share-btn bg-telegram" title="مشاركة عبر تليجرام"><i class="fab fa-telegram-plane"></i></a>
-</div>
+    <!-- ==========================================================
+    FLOATING WHATSAPP
+    ========================================================== -->
+    <a href="https://wa.me/201101076000" target="_blank" rel="noopener" class="float-whatsapp" aria-label="تواصل عبر واتساب">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-<!-- تبديل الوضع -->
-<div class="mode-toggle" id="theme-btn" title="تبديل وضع القراءة">
-    <i class="fas fa-moon"></i>
-</div>
-
-<!-- الهيدر الكامل -->
-<header class="fixed w-full z-[100] header-glass dark-section">
-    <nav class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-            <img src="logo.png" alt="شعار" class="w-20 h-20 object-contain">
-            <div class="flex flex-col leading-tight">
-                <h1 class="font-bold gold-text serif-font text-[28px]">محمود عبد الحميد</h1>
-                <p class="text-gray-300 font-medium text-[13px]">المحامي بالنقض والدستورية العليا</p>
-            </div>
-        </div>
-        <div class="hidden xl:flex items-center gap-6 font-bold text-sm">
-            <a href="index.html" class="nav-link-gold">الرئيسية</a>
-            <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
-            <a href="index.html#why-us" class="nav-link-gold">لماذا تختارنا</a>
-            <a href="index.html#testimonials" class="nav-link-gold">آراء العملاء</a>
-            <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
-            <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
-            <a href="blog.html" class="nav-link-gold border-b-2 border-gold-solid">المدونة</a>
-            <div class="nav-buttons flex items-center gap-2 mr-2">
-                <a href="client-inquiry.html" class="track-case-btn px-3 py-2 rounded-lg text-xs flex items-center gap-2"><i class="fas fa-gavel"></i> تابع قضيتك</a>
-                <a href="contact.html?tab=visit" class="visit-btn px-3 py-2 rounded-lg text-xs">حجز موعد</a>
-                <a href="contact.html?tab=consult" class="gold-btn px-4 py-2 rounded-lg text-xs shadow-lg">طلب استشارة</a>
-            </div>
-        </div>
-        <button id="menu-toggle" class="xl:hidden text-2xl gold-text"><i class="fas fa-bars-staggered"></i></button>
-    </nav>
-</header>
-
-<!-- القائمة الجانبية للجوال -->
-<div id="mobile-menu">
-    <button id="menu-close" class="absolute top-6 left-6 text-3xl gold-text"><i class="fas fa-times"></i></button>
-    <div class="flex flex-col gap-5 text-xl font-bold text-center w-full px-6">
-        <a href="index.html" class="nav-link-gold">الرئيسية</a>
-        <a href="about.html" class="nav-link-gold">عن المؤسسة</a>
-        <a href="index.html#why-us" class="nav-link-gold">لماذا تختارنا</a>
-        <a href="index.html#testimonials" class="nav-link-gold">آراء العملاء</a>
-        <a href="specialties.html" class="nav-link-gold">تخصصاتنا</a>
-        <a href="contact.html" class="nav-link-gold">تواصل معنا</a>
-        <a href="blog.html" class="nav-link-gold border-b-2 border-gold-solid inline-block mx-auto">المدونة</a>
-        <div class="h-px bg-white/10 w-full my-4"></div>
-        <a href="client-inquiry.html" class="track-case-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">تابع قضيتك</a>
-        <a href="contact.html?tab=visit" class="visit-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">حجز موعد</a>
-        <a href="contact.html?tab=consult" class="gold-btn py-3 rounded-xl text-lg w-full max-w-[300px] mx-auto">طلب استشارة</a>
+    <!-- ==========================================================
+    SHARE SIDEBAR
+    ========================================================== -->
+    <div class="share-sidebar">
+        <a href="#" id="share-fb" target="_blank" rel="noopener" class="share-btn bg-facebook" title="مشاركة عبر فيسبوك"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" id="share-x" target="_blank" rel="noopener" class="share-btn bg-twitter" title="مشاركة عبر تويتر"><i class="fab fa-twitter"></i></a>
+        <a href="#" id="share-in" target="_blank" rel="noopener" class="share-btn bg-linkedin" title="مشاركة عبر لينكد إن"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" id="share-wa" target="_blank" rel="noopener" class="share-btn bg-whatsapp" title="مشاركة عبر واتساب"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" id="share-tg" target="_blank" rel="noopener" class="share-btn bg-telegram" title="مشاركة عبر تليجرام"><i class="fab fa-telegram-plane"></i></a>
     </div>
-</div>
 
-<!-- المحتوى الرئيسي للمقال -->
-<main class="pt-40 pb-20 w-full">
-    <div class="article-content-box">
-        <div id="loader" class="text-center py-20"><div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-gold-solid"></div></div>
+    <!-- ==========================================================
+    HEADER – مطابق لبقية الصفحات
+    ========================================================== -->
+    <header class="site-header" id="siteHeader" role="banner">
+        <div class="header-brand">
+            <img src="logo.png" alt="شعار مؤسسة الأستاذ محمود عبد الحميد للمحاماة" width="36" height="36" loading="lazy" />
+            <div class="header-brand-text">
+                <span class="name">محمود عبد الحميد</span>
+                <span class="sub">المحامي بالنقض والدستورية العليا</span>
+            </div>
+        </div>
 
-        <div id="article-wrapper" class="hidden article-inner-container">
-            <!-- وقت القراءة والميتا -->
-            <div class="flex items-center gap-4 text-sm text-gold-solid mb-4 font-bold serif-font">
-                <span><i class="far fa-clock ml-1"></i> <span id="read-time">0</span> دقيقة قراءة</span>
-                <span class="w-1 h-1 bg-gold-solid rounded-full"></span>
+        <nav class="header-nav" role="navigation">
+            <a href="https://alostazlaw.vercel.app/">الرئيسية</a>
+            <a href="https://alostazlaw.vercel.app/about.html">عن المؤسسة</a>
+            <a href="https://alostazlaw.vercel.app/specialties.html">التخصصات</a>
+            <a href="https://alostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a>
+            <a href="https://alostazlaw.vercel.app/blog.html" class="active">المدونة</a>
+            <a href="https://alostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
+            <a href="https://alostazlaw.vercel.app/contact.html">اتصل بنا</a>
+        </nav>
+
+        <div class="header-actions">
+            <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-consult">طلب استشارة</a>
+            <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-appointment">حجز موعد</a>
+            <a href="tel:+201101076000" class="btn-phone"><i class="fas fa-phone-alt"></i> اتصل بنا</a>
+            <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+    MOBILE MENU
+    ========================================================== -->
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
+        <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
+        <nav>
+            <a href="https://alostazlaw.vercel.app/" onclick="closeMobileMenu()">الرئيسية</a>
+            <a href="https://alostazlaw.vercel.app/about.html" onclick="closeMobileMenu()">عن المؤسسة</a>
+            <a href="https://alostazlaw.vercel.app/specialties.html" onclick="closeMobileMenu()">التخصصات</a>
+            <a href="https://alostazlaw.vercel.app/sectors.html" onclick="closeMobileMenu()">قطاعات نخدمها</a>
+            <a href="https://alostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المدونة</a>
+            <a href="https://alostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
+            <a href="https://alostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
+            <div class="divider"></div>
+            <div class="actions">
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-gold" onclick="closeMobileMenu()">طلب استشارة</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-outline-white" onclick="closeMobileMenu()">حجز موعد</a>
+                <a href="tel:+201101076000" class="btn-outline-white" onclick="closeMobileMenu()"><i class="fas fa-phone-alt" style="margin-left:6px;"></i> اتصل بنا</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ==========================================================
+    ARTICLE CONTENT
+    ========================================================== -->
+    <main class="article-wrapper">
+        <!-- Loader -->
+        <div id="loader" class="text-center py-20">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-matte-gold" style="border-color:var(--matte-gold);"></div>
+            <p class="mt-4 text-charcoal/50">جاري تحميل المقال...</p>
+        </div>
+
+        <!-- Article Content (hidden initially) -->
+        <div id="article-container" class="hidden">
+            <div class="article-meta">
+                <span><i class="far fa-clock" style="margin-left:4px;"></i> <span id="read-time">0</span> دقائق قراءة</span>
+                <span class="divider"></span>
                 <span>دراسة قانونية متخصصة</span>
             </div>
 
-            <h1 id="article-title" class="text-4xl md:text-5xl font-bold serif-font mb-8 border-b border-gray-300 dark:border-gray-700 pb-8 leading-tight"></h1>
-            
-            <!-- حاوية الصورة -->
-            <div id="article-image" class="mb-10 text-center"></div>
+            <h1 id="article-title" class="article-title"></h1>
 
-            <div id="article-content" class="markdown-body article-text"></div>
+            <div id="article-image" class="article-image"></div>
 
-            <!-- زر العودة إلى المدونة -->
-            <div class="text-center mt-16 border-t border-gray-300 dark:border-gray-700 pt-10">
-                <a href="blog.html" class="inline-block gold-btn px-8 py-3 rounded-full text-base font-bold shadow-lg">
-                    <i class="fas fa-arrow-right ml-2"></i> العودة إلى المدونة
+            <div id="article-body" class="article-body"></div>
+
+            <!-- Back to Blog -->
+            <div class="text-center mt-10 pt-6 border-t border-charcoal/5">
+                <a href="blog.html" class="btn-outline-gold" style="padding:10px 28px; font-size:0.85rem;">
+                    <i class="fas fa-arrow-right" style="margin-left:6px;"></i> العودة إلى المدونة
                 </a>
             </div>
 
-            <!-- دعوة للاستشارة -->
-            <div class="cta-box serif-font">
-                <h3 class="text-3xl gold-text mb-4 font-bold">هل لديك تساؤل قانوني حول هذا الموضوع؟</h3>
-                <p class="mb-8 opacity-80 text-lg">يمكنك الحصول على استشارة قانونية دقيقة ومباشرة من الأستاذ محمود عبد الحميد</p>
-                <a href="contact.html?tab=consult" class="gold-btn px-12 py-4 rounded-full text-black font-black inline-block text-xl">احجز استشارتك الآن</a>
+            <!-- CTA -->
+            <div class="article-cta">
+                <h3>هل لديك تساؤل قانوني حول هذا الموضوع؟</h3>
+                <p>يمكنك الحصول على استشارة قانونية دقيقة ومباشرة من الأستاذ محمود عبد الحميد</p>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-gold">احجز استشارتك الآن</a>
             </div>
+        </div>
+    </main>
 
-            <!-- النشرة البريدية -->
-            <div class="mt-12 bg-gray-200/50 dark:bg-black/40 p-10 rounded-2xl text-center border border-gold-solid/20 backdrop-blur-sm">
-                <h4 class="font-bold mb-3 text-xl">انضم للنشرة القانونية</h4>
-                <p class="text-base opacity-80 mb-6">تصلك أهم أحكام النقض والتشريعات الجديدة فور صدورها</p>
-                <div class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
-                    <input type="email" placeholder="بريدك الإلكتروني" class="flex-grow px-5 py-3 rounded-lg border focus:outline-gold-solid text-black text-left" dir="ltr">
-                    <button class="bg-black text-gold-solid px-8 py-3 rounded-lg font-bold border border-gold-solid transition hover:bg-gold-solid hover:text-black">اشترك</button>
+    <!-- ==========================================================
+    FOOTER – مطابق لبقية الصفحات
+    ========================================================== -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="logo.png" alt="شعار المؤسسة" width="42" height="42" loading="lazy" />
+                <h3>مؤسسة الأستاذ محمود عبد الحميد</h3>
+                <p>للمحاماة والاستشارات القانونية</p>
+                <div class="social">
+                    <a href="https://www.facebook.com/malegal" target="_blank" rel="noopener" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/mahmoud_a_hamyd" target="_blank" rel="noopener" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                    <a href="https://t.me/mahmoud_a_hamyd" target="_blank" rel="noopener" aria-label="تليجرام"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" rel="noopener" aria-label="لينكد إن"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="mailto:ma.law.firm@outlook.com" aria-label="البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
+
+            <div class="footer-col">
+                <h4>روابط</h4>
+                <a href="https://alostazlaw.vercel.app/">الرئيسية</a>
+                <a href="https://alostazlaw.vercel.app/about.html">عن المؤسسة</a>
+                <a href="https://alostazlaw.vercel.app/specialties.html">التخصصات</a>
+                <a href="https://alostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a>
+                <a href="https://alostazlaw.vercel.app/blog.html">المدونة</a>
+                <a href="https://alostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
+                <a href="https://alostazlaw.vercel.app/contact.html">اتصل بنا</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>خدمات</h4>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult">استشارة قانونية</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment">حجز موعد</a>
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=representation">تمثيل قانوني</a>
+                <a href="https://alostazlaw.vercel.app/client-inquiry.html">متابعة قضية</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>اتصال</h4>
+                <a href="tel:+201101076000"><i class="fas fa-phone" style="margin-left:6px;opacity:0.3;"></i> +20 110 107 6000</a>
+                <a href="mailto:ma.law.firm@outlook.com"><i class="fas fa-envelope" style="margin-left:6px;opacity:0.3;"></i> ma.law.firm@outlook.com</a>
+                <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" rel="noopener"><i class="fas fa-map-marker-alt" style="margin-left:6px;opacity:0.3;"></i> الموقع الجغرافي</a>
+            </div>
         </div>
-    </div>
-</main>
 
-<!-- الفوتر الملكي -->
-<footer class="pt-16 pb-8 border-t border-gold-solid/30 bg-black/80 backdrop-blur-xl text-center mt-10">
-    <div class="max-w-7xl mx-auto px-6">
-        <img src="logo.png" class="w-24 h-24 object-contain mx-auto mb-4">
-        <h2 class="text-3xl font-black gold-text serif-font mb-2">مؤسسة محمود عبد الحميد المحامي</h2>
-        <p class="text-gray-400 font-medium mb-8">التميز في المحاماة والاستشارات القانونية</p>
-        <div class="flex justify-center gap-6 mb-10">
-            <a href="https://www.facebook.com/malegal" target="_blank" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
-            <!-- تم التعديل إلى عصفورة تويتر -->
-            <a href="https://x.com/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
-            <a href="https://t.me/mahmoud_a_hamyd" target="_blank" class="footer-social-icon"><i class="fab fa-telegram-plane"></i></a>
-            <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" class="footer-social-icon"><i class="fab fa-linkedin-in"></i></a>
-            <a href="mailto:ma.law.firm@outlook.com" class="footer-social-icon"><i class="fas fa-envelope"></i></a>
-            <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" class="footer-social-icon"><i class="fas fa-map-marker-alt"></i></a>
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة © ٢٠٢٦ – مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية</p>
+            <p>AL OSTAZ LAW – هوية مؤسسية فاخرة</p>
         </div>
-        <div class="flex flex-wrap gap-x-8 gap-y-4 justify-center text-sm text-gray-400 mb-8 font-bold">
-            <a href="index.html" class="hover:text-gold-solid transition">الرئيسية</a>
-            <a href="about.html" class="hover:text-gold-solid transition">عن المؤسسة</a>
-            <a href="specialties.html" class="hover:text-gold-solid transition">تخصصاتنا</a>
-            <a href="contact.html" class="hover:text-gold-solid transition">اتصل بنا</a>
-            <a href="blog.html" class="hover:text-gold-solid transition">المدونة</a>
-        </div>
-        <p class="text-gray-600 text-xs uppercase tracking-widest border-t border-gold-solid/20 pt-8">جميع الحقوق محفوظة © ٢٠٢٦</p>
-    </div>
-</footer>
+    </footer>
 
-<script>
-    // القائمة الجانبية
-    const menuToggle = document.getElementById('menu-toggle');
-    const menuClose = document.getElementById('menu-close');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuToggle.onclick = () => { mobileMenu.classList.add('active'); document.body.style.overflow = 'hidden'; };
-    menuClose.onclick = () => { mobileMenu.classList.remove('active'); document.body.style.overflow = ''; };
+    <!-- ==========================================================
+    JAVASCRIPT
+    ========================================================== -->
+    <script>
+        (function() {
+            'use strict';
 
-    // تبديل الثيم
-    const themeBtn = document.getElementById('theme-btn');
-    themeBtn.onclick = () => {
-        document.body.classList.toggle('night-mode');
-        const isNight = document.body.classList.contains('night-mode');
-        themeBtn.innerHTML = isNight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    };
+            // ==========================================================
+            // HEADER SCROLL
+            // ==========================================================
+            const header = document.getElementById('siteHeader');
+            window.addEventListener('scroll', function() {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            }, { passive: true });
 
-    // تحميل المقال ومعالجة البيانات
-    async function fetchArticle() {
-        const slug = new URLSearchParams(window.location.search).get('slug');
-        if (!slug) return;
-        const owner = "malegal"; const repo = "mahmoud-legal";
-        try {
-            const res = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/main/blog/articles/${slug}.md`);
-            let md = await res.text();
-            
-            let title = '';
-            let image = '';
+            // ==========================================================
+            // MOBILE MENU
+            // ==========================================================
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuToggle = document.getElementById('menuToggle');
+            const menuClose = document.getElementById('menuClose');
 
-            const yamlMatch = md.match(/^---\s*[\s\S]*?\s*---/);
-            if (yamlMatch) {
-                const yamlContent = yamlMatch[0];
-                const titleMatch = yamlContent.match(/title:\s*(.*)/i);
-                if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
-                
-                const imageMatch = yamlContent.match(/image:\s*(.*)/i);
-                if (imageMatch) image = imageMatch[1].replace(/['"]/g, '').trim();
-                
-                md = md.replace(/^---\s*[\s\S]*?\s*---/, ''); 
+            function openMobileMenu() {
+                mobileMenu.classList.add('open');
+                document.body.style.overflow = 'hidden';
             }
 
-            const lines = md.split('\n');
-            const filteredLines =[];
-            for (let line of lines) {
-                const lowerLine = line.trim().toLowerCase();
-                
-                if (lowerLine.startsWith('title:')) {
-                    if (!title) title = line.substring(line.indexOf(':') + 1).replace(/['"]/g, '').trim();
-                    continue; 
+            window.closeMobileMenu = function() {
+                mobileMenu.classList.remove('open');
+                document.body.style.overflow = '';
+            };
+
+            if (menuToggle) menuToggle.addEventListener('click', openMobileMenu);
+            if (menuClose) menuClose.addEventListener('click', closeMobileMenu);
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMobileMenu();
+            });
+
+            // ==========================================================
+            // FETCH ARTICLE
+            // ==========================================================
+            async function fetchArticle() {
+                const slug = new URLSearchParams(window.location.search).get('slug');
+                if (!slug) {
+                    document.getElementById('loader').innerHTML = '<p class="text-red-500">لم يتم تحديد المقال.</p>';
+                    return;
                 }
-                
-                if (lowerLine.startsWith('image:')) {
-                    if (!image) image = line.substring(line.indexOf(':') + 1).replace(/['"]/g, '').trim();
-                    continue; 
+
+                const owner = 'malegal';
+                const repo = 'mahmoud-legal';
+                const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/blog/articles`;
+
+                try {
+                    const response = await fetch(`${baseUrl}/${slug}.md`);
+                    if (!response.ok) throw new Error('المقال غير موجود');
+
+                    let md = await response.text();
+
+                    // ==========================================================
+                    // EXTRACT FRONT MATTER (title, image, description)
+                    // ==========================================================
+                    let title = '';
+                    let image = '';
+                    let description = '';
+                    const yamlMatch = md.match(/^---\s*([\s\S]*?)\s*---/);
+                    if (yamlMatch) {
+                        const frontMatter = yamlMatch[1];
+                        const titleMatch = frontMatter.match(/title:\s*(.*)/i);
+                        if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+                        const imageMatch = frontMatter.match(/image:\s*(.*)/i);
+                        if (imageMatch) image = imageMatch[1].replace(/['"]/g, '').trim();
+                        const descMatch = frontMatter.match(/description:\s*(.*)/i);
+                        if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
+                        // Remove front matter
+                        md = md.replace(/^---\s*[\s\S]*?\s*---/, '');
+                    }
+
+                    // Fallbacks
+                    if (!title) title = decodeURIComponent(slug.replace(/-/g, ' '));
+                    if (!description) description = 'تحليل قانوني متخصص في مجال القانون المصري.';
+
+                    // ==========================================================
+                    // UPDATE META TAGS (SEO)
+                    // ==========================================================
+                    document.title = title + ' | الأستاذ محمود عبد الحميد';
+                    document.querySelector('meta[name="description"]').setAttribute('content', description);
+                    document.querySelector('link[rel="canonical"]').setAttribute('href',
+                        `https://alostazlaw.vercel.app/article.html?slug=${slug}`);
+                    document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+                    document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+                    document.querySelector('meta[property="og:url"]').setAttribute('content',
+                        `https://alostazlaw.vercel.app/article.html?slug=${slug}`);
+                    if (image) {
+                        document.querySelector('meta[property="og:image"]').setAttribute('content', image);
+                    }
+
+                    // ==========================================================
+                    // RENDER ARTICLE
+                    // ==========================================================
+                    // Title
+                    document.getElementById('article-title').textContent = title;
+
+                    // Image
+                    const imageContainer = document.getElementById('article-image');
+                    if (image) {
+                        imageContainer.innerHTML =
+                            `<img src="${image}" alt="${title}" loading="lazy" onerror="this.style.display='none'" />`;
+                    } else {
+                        imageContainer.style.display = 'none';
+                    }
+
+                    // Body (Markdown → HTML → Sanitize)
+                    const rawHtml = marked.parse(md);
+                    const sanitizedHtml = DOMPurify.sanitize(rawHtml, {
+                        ALLOWED_TAGS: [
+                            'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                            'ul', 'ol', 'li', 'blockquote', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
+                            'strong', 'em', 'u', 'br', 'hr', 'a', 'img', 'code', 'pre', 'span', 'div'
+                        ],
+                        ALLOWED_ATTR: ['href', 'target', 'src', 'alt', 'title', 'class', 'style']
+                    });
+                    document.getElementById('article-body').innerHTML = sanitizedHtml;
+
+                    // Read time
+                    const words = md.split(/\s+/).length;
+                    document.getElementById('read-time').textContent = Math.ceil(words / 200) || 1;
+
+                    // ==========================================================
+                    // UPDATE SHARE BUTTONS
+                    // ==========================================================
+                    const url = encodeURIComponent(`https://alostazlaw.vercel.app/article.html?slug=${slug}`);
+                    const encodedTitle = encodeURIComponent(title);
+                    document.getElementById('share-wa').href = `https://wa.me/?text=${encodedTitle}%20${url}`;
+                    document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${encodedTitle}`;
+                    document.getElementById('share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    document.getElementById('share-in').href =
+                        `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${encodedTitle}`;
+                    document.getElementById('share-x').href = `https://x.com/intent/tweet?url=${url}&text=${encodedTitle}`;
+
+                    // ==========================================================
+                    // SHOW ARTICLE
+                    // ==========================================================
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('article-container').classList.remove('hidden');
+
+                } catch (error) {
+                    console.error('Error loading article:', error);
+                    document.getElementById('loader').innerHTML =
+                        '<p class="text-red-500">نعتذر، فشل تحميل المقال. يرجى المحاولة لاحقاً.</p>';
                 }
-                
-                filteredLines.push(line);
-            }
-            
-            md = filteredLines.join('\n'); 
-
-            if (!title) title = decodeURIComponent(slug.replace(/-/g, ' '));
-            
-            document.getElementById('article-title').textContent = title;
-            
-            if (image) {
-                document.getElementById('article-image').innerHTML = `<img src="${image}" alt="صورة المقال" class="max-w-full h-auto rounded-xl border border-gold-solid/30 shadow-2xl mx-auto max-h-[500px] object-cover">`;
             }
 
-            document.getElementById('article-content').innerHTML = marked.parse(md);
-            
-            const words = md.split(/\s+/).length;
-            document.getElementById('read-time').textContent = Math.ceil(words / 200);
+            fetchArticle();
 
-            // إعداد روابط المشاركة لجميع المنصات
-            const url = encodeURIComponent(window.location.href);
-            const encodedTitle = encodeURIComponent(title);
-            
-            document.getElementById('share-wa').href = `https://wa.me/?text=${encodedTitle}%20${url}`;
-            document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${encodedTitle}`;
-            document.getElementById('share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-            document.getElementById('share-in').href = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${encodedTitle}`;
-            document.getElementById('share-x').href = `https://x.com/intent/tweet?url=${url}&text=${encodedTitle}`;
+        })();
+    </script>
 
-            document.getElementById('loader').classList.add('hidden');
-            document.getElementById('article-wrapper').classList.remove('hidden');
-        } catch (e) {
-            console.error("Error loading article", e);
-            document.getElementById('loader').innerHTML = '<p class="text-red-500 font-bold text-xl">نعتذر، فشل تحميل المقال. يرجى التأكد من الرابط أو المحاولة لاحقاً.</p>';
-        }
-    }
-    fetchArticle();
-</script>
 </body>
 </html>

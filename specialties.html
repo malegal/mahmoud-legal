@@ -6,7 +6,7 @@
     <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
 
     <title>التخصصات القانونية | الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا</title>
-    <meta name="description" content="خبرة قانونية منذ 2005 في المنازعات المدنية، التجارية، العمالية، الإدارية، قضايا الأسرة، الدفاع الجنائي، والطعن الدستوري." />
+    <meta name="description" content="خبرة قانونية منذ 2005 في المنازعات المدنية، التجارية، العمالية، الإدارية، قضايا الأسرة، الدفاع الجنائي، والطعن الدستوري، والنقض، والطعون الإدارية." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://alostazlaw.vercel.app/specialties.html" />
 
@@ -14,7 +14,7 @@
     <link rel="alternate" hreflang="en" href="https://alostazlaw.vercel.app/en/specialties.html" />
 
     <meta property="og:title" content="التخصصات القانونية | الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
-    <meta property="og:description" content="خدمات قانونية متكاملة في المنازعات المدنية، التجارية، العمالية، الإدارية، قضايا الأسرة، والدفاع الجنائي، والطعن الدستوري." />
+    <meta property="og:description" content="خدمات قانونية متكاملة في المنازعات المدنية، التجارية، العمالية، الإدارية، قضايا الأسرة، والدفاع الجنائي، والطعن الدستوري، والنقض، والطعون الإدارية." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://alostazlaw.vercel.app/specialties.html" />
     <meta property="og:image" content="https://alostazlaw.vercel.app/about.png" />
@@ -82,7 +82,9 @@
                         { "@type": "ListItem", "position": 6, "name": "صياغة العقود" },
                         { "@type": "ListItem", "position": 7, "name": "المنازعات العمالية" },
                         { "@type": "ListItem", "position": 8, "name": "التحكيم والوساطة" },
-                        { "@type": "ListItem", "position": 9, "name": "الطعن الدستوري" }
+                        { "@type": "ListItem", "position": 9, "name": "الطعن الدستوري" },
+                        { "@type": "ListItem", "position": 10, "name": "الطعن بالنقض" },
+                        { "@type": "ListItem", "position": 11, "name": "الطعون الإدارية العليا" }
                     ]
                 }
             }]
@@ -206,25 +208,6 @@
             box-shadow: 0 8px 30px rgba(176, 141, 87, 0.15);
         }
 
-        .btn-outline {
-            display: inline-block;
-            border: 1px solid rgba(34, 34, 34, 0.15);
-            color: var(--charcoal);
-            font-weight: 700;
-            padding: 16px 40px;
-            border-radius: 8px;
-            transition: all 0.4s var(--ease-out);
-            text-align: center;
-            font-size: 0.9rem;
-            background: transparent;
-        }
-        .btn-outline:hover {
-            border-color: var(--matte-gold);
-            color: var(--matte-gold);
-            background: rgba(176, 141, 87, 0.03);
-            transform: translateY(-2px);
-        }
-
         .btn-outline-white {
             display: inline-block;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -245,7 +228,7 @@
         }
 
         /* ==========================================================
-               HEADER – مطابق لباقي الصفحات
+               HEADER – مُحدَّث
                ========================================================== */
         .site-header {
             position: fixed;
@@ -372,25 +355,10 @@
             transform: translateY(-2px);
         }
 
-        .header-actions .btn-inquiry {
-            padding: 8px 18px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #fff;
-            background: rgba(255, 255, 255, 0.03);
-            transition: all 0.4s var(--ease-out);
-            font-family: var(--font-ar);
-        }
-        .header-actions .btn-inquiry:hover {
-            border-color: var(--matte-gold);
-            background: rgba(176, 141, 87, 0.06);
-            color: var(--matte-gold);
-            transform: translateY(-2px);
-        }
+        /* تم إزالة زر "تابع قضيتك" من هنا، واكتفاء به في القائمة */
 
-        .header-actions .btn-contact {
+        /* زر "اتصل بنا" أصبح رابط هاتف */
+        .header-actions .btn-phone {
             padding: 8px 18px;
             font-size: 0.7rem;
             font-weight: 700;
@@ -400,8 +368,11 @@
             background: transparent;
             transition: all 0.4s var(--ease-out);
             font-family: var(--font-ar);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
-        .header-actions .btn-contact:hover {
+        .header-actions .btn-phone:hover {
             border-color: var(--matte-gold);
             background: rgba(176, 141, 87, 0.08);
             color: var(--matte-gold);
@@ -503,14 +474,14 @@
         }
 
         /* ==========================================================
-               HERO
+               HERO – بدون عدادات
                ========================================================== */
         .hero-specialties {
             padding: 120px 2rem 4rem;
             background: var(--very-dark-navy);
             position: relative;
             overflow: hidden;
-            min-height: 80vh;
+            min-height: 70vh;
             display: flex;
             align-items: center;
         }
@@ -565,7 +536,6 @@
 
         .hero-specialties .hero-title-wrap {
             text-align: center;
-            margin-bottom: 2.5rem;
         }
         .hero-specialties .hero-title-wrap .en-tag {
             font-size: 0.65rem;
@@ -596,62 +566,12 @@
             line-height: 1.7;
         }
 
-        .hero-specialties .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 2.5rem;
-            margin-top: 2.5rem;
-            flex-wrap: wrap;
-        }
-        .hero-specialties .hero-stat {
-            text-align: center;
-            padding: 0.6rem 1.5rem;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(176, 141, 87, 0.04);
-            min-width: 90px;
-            transition: all 0.5s var(--ease-out);
-        }
-        .hero-specialties .hero-stat:hover {
-            background: rgba(176, 141, 87, 0.02);
-            border-color: rgba(176, 141, 87, 0.08);
-            transform: translateY(-3px);
-        }
-        .hero-specialties .hero-stat .num {
-            font-family: var(--font-serif);
-            font-size: 2.4rem;
-            font-weight: 900;
-            color: #fff;
-            display: block;
-            line-height: 1.1;
-            direction: ltr;
-        }
-        .hero-specialties .hero-stat .num .suffix {
-            font-size: 1.4rem;
-            color: var(--matte-gold);
-        }
-        .hero-specialties .hero-stat .label {
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.3);
-            font-weight: 400;
-            display: block;
-            margin-top: 2px;
-            letter-spacing: 0.04em;
-        }
-        .hero-specialties .hero-stat .icon-mini {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--matte-gold);
-            opacity: 0.25;
-            margin-bottom: 2px;
-        }
-
         .hero-specialties .hero-badges {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 0.5rem;
-            margin-top: 1.6rem;
+            margin-top: 1.8rem;
         }
         .hero-specialties .hero-badge {
             border: 1px solid rgba(176, 141, 87, 0.06);
@@ -722,7 +642,7 @@
         }
 
         /* ==========================================================
-               SPECIALTY CARDS – مع تفاصيل قابلة للتوسيع
+               SPECIALTY CARDS – مع شريط ذهبي على hover
                ========================================================== */
         .specialty-card-wrap {
             margin-bottom: 1.2rem;
@@ -750,7 +670,24 @@
             padding: 1.2rem 1.6rem;
             transition: background 0.3s ease;
             background: var(--pure-white);
+            position: relative;
         }
+        /* شريط ذهبي تحت عنوان التخصص عند hover */
+        .specialty-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .specialty-card-wrap:hover .specialty-card-header::after,
+        .specialty-card-wrap.active .specialty-card-header::after {
+            width: 100%;
+        }
+
         .specialty-card-wrap.active .specialty-card-header {
             background: rgba(176, 141, 87, 0.02);
         }
@@ -804,7 +741,7 @@
         }
 
         /* ==========================================================
-               SPECIALTY DETAILS
+               SPECIALTY DETAILS – نصوص أكثر وضوحاً
                ========================================================== */
         .specialty-details {
             max-height: 0;
@@ -818,7 +755,7 @@
         }
 
         .specialty-details .desc {
-            color: rgba(34, 34, 34, 0.65);
+            color: rgba(34, 34, 34, 0.75); /* أكثر وضوحاً */
             font-weight: 300;
             font-size: 0.95rem;
             line-height: 1.9;
@@ -853,7 +790,7 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.8rem;
-            color: rgba(34, 34, 34, 0.55);
+            color: rgba(34, 34, 34, 0.7); /* أكثر وضوحاً */
             font-weight: 300;
             padding: 0.15rem 0;
             line-height: 1.5;
@@ -862,6 +799,12 @@
             color: var(--matte-gold);
             font-size: 0.6rem;
             opacity: 0.4;
+        }
+        .specialty-details .detail-col p {
+            font-size: 0.8rem;
+            color: rgba(34, 34, 34, 0.7);
+            font-weight: 300;
+            line-height: 1.7;
         }
 
         .specialty-details .detail-cta {
@@ -899,14 +842,14 @@
         .cta-section p {
             max-width: 640px;
             margin: 0.4rem auto 1.8rem;
-            color: rgba(34, 34, 34, 0.5);
+            color: rgba(34, 34, 34, 0.6);
             font-weight: 300;
             font-size: 0.95rem;
             line-height: 1.8;
         }
 
         /* ==========================================================
-               FAQ
+               FAQ – نصوص أوضح
                ========================================================== */
         .faq-list {
             max-width: 780px;
@@ -986,7 +929,7 @@
         }
         .faq-answer p {
             font-size: 0.85rem;
-            color: rgba(34, 34, 34, 0.5);
+            color: rgba(34, 34, 34, 0.7); /* أكثر وضوحاً */
             line-height: 1.8;
             font-weight: 300;
         }
@@ -1172,8 +1115,7 @@
                 display: none;
             }
             .header-actions .btn-appointment,
-            .header-actions .btn-inquiry,
-            .header-actions .btn-contact {
+            .header-actions .btn-phone {
                 display: none;
             }
             .menu-toggle {
@@ -1190,16 +1132,6 @@
             .hero-specialties {
                 padding: 100px 1rem 3rem;
                 min-height: auto;
-            }
-            .hero-specialties .hero-stats {
-                gap: 1rem;
-            }
-            .hero-specialties .hero-stat {
-                min-width: 70px;
-                padding: 0.4rem 1rem;
-            }
-            .hero-specialties .hero-stat .num {
-                font-size: 1.8rem;
             }
 
             .section {
@@ -1249,22 +1181,6 @@
             .hero-specialties .hero-title-wrap h1 {
                 font-size: clamp(2rem, 8vw, 2.8rem);
             }
-            .hero-specialties .hero-stats {
-                gap: 0.6rem;
-            }
-            .hero-specialties .hero-stat {
-                min-width: 60px;
-                padding: 0.3rem 0.7rem;
-            }
-            .hero-specialties .hero-stat .num {
-                font-size: 1.4rem;
-            }
-            .hero-specialties .hero-stat .num .suffix {
-                font-size: 1rem;
-            }
-            .hero-specialties .hero-stat .label {
-                font-size: 0.5rem;
-            }
             .hero-specialties .hero-badges {
                 gap: 0.3rem;
             }
@@ -1304,18 +1220,12 @@
         }
 
         @media (max-width: 400px) {
-            .hero-specialties .hero-stats {
-                gap: 0.4rem;
+            .hero-specialties .hero-badges {
+                gap: 0.2rem;
             }
-            .hero-specialties .hero-stat {
-                min-width: 50px;
-                padding: 0.2rem 0.5rem;
-            }
-            .hero-specialties .hero-stat .num {
-                font-size: 1.1rem;
-            }
-            .hero-specialties .hero-stat .label {
-                font-size: 0.45rem;
+            .hero-specialties .hero-badge {
+                font-size: 0.4rem;
+                padding: 2px 8px;
             }
         }
     </style>
@@ -1330,7 +1240,7 @@
     </a>
 
     <!-- ==========================================================
-    HEADER
+    HEADER – محدث (تم إزالة زر تابع قضيتك، وإضافة قطاعات نخدمها، وتحويل اتصل بنا إلى هاتف)
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -1345,22 +1255,25 @@
             <a href="https://alostazlaw.vercel.app/">الرئيسية</a>
             <a href="https://alostazlaw.vercel.app/about.html">عن المؤسسة</a>
             <a href="https://alostazlaw.vercel.app/specialties.html" class="active">التخصصات</a>
+            <a href="https://alostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a> <!-- تم الإضافة -->
             <a href="https://alostazlaw.vercel.app/blog.html">المدونة</a>
             <a href="https://alostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
+            <!-- اتصل بنا أصبح عبر الهاتف في الأكشن، ونبقي الرابط في القائمة لصفحة الاتصال؟ -->
+            <!-- لكن المستخدم قال "زر اتصل بنا اجعله مرتبط بطلب الهاتف" – نربط الزر بالهاتف، ونبقي رابط "اتصل بنا" في القائمة لصفحة الاتصال -->
             <a href="https://alostazlaw.vercel.app/contact.html">اتصل بنا</a>
         </nav>
 
         <div class="header-actions">
             <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-consult">طلب استشارة</a>
             <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-appointment">حجز موعد</a>
-            <a href="https://alostazlaw.vercel.app/client-inquiry.html" class="btn-inquiry">تابع قضيتك</a>
-            <a href="https://alostazlaw.vercel.app/contact.html" class="btn-contact">اتصل بنا</a>
+            <!-- زر "اتصل بنا" أصبح رابط هاتف -->
+            <a href="tel:+201101076000" class="btn-phone"><i class="fas fa-phone-alt"></i> اتصل بنا</a>
             <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
         </div>
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU
+    MOBILE MENU – محدث
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -1368,6 +1281,7 @@
             <a href="https://alostazlaw.vercel.app/" onclick="closeMobileMenu()">الرئيسية</a>
             <a href="https://alostazlaw.vercel.app/about.html" onclick="closeMobileMenu()">عن المؤسسة</a>
             <a href="https://alostazlaw.vercel.app/specialties.html" onclick="closeMobileMenu()">التخصصات</a>
+            <a href="https://alostazlaw.vercel.app/sectors.html" onclick="closeMobileMenu()">قطاعات نخدمها</a>
             <a href="https://alostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المدونة</a>
             <a href="https://alostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://alostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
@@ -1375,14 +1289,13 @@
             <div class="actions">
                 <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-gold" onclick="closeMobileMenu()">طلب استشارة</a>
                 <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-outline-white" onclick="closeMobileMenu()">حجز موعد</a>
-                <a href="https://alostazlaw.vercel.app/client-inquiry.html" class="btn-outline-white" onclick="closeMobileMenu()">تابع قضيتك</a>
-                <a href="https://alostazlaw.vercel.app/contact.html" class="btn-outline-white" onclick="closeMobileMenu()">اتصل بنا</a>
+                <a href="tel:+201101076000" class="btn-outline-white" onclick="closeMobileMenu()"><i class="fas fa-phone-alt" style="margin-left:6px;"></i> اتصل بنا</a>
             </div>
         </nav>
     </div>
 
     <!-- ==========================================================
-    HERO
+    HERO – بدون عدادات
     ========================================================== -->
     <section class="hero-specialties" aria-label="التخصصات القانونية">
         <div class="hero-pattern"></div>
@@ -1394,26 +1307,8 @@
                 <span class="en-tag">Our Legal Specialties</span>
                 <h1>التخصصات <span class="gold-text">القانونية</span></h1>
                 <p class="sub">
-                    خبرة قانونية تمتد منذ 2005 في حل المنازعات المدنية والتجارية والعمالية والإدارية، وقضايا الأسرة، والدفاع الجنائي، والطعن الدستوري.
+                    خبرة قانونية تمتد منذ 2005 في حل المنازعات المدنية والتجارية والعمالية والإدارية، وقضايا الأسرة، والدفاع الجنائي، والطعن الدستوري، والنقض، والطعون الإدارية العليا.
                 </p>
-            </div>
-
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="icon-mini"><i class="fas fa-calendar-alt"></i></span>
-                    <span class="num"><span class="counter" data-target="2005">0</span></span>
-                    <span class="label">بداية الخبرة</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="icon-mini"><i class="fas fa-gavel"></i></span>
-                    <span class="num"><span class="counter" data-target="2500">0</span><span class="suffix">+</span></span>
-                    <span class="label">قضية تم تمثيلها</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="icon-mini"><i class="fas fa-balance-scale"></i></span>
-                    <span class="num"><span class="counter" data-target="9">0</span></span>
-                    <span class="label">تخصص قانوني</span>
-                </div>
             </div>
 
             <div class="hero-badges">
@@ -1423,6 +1318,8 @@
                 <span class="hero-badge">الدفاع الجنائي</span>
                 <span class="hero-badge">المنازعات الإدارية</span>
                 <span class="hero-badge">الطعن الدستوري</span>
+                <span class="hero-badge">الطعن بالنقض</span>
+                <span class="hero-badge">الطعون الإدارية العليا</span>
                 <span class="hero-badge">المنازعات العمالية</span>
             </div>
 
@@ -1433,7 +1330,7 @@
     </section>
 
     <!-- ==========================================================
-    SPECIALTIES – قائمة التخصصات القابلة للتوسيع
+    SPECIALTIES – قائمة التخصصات
     ========================================================== -->
     <section class="section section-gray" aria-label="التخصصات">
         <div class="section-inner">
@@ -1454,9 +1351,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        نتفهم أن المنازعات المدنية قد تستنزف وقتك وجهدك ومالك. لهذا نضع خبرتنا التي تمتد منذ 2005 بين يديك، لنقدم دفاعاً قانونياً قوياً وحلولاً مبتكرة.
-                    </p>
+                    <p class="desc">نحن نتفهم أن المنازعات المدنية قد تستنزف وقتك وجهدك ومالك. لهذا نضع خبرتنا التي تمتد منذ 2005 بين يديك، لنقدم دفاعاً قانونياً قوياً وحلولاً مبتكرة.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1470,9 +1365,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                نضع استراتيجيات تقاضي مدروسة، ونمتلك خبرة واسعة في إدارة الأدلة وتقديم المرافعات القوية.
-                            </p>
+                            <p>نضع استراتيجيات تقاضي مدروسة، ونمتلك خبرة واسعة في إدارة الأدلة وتقديم المرافعات القوية.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> مراجعة قضيتك وفهم التفاصيل</li>
@@ -1500,9 +1393,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        العالم التجاري مليء بالفرص، لكنه أيضاً مليء بالتحديات القانونية. نحن هنا لحماية عملك واستثماراتك من أي نزاعات.
-                    </p>
+                    <p class="desc">العالم التجاري مليء بالفرص، لكنه أيضاً مليء بالتحديات القانونية. نحن هنا لحماية عملك واستثماراتك من أي نزاعات.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1516,9 +1407,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                نفهم تعقيدات القوانين التجارية ونمتلك شبكة علاقات واسعة تمكننا من حل النزاعات بسرعة وحكمة.
-                            </p>
+                            <p>نفهم تعقيدات القوانين التجارية ونمتلك شبكة علاقات واسعة تمكننا من حل النزاعات بسرعة وحكمة.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> تقييم وضعك التجاري والقانوني</li>
@@ -1546,9 +1435,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        قضايا الأسرة هي الأكثر حساسية في حياتنا. نتعامل معها بكل رحمة وحكمة، ونقدم لك الدعم القانوني والنفسي الذي تحتاجه.
-                    </p>
+                    <p class="desc">قضايا الأسرة هي الأكثر حساسية في حياتنا. نتعامل معها بكل رحمة وحكمة، ونقدم لك الدعم القانوني والنفسي الذي تحتاجه.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1562,9 +1449,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                نهجنا حساس ويحترم خصوصيتك. لدينا خبرة عميقة في قضايا الأسرة وفقاً للشريعة والقانون المصري.
-                            </p>
+                            <p>نهجنا حساس ويحترم خصوصيتك. لدينا خبرة عميقة في قضايا الأسرة وفقاً للشريعة والقانون المصري.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> فهم قضيتك واحتياجات أسرتك</li>
@@ -1592,9 +1477,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        الاتهام الجنائي هو من أصعب اللحظات التي قد تمر بها. نحن هنا للدفاع عنك بكل قوة، نستمع لك، ندرس أدلة الاتهام بدقة، ونضع استراتيجية دفاع قوية.
-                    </p>
+                    <p class="desc">الاتهام الجنائي هو من أصعب اللحظات التي قد تمر بها. نحن هنا للدفاع عنك بكل قوة، نستمع لك، ندرس أدلة الاتهام بدقة، ونضع استراتيجية دفاع قوية.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1608,9 +1491,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                لدينا فهم دقيق لآليات النظام الجنائي المصري، ونعرف كيف نفنّد الأدلة ونكشف نقاط الضعف في الاتهام.
-                            </p>
+                            <p>لدينا فهم دقيق لآليات النظام الجنائي المصري، ونعرف كيف نفنّد الأدلة ونكشف نقاط الضعف في الاتهام.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> مراجعة ملف قضيتك والأدلة</li>
@@ -1638,9 +1519,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        عندما تواجه قراراً إدارياً جائراً أو تتعرض لظلم من جهة حكومية، فإننا نضع خبرتنا في القانون الإداري بين يديك.
-                    </p>
+                    <p class="desc">عندما تواجه قراراً إدارياً جائراً أو تتعرض لظلم من جهة حكومية، فإننا نضع خبرتنا في القانون الإداري بين يديك.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1654,9 +1533,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                خبرة طويلة في التعامل مع الأجهزة الحكومية ومجلس الدولة، ونعرف خبايا القانون الإداري المصري.
-                            </p>
+                            <p>خبرة طويلة في التعامل مع الأجهزة الحكومية ومجلس الدولة، ونعرف خبايا القانون الإداري المصري.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> مراجعة القرار الإداري الذي تعرضت له</li>
@@ -1684,9 +1561,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        العقد الجيد هو خط الدفاع الأول عن حقوقك. نحن نصيغ عقودك بدقة قانونية متناهية، نغلق كل الثغرات التي قد يستغلها الطرف الآخر.
-                    </p>
+                    <p class="desc">العقد الجيد هو خط الدفاع الأول عن حقوقك. نحن نصيغ عقودك بدقة قانونية متناهية، نغلق كل الثغرات التي قد يستغلها الطرف الآخر.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1700,9 +1575,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                دقتنا في الصياغة وخبرتنا في توقع الثغرات القانونية تجعل عقودك درعاً حصيناً يحمي حقوقك ومصالحك.
-                            </p>
+                            <p>دقتنا في الصياغة وخبرتنا في توقع الثغرات القانونية تجعل عقودك درعاً حصيناً يحمي حقوقك ومصالحك.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> فهم أهدافك وتوقعاتك من العقد</li>
@@ -1730,9 +1603,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        العلاقة بين العامل وصاحب العمل قد تشهد توترات ونزاعات. نحن هنا لضمان حقوقك العمالية الكاملة.
-                    </p>
+                    <p class="desc">العلاقة بين العامل وصاحب العمل قد تشهد توترات ونزاعات. نحن هنا لضمان حقوقك العمالية الكاملة.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1746,9 +1617,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                نفهم قانون العمل المصري جيداً، ونمتلك خبرة في قضايا العمال والموظفين، مما يضمن لك دفاعاً قوياً وعادلاً.
-                            </p>
+                            <p>نفهم قانون العمل المصري جيداً، ونمتلك خبرة في قضايا العمال والموظفين، مما يضمن لك دفاعاً قوياً وعادلاً.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> فهم العلاقة العمالية والنزاع</li>
@@ -1776,9 +1645,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        ليس كل نزاع يحتاج إلى معركة قضائية طويلة. نقدم لك بدائل فعالة لحل النزاعات بسرعة وسرية، من خلال التحكيم والوساطة.
-                    </p>
+                    <p class="desc">ليس كل نزاع يحتاج إلى معركة قضائية طويلة. نقدم لك بدائل فعالة لحل النزاعات بسرعة وسرية، من خلال التحكيم والوساطة.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1792,9 +1659,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                خبرة واسعة في إجراءات التحكيم المحلي والدولي، نضمن لك سير العملية بسلاسة ووصولاً إلى حل عادل وسريع.
-                            </p>
+                            <p>خبرة واسعة في إجراءات التحكيم المحلي والدولي، نضمن لك سير العملية بسلاسة ووصولاً إلى حل عادل وسريع.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> تقييم إمكانية التحكيم في نزاعك</li>
@@ -1822,9 +1687,7 @@
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 <div class="specialty-details">
-                    <p class="desc">
-                        الطعن بعدم دستورية القوانين هو أعلى درجات التقاضي، ويتطلب خبرة قانونية وفقهية عميقة. نحن نقدم لك هذه الخبرة.
-                    </p>
+                    <p class="desc">الطعن بعدم دستورية القوانين هو أعلى درجات التقاضي، ويتطلب خبرة قانونية وفقهية عميقة. نحن نقدم لك هذه الخبرة.</p>
                     <div class="detail-grid">
                         <div class="detail-col">
                             <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
@@ -1838,9 +1701,7 @@
                         </div>
                         <div class="detail-col">
                             <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
-                            <p style="font-size:0.8rem; color:rgba(34,34,34,0.5); line-height:1.7; font-weight:300;">
-                                خبرة استثنائية في القانون الدستوري المصري، وفهم عميق لأحكام المحكمة الدستورية العليا.
-                            </p>
+                            <p>خبرة استثنائية في القانون الدستوري المصري، وفهم عميق لأحكام المحكمة الدستورية العليا.</p>
                             <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
                             <ul>
                                 <li><i class="fas fa-circle"></i> تحليل النص التشريعي محل الطعن</li>
@@ -1853,6 +1714,90 @@
                     <div class="detail-cta">
                         <a href="https://alostazlaw.vercel.app/contact.html?tab=consult&specialty=الطعن%20الدستوري" class="btn-gold">طلب استشارة</a>
                         <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment&specialty=الطعن%20الدستوري" class="btn-outline-gold">حجز موعد</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. الطعن بالنقض (جديد) -->
+            <div class="specialty-card-wrap reveal reveal-d1" data-specialty="cassation">
+                <div class="specialty-card-header">
+                    <div class="icon-wrap"><i class="fas fa-gavel"></i></div>
+                    <div class="info">
+                        <h3>الطعن بالنقض</h3>
+                        <p>الطعن أمام محكمة النقض في الأحكام القضائية</p>
+                    </div>
+                    <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="specialty-details">
+                    <p class="desc">الطعن بالنقض هو إجراء قانوني يهدف إلى مراجعة الأحكام الصادرة عن محاكم الاستئناف أمام محكمة النقض. نمتلك خبرة طويلة في إعداد الطعون بالنقض المدنية والجنائية، وندرك تماماً الشكلية والمادية التي تقوم عليها هذه الطعون.</p>
+                    <div class="detail-grid">
+                        <div class="detail-col">
+                            <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
+                            <ul>
+                                <li><i class="fas fa-circle"></i> إعداد مذكرات الطعن بالنقض</li>
+                                <li><i class="fas fa-circle"></i> تمثيل العملاء أمام محكمة النقض</li>
+                                <li><i class="fas fa-circle"></i> الطعن في الأحكام الجنائية والمدنية</li>
+                                <li><i class="fas fa-circle"></i> متابعة إجراءات الطعن حتى الفصل</li>
+                                <li><i class="fas fa-circle"></i> تقديم الدفوع القانونية المتعلقة بالنقض</li>
+                            </ul>
+                        </div>
+                        <div class="detail-col">
+                            <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
+                            <p>خبرة واسعة في أحكام محكمة النقض، وفهم دقيق للأسباب التي تؤدي إلى نقض الأحكام، مما يزيد من فرص نجاح طعنك.</p>
+                            <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
+                            <ul>
+                                <li><i class="fas fa-circle"></i> دراسة الحكم المراد الطعن فيه</li>
+                                <li><i class="fas fa-circle"></i> تحديد أسباب الطعن القانونية</li>
+                                <li><i class="fas fa-circle"></i> صياغة مذكرة الطعن وإيداعها</li>
+                                <li><i class="fas fa-circle"></i> التمثيل أمام دائرة النقض</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="detail-cta">
+                        <a href="https://alostazlaw.vercel.app/contact.html?tab=consult&specialty=الطعن%20بالنقض" class="btn-gold">طلب استشارة</a>
+                        <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment&specialty=الطعن%20بالنقض" class="btn-outline-gold">حجز موعد</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. الطعون الإدارية العليا (جديد) -->
+            <div class="specialty-card-wrap reveal reveal-d2" data-specialty="admin_appeal">
+                <div class="specialty-card-header">
+                    <div class="icon-wrap"><i class="fas fa-landmark"></i></div>
+                    <div class="info">
+                        <h3>الطعون الإدارية العليا</h3>
+                        <p>الطعن أمام المحكمة الإدارية العليا (مجلس الدولة)</p>
+                    </div>
+                    <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                <div class="specialty-details">
+                    <p class="desc">الطعون الإدارية العليا هي السبيل للطعن في الأحكام الصادرة عن محاكم القضاء الإداري أمام المحكمة الإدارية العليا، وهي أعلى سلطة قضائية في مجلس الدولة. نتمتع بخبرة ممتدة في هذا المجال، ونقدم استشارات وتمثيلاً متخصصاً في هذه الطعون.</p>
+                    <div class="detail-grid">
+                        <div class="detail-col">
+                            <h5><i class="fas fa-list-ul" style="margin-left:6px;"></i> الخدمات التي نقدمها</h5>
+                            <ul>
+                                <li><i class="fas fa-circle"></i> إعداد مذكرات الطعن الإداري العليا</li>
+                                <li><i class="fas fa-circle"></i> تمثيل العملاء أمام المحكمة الإدارية العليا</li>
+                                <li><i class="fas fa-circle"></i> الطعن في أحكام القضاء الإداري</li>
+                                <li><i class="fas fa-circle"></i> متابعة إجراءات الطعن حتى الفصل</li>
+                                <li><i class="fas fa-circle"></i> تقديم الدفوع القانونية الإدارية</li>
+                            </ul>
+                        </div>
+                        <div class="detail-col">
+                            <h5><i class="fas fa-star" style="margin-left:6px;"></i> لماذا تختارنا؟</h5>
+                            <p>خبرة عميقة في قوانين مجلس الدولة وأحكام المحكمة الإدارية العليا، مما يضمن تقديم طعون قوية ومقنعة.</p>
+                            <h5 style="margin-top:0.8rem;"><i class="fas fa-clock" style="margin-left:6px;"></i> خطوات العمل</h5>
+                            <ul>
+                                <li><i class="fas fa-circle"></i> دراسة الحكم الإداري المراد الطعن فيه</li>
+                                <li><i class="fas fa-circle"></i> تحديد أسباب الطعن وفقاً للقانون</li>
+                                <li><i class="fas fa-circle"></i> صياغة مذكرة الطعن وإيداعها</li>
+                                <li><i class="fas fa-circle"></i> التمثيل أمام المحكمة الإدارية العليا</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="detail-cta">
+                        <a href="https://alostazlaw.vercel.app/contact.html?tab=consult&specialty=الطعون%20الإدارية%20العليا" class="btn-gold">طلب استشارة</a>
+                        <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment&specialty=الطعون%20الإدارية%20العليا" class="btn-outline-gold">حجز موعد</a>
                     </div>
                 </div>
             </div>
@@ -1890,7 +1835,7 @@
                         <span class="icon"><i class="fas fa-chevron-down"></i></span>
                     </button>
                     <div class="faq-answer">
-                        <p>نمثل العملاء أمام جميع درجات التقاضي في مصر، بدءاً من المحاكم الجزئية والابتدائية، مروراً بمحاكم الاستئناف، وصولاً إلى محكمة النقض والمحكمة الدستورية العليا.</p>
+                        <p>نمثل العملاء أمام جميع درجات التقاضي في مصر، بدءاً من المحاكم الجزئية والابتدائية، مروراً بمحاكم الاستئناف، وصولاً إلى محكمة النقض والمحكمة الدستورية العليا والمحكمة الإدارية العليا.</p>
                     </div>
                 </div>
                 <div class="faq-item reveal reveal-d2">
@@ -1956,6 +1901,7 @@
                 <a href="https://alostazlaw.vercel.app/">الرئيسية</a>
                 <a href="https://alostazlaw.vercel.app/about.html">عن المؤسسة</a>
                 <a href="https://alostazlaw.vercel.app/specialties.html">التخصصات</a>
+                <a href="https://alostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a>
                 <a href="https://alostazlaw.vercel.app/blog.html">المدونة</a>
                 <a href="https://alostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
                 <a href="https://alostazlaw.vercel.app/contact.html">اتصل بنا</a>
@@ -2022,53 +1968,6 @@
             });
 
             // ==========================================================
-            // COUNTERS
-            // ==========================================================
-            let countersDone = false;
-
-            function animateCounters() {
-                if (countersDone) return;
-                const counters = document.querySelectorAll('.counter');
-                if (!counters.length) return;
-                countersDone = true;
-
-                counters.forEach(function(counter) {
-                    const target = parseInt(counter.getAttribute('data-target'));
-                    if (isNaN(target)) return;
-                    let current = 0;
-                    const duration = 2000,
-                        stepTime = 20;
-                    const totalSteps = duration / stepTime;
-                    const increment = target / totalSteps;
-
-                    function update() {
-                        current += increment;
-                        if (current >= target) { counter.textContent = target; return; }
-                        counter.textContent = Math.floor(current);
-                        requestAnimationFrame(update);
-                    }
-
-                    const observer = new IntersectionObserver(function(entries) {
-                        entries.forEach(function(entry) {
-                            if (entry.isIntersecting) { update();
-                                observer.unobserve(entry.target); }
-                        });
-                    }, { threshold: 0.3 });
-                    observer.observe(counter);
-                });
-            }
-
-            const statsObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) { animateCounters();
-                        statsObserver.unobserve(entry.target); }
-                });
-            }, { threshold: 0.15 });
-
-            const statsContainer = document.querySelector('.hero-stats');
-            if (statsContainer) statsObserver.observe(statsContainer);
-
-            // ==========================================================
             // REVEAL
             // ==========================================================
             const revealObserver = new IntersectionObserver(function(entries) {
@@ -2093,10 +1992,8 @@
                 const header = card.querySelector('.specialty-card-header');
 
                 header.addEventListener('click', function(e) {
-                    // Toggle active class
                     const isActive = card.classList.contains('active');
 
-                    // Close all others
                     specialtyCards.forEach(function(other) {
                         other.classList.remove('active');
                     });
@@ -2106,7 +2003,6 @@
                     }
                 });
 
-                // Keyboard support
                 header.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -2114,12 +2010,10 @@
                     }
                 });
 
-                // Make header focusable
                 header.setAttribute('tabindex', '0');
                 header.setAttribute('role', 'button');
                 header.setAttribute('aria-expanded', 'false');
 
-                // Update aria-expanded when toggled
                 const observer = new MutationObserver(function(mutations) {
                     mutations.forEach(function(mutation) {
                         if (mutation.attributeName === 'class') {

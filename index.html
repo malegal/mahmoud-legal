@@ -192,7 +192,6 @@
             cursor: pointer;
             overflow: hidden;
         }
-        /* زر ذهبي – خط ذهبي أسفله عند hover */
         .btn-gold::after {
             content: '';
             position: absolute;
@@ -315,7 +314,7 @@
         }
 
         /* ==========================================================
-               HEADER
+               HEADER – داكن دائماً (بدون شفافية)
                ========================================================== */
         .site-header {
             position: fixed;
@@ -328,16 +327,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: transparent;
-            transition: all 0.5s var(--ease-out);
-        }
-        .site-header.scrolled {
-            background: rgba(11, 17, 27, 0.94);
+            background: rgba(11, 17, 27, 0.98);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(176, 141, 87, 0.08);
-            height: 64px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s var(--ease-out);
+        }
+        .site-header.scrolled {
+            background: rgba(11, 17, 27, 0.98);
+            height: 64px;
         }
 
         .header-brand {
@@ -735,7 +734,6 @@
             position: relative;
             overflow: hidden;
         }
-        /* خط ذهبي تحت بطاقات الأكشن عند hover */
         .action-card::after {
             content: '';
             position: absolute;
@@ -984,7 +982,7 @@
         }
 
         /* ==========================================================
-               PRACTICE AREAS – مع خط ذهبي تحت كل بطاقة ونصوص أوضح
+               PRACTICE AREAS
                ========================================================== */
         .practice-grid {
             display: grid;
@@ -998,7 +996,6 @@
             transition: all 0.4s var(--ease-out);
             position: relative;
         }
-        /* خط ذهبي تحت البطاقة عند hover */
         .practice-link::after {
             content: '';
             position: absolute;
@@ -1057,7 +1054,7 @@
         }
 
         /* ==========================================================
-               PROCESS – مع خط ذهبي تحت كل خطوة ونصوص أوضح
+               PROCESS
                ========================================================== */
         .process-timeline {
             max-width: 780px;
@@ -1120,7 +1117,7 @@
         }
 
         /* ==========================================================
-               LEGAL LIBRARY – مع خط ذهبي تحت كل بطاقة
+               LEGAL LIBRARY – تجلب المقالات فعلياً من المدونة
                ========================================================== */
         .blog-grid {
             display: grid;
@@ -1136,8 +1133,9 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             position: relative;
             cursor: default;
+            display: flex;
+            flex-direction: column;
         }
-        /* خط ذهبي تحت البطاقة عند hover */
         .blog-card::after {
             content: '';
             position: absolute;
@@ -1166,9 +1164,18 @@
             justify-content: center;
             color: rgba(34, 34, 34, 0.15);
             font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .blog-card .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .blog-card .content {
             padding: 1rem 1.2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         .blog-card .content .meta {
             display: flex;
@@ -1183,6 +1190,7 @@
             font-weight: 700;
             color: var(--charcoal);
             margin-bottom: 0.1rem;
+            line-height: 1.4;
         }
         .blog-card .content p {
             font-size: 0.75rem;
@@ -1190,6 +1198,7 @@
             font-weight: 400;
             line-height: 1.6;
             margin-bottom: 0.4rem;
+            flex: 1;
         }
         .blog-card .content .read-more {
             font-size: 0.7rem;
@@ -1198,6 +1207,7 @@
             transition: color 0.3s ease;
             position: relative;
             display: inline-block;
+            align-self: flex-start;
         }
         .blog-card .content .read-more::after {
             content: '';
@@ -1217,7 +1227,7 @@
         }
 
         /* ==========================================================
-               EXPERIENCE / SECTORS – مع خط ذهبي تحت كل بطاقة ونصوص أوضح
+               EXPERIENCE / SECTORS
                ========================================================== */
         .experience-grid {
             display: grid;
@@ -1667,7 +1677,7 @@
     </a>
 
     <!-- ==========================================================
-    HEADER
+    HEADER (داكن دائماً)
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -1931,7 +1941,7 @@
     </section>
 
     <!-- ==========================================================
-    LEGAL LIBRARY
+    LEGAL LIBRARY – مقالات حقيقية من المدونة
     ========================================================== -->
     <section class="section section-gray" aria-label="المكتبة القانونية">
         <div class="section-inner">
@@ -1941,36 +1951,9 @@
                 <p>اطلع على أحدث ما ننشره في مجال القانون المصري.</p>
             </div>
 
-            <div class="blog-grid">
-                <article class="blog-card reveal reveal-d1">
-                    <div class="image" style="background: #e8e4dd;">⚖️</div>
-                    <div class="content">
-                        <div class="meta"><span>٥ دقائق</span> <span>●</span> <span>١ يوليو ٢٠٢٦</span></div>
-                        <h3>شروط صحة عقد البيع في القانون المدني المصري</h3>
-                        <p>تحليل تفصيلي لأركان وشروط عقد البيع وفقاً لأحكام القانون المدني.</p>
-                        <a href="https://alostazlaw.vercel.app/blog/article-1.html" class="read-more">اقرأ المقال ←</a>
-                    </div>
-                </article>
-
-                <article class="blog-card reveal reveal-d2">
-                    <div class="image" style="background: #ddd8cf;">🏛️</div>
-                    <div class="content">
-                        <div class="meta"><span>٤ دقائق</span> <span>●</span> <span>٢٥ يونيو ٢٠٢٦</span></div>
-                        <h3>الطعن بالنقض في الأحكام الجنائية – دليل إجرائي</h3>
-                        <p>شرح الإجراءات والشروط الواجب توفرها لقبول الطعن بالنقض.</p>
-                        <a href="https://alostazlaw.vercel.app/blog/article-2.html" class="read-more">اقرأ المقال ←</a>
-                    </div>
-                </article>
-
-                <article class="blog-card reveal reveal-d3">
-                    <div class="image" style="background: #d5d0c7;">📋</div>
-                    <div class="content">
-                        <div class="meta"><span>٦ دقائق</span> <span>●</span> <span>١٨ يونيو ٢٠٢٦</span></div>
-                        <h3>حقوق المطلقة في القانون المصري – النفقة والحضانة</h3>
-                        <p>استعراض شامل لحقوق المطلقة في القانون المصري.</p>
-                        <a href="https://alostazlaw.vercel.app/blog/article-3.html" class="read-more">اقرأ المقال ←</a>
-                    </div>
-                </article>
+            <div id="blog-grid" class="blog-grid">
+                <!-- سيتم تعبئتها عبر JavaScript -->
+                <div class="col-span-full text-center text-charcoal/50 py-10">جاري تحميل المقالات...</div>
             </div>
 
             <div class="section-cta">
@@ -2096,7 +2079,7 @@
             'use strict';
 
             // ==========================================================
-            // HEADER SCROLL
+            // HEADER SCROLL – فقط لتغيير الارتفاع، الخلفية ثابتة داكنة
             // ==========================================================
             const header = document.getElementById('siteHeader');
             window.addEventListener('scroll', function() {
@@ -2141,6 +2124,97 @@
             document.querySelectorAll('.reveal').forEach(function(el) {
                 revealObserver.observe(el);
             });
+
+            // ==========================================================
+            // LOAD BLOG POSTS (أحدث 3 مقالات)
+            // ==========================================================
+            const CONFIG = {
+                owner: 'malegal',
+                repo: 'mahmoud-legal',
+                path: 'blog/articles',
+                branch: 'main',
+                fileExtension: '.md'
+            };
+
+            async function loadLatestBlog() {
+                const grid = document.getElementById('blog-grid');
+                if (!grid) return;
+
+                // عرض رسالة تحميل
+                grid.innerHTML = '<div class="col-span-full text-center text-charcoal/50 py-10">⏳ جاري تحميل المقالات...</div>';
+
+                try {
+                    const url =
+                        `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}?ref=${CONFIG.branch}`;
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error(`فشل التحميل (${response.status})`);
+
+                    const data = await response.json();
+                    if (!Array.isArray(data)) throw new Error('البيانات غير صحيحة');
+
+                    const mdFiles = data
+                        .filter(item => item.type === 'file' && item.name.endsWith(CONFIG.fileExtension))
+                        .reverse()
+                        .slice(0, 3); // أحدث 3 مقالات فقط
+
+                    if (mdFiles.length === 0) {
+                        grid.innerHTML =
+                            '<div class="col-span-full text-center text-charcoal/50 py-10">لا توجد مقالات حالياً.</div>';
+                        return;
+                    }
+
+                    grid.innerHTML = '';
+
+                    for (const file of mdFiles) {
+                        const slug = file.name.replace(CONFIG.fileExtension, '');
+                        let title = slug.replace(/-/g, ' ');
+                        let imageUrl = '';
+                        let description = '';
+
+                        try {
+                            const contentRes = await fetch(file.download_url);
+                            const content = await contentRes.text();
+                            const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                            if (yamlMatch) {
+                                const frontMatter = yamlMatch[1];
+                                const titleMatch = frontMatter.match(/title:\s*(.*)/i);
+                                if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+                                const imageMatch = frontMatter.match(/image:\s*(.*)/i);
+                                if (imageMatch) imageUrl = imageMatch[1].replace(/['"]/g, '').trim();
+                                const descMatch = frontMatter.match(/description:\s*(.*)/i);
+                                if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
+                            }
+                        } catch (e) { /* use defaults */ }
+
+                        const card = document.createElement('div');
+                        card.className = 'blog-card reveal';
+                        card.innerHTML = `
+                            <div class="image" style="background:#e8e4dd; ${imageUrl ? `background-image:url(${imageUrl}); background-size:cover; background-position:center;` : ''}">
+                                ${!imageUrl ? '⚖️' : ''}
+                            </div>
+                            <div class="content">
+                                <div class="meta">
+                                    <span>${Math.ceil(title.length / 50) || 1} دقائق قراءة</span>
+                                </div>
+                                <h3>${title}</h3>
+                                <p>${description || 'تحليل قانوني متخصص في مجال القانون المصري.'}</p>
+                                <a href="article.html?slug=${encodeURIComponent(slug)}" class="read-more">اقرأ المقال ←</a>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                        // إعادة مراقبة العنصر للـ reveal
+                        revealObserver.observe(card);
+                    }
+
+                } catch (error) {
+                    console.error('خطأ في تحميل المقالات:', error);
+                    grid.innerHTML =
+                        `<div class="col-span-full text-center text-red-500 py-10">حدث خطأ أثناء تحميل المقالات. يرجى تحديث الصفحة.</div>`;
+                }
+            }
+
+            // تشغيل تحميل المقالات عند تحميل الصفحة
+            loadLatestBlog();
 
         })();
     </script>

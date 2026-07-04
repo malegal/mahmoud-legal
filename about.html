@@ -165,6 +165,9 @@
             font-size: 0.95rem;
             letter-spacing: 0.02em;
             box-shadow: 0 2px 20px rgba(176, 141, 87, 0.15);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
         }
         .btn-gold:hover {
             background: #c4a06a;
@@ -183,6 +186,8 @@
             text-align: center;
             font-size: 0.85rem;
             background: transparent;
+            cursor: pointer;
+            position: relative;
         }
         .btn-outline-gold:hover {
             background: var(--matte-gold);
@@ -202,6 +207,7 @@
             text-align: center;
             font-size: 0.9rem;
             background: transparent;
+            cursor: pointer;
         }
         .btn-outline:hover {
             border-color: var(--matte-gold);
@@ -221,6 +227,7 @@
             text-align: center;
             font-size: 0.9rem;
             background: transparent;
+            cursor: pointer;
         }
         .btn-outline-white:hover {
             border-color: var(--matte-gold);
@@ -296,16 +303,18 @@
             color: rgba(255, 255, 255, 0.6);
             transition: color 0.3s ease;
             position: relative;
+            padding-bottom: 2px;
+            text-decoration: none;
         }
         .header-nav a::after {
             content: '';
             position: absolute;
-            bottom: -4px;
+            bottom: 0;
             right: 0;
             width: 0;
             height: 2px;
             background: var(--matte-gold);
-            transition: width 0.4s var(--ease-out);
+            transition: width 0.5s var(--ease-out);
         }
         .header-nav a:hover::after,
         .header-nav a.active::after {
@@ -330,6 +339,8 @@
             color: #000;
             transition: all 0.4s var(--ease-out);
             border: none;
+            cursor: pointer;
+            position: relative;
         }
         .header-actions .btn-consult:hover {
             background: #c4a06a;
@@ -347,6 +358,8 @@
             background: transparent;
             transition: all 0.4s var(--ease-out);
             font-family: var(--font-ar);
+            cursor: pointer;
+            position: relative;
         }
         .header-actions .btn-appointment:hover {
             border-color: var(--matte-gold);
@@ -365,6 +378,8 @@
             background: transparent;
             transition: all 0.4s var(--ease-out);
             font-family: var(--font-ar);
+            cursor: pointer;
+            position: relative;
         }
         .header-actions .btn-contact:hover {
             border-color: var(--matte-gold);
@@ -380,6 +395,7 @@
             background: none;
             border: none;
             padding: 0.5rem;
+            cursor: pointer;
         }
 
         .mobile-menu {
@@ -407,6 +423,7 @@
             color: #fff;
             background: none;
             border: none;
+            cursor: pointer;
         }
         .mobile-menu nav {
             display: flex;
@@ -419,6 +436,21 @@
             font-weight: 700;
             color: rgba(255, 255, 255, 0.6);
             transition: color 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+        .mobile-menu nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .mobile-menu nav a:hover::after {
+            width: 100%;
         }
         .mobile-menu nav a:hover {
             color: #fff;
@@ -450,26 +482,60 @@
             text-align: center;
             border-color: rgba(255, 255, 255, 0.15);
             color: #fff;
+            cursor: pointer;
         }
 
         /* ==========================================================
-               HERO – الهيرو الجديد (فاتح، مع صورة المكتب والنص)
+               HERO – نيڤي عميق مثل الصفحة الرئيسية
                ========================================================== */
         .hero-about {
             padding: 120px 2rem 4rem;
-            background: var(--warm-off-white);
+            background: var(--very-dark-navy);
             position: relative;
             overflow: hidden;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
         }
         .hero-about .hero-pattern {
             position: absolute;
             inset: 0;
-            opacity: 0.02;
+            opacity: 0.03;
             background-image:
                 radial-gradient(circle at 20% 30%, var(--matte-gold) 1px, transparent 1px),
                 radial-gradient(circle at 80% 70%, var(--matte-gold) 1px, transparent 1px);
             background-size: 60px 60px;
             pointer-events: none;
+        }
+        .hero-about .hero-glow {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(176, 141, 87, 0.04) 0%, transparent 70%);
+            top: -20%;
+            right: -20%;
+            pointer-events: none;
+            animation: orbFloat 20s ease-in-out infinite alternate;
+        }
+        .hero-about .hero-glow-2 {
+            position: absolute;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(176, 141, 87, 0.02) 0%, transparent 70%);
+            bottom: -20%;
+            left: -10%;
+            pointer-events: none;
+            animation: orbFloat 25s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(40px, -30px) scale(1.05);
+            }
         }
 
         .hero-about .hero-inner {
@@ -477,6 +543,7 @@
             margin: 0 auto;
             position: relative;
             z-index: 1;
+            width: 100%;
         }
 
         .hero-about .hero-title-wrap {
@@ -497,7 +564,7 @@
             font-family: var(--font-serif);
             font-size: clamp(2.4rem, 5vw, 4rem);
             font-weight: 900;
-            color: var(--charcoal);
+            color: #fff;
             line-height: 1.1;
             margin-bottom: 0.2rem;
         }
@@ -507,10 +574,15 @@
         .hero-about .hero-title-wrap .sub {
             font-size: clamp(1rem, 1.3vw, 1.2rem);
             font-weight: 400;
-            color: rgba(34, 34, 34, 0.55);
+            color: rgba(255, 255, 255, 0.55);
             max-width: 700px;
             margin: 0.8rem auto 0;
             line-height: 1.7;
+        }
+        .hero-about .hero-title-wrap .sub-gold {
+            font-weight: 400;
+            color: var(--matte-gold);
+            margin-top: 0.3rem;
         }
 
         .hero-about .hero-grid {
@@ -524,7 +596,7 @@
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(176, 141, 87, 0.1);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
         }
         .hero-about .hero-image img {
             width: 100%;
@@ -535,11 +607,84 @@
         }
 
         .hero-about .hero-text p {
-            color: rgba(34, 34, 34, 0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 300;
             font-size: 1rem;
             line-height: 1.9;
             margin-bottom: 0.8rem;
+        }
+        .hero-about .hero-text strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* مربع "ما الذي يميز منهجنا؟" في الهيرو */
+        .hero-about .distinctive-box {
+            background: rgba(16, 42, 67, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(176, 141, 87, 0.08);
+            border-radius: 12px;
+            padding: 1.8rem 2rem;
+            margin-top: 1.5rem;
+            color: #fff;
+        }
+        .hero-about .distinctive-box h4 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--matte-gold);
+            margin-bottom: 0.5rem;
+        }
+        .hero-about .distinctive-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .hero-about .distinctive-box ul li {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.2rem 0;
+        }
+        .hero-about .distinctive-box ul li i {
+            color: var(--matte-gold);
+            font-size: 0.7rem;
+        }
+
+        /* ==========================================================
+               تأثير hover – الخط الذهبي المتحرك تحت العناصر
+               ========================================================== */
+        .gold-underline {
+            position: relative;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .gold-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.5s var(--ease-out);
+        }
+        .gold-underline:hover::after {
+            width: 100%;
+        }
+
+        /* البطاقات والقابلة للنقر */
+        .hover-lift {
+            transition: all 0.4s var(--ease-out);
+            cursor: pointer;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
         }
 
         /* ==========================================================
@@ -608,43 +753,6 @@
         }
 
         /* ==========================================================
-               DISTINCTIVE BOX – ما الذي يميز منهجنا؟
-               ========================================================== */
-        .distinctive-box {
-            background: var(--deep-navy);
-            border-radius: 12px;
-            padding: 1.8rem 2rem;
-            margin-top: 1.5rem;
-            color: #fff;
-        }
-        .distinctive-box h4 {
-            font-size: 0.85rem;
-            font-weight: 800;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--matte-gold);
-            margin-bottom: 0.5rem;
-        }
-        .distinctive-box ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .distinctive-box ul li {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0.2rem 0;
-        }
-        .distinctive-box ul li i {
-            color: var(--matte-gold);
-            font-size: 0.7rem;
-        }
-
-        /* ==========================================================
                PHILOSOPHY – 4 بطاقات
                ========================================================== */
         .philosophy-grid {
@@ -660,6 +768,21 @@
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .philosophy-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .philosophy-card:hover::after {
+            width: 100%;
         }
         .philosophy-card:hover {
             border-color: var(--matte-gold);
@@ -702,6 +825,21 @@
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .value-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .value-card:hover::after {
+            width: 100%;
         }
         .value-card:hover {
             border-color: var(--matte-gold);
@@ -840,6 +978,21 @@
             border: 1px solid rgba(0, 0, 0, 0.04);
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            cursor: pointer;
+            position: relative;
+        }
+        .process-step::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .process-step:hover::after {
+            width: 100%;
         }
         .process-step:hover {
             border-color: var(--matte-gold);
@@ -899,6 +1052,21 @@
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .practice-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .practice-card:hover::after {
+            width: 100%;
         }
         .practice-card:hover {
             border-color: var(--matte-gold);
@@ -948,6 +1116,21 @@
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .sector-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .sector-card:hover::after {
+            width: 100%;
         }
         .sector-card:hover {
             border-color: var(--matte-gold);
@@ -987,6 +1170,7 @@
             font-size: 0.8rem;
             border: 1px solid rgba(0, 0, 0, 0.04);
             transition: all 0.4s var(--ease-out);
+            cursor: default;
         }
         .gallery-item:hover {
             border-color: var(--matte-gold);
@@ -1009,6 +1193,21 @@
             border: 1px solid rgba(0, 0, 0, 0.04);
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            cursor: pointer;
+            position: relative;
+        }
+        .blog-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .blog-card:hover::after {
+            width: 100%;
         }
         .blog-card:hover {
             border-color: var(--matte-gold);
@@ -1054,6 +1253,20 @@
             font-weight: 600;
             color: var(--matte-gold);
             transition: color 0.3s ease;
+            position: relative;
+        }
+        .blog-card .content .read-more::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .blog-card .content .read-more:hover::after {
+            width: 100%;
         }
         .blog-card .content .read-more:hover {
             color: #c4a06a;
@@ -1098,6 +1311,21 @@
             gap: 1rem;
             font-family: var(--font-ar);
             transition: color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .faq-question::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .faq-question:hover::after {
+            width: 100%;
         }
         .faq-question:hover {
             color: var(--matte-gold);
@@ -1271,6 +1499,20 @@
             padding: 0.2rem 0;
             transition: color 0.3s ease;
             opacity: 0.7;
+            position: relative;
+        }
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .footer-col a:hover::after {
+            width: 100%;
         }
         .footer-col a:hover {
             color: var(--matte-gold);
@@ -1420,6 +1662,7 @@
 
             .hero-about {
                 padding: 100px 1rem 3rem;
+                min-height: auto;
             }
         }
 
@@ -1509,13 +1752,6 @@
             .faq-item.active .faq-answer {
                 padding: 0 1rem 1rem;
             }
-
-            .distinctive-box {
-                padding: 1.2rem 1rem;
-            }
-            .distinctive-box ul li {
-                font-size: 0.8rem;
-            }
         }
 
         @media (max-width: 400px) {
@@ -1586,10 +1822,12 @@
     </div>
 
     <!-- ==========================================================
-    HERO – عن المؤسسة (فاتح، مع صورة المكتب والنص)
+    HERO – نيڤي عميق مثل الصفحة الرئيسية
     ========================================================== -->
     <section class="hero-about" aria-label="عن المؤسسة">
         <div class="hero-pattern"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-glow-2"></div>
 
         <div class="hero-inner">
             <!-- العنوان -->
@@ -1597,7 +1835,7 @@
                 <span class="en-tag">About Our Firm</span>
                 <h1>مؤسسة الأستاذ<br /><span class="gold-text">محمود عبد الحميد</span></h1>
                 <p class="sub">للمحاماة والاستشارات القانونية</p>
-                <p class="sub" style="font-weight:400; color:var(--matte-gold); margin-top:0.3rem;">
+                <p class="sub sub-gold">
                     نبني الثقة بالخبرة، ونحمي المصالح باستراتيجية قانونية مدروسة.
                 </p>
             </div>

@@ -6,7 +6,7 @@
     <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
 
     <title>مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية | AL OSTAZ LAW</title>
-    <meta name="description" content="مؤسسة قانونية مصرية تقدم استشارات، تمثيلاً قضائياً، وحلولاً قانونية للشركات والأفراد. خبرة في النقض والدستورية العليا. احجز موعدك الآن." />
+    <meta name="description" content="مؤسسة قانونية مصرية تقدم استشارات، تمثيلاً قضائياً، وحلولاً قانونية للشركات والأفراد. خبرة في النقض والدستورية العليا." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://alostazlaw.vercel.app/" />
 
@@ -172,12 +172,6 @@
             color: var(--matte-gold);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
         /* ==========================================================
                BUTTONS
                ========================================================== */
@@ -194,6 +188,23 @@
             font-size: 0.95rem;
             letter-spacing: 0.02em;
             box-shadow: 0 2px 20px rgba(176, 141, 87, 0.15);
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        /* زر ذهبي – خط ذهبي أسفله عند hover */
+        .btn-gold::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .btn-gold:hover::after {
+            width: 100%;
         }
         .btn-gold:hover {
             background: #c4a06a;
@@ -212,6 +223,21 @@
             text-align: center;
             font-size: 0.85rem;
             background: transparent;
+            cursor: pointer;
+            position: relative;
+        }
+        .btn-outline-gold::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .btn-outline-gold:hover::after {
+            width: 100%;
         }
         .btn-outline-gold:hover {
             background: var(--matte-gold);
@@ -231,6 +257,21 @@
             text-align: center;
             font-size: 0.95rem;
             background: transparent;
+            cursor: pointer;
+            position: relative;
+        }
+        .btn-outline-white::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .btn-outline-white:hover::after {
+            width: 100%;
         }
         .btn-outline-white:hover {
             border-color: var(--matte-gold);
@@ -250,6 +291,21 @@
             text-align: center;
             font-size: 0.85rem;
             background: transparent;
+            cursor: pointer;
+            position: relative;
+        }
+        .btn-outline-navy::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .btn-outline-navy:hover::after {
+            width: 100%;
         }
         .btn-outline-navy:hover {
             background: var(--deep-navy);
@@ -259,7 +315,7 @@
         }
 
         /* ==========================================================
-               HEADER (مع زر "اتصل بنا" كهاتف)
+               HEADER
                ========================================================== */
         .site-header {
             position: fixed;
@@ -325,16 +381,18 @@
             color: rgba(255, 255, 255, 0.6);
             transition: color 0.3s ease;
             position: relative;
+            padding-bottom: 2px;
+            text-decoration: none;
         }
         .header-nav a::after {
             content: '';
             position: absolute;
-            bottom: -4px;
+            bottom: 0;
             right: 0;
             width: 0;
             height: 2px;
             background: var(--matte-gold);
-            transition: width 0.4s var(--ease-out);
+            transition: width 0.5s var(--ease-out);
         }
         .header-nav a:hover::after,
         .header-nav a.active::after {
@@ -359,6 +417,21 @@
             color: #000;
             transition: all 0.4s var(--ease-out);
             border: none;
+            cursor: pointer;
+            position: relative;
+        }
+        .header-actions .btn-consult::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .header-actions .btn-consult:hover::after {
+            width: 100%;
         }
         .header-actions .btn-consult:hover {
             background: #c4a06a;
@@ -376,6 +449,21 @@
             background: transparent;
             transition: all 0.4s var(--ease-out);
             font-family: var(--font-ar);
+            cursor: pointer;
+            position: relative;
+        }
+        .header-actions .btn-appointment::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .header-actions .btn-appointment:hover::after {
+            width: 100%;
         }
         .header-actions .btn-appointment:hover {
             border-color: var(--matte-gold);
@@ -384,7 +472,6 @@
             transform: translateY(-2px);
         }
 
-        /* زر "اتصل بنا" مرتبط بالهاتف */
         .header-actions .btn-phone {
             padding: 8px 18px;
             font-size: 0.7rem;
@@ -398,6 +485,21 @@
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
+            cursor: pointer;
+            position: relative;
+        }
+        .header-actions .btn-phone::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .header-actions .btn-phone:hover::after {
+            width: 100%;
         }
         .header-actions .btn-phone:hover {
             border-color: var(--matte-gold);
@@ -413,6 +515,7 @@
             background: none;
             border: none;
             padding: 0.5rem;
+            cursor: pointer;
         }
 
         .mobile-menu {
@@ -440,6 +543,7 @@
             color: #fff;
             background: none;
             border: none;
+            cursor: pointer;
         }
         .mobile-menu nav {
             display: flex;
@@ -452,6 +556,22 @@
             font-weight: 700;
             color: rgba(255, 255, 255, 0.6);
             transition: color 0.3s ease;
+            position: relative;
+            text-decoration: none;
+            padding-bottom: 2px;
+        }
+        .mobile-menu nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .mobile-menu nav a:hover::after {
+            width: 100%;
         }
         .mobile-menu nav a:hover {
             color: #fff;
@@ -483,6 +603,21 @@
             text-align: center;
             border-color: rgba(255, 255, 255, 0.15);
             color: #fff;
+            cursor: pointer;
+            position: relative;
+        }
+        .mobile-menu .actions .btn-outline-white::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .mobile-menu .actions .btn-outline-white:hover::after {
+            width: 100%;
         }
 
         /* ==========================================================
@@ -594,6 +729,25 @@
             padding: 1.6rem 1.4rem;
             transition: all 0.5s var(--ease-out);
             backdrop-filter: blur(8px);
+            text-decoration: none;
+            display: block;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        /* خط ذهبي تحت بطاقات الأكشن عند hover */
+        .action-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: var(--matte-gold);
+            transition: width 0.7s var(--ease-out);
+        }
+        .action-card:hover::after {
+            width: 100%;
         }
         .action-card:hover {
             background: rgba(255, 255, 255, 0.06);
@@ -830,7 +984,7 @@
         }
 
         /* ==========================================================
-               PRACTICE AREAS (قابلة للنقر → specialties.html)
+               PRACTICE AREAS – مع خط ذهبي تحت كل بطاقة ونصوص أوضح
                ========================================================== */
         .practice-grid {
             display: grid;
@@ -842,6 +996,22 @@
             text-decoration: none;
             color: inherit;
             transition: all 0.4s var(--ease-out);
+            position: relative;
+        }
+        /* خط ذهبي تحت البطاقة عند hover */
+        .practice-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 10px 10px;
+        }
+        .practice-link:hover::after {
+            width: 100%;
         }
         .practice-link:hover .practice-card {
             border-color: var(--matte-gold);
@@ -881,13 +1051,13 @@
         }
         .practice-card p {
             font-size: 0.7rem;
-            color: rgba(34, 34, 34, 0.45);
+            color: #444;
+            font-weight: 400;
             line-height: 1.5;
-            font-weight: 300;
         }
 
         /* ==========================================================
-               PROCESS
+               PROCESS – مع خط ذهبي تحت كل خطوة ونصوص أوضح
                ========================================================== */
         .process-timeline {
             max-width: 780px;
@@ -905,6 +1075,22 @@
             border-radius: 10px;
             border: 1px solid rgba(0, 0, 0, 0.04);
             transition: all 0.4s var(--ease-out);
+            position: relative;
+            cursor: default;
+        }
+        .process-step::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 10px 10px;
+        }
+        .process-step:hover::after {
+            width: 100%;
         }
         .process-step:hover {
             border-color: var(--matte-gold);
@@ -928,13 +1114,13 @@
         }
         .process-step .step-content p {
             font-size: 0.8rem;
-            color: rgba(34, 34, 34, 0.45);
-            font-weight: 300;
+            color: #444;
+            font-weight: 400;
             line-height: 1.7;
         }
 
         /* ==========================================================
-               LEGAL LIBRARY
+               LEGAL LIBRARY – مع خط ذهبي تحت كل بطاقة
                ========================================================== */
         .blog-grid {
             display: grid;
@@ -948,6 +1134,23 @@
             border: 1px solid rgba(0, 0, 0, 0.04);
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            position: relative;
+            cursor: default;
+        }
+        /* خط ذهبي تحت البطاقة عند hover */
+        .blog-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 10px 10px;
+        }
+        .blog-card:hover::after {
+            width: 100%;
         }
         .blog-card:hover {
             border-color: var(--matte-gold);
@@ -983,9 +1186,9 @@
         }
         .blog-card .content p {
             font-size: 0.75rem;
-            color: rgba(34, 34, 34, 0.45);
+            color: #444;
+            font-weight: 400;
             line-height: 1.6;
-            font-weight: 300;
             margin-bottom: 0.4rem;
         }
         .blog-card .content .read-more {
@@ -993,13 +1196,28 @@
             font-weight: 600;
             color: var(--matte-gold);
             transition: color 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+        .blog-card .content .read-more::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .blog-card .content .read-more:hover::after {
+            width: 100%;
         }
         .blog-card .content .read-more:hover {
             color: #c4a06a;
         }
 
         /* ==========================================================
-               EXPERIENCE / SECTORS (قابلة للنقر → sectors.html)
+               EXPERIENCE / SECTORS – مع خط ذهبي تحت كل بطاقة ونصوص أوضح
                ========================================================== */
         .experience-grid {
             display: grid;
@@ -1011,6 +1229,21 @@
             text-decoration: none;
             color: inherit;
             transition: all 0.4s var(--ease-out);
+            position: relative;
+        }
+        .sector-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 10px 10px;
+        }
+        .sector-link:hover::after {
+            width: 100%;
         }
         .sector-link:hover .experience-card {
             border-color: var(--matte-gold);
@@ -1043,9 +1276,9 @@
         }
         .experience-card p {
             font-size: 0.75rem;
-            color: rgba(34, 34, 34, 0.45);
+            color: #444;
+            font-weight: 400;
             line-height: 1.6;
-            font-weight: 300;
         }
 
         /* ==========================================================
@@ -1151,6 +1384,20 @@
             padding: 0.2rem 0;
             transition: color 0.3s ease;
             opacity: 0.7;
+            position: relative;
+        }
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .footer-col a:hover::after {
+            width: 100%;
         }
         .footer-col a:hover {
             color: var(--matte-gold);
@@ -1172,7 +1419,7 @@
         }
 
         /* ==========================================================
-               FLOATING WHATSAPP (فقط واتساب)
+               FLOATING WHATSAPP
                ========================================================== */
         .float-whatsapp {
             position: fixed;
@@ -1193,11 +1440,26 @@
             -webkit-backdrop-filter: blur(4px);
             text-decoration: none;
             color: #fff;
+            position: relative;
         }
         .float-whatsapp i {
             font-size: 1.8rem;
             color: #fff;
             transition: transform 0.4s ease;
+        }
+        .float-whatsapp::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: var(--whatsapp-green);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 50% 50%;
+        }
+        .float-whatsapp:hover::after {
+            width: 100%;
         }
         .float-whatsapp:hover {
             transform: translateY(-4px) scale(1.05);
@@ -1398,14 +1660,14 @@
 <body>
 
     <!-- ==========================================================
-    FLOATING WHATSAPP (فقط واتساب)
+    FLOATING WHATSAPP
     ========================================================== -->
     <a href="https://wa.me/201101076000" target="_blank" rel="noopener" class="float-whatsapp" id="whatsappFloat" aria-label="تواصل عبر واتساب">
         <i class="fab fa-whatsapp"></i>
     </a>
 
     <!-- ==========================================================
-    HEADER (القائمة والأزرار محدثة لتتوافق مع باقي الموقع)
+    HEADER
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -1435,7 +1697,7 @@
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU (محدث)
+    MOBILE MENU
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -1476,21 +1738,21 @@
             </p>
 
             <div class="action-gateway">
-                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="action-card" style="text-decoration:none; display:block;">
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="action-card">
                     <span class="icon"><i class="fas fa-calendar-check"></i></span>
                     <h3>حجز موعد استشارة</h3>
                     <p>لقاء أولي مع الأستاذ محمود عبد الحميد لمناقشة قضيتك وتقييم الموقف القانوني.</p>
                     <span class="btn-action">حجز موعد</span>
                 </a>
 
-                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="action-card" style="text-decoration:none; display:block;">
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="action-card">
                     <span class="icon"><i class="fas fa-file-signature"></i></span>
                     <h3>طلب استشارة قانونية</h3>
                     <p>تحليل أولي لقضيتك وتقديم رؤية قانونية واضحة حول الخيارات المتاحة.</p>
                     <span class="btn-action">طلب استشارة</span>
                 </a>
 
-                <a href="https://alostazlaw.vercel.app/contact.html?tab=representation" class="action-card" style="text-decoration:none; display:block;">
+                <a href="https://alostazlaw.vercel.app/contact.html?tab=representation" class="action-card">
                     <span class="icon"><i class="fas fa-gavel"></i></span>
                     <h3>طلب تمثيل قانوني</h3>
                     <p>تولي قضيتك بالكامل، من التحليل ووضع الاستراتيجية إلى التمثيل والمتابعة.</p>
@@ -1570,7 +1832,7 @@
     </section>
 
     <!-- ==========================================================
-    PRACTICE AREAS (قابلة للنقر → specialties.html)
+    PRACTICE AREAS
     ========================================================== -->
     <section class="section section-gray" aria-label="مجالات الممارسة القانونية">
         <div class="section-inner">
@@ -1718,7 +1980,7 @@
     </section>
 
     <!-- ==========================================================
-    EXPERIENCE / SECTORS (قابلة للنقر → sectors.html)
+    EXPERIENCE / SECTORS
     ========================================================== -->
     <section class="section section-light" aria-label="القطاعات التي نخدمها">
         <div class="section-inner">
@@ -1755,7 +2017,7 @@
     </section>
 
     <!-- ==========================================================
-    FINAL CTA – مع روابط إلى contact.html
+    FINAL CTA
     ========================================================== -->
     <section class="cta-section" aria-label="دعوة للتواصل">
         <div class="section-inner reveal">

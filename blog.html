@@ -6,7 +6,7 @@
     <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
 
     <title>المدونة القانونية | الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا</title>
-    <meta name="description" content="مدونة قانونية متخصصة تقدم مقالات وتحليلات قانونية في مختلف مجالات القانون المصري، كتبها الأستاذ محمود عبد الحميد المحامي بالنقض والدستورية العليا." />
+    <meta name="description" content="مدونة قانونية متخصصة تقدم مقالات وتحليلات قانونية في مختلف مجالات القانون المصري." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://alostazlaw.vercel.app/blog.html" />
 
@@ -56,7 +56,7 @@
                 "@id": "https://alostazlaw.vercel.app/blog.html#webpage",
                 "url": "https://alostazlaw.vercel.app/blog.html",
                 "name": "المدونة القانونية",
-                "description": "مدونة قانونية متخصصة تقدم مقالات وتحليلات قانونية في مختلف مجالات القانون المصري.",
+                "description": "مدونة قانونية متخصصة تقدم مقالات وتحليلات قانونية.",
                 "isPartOf": { "@id": "https://alostazlaw.vercel.app/#website" },
                 "about": { "@id": "https://alostazlaw.vercel.app/#organization" }
             }]
@@ -1012,11 +1012,22 @@
     </footer>
 
     <!-- ==========================================================
-    JAVASCRIPT
+    JAVASCRIPT – مع تحسينات التشخيص والمرونة
     ========================================================== -->
     <script>
         (function() {
             'use strict';
+
+            // ==========================================================
+            // CONFIGURATION – غيّر هذه القيم حسب هيكل مستودعك
+            // ==========================================================
+            const CONFIG = {
+                owner: 'malegal',
+                repo: 'mahmoud-legal',
+                path: 'blog/articles', // اتركه فارغاً '' إذا كانت الملفات في جذر المستودع
+                branch: 'main', // أو 'master'
+                fileExtension: '.md'
+            };
 
             // ==========================================================
             // HEADER SCROLL
@@ -1070,47 +1081,86 @@
             // ==========================================================
             async function loadBlog() {
                 const grid = document.getElementById('blog-grid');
-                const owner = 'malegal';
-                const repo = 'mahmoud-legal';
-                const path = 'blog/articles';
+
+                // عرض رسالة تحميل
+                grid.innerHTML = '<p class="col-span-full text-center text-charcoal/50">جاري تحميل المقالات...</p>';
 
                 try {
-                    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
-                    if (!res.ok) throw new Error('Failed to fetch articles');
-                    const files = await res.json();
+                    // بناء الرابط
+                    let url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents`;
+                    if (CONFIG.path) {
+                        url += `/${CONFIG.path}`;
+                    }
+                    url += `?ref=${CONFIG.branch}`;
 
-                    const mdFiles = files
-                        .filter(f => f.name.endsWith('.md'))
-                        .reverse();
+                    console.log('🔍 جاري جلب المقالات من:', url);
+
+                    const response = await fetch(url);
+                    console.log('📡 حالة الاستجابة:', response.status);
+
+                    if (!response.ok) {
+                        throw new Error(`خطأ في جلب المقالات (${response.status}): ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    console.log('📁 البيانات المسترجعة:', data);
+
+                    // التأكد من أن البيانات هي مصفوفة
+                    if (!Array.isArray(data)) {
+                        throw new Error('البيانات المسترجعة ليست مصفوفة. قد يكون المسار غير صحيح.');
+                    }
+
+                    // تصفية الملفات للحصول على ملفات .md
+                    const mdFiles = data.filter(function(item) {
+                        return item.type === 'file' &&
+                            item.name &&
+                            item.name.endsWith(CONFIG.fileExtension);
+                    });
+
+                    console.log('📄 تم العثور على ' + mdFiles.length + ' ملف(ات) Markdown.');
 
                     if (mdFiles.length === 0) {
-                        grid.innerHTML = '<p class="col-span-full text-center text-charcoal/50">لا توجد مقالات حالياً.</p>';
+                        grid.innerHTML = `
+                            <div class="col-span-full text-center py-10">
+                                <p class="text-charcoal/50">لا توجد مقالات قانونية حالياً.</p>
+                                <p class="text-charcoal/30 text-sm mt-2">
+                                    تأكد من وجود ملفات .md في المسار: ${CONFIG.path || '(جذر المستودع)'}
+                                </p>
+                                <p class="text-charcoal/20 text-xs mt-1">
+                                    المستودع: ${CONFIG.owner}/${CONFIG.repo} | الفرع: ${CONFIG.branch}
+                                </p>
+                            </div>
+                        `;
                         return;
                     }
 
+                    // ترتيب المقالات (الأحدث أولاً) – نعكس الترتيب
+                    mdFiles.reverse();
+
+                    // بناء البطاقات
                     grid.innerHTML = '';
 
                     for (const file of mdFiles) {
-                        const slug = file.name.replace('.md', '');
-                        const title = decodeURIComponent(slug.replace(/-/g, ' '));
+                        const slug = file.name.replace(CONFIG.fileExtension, '');
+                        let displayTitle = slug.replace(/-/g, ' ');
 
-                        // Fetch file content to extract title from front matter
-                        let displayTitle = title;
-                        let imageUrl = '';
+                        // محاولة استخراج العنوان من Front Matter
                         try {
                             const contentRes = await fetch(file.download_url);
-                            const mdContent = await contentRes.text();
-                            const yamlMatch = mdContent.match(/^---\s*([\s\S]*?)\s*---/);
+                            const content = await contentRes.text();
+                            const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
                             if (yamlMatch) {
                                 const frontMatter = yamlMatch[1];
                                 const titleMatch = frontMatter.match(/title:\s*(.*)/i);
-                                if (titleMatch) displayTitle = titleMatch[1].replace(/['"]/g, '').trim();
-                                const imageMatch = frontMatter.match(/image:\s*(.*)/i);
-                                if (imageMatch) imageUrl = imageMatch[1].replace(/['"]/g, '').trim();
+                                if (titleMatch) {
+                                    displayTitle = titleMatch[1].replace(/['"]/g, '').trim();
+                                }
                             }
-                        } catch (e) { /* use default title */ }
+                        } catch (e) {
+                            console.warn('⚠️ تعذر استخراج العنوان من ' + file.name, e);
+                        }
 
-                        // Create card
+                        // إنشاء البطاقة
                         const card = document.createElement('div');
                         card.className = 'blog-card reveal';
                         card.innerHTML = `
@@ -1118,25 +1168,39 @@
                                 <span class="badge">دراسة قانونية</span>
                                 <h3>${displayTitle}</h3>
                                 <div class="meta">
-                                    <span><i class="far fa-clock" style="margin-left:4px;"></i> ${Math.ceil(displayTitle.length / 50)} دقائق قراءة</span>
+                                    <span><i class="far fa-clock" style="margin-left:4px;"></i> ${Math.ceil(displayTitle.length / 50) || 1} دقائق قراءة</span>
                                 </div>
-                                <a href="article.html?slug=${slug}" class="btn-read">
+                                <a href="article.html?slug=${encodeURIComponent(slug)}" class="btn-read">
                                     استعراض الدراسة <i class="fas fa-arrow-left"></i>
                                 </a>
                             </div>
                         `;
                         grid.appendChild(card);
 
-                        // Re-observe the new card for reveal animation
+                        // إعادة مراقبة البطاقة الجديدة لتأثير Reveal
                         revealObserver.observe(card);
                     }
 
                 } catch (error) {
-                    console.error('Error loading blog:', error);
-                    grid.innerHTML = '<p class="col-span-full text-center text-red-500">حدث خطأ أثناء تحميل المقالات. يرجى المحاولة لاحقاً.</p>';
+                    console.error('❌ خطأ في تحميل المدونة:', error);
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-10">
+                            <p class="text-red-500">حدث خطأ أثناء تحميل المقالات.</p>
+                            <p class="text-charcoal/30 text-sm mt-2">${error.message}</p>
+                            <p class="text-charcoal/20 text-xs mt-1">
+                                تأكد من صحة اسم المستخدم والمستودع والمسار والفرع.
+                            </p>
+                            <p class="text-charcoal/20 text-xs">
+                                المستخدم: ${CONFIG.owner} | المستودع: ${CONFIG.repo} | المسار: ${CONFIG.path || '(جذر)'}
+                            </p>
+                        </div>
+                    `;
                 }
             }
 
+            // ==========================================================
+            // START
+            // ==========================================================
             loadBlog();
 
         })();

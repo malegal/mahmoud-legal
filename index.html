@@ -259,7 +259,7 @@
         }
 
         /* ==========================================================
-               HEADER (مع زر "اتصل بنا")
+               HEADER (مع زر "اتصل بنا" كهاتف)
                ========================================================== */
         .site-header {
             position: fixed;
@@ -384,8 +384,8 @@
             transform: translateY(-2px);
         }
 
-        /* === زر "اتصل بنا" الجديد في الهيدر === */
-        .header-actions .btn-contact {
+        /* زر "اتصل بنا" مرتبط بالهاتف */
+        .header-actions .btn-phone {
             padding: 8px 18px;
             font-size: 0.7rem;
             font-weight: 700;
@@ -395,8 +395,11 @@
             background: transparent;
             transition: all 0.4s var(--ease-out);
             font-family: var(--font-ar);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
-        .header-actions .btn-contact:hover {
+        .header-actions .btn-phone:hover {
             border-color: var(--matte-gold);
             background: rgba(176, 141, 87, 0.08);
             color: var(--matte-gold);
@@ -827,12 +830,23 @@
         }
 
         /* ==========================================================
-               PRACTICE AREAS
+               PRACTICE AREAS (قابلة للنقر → specialties.html)
                ========================================================== */
         .practice-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 1rem;
+        }
+        .practice-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s var(--ease-out);
+        }
+        .practice-link:hover .practice-card {
+            border-color: var(--matte-gold);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
         }
         .practice-card {
             background: var(--pure-white);
@@ -842,11 +856,8 @@
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             text-align: center;
-        }
-        .practice-card:hover {
-            border-color: var(--matte-gold);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            height: 100%;
+            cursor: pointer;
         }
         .practice-card .icon-wrap {
             width: 40px;
@@ -988,12 +999,23 @@
         }
 
         /* ==========================================================
-               EXPERIENCE / SECTORS
+               EXPERIENCE / SECTORS (قابلة للنقر → sectors.html)
                ========================================================== */
         .experience-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.2rem;
+        }
+        .sector-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s var(--ease-out);
+        }
+        .sector-link:hover .experience-card {
+            border-color: var(--matte-gold);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
         }
         .experience-card {
             background: var(--pure-white);
@@ -1003,11 +1025,8 @@
             transition: all 0.4s var(--ease-out);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             text-align: center;
-        }
-        .experience-card:hover {
-            border-color: var(--matte-gold);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            height: 100%;
         }
         .experience-card .icon {
             font-size: 1.6rem;
@@ -1240,7 +1259,7 @@
             .header-actions .btn-appointment {
                 display: none;
             }
-            .header-actions .btn-contact {
+            .header-actions .btn-phone {
                 display: none;
             }
             .menu-toggle {
@@ -1379,14 +1398,14 @@
 <body>
 
     <!-- ==========================================================
-    FLOATING WHATSAPP (فقط واتساب – بدون زر اتصال)
+    FLOATING WHATSAPP (فقط واتساب)
     ========================================================== -->
     <a href="https://wa.me/201101076000" target="_blank" rel="noopener" class="float-whatsapp" id="whatsappFloat" aria-label="تواصل عبر واتساب">
         <i class="fab fa-whatsapp"></i>
     </a>
 
     <!-- ==========================================================
-    HEADER (مع زر "اتصل بنا")
+    HEADER (القائمة والأزرار محدثة لتتوافق مع باقي الموقع)
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -1401,20 +1420,22 @@
             <a href="https://alostazlaw.vercel.app/" class="active">الرئيسية</a>
             <a href="https://alostazlaw.vercel.app/about.html">عن المؤسسة</a>
             <a href="https://alostazlaw.vercel.app/specialties.html">التخصصات</a>
+            <a href="https://alostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a>
             <a href="https://alostazlaw.vercel.app/blog.html">المدونة</a>
+            <a href="https://alostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
             <a href="https://alostazlaw.vercel.app/contact.html">اتصل بنا</a>
         </nav>
 
         <div class="header-actions">
             <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-consult">طلب استشارة</a>
             <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-appointment">حجز موعد</a>
-            <a href="https://alostazlaw.vercel.app/contact.html" class="btn-contact">اتصل بنا</a>
+            <a href="tel:+201101076000" class="btn-phone"><i class="fas fa-phone-alt"></i> اتصل بنا</a>
             <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
         </div>
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU (مع زر "اتصل بنا")
+    MOBILE MENU (محدث)
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -1422,19 +1443,21 @@
             <a href="https://alostazlaw.vercel.app/" onclick="closeMobileMenu()">الرئيسية</a>
             <a href="https://alostazlaw.vercel.app/about.html" onclick="closeMobileMenu()">عن المؤسسة</a>
             <a href="https://alostazlaw.vercel.app/specialties.html" onclick="closeMobileMenu()">التخصصات</a>
+            <a href="https://alostazlaw.vercel.app/sectors.html" onclick="closeMobileMenu()">قطاعات نخدمها</a>
             <a href="https://alostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المدونة</a>
+            <a href="https://alostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://alostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
             <div class="divider"></div>
             <div class="actions">
                 <a href="https://alostazlaw.vercel.app/contact.html?tab=consult" class="btn-gold" onclick="closeMobileMenu()">طلب استشارة</a>
                 <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="btn-outline-white" onclick="closeMobileMenu()">حجز موعد</a>
-                <a href="https://alostazlaw.vercel.app/contact.html" class="btn-outline-white" onclick="closeMobileMenu()">اتصل بنا</a>
+                <a href="tel:+201101076000" class="btn-outline-white" onclick="closeMobileMenu()"><i class="fas fa-phone-alt" style="margin-left:6px;"></i> اتصل بنا</a>
             </div>
         </nav>
     </div>
 
     <!-- ==========================================================
-    HERO – مع أزرار موجهة إلى صفحة "اتصل بنا"
+    HERO
     ========================================================== -->
     <section class="hero" aria-label="الصفحة الرئيسية – بوابة الوصول إلى الخدمات القانونية">
         <div class="hero-bg">
@@ -1452,9 +1475,6 @@
                 خبرة قضائية راسخة في النقض والدستورية العليا، نضعها بين يديك لحماية أعمالك، واستثماراتك، ومستقبلك القانوني.
             </p>
 
-            <!-- ==========================================================
-            ACTION GATEWAY – ثلاثة مسارات → contact.html مع باراميترات
-            ========================================================== -->
             <div class="action-gateway">
                 <a href="https://alostazlaw.vercel.app/contact.html?tab=appointment" class="action-card" style="text-decoration:none; display:block;">
                     <span class="icon"><i class="fas fa-calendar-check"></i></span>
@@ -1550,7 +1570,7 @@
     </section>
 
     <!-- ==========================================================
-    PRACTICE AREAS
+    PRACTICE AREAS (قابلة للنقر → specialties.html)
     ========================================================== -->
     <section class="section section-gray" aria-label="مجالات الممارسة القانونية">
         <div class="section-inner">
@@ -1561,31 +1581,41 @@
             </div>
 
             <div class="practice-grid">
-                <div class="practice-card reveal reveal-d1">
-                    <div class="icon-wrap"><i class="fas fa-gavel"></i></div>
-                    <h3>المنازعات المدنية</h3>
-                    <p>قضايا العقود، التعويضات، الملكية والإيجارات.</p>
-                </div>
-                <div class="practice-card reveal reveal-d2">
-                    <div class="icon-wrap"><i class="fas fa-chart-pie"></i></div>
-                    <h3>القانون التجاري</h3>
-                    <p>الشركات، العقود التجارية، والأوراق المالية.</p>
-                </div>
-                <div class="practice-card reveal reveal-d3">
-                    <div class="icon-wrap"><i class="fas fa-building"></i></div>
-                    <h3>الخدمات القانونية للشركات</h3>
-                    <p>هيكلة الشركات، الحوكمة، وصياغة العقود.</p>
-                </div>
-                <div class="practice-card reveal reveal-d1">
-                    <div class="icon-wrap"><i class="fas fa-landmark"></i></div>
-                    <h3>القضاء الإداري</h3>
-                    <p>الطعن في القرارات الإدارية والمنازعات الحكومية.</p>
-                </div>
-                <div class="practice-card reveal reveal-d2">
-                    <div class="icon-wrap"><i class="fas fa-scale-balanced"></i></div>
-                    <h3>الطعن الدستوري</h3>
-                    <p>الدفع بعدم دستورية القوانين أمام المحكمة الدستورية العليا.</p>
-                </div>
+                <a href="https://alostazlaw.vercel.app/specialties.html" class="practice-link">
+                    <div class="practice-card reveal reveal-d1">
+                        <div class="icon-wrap"><i class="fas fa-gavel"></i></div>
+                        <h3>المنازعات المدنية</h3>
+                        <p>قضايا العقود، التعويضات، الملكية والإيجارات.</p>
+                    </div>
+                </a>
+                <a href="https://alostazlaw.vercel.app/specialties.html" class="practice-link">
+                    <div class="practice-card reveal reveal-d2">
+                        <div class="icon-wrap"><i class="fas fa-chart-pie"></i></div>
+                        <h3>القانون التجاري</h3>
+                        <p>الشركات، العقود التجارية، والأوراق المالية.</p>
+                    </div>
+                </a>
+                <a href="https://alostazlaw.vercel.app/specialties.html" class="practice-link">
+                    <div class="practice-card reveal reveal-d3">
+                        <div class="icon-wrap"><i class="fas fa-building"></i></div>
+                        <h3>الخدمات القانونية للشركات</h3>
+                        <p>هيكلة الشركات، الحوكمة، وصياغة العقود.</p>
+                    </div>
+                </a>
+                <a href="https://alostazlaw.vercel.app/specialties.html" class="practice-link">
+                    <div class="practice-card reveal reveal-d1">
+                        <div class="icon-wrap"><i class="fas fa-landmark"></i></div>
+                        <h3>القضاء الإداري</h3>
+                        <p>الطعن في القرارات الإدارية والمنازعات الحكومية.</p>
+                    </div>
+                </a>
+                <a href="https://alostazlaw.vercel.app/specialties.html" class="practice-link">
+                    <div class="practice-card reveal reveal-d2">
+                        <div class="icon-wrap"><i class="fas fa-scale-balanced"></i></div>
+                        <h3>الطعن الدستوري</h3>
+                        <p>الدفع بعدم دستورية القوانين أمام المحكمة الدستورية العليا.</p>
+                    </div>
+                </a>
             </div>
 
             <div class="section-cta">
@@ -1688,7 +1718,7 @@
     </section>
 
     <!-- ==========================================================
-    EXPERIENCE / SECTORS
+    EXPERIENCE / SECTORS (قابلة للنقر → sectors.html)
     ========================================================== -->
     <section class="section section-light" aria-label="القطاعات التي نخدمها">
         <div class="section-inner">
@@ -1699,21 +1729,27 @@
             </div>
 
             <div class="experience-grid">
-                <div class="experience-card reveal reveal-d1">
-                    <span class="icon"><i class="fas fa-building"></i></span>
-                    <h4>قطاع الشركات</h4>
-                    <p>هيكلة الشركات، الحوكمة، وصياغة العقود التجارية.</p>
-                </div>
-                <div class="experience-card reveal reveal-d2">
-                    <span class="icon"><i class="fas fa-handshake"></i></span>
-                    <h4>القطاع التجاري</h4>
-                    <p>صياغة ومراجعة العقود التجارية والمدنية.</p>
-                </div>
-                <div class="experience-card reveal reveal-d3">
-                    <span class="icon"><i class="fas fa-gavel"></i></span>
-                    <h4>قطاع التعويضات</h4>
-                    <p>المطالبة بالتعويضات المادية والأدبية عن الأضرار.</p>
-                </div>
+                <a href="https://alostazlaw.vercel.app/sectors.html" class="sector-link">
+                    <div class="experience-card reveal reveal-d1">
+                        <span class="icon"><i class="fas fa-building"></i></span>
+                        <h4>قطاع الشركات</h4>
+                        <p>هيكلة الشركات، الحوكمة، وصياغة العقود التجارية.</p>
+                    </div>
+                </a>
+                <a href="https://alostazlaw.vercel.app/sectors.html" class="sector-link">
+                    <div class="experience-card reveal reveal-d2">
+                        <span class="icon"><i class="fas fa-handshake"></i></span>
+                        <h4>القطاع التجاري</h4>
+                        <p>صياغة ومراجعة العقود التجارية والمدنية.</p>
+                    </div>
+                </a>
+                <a href="https://alostazlaw.vercel.app/sectors.html" class="sector-link">
+                    <div class="experience-card reveal reveal-d3">
+                        <span class="icon"><i class="fas fa-gavel"></i></span>
+                        <h4>قطاع التعويضات</h4>
+                        <p>المطالبة بالتعويضات المادية والأدبية عن الأضرار.</p>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -1758,7 +1794,9 @@
                 <a href="https://alostazlaw.vercel.app/">الرئيسية</a>
                 <a href="https://alostazlaw.vercel.app/about.html">عن المؤسسة</a>
                 <a href="https://alostazlaw.vercel.app/specialties.html">التخصصات</a>
+                <a href="https://alostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a>
                 <a href="https://alostazlaw.vercel.app/blog.html">المدونة</a>
+                <a href="https://alostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
                 <a href="https://alostazlaw.vercel.app/contact.html">اتصل بنا</a>
             </div>
 

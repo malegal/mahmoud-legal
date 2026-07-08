@@ -29,9 +29,30 @@
     <meta name="twitter:image" content="https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg" />
     <meta name="twitter:image:alt" content="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
 
+    <!-- ==========================================================
+    سياسة أمان المحتوى (CSP) – طبقة دفاع إضافية
+    ========================================================== -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' https://cdnjs.cloudflare.com https://api.github.com;
+        style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https:;
+        connect-src 'self' https://api.github.com;
+        frame-ancestors 'none';
+        base-uri 'self';
+    ">
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome مع خاصية integrity لضمان سلامة الملف -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
 
     <script type="application/ld+json">
         {
@@ -199,23 +220,19 @@
             border-radius: 2px;
         }
 
-        /* Hover للكمبيوتر */
         .gold-underline:hover::after,
         .gold-underline:focus::after {
             width: 100%;
         }
 
-        /* Active للموبايل (عند اللمس) */
         .gold-underline:active::after {
             width: 100%;
         }
 
-        /* تأثير التمرير – يضاف عبر JavaScript */
         .gold-underline.scroll-visible::after {
             width: 100%;
         }
 
-        /* للأزرار والبطاقات التي تحتوي على عناصر داخلية */
         .gold-underline-card {
             position: relative;
             cursor: pointer;
@@ -1926,9 +1943,6 @@
                 خبرة قضائية راسخة في النقض والدستورية العليا، نضعها بين يديك لحماية أعمالك، واستثماراتك، ومستقبلك القانوني.
             </p>
 
-            <!-- ==========================================================
-            HERO ACTIONS – أيقونات بدلاً من الكروت
-            ========================================================== -->
             <div class="hero-actions">
                 <a href="https://ostazlaw.vercel.app/contact.html?tab=consult" class="hero-action-item gold-underline">
                     <span class="icon-wrap"><i class="fas fa-file-signature"></i></span>
@@ -2243,12 +2257,7 @@
     </footer>
 
     <!-- ==========================================================
-    FONT AWESOME
-    ========================================================== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <!-- ==========================================================
-    JAVASCRIPT
+    JAVASCRIPT – (تم تعديل دالة تحميل المقالات لتكون آمنة)
     ========================================================== -->
     <script>
         (function() {
@@ -2310,7 +2319,6 @@
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('scroll-visible');
-                        // إزالة الفئة بعد فترة قصيرة لإعادة التشغيل عند التمرير مرة أخرى
                         setTimeout(function() {
                             entry.target.classList.remove('scroll-visible');
                         }, 1500);
@@ -2323,7 +2331,7 @@
             });
 
             // ==========================================================
-            // LOAD BLOG POSTS (أحدث 3 مقالات)
+            // LOAD BLOG POSTS – نسخة آمنة باستخدام DOM APIs بدلاً من innerHTML
             // ==========================================================
             const CONFIG = {
                 owner: 'malegal',
@@ -2337,7 +2345,12 @@
                 const grid = document.getElementById('blog-grid');
                 if (!grid) return;
 
-                grid.innerHTML = '<div class="col-span-full text-center text-charcoal/50 py-10">⏳ جاري تحميل المقالات...</div>';
+                // رسالة تحميل
+                const loadingMsg = document.createElement('div');
+                loadingMsg.className = 'col-span-full text-center text-charcoal/50 py-10';
+                loadingMsg.textContent = '⏳ جاري تحميل المقالات...';
+                grid.innerHTML = '';
+                grid.appendChild(loadingMsg);
 
                 try {
                     const url =
@@ -2353,13 +2366,16 @@
                         .reverse()
                         .slice(0, 3);
 
+                    // إزالة رسالة التحميل
+                    grid.innerHTML = '';
+
                     if (mdFiles.length === 0) {
-                        grid.innerHTML =
-                            '<div class="col-span-full text-center text-charcoal/50 py-10">لا توجد مقالات حالياً.</div>';
+                        const emptyMsg = document.createElement('div');
+                        emptyMsg.className = 'col-span-full text-center text-charcoal/50 py-10';
+                        emptyMsg.textContent = 'لا توجد مقالات حالياً.';
+                        grid.appendChild(emptyMsg);
                         return;
                     }
-
-                    grid.innerHTML = '';
 
                     for (const file of mdFiles) {
                         const slug = file.name.replace(CONFIG.fileExtension, '');
@@ -2382,29 +2398,63 @@
                             }
                         } catch (e) { /* use defaults */ }
 
+                        // بناء البطاقة باستخدام DOM APIs (آمن تماماً)
                         const card = document.createElement('div');
                         card.className = 'blog-card reveal';
-                        card.innerHTML = `
-                            <div class="image" style="background:#e8e4dd; ${imageUrl ? `background-image:url(${imageUrl}); background-size:cover; background-position:center;` : ''}">
-                                ${!imageUrl ? '⚖️' : ''}
-                            </div>
-                            <div class="content">
-                                <div class="meta">
-                                    <span>${Math.ceil(title.length / 50) || 1} دقائق قراءة</span>
-                                </div>
-                                <h3>${title}</h3>
-                                <p>${description || 'تحليل قانوني متخصص في مجال القانون المصري.'}</p>
-                                <a href="article.html?slug=${encodeURIComponent(slug)}" class="read-more">اقرأ المقال ←</a>
-                            </div>
-                        `;
+
+                        // قسم الصورة
+                        const imageDiv = document.createElement('div');
+                        imageDiv.className = 'image';
+                        if (imageUrl) {
+                            imageDiv.style.backgroundImage = `url(${imageUrl})`;
+                            imageDiv.style.backgroundSize = 'cover';
+                            imageDiv.style.backgroundPosition = 'center';
+                        } else {
+                            imageDiv.textContent = '⚖️';
+                        }
+                        card.appendChild(imageDiv);
+
+                        // قسم المحتوى
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'content';
+
+                        // الميتا (وقت القراءة)
+                        const metaDiv = document.createElement('div');
+                        metaDiv.className = 'meta';
+                        const timeSpan = document.createElement('span');
+                        timeSpan.textContent = `${Math.ceil(title.length / 50) || 1} دقائق قراءة`;
+                        metaDiv.appendChild(timeSpan);
+                        contentDiv.appendChild(metaDiv);
+
+                        // العنوان
+                        const titleEl = document.createElement('h3');
+                        titleEl.textContent = title;
+                        contentDiv.appendChild(titleEl);
+
+                        // الوصف
+                        const descEl = document.createElement('p');
+                        descEl.textContent = description || 'تحليل قانوني متخصص في مجال القانون المصري.';
+                        contentDiv.appendChild(descEl);
+
+                        // رابط القراءة
+                        const linkEl = document.createElement('a');
+                        linkEl.className = 'read-more';
+                        linkEl.href = `article.html?slug=${encodeURIComponent(slug)}`;
+                        linkEl.textContent = 'اقرأ المقال ←';
+                        contentDiv.appendChild(linkEl);
+
+                        card.appendChild(contentDiv);
                         grid.appendChild(card);
                         revealObserver.observe(card);
                     }
 
                 } catch (error) {
                     console.error('خطأ في تحميل المقالات:', error);
-                    grid.innerHTML =
-                        `<div class="col-span-full text-center text-red-500 py-10">حدث خطأ أثناء تحميل المقالات. يرجى تحديث الصفحة.</div>`;
+                    grid.innerHTML = '';
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'col-span-full text-center text-red-500 py-10';
+                    errorMsg.textContent = 'حدث خطأ أثناء تحميل المقالات. يرجى تحديث الصفحة.';
+                    grid.appendChild(errorMsg);
                 }
             }
 

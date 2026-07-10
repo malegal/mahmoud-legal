@@ -10,20 +10,36 @@
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://ostazlaw.vercel.app/about.html" />
 
-    <link rel="alternate" hreflang="ar-eg" href="https://ostazlaw.vercel.app/ar/about.html" />
+    <link rel="alternate" hreflang="ar-eg" href="https://ostazlaw.vercel.app/about.html" />
     <link rel="alternate" hreflang="en" href="https://ostazlaw.vercel.app/en/about.html" />
+
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://ostazlaw.vercel.app/sitemap.xml" />
+    <link rel="robots" type="text/plain" href="https://ostazlaw.vercel.app/robots.txt" />
 
     <meta property="og:title" content="عن المؤسسة | الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
     <meta property="og:description" content="مؤسسة قانونية مصرية تقدم خدمات المحاماة والاستشارات القانونية للأفراد والشركات." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ostazlaw.vercel.app/about.html" />
-    <meta property="og:image" content="https://ostazlaw.vercel.app/about.png" />
+    <meta property="og:image" content="https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg" />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
     <meta property="og:locale" content="ar_EG" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg" />
+    <meta name="twitter:image:alt" content="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
 
+    <!-- ===== تحميل الخطوط ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- ===== Font Awesome ===== -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
 
     <script type="application/ld+json">
         {
@@ -69,21 +85,25 @@
                 "url": "https://ostazlaw.vercel.app/about.html",
                 "name": "عن المؤسسة",
                 "isPartOf": { "@id": "https://ostazlaw.vercel.app/#website" },
-                "about": { "@id": "https://ostazlaw.vercel.app/#organization" }
+                "about": { "@id": "https://ostazlaw.vercel.app/#organization" },
+                "primaryImageOfPage": {
+                    "@type": "ImageObject",
+                    "url": "https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg",
+                    "caption": "الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا"
+                }
             }, {
                 "@type": "WebSite",
                 "@id": "https://ostazlaw.vercel.app/#website",
-                "url": "https://ostazlaw.vercel.app/",
                 "name": "مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية",
-                "description": "مؤسسة قانونية مصرية تقدم خدمات المحاماة والاستشارات القانونية للأفراد والشركات.",
-                "about": { "@id": "https://ostazlaw.vercel.app/#organization" }
+                "url": "https://ostazlaw.vercel.app/",
+                "description": "مؤسسة قانونية مصرية تقدم خدمات المحاماة والاستشارات القانونية للأفراد والشركات."
             }]
         }
     </script>
 
     <style>
         /* ==========================================================
-               ROOT – الهوية البصرية الموحدة
+               ROOT – الهوية البصرية الموحدة مع الصفحة الرئيسية
                ========================================================== */
         :root {
             --very-dark-navy: #0B111B;
@@ -157,7 +177,70 @@
         }
 
         /* ==========================================================
-               BUTTONS
+               GOLD UNDERLINE – تأثير الخط الذهبي (مطابق للصفحة الرئيسية)
+               ========================================================== */
+        .gold-underline {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .gold-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.5s var(--ease-out);
+            border-radius: 2px;
+        }
+
+        .gold-underline:hover::after,
+        .gold-underline:focus::after {
+            width: 100%;
+        }
+
+        .gold-underline:active::after {
+            width: 100%;
+        }
+
+        .gold-underline.scroll-visible::after {
+            width: 100%;
+        }
+
+        .gold-underline-card {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .gold-underline-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 2px 2px;
+        }
+
+        .gold-underline-card:hover::after,
+        .gold-underline-card:focus::after,
+        .gold-underline-card.active::after {
+            width: 100%;
+        }
+
+        .gold-underline-card.scroll-visible::after {
+            width: 100%;
+        }
+
+        /* ==========================================================
+               BUTTONS (مطابقة للصفحة الرئيسية)
                ========================================================== */
         .btn-gold {
             display: inline-block;
@@ -174,6 +257,21 @@
             box-shadow: 0 2px 20px rgba(176, 141, 87, 0.15);
             cursor: pointer;
             position: relative;
+        }
+        .btn-gold::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .btn-gold:hover::after,
+        .btn-gold:focus::after,
+        .btn-gold:active::after {
+            width: 100%;
         }
         .btn-gold:hover {
             background: #c4a06a;
@@ -193,6 +291,22 @@
             font-size: 0.85rem;
             background: transparent;
             cursor: pointer;
+            position: relative;
+        }
+        .btn-outline-gold::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .btn-outline-gold:hover::after,
+        .btn-outline-gold:focus::after,
+        .btn-outline-gold:active::after {
+            width: 100%;
         }
         .btn-outline-gold:hover {
             background: var(--matte-gold);
@@ -213,6 +327,22 @@
             font-size: 0.9rem;
             background: transparent;
             cursor: pointer;
+            position: relative;
+        }
+        .btn-outline-white::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .btn-outline-white:hover::after,
+        .btn-outline-white:focus::after,
+        .btn-outline-white:active::after {
+            width: 100%;
         }
         .btn-outline-white:hover {
             border-color: var(--matte-gold);
@@ -222,7 +352,7 @@
         }
 
         /* ==========================================================
-               HEADER – مطابق لصفحة التخصصات
+               HEADER – مطابق للصفحة الرئيسية
                ========================================================== */
         .site-header {
             position: fixed;
@@ -325,6 +455,21 @@
             transition: all 0.4s var(--ease-out);
             border: none;
             cursor: pointer;
+            position: relative;
+        }
+        .header-actions .btn-consult::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .header-actions .btn-consult:hover::after,
+        .header-actions .btn-consult:focus::after {
+            width: 100%;
         }
         .header-actions .btn-consult:hover {
             background: #c4a06a;
@@ -343,6 +488,21 @@
             transition: all 0.4s var(--ease-out);
             font-family: var(--font-ar);
             cursor: pointer;
+            position: relative;
+        }
+        .header-actions .btn-appointment::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .header-actions .btn-appointment:hover::after,
+        .header-actions .btn-appointment:focus::after {
+            width: 100%;
         }
         .header-actions .btn-appointment:hover {
             border-color: var(--matte-gold);
@@ -365,6 +525,21 @@
             align-items: center;
             gap: 0.3rem;
             cursor: pointer;
+            position: relative;
+        }
+        .header-actions .btn-phone::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+        .header-actions .btn-phone:hover::after,
+        .header-actions .btn-phone:focus::after {
+            width: 100%;
         }
         .header-actions .btn-phone:hover {
             border-color: var(--matte-gold);
@@ -423,11 +598,12 @@
             transition: color 0.3s ease;
             position: relative;
             text-decoration: none;
+            padding-bottom: 2px;
         }
         .mobile-menu nav a::after {
             content: '';
             position: absolute;
-            bottom: -4px;
+            bottom: 0;
             right: 0;
             width: 0;
             height: 2px;
@@ -468,6 +644,20 @@
             border-color: rgba(255, 255, 255, 0.15);
             color: #fff;
             cursor: pointer;
+            position: relative;
+        }
+        .mobile-menu .actions .btn-outline-white::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.4s var(--ease-out);
+        }
+        .mobile-menu .actions .btn-outline-white:hover::after {
+            width: 100%;
         }
 
         /* ==========================================================
@@ -1255,11 +1445,26 @@
             -webkit-backdrop-filter: blur(4px);
             text-decoration: none;
             color: #fff;
+            position: relative;
         }
         .float-whatsapp i {
             font-size: 1.8rem;
             color: #fff;
             transition: transform 0.4s ease;
+        }
+        .float-whatsapp::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            right: 0;
+            width: 0;
+            height: 3px;
+            background: var(--whatsapp-green);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 50% 50%;
+        }
+        .float-whatsapp:hover::after {
+            width: 100%;
         }
         .float-whatsapp:hover {
             transform: translateY(-4px) scale(1.05);
@@ -1272,7 +1477,7 @@
         }
 
         /* ==========================================================
-               FOOTER – مطابق لصفحة التخصصات
+               FOOTER
                ========================================================== */
         .site-footer {
             background: var(--footer-navy);
@@ -1605,14 +1810,14 @@
 <body>
 
     <!-- ==========================================================
-    FLOATING WHATSAPP (تم إضافة noopener)
+    FLOATING WHATSAPP – مع noopener noreferrer
     ========================================================== -->
     <a href="https://wa.me/201101076000" target="_blank" rel="noopener noreferrer" class="float-whatsapp" aria-label="تواصل عبر واتساب">
         <i class="fab fa-whatsapp"></i>
     </a>
 
     <!-- ==========================================================
-    HEADER – مطابق لصفحة التخصصات (تم تحديث الروابط)
+    HEADER – الروابط تشير إلى ostazlaw.vercel.app
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -1623,7 +1828,7 @@
             </div>
         </div>
 
-        <nav class="header-nav" role="navigation">
+        <nav class="header-nav" role="navigation" aria-label="القائمة الرئيسية">
             <a href="https://ostazlaw.vercel.app/">الرئيسية</a>
             <a href="https://ostazlaw.vercel.app/about.html" class="active">عن المؤسسة</a>
             <a href="https://ostazlaw.vercel.app/specialties.html">التخصصات</a>
@@ -1642,7 +1847,7 @@
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU – مطابق لصفحة التخصصات (تم تحديث الروابط)
+    MOBILE MENU – الروابط تشير إلى ostazlaw.vercel.app
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -1730,19 +1935,19 @@
                     </p>
 
                     <div class="def-cards">
-                        <div class="def-card">
+                        <div class="def-card gold-underline-card">
                             <span class="icon"><i class="fas fa-scale-balanced"></i></span>
                             <h4>مؤسسة قانونية</h4>
                         </div>
-                        <div class="def-card">
+                        <div class="def-card gold-underline-card">
                             <span class="icon"><i class="fas fa-building"></i></span>
                             <h4>خدمات للشركات والأفراد</h4>
                         </div>
-                        <div class="def-card">
+                        <div class="def-card gold-underline-card">
                             <span class="icon"><i class="fas fa-shield-alt"></i></span>
                             <h4>حلول قانونية متخصصة</h4>
                         </div>
-                        <div class="def-card">
+                        <div class="def-card gold-underline-card">
                             <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
                             <h4>جمهورية مصر العربية</h4>
                         </div>
@@ -1773,22 +1978,22 @@
             </div>
 
             <div class="philosophy-grid">
-                <div class="philosophy-card reveal reveal-d1">
+                <div class="philosophy-card gold-underline-card reveal reveal-d1">
                     <span class="icon"><i class="fas fa-search"></i></span>
                     <h4>نفهم أولاً</h4>
                     <p>لا نقدم رأيًا قانونيًا قبل دراسة الوقائع وتحليلها بعمق.</p>
                 </div>
-                <div class="philosophy-card reveal reveal-d2">
+                <div class="philosophy-card gold-underline-card reveal reveal-d2">
                     <span class="icon"><i class="fas fa-microscope"></i></span>
                     <h4>نحلل بدقة</h4>
                     <p>كل ملف قانوني يخضع لتحليل مستقل وشامل.</p>
                 </div>
-                <div class="philosophy-card reveal reveal-d3">
+                <div class="philosophy-card gold-underline-card reveal reveal-d3">
                     <span class="icon"><i class="fas fa-map"></i></span>
                     <h4>نخطط باستراتيجية</h4>
                     <p>لكل قضية مسار قانوني يناسب طبيعتها وأهدافها.</p>
                 </div>
-                <div class="philosophy-card reveal reveal-d4">
+                <div class="philosophy-card gold-underline-card reveal reveal-d4">
                     <span class="icon"><i class="fas fa-gavel"></i></span>
                     <h4>ننفذ باحتراف</h4>
                     <p>نمثل عملاءنا بأعلى درجات الالتزام والمسؤولية.</p>
@@ -1809,32 +2014,32 @@
             </div>
 
             <div class="values-grid">
-                <div class="value-card reveal reveal-d1">
+                <div class="value-card gold-underline-card reveal reveal-d1">
                     <span class="icon"><i class="fas fa-scale-balanced"></i></span>
                     <h4>النزاهة</h4>
                     <p>الأمانة والوضوح في كل رأي وإجراء.</p>
                 </div>
-                <div class="value-card reveal reveal-d2">
+                <div class="value-card gold-underline-card reveal reveal-d2">
                     <span class="icon"><i class="fas fa-lock"></i></span>
                     <h4>السرية</h4>
                     <p>حماية خصوصية معلومات ووثائق العملاء.</p>
                 </div>
-                <div class="value-card reveal reveal-d3">
+                <div class="value-card gold-underline-card reveal reveal-d3">
                     <span class="icon"><i class="fas fa-briefcase"></i></span>
                     <h4>الاحتراف</h4>
                     <p>أعلى معايير المهنة في كل خدمة نقدمها.</p>
                 </div>
-                <div class="value-card reveal reveal-d1">
+                <div class="value-card gold-underline-card reveal reveal-d1">
                     <span class="icon"><i class="fas fa-crosshairs"></i></span>
                     <h4>الدقة</h4>
                     <p>التحليل والصياغة والمتابعة بدقة متناهية.</p>
                 </div>
-                <div class="value-card reveal reveal-d2">
+                <div class="value-card gold-underline-card reveal reveal-d2">
                     <span class="icon"><i class="fas fa-handshake"></i></span>
                     <h4>المسؤولية</h4>
                     <p>الالتزام تجاه عملائنا وقضاياهم.</p>
                 </div>
-                <div class="value-card reveal reveal-d3">
+                <div class="value-card gold-underline-card reveal reveal-d3">
                     <span class="icon"><i class="fas fa-book"></i></span>
                     <h4>التعلم المستمر</h4>
                     <p>تحديث معرفتنا القانونية باستمرار.</p>
@@ -1844,7 +2049,7 @@
     </section>
 
     <!-- ==========================================================
-    5. قيادة المؤسسة (أهم قسم مع تأثير التلوين)
+    5. قيادة المؤسسة (أهم قسم)
     ========================================================== -->
     <section class="section section-gray" aria-label="القيادة">
         <div class="section-inner">
@@ -1908,35 +2113,35 @@
             </div>
 
             <div class="process-timeline">
-                <div class="process-step reveal reveal-d1">
+                <div class="process-step gold-underline-card reveal reveal-d1">
                     <span class="num">١</span>
                     <div class="step-content">
                         <h4>الاستماع</h4>
                         <p>نستمع إلى عميلنا لفهم الوقائع والأهداف والتحديات.</p>
                     </div>
                 </div>
-                <div class="process-step reveal reveal-d2">
+                <div class="process-step gold-underline-card reveal reveal-d2">
                     <span class="num">٢</span>
                     <div class="step-content">
                         <h4>التحليل</h4>
                         <p>ندرس الموقف القانوني بعمق، ونحلل الأدلة والمستندات.</p>
                     </div>
                 </div>
-                <div class="process-step reveal reveal-d3">
+                <div class="process-step gold-underline-card reveal reveal-d3">
                     <span class="num">٣</span>
                     <div class="step-content">
                         <h4>الاستراتيجية</h4>
                         <p>نضع خطة قانونية واضحة تتناسب مع طبيعة القضية.</p>
                     </div>
                 </div>
-                <div class="process-step reveal reveal-d4">
+                <div class="process-step gold-underline-card reveal reveal-d4">
                     <span class="num">٤</span>
                     <div class="step-content">
                         <h4>التمثيل</h4>
                         <p>نمثل عملاءنا أمام المحاكم باحترافية ومتابعة دقيقة.</p>
                     </div>
                 </div>
-                <div class="process-step reveal reveal-d1">
+                <div class="process-step gold-underline-card reveal reveal-d1">
                     <span class="num">٥</span>
                     <div class="step-content">
                         <h4>المتابعة</h4>
@@ -1963,27 +2168,27 @@
             </div>
 
             <div class="trust-grid">
-                <div class="trust-card reveal reveal-d1">
+                <div class="trust-card gold-underline-card reveal reveal-d1">
                     <span class="icon"><i class="fas fa-check-circle"></i></span>
                     <h4>دراسة دقيقة</h4>
                 </div>
-                <div class="trust-card reveal reveal-d2">
+                <div class="trust-card gold-underline-card reveal reveal-d2">
                     <span class="icon"><i class="fas fa-check-circle"></i></span>
                     <h4>شفافية</h4>
                 </div>
-                <div class="trust-card reveal reveal-d3">
+                <div class="trust-card gold-underline-card reveal reveal-d3">
                     <span class="icon"><i class="fas fa-check-circle"></i></span>
                     <h4>تواصل مستمر</h4>
                 </div>
-                <div class="trust-card reveal reveal-d1">
+                <div class="trust-card gold-underline-card reveal reveal-d1">
                     <span class="icon"><i class="fas fa-check-circle"></i></span>
                     <h4>سرية</h4>
                 </div>
-                <div class="trust-card reveal reveal-d2">
+                <div class="trust-card gold-underline-card reveal reveal-d2">
                     <span class="icon"><i class="fas fa-check-circle"></i></span>
                     <h4>تمثيل احترافي</h4>
                 </div>
-                <div class="trust-card reveal reveal-d3">
+                <div class="trust-card gold-underline-card reveal reveal-d3">
                     <span class="icon"><i class="fas fa-check-circle"></i></span>
                     <h4>حلول عملية</h4>
                 </div>
@@ -1992,7 +2197,7 @@
     </section>
 
     <!-- ==========================================================
-    8. داخل المؤسسة (معرض صور مع lazy loading)
+    8. داخل المؤسسة (معرض صور)
     ========================================================== -->
     <section class="section section-light" aria-label="داخل المؤسسة">
         <div class="section-inner">
@@ -2003,22 +2208,22 @@
             </div>
 
             <div class="gallery-grid">
-                <div class="gallery-item reveal reveal-d1" style="background: #e8e4dd; color:rgba(34,34,34,0.2); font-size:0.8rem;">
+                <div class="gallery-item gold-underline-card reveal reveal-d1" style="background: #e8e4dd; color:rgba(34,34,34,0.2); font-size:0.8rem;">
                     <span>المكتب</span>
                 </div>
-                <div class="gallery-item reveal reveal-d2" style="background: #ddd8cf; color:rgba(34,34,34,0.2); font-size:0.8rem;">
+                <div class="gallery-item gold-underline-card reveal reveal-d2" style="background: #ddd8cf; color:rgba(34,34,34,0.2); font-size:0.8rem;">
                     <span>غرفة الاجتماعات</span>
                 </div>
-                <div class="gallery-item reveal reveal-d3" style="background: #d5d0c7; color:rgba(34,34,34,0.2); font-size:0.8rem;">
+                <div class="gallery-item gold-underline-card reveal reveal-d3" style="background: #d5d0c7; color:rgba(34,34,34,0.2); font-size:0.8rem;">
                     <span>المكتبة القانونية</span>
                 </div>
-                <div class="gallery-item reveal reveal-d1" style="background: #e0dbd2; color:rgba(34,34,34,0.2); font-size:0.8rem;">
+                <div class="gallery-item gold-underline-card reveal reveal-d1" style="background: #e0dbd2; color:rgba(34,34,34,0.2); font-size:0.8rem;">
                     <span>استقبال العملاء</span>
                 </div>
-                <div class="gallery-item reveal reveal-d2" style="background: #d8d3ca; color:rgba(34,34,34,0.2); font-size:0.8rem;">
+                <div class="gallery-item gold-underline-card reveal reveal-d2" style="background: #d8d3ca; color:rgba(34,34,34,0.2); font-size:0.8rem;">
                     <span>بيئة العمل</span>
                 </div>
-                <div class="gallery-item reveal reveal-d3" style="background: #e5e0d7; color:rgba(34,34,34,0.2); font-size:0.8rem;">
+                <div class="gallery-item gold-underline-card reveal reveal-d3" style="background: #e5e0d7; color:rgba(34,34,34,0.2); font-size:0.8rem;">
                     <span>تفاصيل معمارية</span>
                 </div>
             </div>
@@ -2054,7 +2259,7 @@
     </section>
 
     <!-- ==========================================================
-    FOOTER – مطابق لصفحة التخصصات (تم تحديث الروابط وإضافة noopener)
+    FOOTER – الروابط تشير إلى ostazlaw.vercel.app
     ========================================================== -->
     <footer class="site-footer" role="contentinfo">
         <div class="footer-inner">
@@ -2146,6 +2351,24 @@
 
             document.querySelectorAll('.reveal').forEach(function(el) {
                 revealObserver.observe(el);
+            });
+
+            // Gold Underline Scroll Effect
+            const goldElements = document.querySelectorAll('.gold-underline, .gold-underline-card');
+
+            const scrollObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('scroll-visible');
+                        setTimeout(function() {
+                            entry.target.classList.remove('scroll-visible');
+                        }, 1500);
+                    }
+                });
+            }, { threshold: 0.3, rootMargin: '0px 0px -50px 0px' });
+
+            goldElements.forEach(function(el) {
+                scrollObserver.observe(el);
             });
 
             // Leadership Image – Auto Colorize (Grayscale to Color)

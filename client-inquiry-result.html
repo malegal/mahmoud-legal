@@ -5,17 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
 
-    <!-- ===== سياسة أمان المحتوى (CSP) ===== -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://mgvyieyismzzvdejsvcv.supabase.co; 
-                   style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data:; 
-                   connect-src 'self' https://mgvyieyismzzvdejsvcv.supabase.co; 
-                   base-uri 'self'; 
-                   form-action 'self';">
-
     <title>نتيجة الاستعلام | الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا</title>
     <meta name="description" content="نتيجة استعلام قضيتك – مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية." />
     <meta name="robots" content="index, follow" />
@@ -27,7 +16,6 @@
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://ostazlaw.vercel.app/sitemap.xml" />
     <link rel="robots" type="text/plain" href="https://ostazlaw.vercel.app/robots.txt" />
 
-    <!-- ===== Open Graph ===== -->
     <meta property="og:title" content="نتيجة الاستعلام | الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
     <meta property="og:description" content="نتيجة استعلام قضيتك – مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية." />
     <meta property="og:type" content="website" />
@@ -102,8 +90,8 @@
 
     <style>
         /* ==========================================================
-           ROOT – الهوية المؤسسية (مطابقة للـ template.html)
-           ========================================================== */
+               ROOT – الهوية المؤسسية (مطابقة تماماً للـ template.html)
+               ========================================================== */
         :root {
             --very-dark-navy: #0B111B;
             --deep-navy: #102A43;
@@ -112,16 +100,12 @@
             --light-gray: #F5F5F5;
             --charcoal: #222222;
             --matte-gold: #B08D57;
-            --matte-gold-light: rgba(176, 141, 87, 0.12);
             --footer-navy: #0B1F35;
             --whatsapp-green: #25D366;
             --font-ar: 'Tajawal', sans-serif;
             --font-serif: 'Amiri', serif;
             --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
             --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.08);
-            --gold-glow: 0 0 30px rgba(176, 141, 87, 0.1);
         }
 
         *,
@@ -140,7 +124,7 @@
 
         body {
             font-family: var(--font-ar);
-            background: linear-gradient(180deg, var(--warm-off-white) 0%, #F0EDE8 100%);
+            background-color: var(--warm-off-white);
             color: var(--charcoal);
             overflow-x: hidden;
             line-height: 1.7;
@@ -184,8 +168,8 @@
         }
 
         /* ==========================================================
-           GOLD UNDERLINE
-           ========================================================== */
+               GOLD UNDERLINE (مطابق تماماً للـ template.html)
+               ========================================================== */
         .gold-underline {
             position: relative;
             display: inline-block;
@@ -218,9 +202,37 @@
             width: 100%;
         }
 
+        .gold-underline-card {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .gold-underline-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+            border-radius: 0 0 2px 2px;
+        }
+
+        .gold-underline-card:hover::after,
+        .gold-underline-card:focus::after,
+        .gold-underline-card.active::after {
+            width: 100%;
+        }
+
+        .gold-underline-card.scroll-visible::after {
+            width: 100%;
+        }
+
         /* ==========================================================
-           BUTTONS (مطابقة للـ template.html)
-           ========================================================== */
+               BUTTONS (مطابقة تماماً للـ template.html)
+               ========================================================== */
         .btn-gold {
             display: inline-block;
             background: var(--matte-gold);
@@ -238,6 +250,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .btn-gold::after {
             content: '';
             position: absolute;
@@ -248,11 +261,13 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .btn-gold:hover::after,
         .btn-gold:focus::after,
         .btn-gold:active::after {
             width: 100%;
         }
+
         .btn-gold:hover {
             background: #c4a06a;
             transform: translateY(-2px);
@@ -273,6 +288,7 @@
             cursor: pointer;
             position: relative;
         }
+
         .btn-outline-gold::after {
             content: '';
             position: absolute;
@@ -283,11 +299,13 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .btn-outline-gold:hover::after,
         .btn-outline-gold:focus::after,
         .btn-outline-gold:active::after {
             width: 100%;
         }
+
         .btn-outline-gold:hover {
             background: var(--matte-gold);
             color: #000;
@@ -297,18 +315,19 @@
 
         .btn-outline-white {
             display: inline-block;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             color: #fff;
             font-weight: 700;
-            padding: 14px 32px;
+            padding: 16px 40px;
             border-radius: 8px;
             transition: all 0.4s var(--ease-out);
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             background: transparent;
             cursor: pointer;
             position: relative;
         }
+
         .btn-outline-white::after {
             content: '';
             position: absolute;
@@ -319,11 +338,13 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .btn-outline-white:hover::after,
         .btn-outline-white:focus::after,
         .btn-outline-white:active::after {
             width: 100%;
         }
+
         .btn-outline-white:hover {
             border-color: var(--matte-gold);
             color: var(--matte-gold);
@@ -331,9 +352,48 @@
             transform: translateY(-2px);
         }
 
+        .btn-outline-navy {
+            display: inline-block;
+            border: 1px solid var(--deep-navy);
+            color: var(--deep-navy);
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 8px;
+            transition: all 0.4s var(--ease-out);
+            text-align: center;
+            font-size: 0.85rem;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .btn-outline-navy::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
+        }
+
+        .btn-outline-navy:hover::after,
+        .btn-outline-navy:focus::after,
+        .btn-outline-navy:active::after {
+            width: 100%;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--deep-navy);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 42, 67, 0.15);
+        }
+
         /* ==========================================================
-           HEADER – مطابق للـ template.html
-           ========================================================== */
+               HEADER – مطابق تماماً للـ template.html
+               ========================================================== */
         .site-header {
             position: fixed;
             top: 0;
@@ -349,6 +409,7 @@
             border-bottom: 1px solid rgba(176, 141, 87, 0.08);
             transition: all 0.5s var(--ease-out);
         }
+
         .site-header.scrolled {
             background: rgba(11, 17, 27, 0.94);
             backdrop-filter: blur(20px);
@@ -364,7 +425,6 @@
             gap: 0.8rem;
         }
 
-        /* شعار Wordmark النصي */
         .brand-wordmark {
             display: flex;
             flex-direction: column;
@@ -425,6 +485,7 @@
             padding-bottom: 2px;
             text-decoration: none;
         }
+
         .header-nav a::after {
             content: '';
             position: absolute;
@@ -435,10 +496,12 @@
             background: var(--matte-gold);
             transition: width 0.5s var(--ease-out);
         }
+
         .header-nav a:hover::after,
         .header-nav a.active::after {
             width: 100%;
         }
+
         .header-nav a:hover,
         .header-nav a.active {
             color: #fff;
@@ -449,6 +512,7 @@
             align-items: center;
             gap: 0.6rem;
         }
+
         .header-actions .btn-consult {
             padding: 8px 18px;
             font-size: 0.7rem;
@@ -461,6 +525,7 @@
             cursor: pointer;
             position: relative;
         }
+
         .header-actions .btn-consult::after {
             content: '';
             position: absolute;
@@ -471,10 +536,12 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .header-actions .btn-consult:hover::after,
         .header-actions .btn-consult:focus::after {
             width: 100%;
         }
+
         .header-actions .btn-consult:hover {
             background: #c4a06a;
             transform: translateY(-2px);
@@ -494,6 +561,7 @@
             cursor: pointer;
             position: relative;
         }
+
         .header-actions .btn-appointment::after {
             content: '';
             position: absolute;
@@ -504,10 +572,12 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .header-actions .btn-appointment:hover::after,
         .header-actions .btn-appointment:focus::after {
             width: 100%;
         }
+
         .header-actions .btn-appointment:hover {
             border-color: var(--matte-gold);
             color: var(--matte-gold);
@@ -531,6 +601,7 @@
             cursor: pointer;
             position: relative;
         }
+
         .header-actions .btn-phone::after {
             content: '';
             position: absolute;
@@ -541,10 +612,12 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .header-actions .btn-phone:hover::after,
         .header-actions .btn-phone:focus::after {
             width: 100%;
         }
+
         .header-actions .btn-phone:hover {
             border-color: var(--matte-gold);
             background: rgba(176, 141, 87, 0.08);
@@ -665,38 +738,120 @@
         }
 
         /* ==========================================================
-           MAIN CONTENT – عرض النتيجة (تصميم فاخر)
-           ========================================================== */
+               HERO – نتيجة الاستعلام (مطابق للـ template.html)
+               ========================================================== */
+        .hero-result {
+            padding: 120px 2rem 3rem;
+            background: var(--very-dark-navy);
+            position: relative;
+            overflow: hidden;
+            min-height: 35vh;
+            display: flex;
+            align-items: center;
+        }
+        .hero-result .hero-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image:
+                radial-gradient(circle at 20% 30%, var(--matte-gold) 1px, transparent 1px),
+                radial-gradient(circle at 80% 70%, var(--matte-gold) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+        .hero-result .hero-glow {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(176, 141, 87, 0.04) 0%, transparent 70%);
+            top: -20%;
+            right: -20%;
+            pointer-events: none;
+            animation: orbFloat 20s ease-in-out infinite alternate;
+        }
+        .hero-result .hero-glow-2 {
+            position: absolute;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(176, 141, 87, 0.02) 0%, transparent 70%);
+            bottom: -20%;
+            left: -10%;
+            pointer-events: none;
+            animation: orbFloat 25s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(40px, -30px) scale(1.05);
+            }
+        }
+
+        .hero-result .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+        .hero-result .hero-title-wrap {
+            text-align: center;
+        }
+        .hero-result .hero-title-wrap .en-tag {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--matte-gold);
+            opacity: 0.5;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .hero-result .hero-title-wrap h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+        }
+        .hero-result .hero-title-wrap h1 .gold-text {
+            color: var(--matte-gold);
+        }
+        .hero-result .hero-title-wrap .sub {
+            font-size: clamp(1rem, 1.3vw, 1.2rem);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.55);
+            max-width: 700px;
+            margin: 0.8rem auto 0;
+            line-height: 1.7;
+        }
+
+        /* ==========================================================
+               MAIN CONTENT – عرض النتيجة (مطابق للـ template.html)
+               ========================================================== */
         .result-main {
             flex: 1;
-            padding: 120px 2rem 4rem;
-            background: linear-gradient(180deg, var(--warm-off-white) 0%, #F0EDE8 100%);
+            padding: 3rem 2rem 5rem;
+            background: var(--warm-off-white);
         }
         .result-main .inner {
             max-width: 900px;
             margin: 0 auto;
         }
 
-        /* ===== البطاقة الرئيسية ===== */
+        /* ===== بطاقة النتيجة (مطابقة لبطاقات template.html) ===== */
         .result-card {
             background: var(--pure-white);
-            border-radius: 20px;
-            padding: 2.8rem 2.4rem;
-            border: 1px solid rgba(176, 141, 87, 0.08);
-            box-shadow: var(--shadow-card), var(--gold-glow);
-            transition: all 0.5s var(--ease-out);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s var(--ease-out);
             position: relative;
             overflow: hidden;
-        }
-        .result-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #D4AF37, #B08D57, #8A703E);
-            opacity: 0.6;
         }
         .result-card::after {
             content: '';
@@ -705,141 +860,102 @@
             right: 0;
             width: 0;
             height: 3px;
-            background: linear-gradient(90deg, #D4AF37, #B08D57, #8A703E);
-            transition: width 0.8s var(--ease-out);
+            background: var(--matte-gold);
+            transition: width 0.6s var(--ease-out);
         }
         .result-card:hover::after {
             width: 100%;
         }
         .result-card:hover {
             border-color: var(--matte-gold);
-            box-shadow: var(--shadow-hover), var(--gold-glow);
-            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
         }
 
         /* ===== رأس البطاقة ===== */
         .result-header {
             text-align: center;
-            border-bottom: 1px solid rgba(176, 141, 87, 0.08);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             padding-bottom: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-        .result-header .client-name-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
-        .result-header .client-name-wrap .icon-crown {
-            color: var(--matte-gold);
-            font-size: 1.2rem;
-            opacity: 0.3;
+            margin-bottom: 1.2rem;
         }
         .result-header h2 {
             font-family: var(--font-serif);
             font-size: 2rem;
             font-weight: 900;
             color: var(--matte-gold);
-            margin: 0;
-            letter-spacing: 0.02em;
-            text-shadow: 0 0 40px rgba(176, 141, 87, 0.05);
+            margin-bottom: 0.1rem;
         }
         .result-header .badge-role {
-            background: linear-gradient(135deg, rgba(176, 141, 87, 0.08), rgba(176, 141, 87, 0.02));
+            background: var(--light-gray);
             color: rgba(34, 34, 34, 0.5);
-            padding: 0.25rem 1.2rem;
+            padding: 0.2rem 1rem;
             border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 500;
             display: inline-block;
-            border: 1px solid rgba(176, 141, 87, 0.06);
-            margin-top: 0.2rem;
         }
 
-        /* ===== شبكة المعلومات ===== */
+        /* ===== شبكة المعلومات (مطابقة لبطاقات template.html) ===== */
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 0.8rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
         .info-item {
             background: var(--light-gray);
-            padding: 0.9rem 1.2rem;
-            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
             border: 1px solid rgba(0, 0, 0, 0.02);
             transition: all 0.3s ease;
-            position: relative;
         }
         .info-item:hover {
             border-color: var(--matte-gold);
-            box-shadow: 0 4px 16px rgba(176, 141, 87, 0.04);
             transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(176, 141, 87, 0.04);
         }
         .info-item .info-label {
             display: block;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             color: rgba(34, 34, 34, 0.3);
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 0.1rem;
+            letter-spacing: 0.06em;
         }
         .info-item .info-value {
             font-size: 0.95rem;
             font-weight: 700;
             color: var(--charcoal);
+            margin-top: 0.1rem;
             display: block;
             word-break: break-word;
         }
         .info-item .info-value.status {
             color: var(--matte-gold);
-            font-weight: 800;
         }
 
-        /* ===== آخر جلسة ===== */
+        /* ===== آخر جلسة (مطابقة لبطاقات template.html) ===== */
         .last-session-box {
-            background: linear-gradient(135deg, rgba(176, 141, 87, 0.03), rgba(176, 141, 87, 0.01));
-            border-right: 4px solid var(--matte-gold);
-            padding: 1.2rem 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .last-session-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 50%, rgba(176, 141, 87, 0.02), transparent 60%);
-            pointer-events: none;
-        }
-        .last-session-box:hover {
-            border-color: #D4AF37;
-            box-shadow: 0 4px 20px rgba(176, 141, 87, 0.06);
+            background: rgba(176, 141, 87, 0.03);
+            border-right: 3px solid var(--matte-gold);
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 1.2rem;
         }
         .last-session-box h5 {
             font-size: 0.85rem;
             font-weight: 700;
             color: var(--charcoal);
             margin-bottom: 0.3rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
         .last-session-box h5 i {
             color: var(--matte-gold);
-            font-size: 1rem;
+            margin-left: 0.4rem;
         }
         .last-session-box .date {
             color: var(--matte-gold);
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         .last-session-box .decision {
             color: rgba(34, 34, 34, 0.5);
@@ -848,19 +964,19 @@
             margin-top: 0.2rem;
         }
 
-        /* ===== أزرار الإجراءات ===== */
+        /* ===== أزرار الإجراءات (مطابقة لبطاقات template.html) ===== */
         .modal-actions {
             display: flex;
             gap: 0.8rem;
             justify-content: center;
             border-top: 1px solid rgba(0, 0, 0, 0.04);
-            padding-top: 1.5rem;
+            padding-top: 1.2rem;
             flex-wrap: wrap;
         }
         .modal-actions .btn-action {
             flex: 1;
-            padding: 0.7rem 1.2rem;
-            border-radius: 12px;
+            padding: 0.6rem;
+            border-radius: 10px;
             font-weight: 700;
             font-size: 0.85rem;
             transition: all 0.4s var(--ease-out);
@@ -868,21 +984,6 @@
             cursor: pointer;
             text-align: center;
             min-width: 120px;
-            position: relative;
-            overflow: hidden;
-        }
-        .modal-actions .btn-action::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 0;
-            height: 2px;
-            background: var(--matte-gold);
-            transition: width 0.5s var(--ease-out);
-        }
-        .modal-actions .btn-action:hover::after {
-            width: 100%;
         }
         .btn-print {
             border-color: var(--matte-gold);
@@ -892,8 +993,6 @@
         .btn-print:hover {
             background: var(--matte-gold);
             color: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(176, 141, 87, 0.15);
         }
         .btn-new {
             background: var(--charcoal);
@@ -901,8 +1000,6 @@
         }
         .btn-new:hover {
             background: #333;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
         .btn-exit {
             background: #dc2626;
@@ -910,8 +1007,6 @@
         }
         .btn-exit:hover {
             background: #b91c1c;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(220, 38, 38, 0.15);
         }
 
         /* ==========================================================
@@ -919,14 +1014,14 @@
            ========================================================== */
         .loading-container,
         .error-container {
-            padding: 3rem 0;
+            padding: 2rem 0;
             text-align: center;
         }
         .spinner {
             display: inline-block;
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--matte-gold-light);
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(176, 141, 87, 0.15);
             border-radius: 50%;
             border-top-color: var(--matte-gold);
             animation: spin 0.8s linear infinite;
@@ -942,12 +1037,12 @@
         }
 
         .error-container i {
-            font-size: 3.5rem;
+            font-size: 3rem;
             color: #dc2626;
             margin-bottom: 0.5rem;
         }
         .error-container h3 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 0.3rem;
             color: var(--charcoal);
@@ -1019,7 +1114,7 @@
         }
 
         /* ==========================================================
-           FOOTER – مطابق للـ template.html
+           FOOTER – مطابق تماماً للـ template.html
            ========================================================== */
         .site-footer {
             background: var(--footer-navy);
@@ -1126,20 +1221,20 @@
         }
 
         /* ==========================================================
-           REVEAL – تأثير الظهور الأنيق
+           REVEAL – مطابق تماماً للـ template.html
            ========================================================== */
         .reveal {
             opacity: 0;
-            transform: translateY(40px) scale(0.98);
+            transform: translateY(30px);
             transition: all 0.8s var(--ease-out);
         }
         .reveal.visible {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
 
         /* ==========================================================
-           RESPONSIVE
+           RESPONSIVE – مطابق تماماً للـ template.html
            ========================================================== */
         @media (max-width: 1024px) {
             .footer-inner {
@@ -1163,8 +1258,12 @@
                 padding: 0 1rem;
                 height: 64px;
             }
+            .hero-result {
+                padding: 100px 1rem 2rem;
+                min-height: auto;
+            }
             .result-main {
-                padding: 100px 1rem 3rem;
+                padding: 2rem 1rem 3rem;
             }
             .result-card {
                 padding: 1.8rem 1.2rem;
@@ -1213,7 +1312,6 @@
             }
             .result-card {
                 padding: 1.2rem 0.8rem;
-                border-radius: 14px;
             }
             .result-header h2 {
                 font-size: 1.4rem;
@@ -1245,11 +1343,11 @@
                 letter-spacing: 3px;
             }
             .last-session-box {
-                padding: 1rem 1.2rem;
+                padding: 0.8rem 1rem;
             }
             .modal-actions .btn-action {
                 font-size: 0.8rem;
-                padding: 0.6rem 0.8rem;
+                padding: 0.5rem 0.8rem;
                 min-width: 80px;
             }
         }
@@ -1266,7 +1364,6 @@
                 border: 1px solid rgba(0, 0, 0, 0.04) !important;
                 padding: 1.5rem !important;
             }
-            .result-card::before,
             .result-card::after {
                 display: none !important;
             }
@@ -1346,7 +1443,24 @@
     </div>
 
     <!-- ==========================================================
-    MAIN CONTENT – عرض نتيجة الاستعلام
+    HERO – نتيجة الاستعلام
+    ========================================================== -->
+    <section class="hero-result" aria-label="نتيجة الاستعلام">
+        <div class="hero-pattern"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-glow-2"></div>
+
+        <div class="hero-inner">
+            <div class="hero-title-wrap reveal">
+                <span class="en-tag">Inquiry Result</span>
+                <h1>نتيجة <span class="gold-text">الاستعلام</span></h1>
+                <p class="sub">تفاصيل قضيتك</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+    MAIN CONTENT – عرض النتيجة
     ========================================================== -->
     <main class="result-main" id="mainContent">
         <div class="inner reveal" style="transition-delay:0.1s;">
@@ -1362,10 +1476,7 @@
                 <div id="resultContent" style="display:none;">
                     <!-- رأس البطاقة -->
                     <div class="result-header">
-                        <div class="client-name-wrap">
-                            <span class="icon-crown"><i class="fas fa-crown"></i></span>
-                            <h2 id="r_clientName"></h2>
-                        </div>
+                        <h2 id="r_clientName"></h2>
                         <span class="badge-role" id="r_clientRole"></span>
                     </div>
 
@@ -1437,7 +1548,7 @@
     </main>
 
     <!-- ==========================================================
-    FOOTER – مطابق للـ template.html
+    FOOTER – مطابق تماماً للـ template.html
     ========================================================== -->
     <footer class="site-footer" role="contentinfo">
         <div class="footer-inner">
@@ -1535,7 +1646,7 @@
                         revealObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+            }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
 
             document.querySelectorAll('.reveal').forEach(function(el) {
                 revealObserver.observe(el);
@@ -1617,7 +1728,6 @@
                         }
                     };
 
-                    // استخدام textContent بدلاً من innerHTML للحماية من XSS
                     setText('r_clientName', c.client_name || 'غير معروف');
                     setText('r_clientRole', c.client_role || 'عميل');
                     setText('r_opponent', c.opponent_name || 'غير محدد');
@@ -1643,7 +1753,6 @@
 
                 } catch (err) {
                     console.warn('فشل تحميل النتيجة:', err.message);
-                    // عرض صفحة الخطأ
                     error.style.display = 'block';
                     if (errorMsg) {
                         if (err.message === 'انتهت صلاحية البيانات') {
@@ -1671,7 +1780,6 @@
                     confirmButtonText: 'إغلاق',
                     timer: 3000
                 }).then(function() {
-                    // مسح البيانات من sessionStorage
                     sessionStorage.removeItem('caseData');
                     window.location.href = 'https://ostazlaw.vercel.app/';
                 });

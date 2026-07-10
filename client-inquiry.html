@@ -231,7 +231,7 @@
         }
 
         /* ==========================================================
-               BUTTONS
+               BUTTONS (مطابقة للصفحة الرئيسية)
                ========================================================== */
         .btn-gold {
             display: inline-block;
@@ -250,6 +250,7 @@
             cursor: pointer;
             overflow: hidden;
         }
+
         .btn-gold::after {
             content: '';
             position: absolute;
@@ -260,11 +261,13 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .btn-gold:hover::after,
         .btn-gold:focus::after,
         .btn-gold:active::after {
             width: 100%;
         }
+
         .btn-gold:hover {
             background: #c4a06a;
             transform: translateY(-2px);
@@ -285,6 +288,7 @@
             cursor: pointer;
             position: relative;
         }
+
         .btn-outline-gold::after {
             content: '';
             position: absolute;
@@ -295,11 +299,13 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .btn-outline-gold:hover::after,
         .btn-outline-gold:focus::after,
         .btn-outline-gold:active::after {
             width: 100%;
         }
+
         .btn-outline-gold:hover {
             background: var(--matte-gold);
             color: #000;
@@ -321,6 +327,7 @@
             cursor: pointer;
             position: relative;
         }
+
         .btn-outline-white::after {
             content: '';
             position: absolute;
@@ -331,11 +338,13 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .btn-outline-white:hover::after,
         .btn-outline-white:focus::after,
         .btn-outline-white:active::after {
             width: 100%;
         }
+
         .btn-outline-white:hover {
             border-color: var(--matte-gold);
             color: var(--matte-gold);
@@ -357,6 +366,7 @@
             cursor: pointer;
             position: relative;
         }
+
         .btn-outline-navy::after {
             content: '';
             position: absolute;
@@ -367,11 +377,13 @@
             background: var(--matte-gold);
             transition: width 0.6s var(--ease-out);
         }
+
         .btn-outline-navy:hover::after,
         .btn-outline-navy:focus::after,
         .btn-outline-navy:active::after {
             width: 100%;
         }
+
         .btn-outline-navy:hover {
             background: var(--deep-navy);
             color: #fff;
@@ -397,6 +409,7 @@
             border-bottom: 1px solid rgba(176, 141, 87, 0.08);
             transition: all 0.5s var(--ease-out);
         }
+
         .site-header.scrolled {
             background: rgba(11, 17, 27, 0.94);
             backdrop-filter: blur(20px);
@@ -411,6 +424,7 @@
             align-items: center;
             gap: 0.8rem;
         }
+
         .brand-wordmark {
             display: flex;
             flex-direction: column;
@@ -715,6 +729,7 @@
         }
 
         /* ===== بطاقة الاستعلام ===== */
+        /* ✅ تم إزالة فئة reveal من هنا وحل محلها ظهور فوري */
         .search-card {
             max-width: 600px;
             margin: 0 auto;
@@ -726,6 +741,9 @@
             transition: all 0.4s var(--ease-out);
             position: relative;
             overflow: visible;
+            /* ✅ إلغاء أي تأثير إخفاء */
+            opacity: 1 !important;
+            transform: translateY(0) !important;
         }
         .search-card::after {
             content: '';
@@ -956,7 +974,7 @@
         .float-whatsapp:hover i { transform: scale(1.05); }
 
         /* ==========================================================
-               REVEAL
+               REVEAL (تم إلغاء تأثيره على النموذج)
                ========================================================== */
         .reveal {
             opacity: 0; transform: translateY(30px);
@@ -1105,7 +1123,7 @@
     </section>
 
     <!-- ==========================================================
-    MAIN – نموذج الاستعلام
+    MAIN – نموذج الاستعلام (تم إزالة reveal لظهور فوري)
     ========================================================== -->
     <section class="section section-light" aria-label="نموذج استعلام القضايا">
         <div class="section-inner">
@@ -1115,7 +1133,8 @@
                 <p>للاطلاع على آخر المستجدات، يرجى إدخال رقم الهاتف وكود القضية.</p>
             </div>
 
-            <div class="search-card reveal" style="transition-delay:0.15s;">
+            <!-- ✅ تم إزالة فئة "reveal" من هنا لتظهر فوراً -->
+            <div class="search-card">
                 <div class="icon-header">
                     <i class="fas fa-search"></i>
                 </div>

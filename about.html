@@ -32,7 +32,7 @@
     <!-- ===== تحميل الخطوط ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
 
     <!-- ===== Font Awesome ===== -->
     <link rel="stylesheet" 
@@ -383,11 +383,10 @@
             align-items: center;
             gap: 0.6rem;
         }
-        .header-brand img {
+        .header-brand svg {
             width: 36px;
             height: 36px;
-            object-fit: contain;
-            filter: brightness(0.9);
+            flex-shrink: 0;
         }
         .header-brand-text {
             display: flex;
@@ -1763,9 +1762,9 @@
             .header-brand-text .sub {
                 font-size: 0.45rem;
             }
-            .header-brand img {
-                width: 30px;
-                height: 30px;
+            .header-brand svg {
+                width: 28px;
+                height: 28px;
             }
 
             .hero-about .hero-title-wrap h1 {
@@ -1818,11 +1817,43 @@
     </a>
 
     <!-- ==========================================================
-    HEADER – الروابط تشير إلى ostazlaw.vercel.app
+    HEADER – مع الشعار الجديد SVG
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
-            <img src="logo.png" alt="شعار مؤسسة الأستاذ محمود عبد الحميد للمحاماة" width="36" height="36" loading="lazy" />
+            <!-- ===== الشعار الجديد SVG ===== -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 100" width="36" height="36" class="firm-logo" role="img" aria-label="شعار مؤسسة الأستاذ محمود عبد الحميد للمحاماة OSTAZ LAW">
+                <defs>
+                    <linearGradient id="ostazGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#D4AF37" />
+                        <stop offset="60%" stop-color="#B08D57" />
+                        <stop offset="100%" stop-color="#8A703E" />
+                    </linearGradient>
+                    <style>
+                        .brand-name { font-family: 'Playfair Display', 'Georgia', serif; font-weight: 700; font-size: 36px; fill: url(#ostazGold); letter-spacing: 4px; }
+                        .brand-sub { font-family: 'Montserrat', 'Helvetica Neue', sans-serif; font-weight: 400; font-size: 14px; fill: #C0C0C0; letter-spacing: 8px; }
+                        .seal-circle { fill: none; stroke: url(#ostazGold); stroke-width: 1.8; opacity: 0.6; }
+                        .seal-balance { fill: none; stroke: url(#ostazGold); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+                    </style>
+                </defs>
+
+                <!-- الختم المُطوَّر (رمز الميزان المبسط) -->
+                <g transform="translate(15, 10)">
+                    <circle cx="40" cy="40" r="28" class="seal-circle" />
+                    <line x1="20" y1="40" x2="60" y2="40" class="seal-balance" />
+                    <line x1="40" y1="25" x2="40" y2="55" class="seal-balance" />
+                    <line x1="20" y1="40" x2="25" y2="30" class="seal-balance" />
+                    <line x1="60" y1="40" x2="55" y2="30" class="seal-balance" />
+                    <circle cx="40" cy="22" r="2.5" fill="#D4AF37" opacity="0.8" />
+                </g>
+
+                <!-- النص الأساسي (OSTAZ) -->
+                <text x="100" y="50" class="brand-name">OSTAZ</text>
+
+                <!-- النص الفرعي (LAW FIRM) -->
+                <text x="105" y="75" class="brand-sub">LAW FIRM</text>
+            </svg>
+
             <div class="header-brand-text">
                 <span class="name">محمود عبد الحميد</span>
                 <span class="sub">المحامي بالنقض والدستورية العليا</span>

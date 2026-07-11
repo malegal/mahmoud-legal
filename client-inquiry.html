@@ -729,7 +729,6 @@
         }
 
         /* ===== بطاقة الاستعلام ===== */
-        /* ✅ تم إزالة فئة reveal من هنا وحل محلها ظهور فوري */
         .search-card {
             max-width: 600px;
             margin: 0 auto;
@@ -741,7 +740,6 @@
             transition: all 0.4s var(--ease-out);
             position: relative;
             overflow: visible;
-            /* ✅ إلغاء أي تأثير إخفاء */
             opacity: 1 !important;
             transform: translateY(0) !important;
         }
@@ -826,8 +824,8 @@
         .input-group-custom {
             display: flex;
             align-items: center;
-            background: #FFFFFF !important; /* خلفية بيضاء صلبة */
-            border: 1px solid #D1D1D1 !important; /* حد رمادي مرئي */
+            background: #FFFFFF !important;
+            border: 1px solid #D1D1D1 !important;
             border-radius: 10px;
             margin-bottom: 1rem;
             overflow: hidden;
@@ -839,9 +837,9 @@
         }
 
         .input-group-custom .form-control-custom {
-            background: #FFFFFF !important; /* خلفية بيضاء صلبة */
+            background: #FFFFFF !important;
             border: none !important;
-            color: #222222 !important; /* لون نص داكن */
+            color: #222222 !important;
             padding: 0.7rem 0.8rem;
             width: 100%;
             font-size: 1rem;
@@ -852,14 +850,14 @@
         }
 
         .input-group-custom .form-control-custom::placeholder {
-            color: #999999 !important; /* لون عنصر نائب رمادي فاتح */
+            color: #999999 !important;
             font-weight: 300;
             opacity: 1;
         }
 
         .input-group-custom .fixed-prefix {
-            background: #F5F5F5 !important; /* خلفية رمادية فاتحة للبادئة */
-            color: #555555 !important; /* لون نص داكن للبادئة */
+            background: #F5F5F5 !important;
+            color: #555555 !important;
             padding: 0.7rem 0.8rem;
             font-weight: 700;
             font-size: 0.85rem;
@@ -974,7 +972,7 @@
         .float-whatsapp:hover i { transform: scale(1.05); }
 
         /* ==========================================================
-               REVEAL (تم إلغاء تأثيره على النموذج)
+               REVEAL
                ========================================================== */
         .reveal {
             opacity: 0; transform: translateY(30px);
@@ -1123,7 +1121,7 @@
     </section>
 
     <!-- ==========================================================
-    MAIN – نموذج الاستعلام (تم إزالة reveal لظهور فوري)
+    MAIN – نموذج الاستعلام
     ========================================================== -->
     <section class="section section-light" aria-label="نموذج استعلام القضايا">
         <div class="section-inner">
@@ -1133,7 +1131,6 @@
                 <p>للاطلاع على آخر المستجدات، يرجى إدخال رقم الهاتف وكود القضية.</p>
             </div>
 
-            <!-- ✅ تم إزالة فئة "reveal" من هنا لتظهر فوراً -->
             <div class="search-card">
                 <div class="icon-header">
                     <i class="fas fa-search"></i>
@@ -1233,11 +1230,39 @@
     </footer>
 
     <!-- ==========================================================
-    JAVASCRIPT
+    JAVASCRIPT – مع استيراد ديناميكي لتجنب تعطل القائمة
     ========================================================== -->
     <script type="module">
-        import { getCaseData } from './supabase-config.js';
+        // ==========================================================
+        // 1. عناصر القائمة الموبايل والهيدر (تعمل دائماً)
+        // ==========================================================
+        const header = document.getElementById('siteHeader');
+        window.addEventListener('scroll', function() {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        }, { passive: true });
 
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuToggle = document.getElementById('menuToggle');
+        const menuClose = document.getElementById('menuClose');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        window.closeMobileMenu = function() {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = '';
+        };
+
+        if (menuToggle) menuToggle.addEventListener('click', openMobileMenu);
+        if (menuClose) menuClose.addEventListener('click', closeMobileMenu);
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMobileMenu();
+        });
+
+        // ==========================================================
+        // 2. عناصر نموذج الاستعلام
+        // ==========================================================
         const phoneInput = document.getElementById('phoneInput');
         const codeInput = document.getElementById('codeInput');
         const searchBtn = document.getElementById('searchBtn');
@@ -1282,6 +1307,9 @@
             }, 10);
         });
 
+        // ==========================================================
+        // 3. دالة البحث (مع استيراد ديناميكي)
+        // ==========================================================
         window.handleSearch = async function(e) {
             e.preventDefault();
 
@@ -1324,6 +1352,8 @@
             searchBtn.disabled = true;
 
             try {
+                // ✅ استيراد ديناميكي – لا يمنع تنفيذ بقية الكود
+                const { getCaseData } = await import('./supabase-config.js');
                 const { data, error } = await getCaseData(fullPhone, fullCode);
                 if (error) throw error;
                 if (!data || !data.case) throw new Error("NOT_FOUND");
@@ -1348,30 +1378,9 @@
             }
         };
 
-        const header = document.getElementById('siteHeader');
-        window.addEventListener('scroll', function() {
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        }, { passive: true });
-
-        const mobileMenu = document.getElementById('mobileMenu');
-        const menuToggle = document.getElementById('menuToggle');
-        const menuClose = document.getElementById('menuClose');
-
-        function openMobileMenu() {
-            mobileMenu.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-        window.closeMobileMenu = function() {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = '';
-        };
-
-        menuToggle.addEventListener('click', openMobileMenu);
-        menuClose.addEventListener('click', closeMobileMenu);
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMobileMenu();
-        });
-
+        // ==========================================================
+        // 4. تأثيرات Reveal
+        // ==========================================================
         const revealObserver = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
@@ -1385,6 +1394,9 @@
             revealObserver.observe(el);
         });
 
+        // ==========================================================
+        // 5. Rate Limiting
+        // ==========================================================
         let lastSubmitTime = 0;
         const originalSubmit = window.handleSearch;
         window.handleSearch = function(e) {

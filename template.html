@@ -32,7 +32,7 @@
     <!-- ===== تحميل الخطوط ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@400;600;700;900&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
     <!-- ===== Font Awesome للأيقونات الداخلية في الموقع ===== -->
     <link rel="stylesheet" 
@@ -453,13 +453,48 @@
             gap: 1rem;
         }
 
-        /* --- الشعار الجديد (Wordmark) --- */
-        .header-brand svg {
-            height: 46px;
-            width: auto;
-            max-width: 220px;
+        /* ==========================================================
+               الشعار النصي الجديد (Wordmark)
+               ========================================================== */
+        .brand-wordmark {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            font-family: 'Playfair Display', 'Cinzel', 'Times New Roman', serif;
+            transition: opacity 0.3s ease;
             flex-shrink: 0;
-            display: block;
+        }
+
+        .brand-wordmark:hover {
+            opacity: 0.85;
+        }
+
+        .brand-primary {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
+
+        .brand-secondary {
+            font-size: 24px;
+            font-weight: 400;
+            color: #D4AF37;
+            letter-spacing: 3px;
+        }
+
+        /* النسخة العربية (معلقة) – يمكن تفعيلها باستخدام الكلاس */
+        .arabic-brand {
+            font-family: 'Amiri', 'Tajawal', serif;
+        }
+        .arabic-brand .brand-primary {
+            font-size: 32px;
+            letter-spacing: 0;
+        }
+        .arabic-brand .brand-secondary {
+            font-size: 26px;
+            letter-spacing: 0;
         }
 
         .header-brand-text {
@@ -1682,7 +1717,7 @@
         }
 
         /* ==========================================================
-               RESPONSIVE
+               RESPONSIVE – مع تعديلات الشعار النصي
                ========================================================== */
         @media (max-width: 1024px) {
             .practice-grid {
@@ -1704,15 +1739,22 @@
         }
 
         @media (max-width: 820px) {
-            /* تعديل padding-top للهيرو لمنع الشريط الأبيض */
             .hero {
                 padding-top: 140px;
             }
 
-            /* تصغير الشعار */
-            .header-brand svg {
-                height: 34px;
-                max-width: 150px;
+            /* تصغير الشعار النصي */
+            .brand-primary {
+                font-size: 24px;
+            }
+            .brand-secondary {
+                font-size: 20px;
+            }
+            .arabic-brand .brand-primary {
+                font-size: 28px;
+            }
+            .arabic-brand .brand-secondary {
+                font-size: 22px;
             }
 
             .about-why-grid {
@@ -1756,7 +1798,6 @@
                 grid-template-columns: 1fr;
             }
 
-            /* الأزرار العائمة للتابلت */
             .float-whatsapp {
                 width: 48px;
                 height: 48px;
@@ -1819,15 +1860,21 @@
         }
 
         @media (max-width: 640px) {
-            /* تعديل padding-top للهيرو */
             .hero {
                 padding-top: 120px;
             }
 
-            /* تصغير الشعار للهواتف */
-            .header-brand svg {
-                height: 28px;
-                max-width: 120px;
+            .brand-primary {
+                font-size: 20px;
+            }
+            .brand-secondary {
+                font-size: 16px;
+            }
+            .arabic-brand .brand-primary {
+                font-size: 24px;
+            }
+            .arabic-brand .brand-secondary {
+                font-size: 18px;
             }
 
             .practice-grid {
@@ -1931,14 +1978,21 @@
         }
 
         @media (max-width: 400px) {
-            /* تعديل padding-top للهيرو */
             .hero {
                 padding-top: 100px;
             }
 
-            .header-brand svg {
-                height: 24px;
-                max-width: 100px;
+            .brand-primary {
+                font-size: 18px;
+            }
+            .brand-secondary {
+                font-size: 14px;
+            }
+            .arabic-brand .brand-primary {
+                font-size: 20px;
+            }
+            .arabic-brand .brand-secondary {
+                font-size: 16px;
             }
 
             .trust-item {
@@ -2014,7 +2068,7 @@
 <body>
 
     <!-- ==========================================================
-    FLOATING BUTTONS – (واتساب، زر +، قائمة فرعية)
+    FLOATING BUTTONS – واتساب، زر +، قائمة فرعية
     ========================================================== -->
     <!-- واتساب -->
     <a href="https://wa.me/201101076000" target="_blank" rel="noopener noreferrer" class="float-whatsapp" aria-label="تواصل عبر واتساب">
@@ -2053,15 +2107,23 @@
     </div>
 
     <!-- ==========================================================
-    HEADER – مع شعار Wordmark الجديد
+    HEADER – مع الشعار النصي الجديد
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
-            <!-- شعار OSTAZ LAW FIRM المُحسَّن -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 85" class="firm-logo" role="img" aria-label="OSTAZ LAW FIRM">
-                <text x="0" y="50" font-family="'Playfair Display', 'Georgia', 'Times New Roman', serif" font-weight="900" font-size="46" fill="#D4AF37" letter-spacing="2">OSTAZ</text>
-                <text x="3" y="76" font-family="'Montserrat', 'Arial', 'Helvetica Neue', sans-serif" font-weight="500" font-size="14" fill="#B0B8C0" letter-spacing="9">LAW FIRM</text>
-            </svg>
+            <!-- الشعار النصي (Wordmark) – النسخة الإنجليزية -->
+            <a href="index.html" class="brand-wordmark" aria-label="OSTAZ LAW – الصفحة الرئيسية">
+                <span class="brand-primary">OSTAZ</span>
+                <span class="brand-secondary">LAW</span>
+            </a>
+
+            <!-- النسخة العربية (معلقة – يمكنك تفعيلها بإزالة التعليق وإضافة الكلاس arabic-brand) -->
+            <!--
+            <a href="index.html" class="brand-wordmark arabic-brand" aria-label="أستاذ للمحاماة – الصفحة الرئيسية">
+                <span class="brand-primary">أستاذ</span>
+                <span class="brand-secondary">للمحاماة</span>
+            </a>
+            -->
 
             <div class="header-brand-text">
                 <span class="name">محمود عبد الحميد</span>

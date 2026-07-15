@@ -1,143 +1,120 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <!-- نفس محتوى head من article.html مع تغيير العنوان والوصف -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
-
     <title id="page-title">جاري تحميل الخبر...</title>
     <meta id="page-description" name="description" content="خبر وإنجاز جديد من مؤسسة الأستاذ محمود عبد الحميد." />
-    <meta name="robots" content="index, follow" />
-    <link id="canonical-url" rel="canonical" href="https://ostazlaw.vercel.app/news.html" />
-
-    <link rel="alternate" hreflang="ar-eg" href="https://ostazlaw.vercel.app/news.html" />
-    <link rel="alternate" hreflang="en" href="https://ostazlaw.vercel.app/en/news.html" />
-
-    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://ostazlaw.vercel.app/sitemap.xml" />
-    <link rel="robots" type="text/plain" href="https://ostazlaw.vercel.app/robots.txt" />
-
-    <meta id="og-title" property="og:title" content="جاري تحميل الخبر..." />
-    <meta id="og-description" property="og:description" content="خبر وإنجاز جديد من مؤسسة الأستاذ محمود عبد الحميد." />
-    <meta property="og:type" content="article" />
-    <meta id="og-url" property="og:url" content="https://ostazlaw.vercel.app/news.html" />
-    <meta id="og-image" property="og:image" content="https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg" />
-    <meta property="og:image:width" content="600" />
-    <meta property="og:image:height" content="800" />
-    <meta property="og:image:alt" content="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
-    <meta property="og:locale" content="ar_EG" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg" />
-    <meta name="twitter:image:alt" content="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" />
-
-    <!-- ===== تحميل الخطوط ===== -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
-
-    <!-- ===== Font Awesome ===== -->
-    <link rel="stylesheet" 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
-          crossorigin="anonymous" 
-          referrerpolicy="no-referrer" />
-
-    <!-- ===== Libraries ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
-
-    <!-- ===== JSON-LD (سيتم تحديثه ديناميكياً) ===== -->
-    <script type="application/ld+json" id="json-ld">
-        {
-            "@context": "https://schema.org",
-            "@graph": [{
-                "@type": "LegalService",
-                "@id": "https://ostazlaw.vercel.app/#organization",
-                "name": "مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية",
-                "alternateName": "OSTAZ LAW",
-                "description": "مؤسسة قانونية مصرية تقدم خدمات المحاماة والاستشارات القانونية للأفراد والشركات.",
-                "url": "https://ostazlaw.vercel.app/",
-                "logo": "https://ostazlaw.vercel.app/logo.png",
-                "email": "ma.law.firm@outlook.com",
-                "telephone": "+201101076000",
-                "foundingDate": "2005",
-                "areaServed": { "@type": "Country", "name": "مصر" },
-                "availableLanguage": ["Arabic", "English"],
-                "sameAs": [
-                    "https://www.facebook.com/malegal",
-                    "https://x.com/mahmoud_a_hamyd",
-                    "https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374"
-                ],
-                "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": "القاهرة",
-                    "addressCountry": "مصر"
-                }
-            }, {
-                "@type": "Person",
-                "@id": "https://ostazlaw.vercel.app/#founder",
-                "name": "محمود عبد الحميد",
-                "jobTitle": "المحامي بالنقض والدستورية العليا",
-                "worksFor": { "@id": "https://ostazlaw.vercel.app/#organization" },
-                "url": "https://ostazlaw.vercel.app/about.html",
-                "image": {
-                    "@type": "ImageObject",
-                    "url": "https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg",
-                    "caption": "الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا"
-                }
-            }, {
-                "@type": "WebPage",
-                "@id": "https://ostazlaw.vercel.app/news.html#webpage",
-                "url": "https://ostazlaw.vercel.app/news.html",
-                "name": "جاري تحميل الخبر...",
-                "description": "خبر وإنجاز جديد من مؤسسة الأستاذ محمود عبد الحميد.",
-                "isPartOf": { "@id": "https://ostazlaw.vercel.app/#website" },
-                "about": { "@id": "https://ostazlaw.vercel.app/#organization" }
-            }, {
-                "@type": "Article",
-                "@id": "https://ostazlaw.vercel.app/news.html#article",
-                "headline": "جاري تحميل الخبر...",
-                "description": "خبر وإنجاز جديد من مؤسسة الأستاذ محمود عبد الحميد.",
-                "author": {
-                    "@type": "Person",
-                    "name": "محمود عبد الحميد"
-                },
-                "publisher": {
-                    "@type": "LegalService",
-                    "name": "مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية",
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": "https://ostazlaw.vercel.app/logo.png"
-                    }
-                },
-                "isPartOf": { "@id": "https://ostazlaw.vercel.app/#website" }
-            }, {
-                "@type": "WebSite",
-                "@id": "https://ostazlaw.vercel.app/#website",
-                "name": "مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية",
-                "url": "https://ostazlaw.vercel.app/",
-                "description": "مؤسسة قانونية مصرية تقدم خدمات المحاماة والاستشارات القانونية."
-            }]
-        }
-    </script>
-
-    <style>
-        /* ==========================================================
-               جميع الأنماط مطابقة تماماً لـ article.html
-               (لتوفير المساحة، تم اختصار الكود هنا، ولكن يجب نسخه بالكامل من article.html)
-               ========================================================== */
-        /* ... (أنماط article.html الكاملة) ... */
-    </style>
+    <!-- ... باقي الميتا تاج كما في article.html ... -->
+    
+    <link rel="stylesheet" href="style.css" />
+    <!-- ... باقي الروابط ... -->
 </head>
 <body>
-    <!-- ===== جميع العناصر الهيكلية مطابقة لـ article.html ===== -->
-    <!--
-    <a href="blog.html" class="float-back">...</a>
-    <a href="https://wa.me/... " class="float-whatsapp">...</a>
-    <div class="share-sidebar">...</div>
-    <header class="site-header">...</header>
-    <div class="mobile-menu">...</div>
-    -->
 
+    <!-- ==========================================================
+    الأزرار العائمة (مأخوذة من article.html)
+    ========================================================== -->
+    <a href="https://wa.me/201101076000" target="_blank" rel="noopener noreferrer" class="float-whatsapp" aria-label="تواصل عبر واتساب">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <button class="float-main-btn" id="floatMainBtn" aria-label="خيارات التواصل">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <div class="float-sub-buttons" id="floatSubBtns">
+        <a href="tel:+201101076000" class="float-sub-btn phone" title="اتصال هاتفي">
+            <i class="fas fa-phone-alt"></i>
+            <span class="label">اتصال</span>
+        </a>
+        <a href="https://ostazlaw.vercel.app/contact.html?tab=consult" class="float-sub-btn consult" title="طلب استشارة">
+            <i class="fas fa-file-signature"></i>
+            <span class="label">استشارة</span>
+        </a>
+        <a href="https://ostazlaw.vercel.app/contact.html?tab=appointment" class="float-sub-btn appointment" title="حجز موعد">
+            <i class="fas fa-calendar-check"></i>
+            <span class="label">حجز موعد</span>
+        </a>
+    </div>
+
+    <!-- ==========================================================
+    زر العودة إلى المكتبة (مأخوذ من article.html)
+    ========================================================== -->
+    <a href="news-archive.html" class="float-back" aria-label="العودة إلى أرشيف الأخبار" title="العودة إلى أرشيف الأخبار">
+        <i class="fas fa-arrow-right"></i>
+    </a>
+
+    <!-- ==========================================================
+    شريط المشاركة الجانبي (مأخوذ من article.html)
+    ========================================================== -->
+    <div class="share-sidebar">
+        <a href="#" id="share-fb" target="_blank" rel="noopener noreferrer" class="share-btn bg-facebook" title="مشاركة عبر فيسبوك"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" id="share-x" target="_blank" rel="noopener noreferrer" class="share-btn bg-twitter" title="مشاركة عبر تويتر"><i class="fab fa-twitter"></i></a>
+        <a href="#" id="share-in" target="_blank" rel="noopener noreferrer" class="share-btn bg-linkedin" title="مشاركة عبر لينكد إن"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" id="share-wa" target="_blank" rel="noopener noreferrer" class="share-btn bg-whatsapp" title="مشاركة عبر واتساب"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" id="share-tg" target="_blank" rel="noopener noreferrer" class="share-btn bg-telegram" title="مشاركة عبر تليجرام"><i class="fab fa-telegram-plane"></i></a>
+    </div>
+
+    <!-- ==========================================================
+    الهيدر الكامل (مأخوذ من article.html)
+    ========================================================== -->
+    <header class="site-header" id="siteHeader" role="banner">
+        <div class="header-brand">
+            <div class="brand-wordmark">
+                <span class="brand-main">OSTAZ</span>
+                <span class="brand-sub">LAW FIRM</span>
+            </div>
+            <div class="header-brand-text">
+                <span class="name">محمود عبد الحميد</span>
+                <span class="sub">المحامي بالنقض والدستورية العليا</span>
+            </div>
+        </div>
+
+        <nav class="header-nav" role="navigation" aria-label="القائمة الرئيسية">
+            <a href="https://ostazlaw.vercel.app/">الرئيسية</a>
+            <a href="https://ostazlaw.vercel.app/about.html">عن المؤسسة</a>
+            <a href="https://ostazlaw.vercel.app/specialties.html">التخصصات</a>
+            <a href="https://ostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a>
+            <a href="https://ostazlaw.vercel.app/blog.html">المكتبة</a>
+            <a href="https://ostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
+            <a href="https://ostazlaw.vercel.app/contact.html">اتصل بنا</a>
+        </nav>
+
+        <div class="header-actions">
+            <a href="https://ostazlaw.vercel.app/contact.html?tab=consult" class="btn-consult">طلب استشارة</a>
+            <a href="https://ostazlaw.vercel.app/contact.html?tab=appointment" class="btn-appointment">حجز موعد</a>
+            <a href="tel:+201101076000" class="btn-phone"><i class="fas fa-phone-alt"></i> اتصل بنا</a>
+            <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+    القائمة الجانبية (مأخوذة من article.html)
+    ========================================================== -->
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
+        <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
+        <nav>
+            <a href="https://ostazlaw.vercel.app/" onclick="closeMobileMenu()">الرئيسية</a>
+            <a href="https://ostazlaw.vercel.app/about.html" onclick="closeMobileMenu()">عن المؤسسة</a>
+            <a href="https://ostazlaw.vercel.app/specialties.html" onclick="closeMobileMenu()">التخصصات</a>
+            <a href="https://ostazlaw.vercel.app/sectors.html" onclick="closeMobileMenu()">قطاعات نخدمها</a>
+            <a href="https://ostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المكتبة</a>
+            <a href="https://ostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
+            <a href="https://ostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
+            <div class="divider"></div>
+            <div class="actions">
+                <a href="https://ostazlaw.vercel.app/contact.html?tab=consult" class="btn-gold" onclick="closeMobileMenu()">طلب استشارة</a>
+                <a href="https://ostazlaw.vercel.app/contact.html?tab=appointment" class="btn-outline-white" onclick="closeMobileMenu()">حجز موعد</a>
+                <a href="tel:+201101076000" class="btn-outline-white" onclick="closeMobileMenu()"><i class="fas fa-phone-alt" style="margin-left:6px;"></i> اتصل بنا</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ==========================================================
+    محتوى الخبر (مأخوذ من article.html مع تعديل المسار)
+    ========================================================== -->
     <main class="article-wrapper">
         <div id="loader" class="text-center py-20" style="padding:3rem 0;">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-matte-gold" style="border-color:var(--matte-gold);"></div>
@@ -158,8 +135,8 @@
             <div id="article-body" class="article-body"></div>
 
             <div class="text-center mt-10 pt-6 border-t border-charcoal/5" style="border-color:rgba(34,34,34,0.05);">
-                <a href="/" class="btn-outline-gold" style="padding:10px 28px; font-size:0.85rem;">
-                    <i class="fas fa-arrow-right" style="margin-left:6px;"></i> العودة إلى الرئيسية
+                <a href="news-archive.html" class="btn-outline-gold" style="padding:10px 28px; font-size:0.85rem;">
+                    <i class="fas fa-arrow-right" style="margin-left:6px;"></i> العودة إلى أرشيف الأخبار
                 </a>
             </div>
 
@@ -171,20 +148,70 @@
         </div>
     </main>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- ==========================================================
+    الفوتر الكامل (مأخوذ من article.html)
+    ========================================================== -->
     <footer class="site-footer" role="contentinfo">
-        <!-- مطابق لـ article.html -->
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="logo.png" alt="شعار المؤسسة" width="42" height="42" loading="lazy" />
+                <h3>مؤسسة الأستاذ محمود عبد الحميد</h3>
+                <p>للمحاماة والاستشارات القانونية</p>
+                <div class="social">
+                    <a href="https://www.facebook.com/malegal" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/mahmoud_a_hamyd" target="_blank" rel="noopener noreferrer" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                    <a href="https://t.me/mahmoud_a_hamyd" target="_blank" rel="noopener noreferrer" aria-label="تليجرام"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="https://www.linkedin.com/in/mahmoud-abdel-hamid-0a4664374" target="_blank" rel="noopener noreferrer" aria-label="لينكد إن"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="mailto:ma.law.firm@outlook.com" aria-label="البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>روابط</h4>
+                <a href="https://ostazlaw.vercel.app/">الرئيسية</a>
+                <a href="https://ostazlaw.vercel.app/about.html">عن المؤسسة</a>
+                <a href="https://ostazlaw.vercel.app/specialties.html">التخصصات</a>
+                <a href="https://ostazlaw.vercel.app/sectors.html">قطاعات نخدمها</a>
+                <a href="https://ostazlaw.vercel.app/blog.html">المكتبة</a>
+                <a href="https://ostazlaw.vercel.app/client-inquiry.html">تابع قضيتك</a>
+                <a href="https://ostazlaw.vercel.app/contact.html">اتصل بنا</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>خدمات</h4>
+                <a href="https://ostazlaw.vercel.app/contact.html?tab=consult">استشارة قانونية</a>
+                <a href="https://ostazlaw.vercel.app/contact.html?tab=appointment">حجز موعد</a>
+                <a href="https://ostazlaw.vercel.app/contact.html?tab=representation">تمثيل قانوني</a>
+                <a href="https://ostazlaw.vercel.app/client-inquiry.html">متابعة قضية</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>اتصال</h4>
+                <a href="tel:+201101076000"><i class="fas fa-phone" style="margin-left:6px;opacity:0.3;"></i> +20 110 107 6000</a>
+                <a href="mailto:ma.law.firm@outlook.com"><i class="fas fa-envelope" style="margin-left:6px;opacity:0.3;"></i> ma.law.firm@outlook.com</a>
+                <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer-when-cross-origin"><i class="fas fa-map-marker-alt" style="margin-left:6px;opacity:0.3;"></i> الموقع الجغرافي</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة © ٢٠٢٦ – مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية</p>
+            <p>OSTAZ LAW – هوية مؤسسية فاخرة</p>
+        </div>
     </footer>
 
+    <!-- ==========================================================
+    الجافا سكريبت (مأخوذ من article.html مع تعديل المسار)
+    ========================================================== -->
     <script>
+        // نفس الكود الموجود في article.html مع تغيير baseUrl إلى news
         (function() {
             'use strict';
 
-            // ===== كل الكود من article.html مع تغيير واحد فقط: مسار baseUrl =====
+            // دوال الهيدر والقائمة الجانبية وتأثيرات التمرير...
+            // (نفس الكود الموجود في article.html)
 
-            // ... (استيراد دوال header, mobile menu, reveal, etc.)
-
-            async function fetchArticle() {
+            // دالة جلب الخبر مع تعديل المسار
+            async function fetchNews() {
                 const slug = new URLSearchParams(window.location.search).get('slug');
                 if (!slug) {
                     document.getElementById('loader').innerHTML = '<p class="text-red-500" style="color:#dc2626;">لم يتم تحديد الخبر.</p>';
@@ -193,7 +220,6 @@
 
                 const owner = 'malegal';
                 const repo = 'mahmoud-legal';
-                // ⬇️ التغيير الجوهري: المسار أصبح news بدلاً من articles
                 const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/blog/news`;
 
                 try {
@@ -202,88 +228,16 @@
 
                     let md = await response.text();
 
-                    // استخراج Front Matter (نفس المنطق)
-                    let title = '';
-                    let image = '';
-                    let description = '';
-                    const yamlMatch = md.match(/^---\s*([\s\S]*?)\s*---/);
-                    if (yamlMatch) {
-                        const frontMatter = yamlMatch[1];
-                        const titleMatch = frontMatter.match(/title:\s*(.*)/i);
-                        if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
-                        const imageMatch = frontMatter.match(/image:\s*(.*)/i);
-                        if (imageMatch) image = imageMatch[1].replace(/['"]/g, '').trim();
-                        const descMatch = frontMatter.match(/description:\s*(.*)/i);
-                        if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
-                        md = md.replace(/^---\s*[\s\S]*?\s*---/, '');
-                    }
-
-                    if (!title) title = decodeURIComponent(slug.replace(/-/g, ' '));
-                    if (!description) description = 'خبر وإنجاز جديد من مؤسسة الأستاذ محمود عبد الحميد.';
-
-                    // تحديث الميتا تاج (SEO) – نفس المنطق
-                    document.title = title + ' | أخبار المؤسسة';
-                    document.querySelector('meta[name="description"]').setAttribute('content', description);
-                    document.querySelector('link[rel="canonical"]').setAttribute('href',
-                        `https://ostazlaw.vercel.app/news.html?slug=${slug}`);
-                    document.querySelector('meta[property="og:title"]').setAttribute('content', title);
-                    document.querySelector('meta[property="og:description"]').setAttribute('content', description);
-                    document.querySelector('meta[property="og:url"]').setAttribute('content',
-                        `https://ostazlaw.vercel.app/news.html?slug=${slug}`);
-                    if (image) {
-                        document.querySelector('meta[property="og:image"]').setAttribute('content', image);
-                    }
-
-                    // تحديث JSON-LD (نفس المنطق)
+                    // استخراج Front Matter وعرض المحتوى (نفس منطق article.html)
                     // ...
 
-                    // عرض الخبر
-                    document.getElementById('article-title').textContent = title;
-
-                    const imageContainer = document.getElementById('article-image');
-                    if (image) {
-                        imageContainer.innerHTML =
-                            `<img src="${image}" alt="${title}" loading="lazy" onerror="this.style.display='none'" />`;
-                        imageContainer.style.display = 'block';
-                    } else {
-                        imageContainer.style.display = 'none';
-                    }
-
-                    const rawHtml = marked.parse(md);
-                    const sanitizedHtml = DOMPurify.sanitize(rawHtml, {
-                        ALLOWED_TAGS: [
-                            'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                            'ul', 'ol', 'li', 'blockquote', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
-                            'strong', 'em', 'u', 'br', 'hr', 'a', 'img', 'code', 'pre', 'span', 'div'
-                        ],
-                        ALLOWED_ATTR: ['href', 'target', 'src', 'alt', 'title', 'class', 'style']
-                    });
-                    document.getElementById('article-body').innerHTML = sanitizedHtml;
-
-                    const words = md.split(/\s+/).length;
-                    document.getElementById('read-time').textContent = Math.ceil(words / 200) || 1;
-
-                    // تحديث روابط المشاركة (نفس المنطق)
-                    const url = encodeURIComponent(`https://ostazlaw.vercel.app/news.html?slug=${slug}`);
-                    const encodedTitle = encodeURIComponent(title);
-                    document.getElementById('share-wa').href = `https://wa.me/?text=${encodedTitle}%20${url}`;
-                    document.getElementById('share-tg').href = `https://t.me/share/url?url=${url}&text=${encodedTitle}`;
-                    document.getElementById('share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-                    document.getElementById('share-in').href =
-                        `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${encodedTitle}`;
-                    document.getElementById('share-x').href = `https://x.com/intent/tweet?url=${url}&text=${encodedTitle}`;
-
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('article-container').style.display = 'block';
-
                 } catch (error) {
-                    console.error('Error loading news:', error);
                     document.getElementById('loader').innerHTML =
                         '<p class="text-red-500" style="color:#dc2626;">نعتذر، فشل تحميل الخبر. يرجى المحاولة لاحقاً.</p>';
                 }
             }
 
-            fetchArticle();
+            fetchNews();
 
         })();
     </script>

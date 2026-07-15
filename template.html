@@ -160,6 +160,9 @@
         </div>
     </header>
 
+    <!-- ==========================================================
+    القائمة المتنقلة (معدلة: تم حذف الأزرار الإضافية، وضبط التمرير)
+    ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
         <nav>
@@ -170,12 +173,7 @@
             <a href="https://ostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المكتبة</a>
             <a href="https://ostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://ostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
-            <div class="divider"></div>
-            <div class="actions">
-                <a href="https://ostazlaw.vercel.app/contact.html?tab=consult" class="btn-gold" onclick="closeMobileMenu()">طلب استشارة</a>
-                <a href="https://ostazlaw.vercel.app/contact.html?tab=appointment" class="btn-outline-white" onclick="closeMobileMenu()">حجز موعد</a>
-                <a href="tel:+201101076000" class="btn-outline-white" onclick="closeMobileMenu()"><i class="fas fa-phone-alt" style="margin-left:6px;"></i> اتصل بنا</a>
-            </div>
+            <!-- تم حذف <div class="actions"> بالكامل -->
         </nav>
     </div>
 
@@ -541,7 +539,7 @@
             }, { passive: true });
 
             // ==========================================================
-            // 2. MOBILE MENU
+            // 2. MOBILE MENU (مع تحسين التوافق)
             // ==========================================================
             const mobileMenu = document.getElementById('mobileMenu');
             const menuToggle = document.getElementById('menuToggle');
@@ -557,8 +555,8 @@
                 document.body.style.overflow = '';
             };
 
-            menuToggle.addEventListener('click', openMobileMenu);
-            menuClose.addEventListener('click', closeMobileMenu);
+            if (menuToggle) menuToggle.addEventListener('click', openMobileMenu);
+            if (menuClose) menuClose.addEventListener('click', closeMobileMenu);
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMobileMenu();
             });
@@ -631,52 +629,93 @@
             });
 
             // ==========================================================
-            // 6. تحميل المحتوى ديناميكياً من GitHub (الحل الدائم)
+            // 6. تحميل المحتوى ديناميكياً مع الترتيب من الأحدث إلى الأقدم
             // ==========================================================
             async function loadHomeContent() {
                 const owner = 'malegal';
                 const repo = 'mahmoud-legal';
                 const branch = 'main';
 
-                // عناصر الـ DOM
                 const articlesContainer = document.getElementById('homeArticles');
                 const newsContainer = document.getElementById('homeNews');
 
+                // دالة مساعدة لاستخراج التاريخ من اسم الملف أو من المحتوى
+                function extractDateFromFile(file, content) {
+                    // 1. محاولة استخراج التاريخ من Front Matter
+                    const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                    if (yamlMatch) {
+                        const dateMatch = yamlMatch[1].match(/date:\s*(.*)/i);
+                        if (dateMatch) {
+                            const dateStr = dateMatch[1].replace(/['"]/g, '').trim();
+                            const d = new Date(dateStr);
+                            if (!isNaN(d.getTime())) return d.getTime();
+                        }
+                    }
+                    // 2. محاولة استخراج التاريخ من اسم الملف (مثل 2024-01-15-...)
+                    const nameMatch = file.name.match(/(\d{4})-(\d{2})-(\d{2})/);
+                    if (nameMatch) {
+                        const d = new Date(nameMatch[1], nameMatch[2] - 1, nameMatch[3]);
+                        if (!isNaN(d.getTime())) return d.getTime();
+                    }
+                    // 3. استخدام وقت التعديل من GitHub (إن وجد)
+                    if (file.sha) {
+                        // استخدام وقت التعديل من GitHub (غير متاح مباشرة في API، لكن يمكن استخدام updated_at)
+                        // نعود إلى التاريخ الحالي كحل أخير
+                        return 0;
+                    }
+                    return 0;
+                }
+
                 // ==========================================================
-                // أ. جلب المقالات (آخر 3)
+                // أ. جلب المقالات وترتيبها من الأحدث إلى الأقدم
                 // ==========================================================
                 if (articlesContainer) {
                     try {
-                        const articlesUrl =
-                            `https://api.github.com/repos/${owner}/${repo}/contents/blog/articles?ref=${branch}`;
+                        const articlesUrl = `https://api.github.com/repos/${owner}/${repo}/contents/blog/articles?ref=${branch}`;
                         const articlesRes = await fetch(articlesUrl);
 
                         if (!articlesRes.ok) throw new Error('فشل جلب المقالات');
 
                         const articlesData = await articlesRes.json();
-                        const mdFiles = articlesData
-                            .filter(f => f.type === 'file' && f.name.endsWith('.md'))
-                            .reverse() // الأحدث أولاً
-                            .slice(0, 3); // آخر 3 فقط
+                        let mdFiles = articlesData.filter(f => f.type === 'file' && f.name.endsWith('.md'));
+
+                        // جلب المحتوى لكل ملف لاستخراج التواريخ
+                        const filesWithDate = [];
+                        for (const file of mdFiles) {
+                            try {
+                                const contentRes = await fetch(file.download_url);
+                                const content = await contentRes.text();
+                                const date = extractDateFromFile(file, content);
+                                filesWithDate.push({ file, content, date });
+                            } catch (e) {
+                                filesWithDate.push({ file, content: '', date: 0 });
+                            }
+                        }
+
+                        // الترتيب تنازلياً (الأحدث أولاً)
+                        filesWithDate.sort((a, b) => b.date - a.date);
+
+                        // أخذ آخر 3
+                        const topFiles = filesWithDate.slice(0, 3);
 
                         articlesContainer.innerHTML = '';
 
-                        if (mdFiles.length === 0) {
+                        if (topFiles.length === 0) {
                             articlesContainer.innerHTML =
                                 `<div class="col-span-full text-center text-charcoal/50 py-10">لا توجد مقالات حالياً.</div>`;
                         } else {
-                            for (const file of mdFiles) {
+                            for (const item of topFiles) {
+                                const file = item.file;
+                                const content = item.content;
                                 const slug = file.name.replace('.md', '');
                                 let title = slug.replace(/-/g, ' ');
-                                try {
-                                    const contentRes = await fetch(file.download_url);
-                                    const content = await contentRes.text();
-                                    const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
-                                    if (yamlMatch) {
-                                        const titleMatch = yamlMatch[1].match(/title:\s*(.*)/i);
-                                        if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
-                                    }
-                                } catch (e) { /* استخدام القيمة الافتراضية */ }
+
+                                // استخراج العنوان من Front Matter
+                                const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                                if (yamlMatch) {
+                                    const titleMatch = yamlMatch[1].match(/title:\s*(.*)/i);
+                                    if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+                                }
 
                                 const card = document.createElement('div');
                                 card.className = 'blog-card reveal';
@@ -693,7 +732,7 @@
                                     </div>
                                 `;
                                 articlesContainer.appendChild(card);
-                                revealObserver.observe(card); // إعادة تفعيل تأثير الظهور
+                                revealObserver.observe(card);
                             }
                         }
                     } catch (error) {
@@ -704,29 +743,46 @@
                 }
 
                 // ==========================================================
-                // ب. جلب الأخبار (آخر 3)
+                // ب. جلب الأخبار وترتيبها من الأحدث إلى الأقدم
                 // ==========================================================
                 if (newsContainer) {
                     try {
-                        const newsUrl =
-                            `https://api.github.com/repos/${owner}/${repo}/contents/blog/news?ref=${branch}`;
+                        const newsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/blog/news?ref=${branch}`;
                         const newsRes = await fetch(newsUrl);
 
                         if (!newsRes.ok) throw new Error('فشل جلب الأخبار');
 
                         const newsData = await newsRes.json();
-                        const newsFiles = newsData
-                            .filter(f => f.type === 'file' && f.name.endsWith('.md'))
-                            .reverse() // الأحدث أولاً
-                            .slice(0, 3); // آخر 3 فقط
+                        let newsFiles = newsData.filter(f => f.type === 'file' && f.name.endsWith('.md'));
+
+                        // جلب المحتوى لكل ملف لاستخراج التواريخ
+                        const filesWithDate = [];
+                        for (const file of newsFiles) {
+                            try {
+                                const contentRes = await fetch(file.download_url);
+                                const content = await contentRes.text();
+                                const date = extractDateFromFile(file, content);
+                                filesWithDate.push({ file, content, date });
+                            } catch (e) {
+                                filesWithDate.push({ file, content: '', date: 0 });
+                            }
+                        }
+
+                        // الترتيب تنازلياً (الأحدث أولاً)
+                        filesWithDate.sort((a, b) => b.date - a.date);
+
+                        // أخذ آخر 3
+                        const topFiles = filesWithDate.slice(0, 3);
 
                         newsContainer.innerHTML = '';
 
-                        if (newsFiles.length === 0) {
+                        if (topFiles.length === 0) {
                             newsContainer.innerHTML =
                                 `<div class="col-span-full text-center text-charcoal/50 py-10">لا توجد أخبار حالياً.</div>`;
                         } else {
-                            for (const file of newsFiles) {
+                            for (const item of topFiles) {
+                                const file = item.file;
+                                const content = item.content;
                                 const slug = file.name.replace('.md', '');
                                 let title = slug.replace(/-/g, ' ');
                                 let category = 'خبر';
@@ -734,32 +790,27 @@
                                 let date = '';
                                 let description = '';
 
-                                try {
-                                    const contentRes = await fetch(file.download_url);
-                                    const content = await contentRes.text();
-                                    const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
-                                    if (yamlMatch) {
-                                        const front = yamlMatch[1];
-                                        const titleMatch = front.match(/title:\s*(.*)/i);
-                                        if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
-                                        const catMatch = front.match(/category:\s*(.*)/i);
-                                        if (catMatch) category = catMatch[1].replace(/['"]/g, '').trim();
-                                        const iconMatch = front.match(/icon:\s*(.*)/i);
-                                        if (iconMatch) icon = iconMatch[1].replace(/['"]/g, '').trim();
-                                        const dateMatch = front.match(/date:\s*(.*)/i);
-                                        if (dateMatch) date = dateMatch[1].replace(/['"]/g, '').trim();
-                                        const descMatch = front.match(/description:\s*(.*)/i);
-                                        if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
-                                    }
-                                } catch (e) { /* استخدام القيم الافتراضية */ }
+                                const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                                if (yamlMatch) {
+                                    const front = yamlMatch[1];
+                                    const titleMatch = front.match(/title:\s*(.*)/i);
+                                    if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+                                    const catMatch = front.match(/category:\s*(.*)/i);
+                                    if (catMatch) category = catMatch[1].replace(/['"]/g, '').trim();
+                                    const iconMatch = front.match(/icon:\s*(.*)/i);
+                                    if (iconMatch) icon = iconMatch[1].replace(/['"]/g, '').trim();
+                                    const dateMatch = front.match(/date:\s*(.*)/i);
+                                    if (dateMatch) date = dateMatch[1].replace(/['"]/g, '').trim();
+                                    const descMatch = front.match(/description:\s*(.*)/i);
+                                    if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
+                                }
 
                                 const badgeColors = {
                                     'إنجاز قضائي': 'background:var(--matte-gold); color:#000;',
                                     'فعالية': 'background:var(--deep-navy); color:#fff;',
                                     'تطوير': 'background:var(--very-dark-navy); color:#fff;'
                                 };
-                                const badgeStyle = badgeColors[category] ||
-                                    'background:var(--matte-gold); color:#000;';
+                                const badgeStyle = badgeColors[category] || 'background:var(--matte-gold); color:#000;';
 
                                 const card = document.createElement('div');
                                 card.className = 'sector-link';

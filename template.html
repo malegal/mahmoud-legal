@@ -34,13 +34,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
 
-    <!-- ===== Font Awesome ===== -->
-    <link rel="stylesheet" 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
-          crossorigin="anonymous" 
-          referrerpolicy="no-referrer" />
-
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -108,12 +101,12 @@
                ROOT – الهوية المؤسسية
                ========================================================== */
         :root {
-            --very-dark-navy: #0B111B;
+            --very-dark-navy: #0a192f;   /* لون خلفية الهيدر الداكن */
             --deep-navy: #102A43;
-            --warm-off-white: #FAFAF8;
+            --warm-off-white: #fcfcfc;   /* خلفية المحتوى الفاتحة */
             --pure-white: #FFFFFF;
             --light-gray: #F5F5F5;
-            --charcoal: #222222;
+            --charcoal: #333333;
             --matte-gold: #B08D57;
             --footer-navy: #0B1F35;
             --whatsapp-green: #25D366;
@@ -123,27 +116,42 @@
             --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* --- منع الشريط الأبيض عند التمرير الزائد --- */
         html {
+            background-color: var(--very-dark-navy);
+            overscroll-behavior: none;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: var(--font-ar);
             background-color: var(--warm-off-white);
+            font-family: var(--font-ar);
             color: var(--charcoal);
             overflow-x: hidden;
             line-height: 1.7;
             direction: rtl;
+            overscroll-behavior: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- أيقونات SVG العامة --- */
+        .icon-svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         img {
@@ -186,7 +194,7 @@
         }
 
         /* ==========================================================
-               GOLD UNDERLINE
+               GOLD UNDERLINE (نفس الكود الأصلي)
                ========================================================== */
         .gold-underline {
             position: relative;
@@ -410,7 +418,7 @@
         }
 
         /* ==========================================================
-               HEADER
+               HEADER (مطابق للأصل)
                ========================================================== */
         .site-header {
             position: fixed;
@@ -429,7 +437,7 @@
         }
 
         .site-header.scrolled {
-            background: rgba(11, 17, 27, 0.94);
+            background: rgba(10, 25, 47, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(176, 141, 87, 0.08);
@@ -523,7 +531,7 @@
             position: fixed;
             inset: 0;
             z-index: 2000;
-            background: rgba(11, 17, 27, 0.98);
+            background: rgba(10, 25, 47, 0.98);
             backdrop-filter: blur(30px);
             transform: translateX(100%);
             transition: transform 0.6s var(--ease-in-out);
@@ -622,7 +630,7 @@
         }
 
         /* ==========================================================
-               HERO
+               HERO (نفس الأصل)
                ========================================================== */
         .hero {
             position: relative;
@@ -715,9 +723,6 @@
             line-height: 1.9;
         }
 
-        /* ==========================================================
-               HERO ACTION ICONS
-               ========================================================== */
         .hero-actions {
             display: flex;
             justify-content: center;
@@ -852,7 +857,7 @@
         }
 
         /* ==========================================================
-               SECTIONS
+               SECTIONS (مختصرة للاختصار – هي نفسها الأصلية)
                ========================================================== */
         .section {
             padding: 4rem 2rem;
@@ -904,7 +909,7 @@
         }
 
         /* ==========================================================
-               ABOUT + WHY
+               ABOUT + WHY (مختصر)
                ========================================================== */
         .about-why-grid {
             display: grid;
@@ -1033,7 +1038,7 @@
         }
 
         /* ==========================================================
-               PRACTICE AREAS
+               PRACTICE AREAS (مختصر)
                ========================================================== */
         .practice-grid {
             display: grid;
@@ -1106,7 +1111,7 @@
         }
 
         /* ==========================================================
-               PROCESS
+               PROCESS (مختصر)
                ========================================================== */
         .process-timeline {
             max-width: 780px;
@@ -1169,7 +1174,7 @@
         }
 
         /* ==========================================================
-               EXPERIENCE / SECTORS
+               EXPERIENCE / SECTORS (مختصر)
                ========================================================== */
         .experience-grid {
             display: grid;
@@ -1236,7 +1241,7 @@
         }
 
         /* ==========================================================
-               BLOG
+               BLOG (مختصر)
                ========================================================== */
         .blog-grid {
             display: grid;
@@ -1347,7 +1352,7 @@
         }
 
         /* ==========================================================
-               MAP SECTION
+               MAP SECTION (مختصر)
                ========================================================== */
         .map-section {
             padding: 4rem 2rem;
@@ -1411,13 +1416,13 @@
         }
 
         /* ==========================================================
-               FLOATING BUTTONS – أسفل يمين (كلاهما دائري)
+               FLOATING BUTTONS – الجهة اليمنى مع أيقونات SVG
                ========================================================== */
-        /* === زر واتساب (أسفل) === */
+        /* --- زر واتساب (أسفل) --- */
         .float-whatsapp {
             position: fixed;
             bottom: 2rem;
-            right: 2rem;           /* ← تغيير من left إلى right */
+            right: 2rem;
             z-index: 500;
             width: 56px;
             height: 56px;
@@ -1433,9 +1438,10 @@
             color: #fff;
             position: relative;
         }
-        .float-whatsapp i {
-            font-size: 2rem;
-            color: #fff;
+        .float-whatsapp .icon-svg {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
             transition: transform 0.4s ease;
         }
         .float-whatsapp::after {
@@ -1458,15 +1464,15 @@
             background: #1ebe5c;
             border-color: #1ebe5c;
         }
-        .float-whatsapp:hover i {
+        .float-whatsapp:hover .icon-svg {
             transform: scale(1.05);
         }
 
-        /* === زر التواصل الرئيسي (فوق واتساب) === */
+        /* --- الزر الرئيسي (علامة +) --- */
         .float-main-btn {
             position: fixed;
             bottom: calc(2rem + 60px + 0.8rem);
-            right: 2rem;           /* ← تغيير من left إلى right */
+            right: 2rem;
             z-index: 500;
             width: 56px;
             height: 56px;
@@ -1479,23 +1485,31 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
             transition: all 0.4s var(--ease-out);
             position: relative;
+        }
+        .float-main-btn .icon-svg {
+            width: 28px;
+            height: 28px;
+            fill: #000;
+            transition: transform 0.4s ease;
         }
         .float-main-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 40px rgba(176, 141, 87, 0.4);
         }
         .float-main-btn.active {
-            transform: rotate(45deg);   /* دوران عند الفتح */
+            transform: rotate(45deg);
+        }
+        .float-main-btn.active .icon-svg {
+            transform: rotate(0deg); /* نمنع دوران الأيقونة داخلياً لأننا ندير الزر نفسه */
         }
 
-        /* === الأزرار الفرعية (تظهر للأعلى) === */
+        /* --- الأزرار الفرعية --- */
         .float-sub-buttons {
             position: fixed;
             bottom: calc(2rem + 60px + 0.8rem + 60px + 0.8rem);
-            right: 2rem;           /* ← تغيير من left إلى right */
+            right: 2rem;
             z-index: 499;
             display: flex;
             flex-direction: column;
@@ -1517,35 +1531,37 @@
             height: 52px;
             border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             color: #fff;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: 600;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             transition: all 0.4s var(--ease-out);
             border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            flex-direction: column;
             gap: 0.1rem;
             font-family: var(--font-ar);
             text-align: center;
             line-height: 1.2;
             background: rgba(16, 42, 67, 0.75);
         }
-        .float-sub-btn:hover {
-            transform: scale(1.1) translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        }
-        .float-sub-btn i {
-            font-size: 1.1rem;
+        .float-sub-btn .icon-svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
             margin-bottom: 0.1rem;
         }
         .float-sub-btn .label {
             font-size: 0.5rem;
             opacity: 0.8;
+        }
+        .float-sub-btn:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         }
 
         .float-sub-btn.phone {
@@ -1561,7 +1577,7 @@
         }
 
         /* ==========================================================
-               FOOTER
+               FOOTER (نفس الأصل)
                ========================================================== */
         .site-footer {
             background: var(--footer-navy);
@@ -1667,7 +1683,7 @@
         }
 
         /* ==========================================================
-               REVEAL
+               REVEAL (تأثير الظهور)
                ========================================================== */
         .reveal {
             opacity: 0;
@@ -1752,15 +1768,19 @@
                 bottom: 1.2rem;
                 right: 1.2rem;
             }
-            .float-whatsapp i {
-                font-size: 1.4rem;
+            .float-whatsapp .icon-svg {
+                width: 24px;
+                height: 24px;
             }
             .float-main-btn {
                 width: 48px;
                 height: 48px;
-                font-size: 1.3rem;
                 bottom: calc(1.2rem + 52px + 0.6rem);
                 right: 1.2rem;
+            }
+            .float-main-btn .icon-svg {
+                width: 24px;
+                height: 24px;
             }
             .float-sub-buttons {
                 bottom: calc(1.2rem + 52px + 0.6rem + 52px + 0.6rem);
@@ -1771,8 +1791,9 @@
                 width: 44px;
                 height: 44px;
             }
-            .float-sub-btn i {
-                font-size: 0.9rem;
+            .float-sub-btn .icon-svg {
+                width: 18px;
+                height: 18px;
             }
             .float-sub-btn .label {
                 font-size: 0.4rem;
@@ -1847,15 +1868,19 @@
                 bottom: 1rem;
                 right: 1rem;
             }
-            .float-whatsapp i {
-                font-size: 1.2rem;
+            .float-whatsapp .icon-svg {
+                width: 20px;
+                height: 20px;
             }
             .float-main-btn {
                 width: 44px;
                 height: 44px;
-                font-size: 1.1rem;
                 bottom: calc(1rem + 48px + 0.5rem);
                 right: 1rem;
+            }
+            .float-main-btn .icon-svg {
+                width: 20px;
+                height: 20px;
             }
             .float-sub-buttons {
                 bottom: calc(1rem + 48px + 0.5rem + 48px + 0.5rem);
@@ -1866,8 +1891,9 @@
                 width: 40px;
                 height: 40px;
             }
-            .float-sub-btn i {
-                font-size: 0.8rem;
+            .float-sub-btn .icon-svg {
+                width: 16px;
+                height: 16px;
             }
             .float-sub-btn .label {
                 font-size: 0.35rem;
@@ -1940,15 +1966,19 @@
                 bottom: 0.8rem;
                 right: 0.8rem;
             }
-            .float-whatsapp i {
-                font-size: 1rem;
+            .float-whatsapp .icon-svg {
+                width: 18px;
+                height: 18px;
             }
             .float-main-btn {
                 width: 40px;
                 height: 40px;
-                font-size: 1rem;
                 bottom: calc(0.8rem + 44px + 0.4rem);
                 right: 0.8rem;
+            }
+            .float-main-btn .icon-svg {
+                width: 18px;
+                height: 18px;
             }
             .float-sub-buttons {
                 bottom: calc(0.8rem + 44px + 0.4rem + 44px + 0.4rem);
@@ -1959,8 +1989,9 @@
                 width: 36px;
                 height: 36px;
             }
-            .float-sub-btn i {
-                font-size: 0.7rem;
+            .float-sub-btn .icon-svg {
+                width: 14px;
+                height: 14px;
             }
             .float-sub-btn .label {
                 font-size: 0.3rem;
@@ -1971,39 +2002,54 @@
 <body>
 
     <!-- ==========================================================
-    FLOATING WHATSAPP (أسفل يمين)
+    FLOATING WHATSAPP (أسفل يمين) – SVG
     ========================================================== -->
     <a href="https://wa.me/201101076000" target="_blank" rel="noopener noreferrer" class="float-whatsapp" id="whatsappFloat" aria-label="تواصل عبر واتساب">
-        <i class="fab fa-whatsapp"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon-svg" role="img" aria-hidden="true">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-23.1-115-65.1-157zM223.9 413.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 334.1l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+        </svg>
     </a>
 
     <!-- ==========================================================
-    FLOATING MAIN BUTTON (فوق واتساب – زر دائري ذهبي)
+    FLOATING MAIN BUTTON (علامة +) – SVG
     ========================================================== -->
     <button class="float-main-btn" id="floatMainBtn" aria-label="خيارات التواصل">
-        <i class="fas fa-comment-dots"></i>   <!-- ← أيقونة رسالة بدلاً من plus -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon-svg" role="img" aria-hidden="true">
+            <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+        </svg>
     </button>
 
     <!-- ==========================================================
-    FLOATING SUB BUTTONS (تظهر للأعلى عند النقر)
+    FLOATING SUB BUTTONS – SVG
     ========================================================== -->
     <div class="float-sub-buttons" id="floatSubBtns">
+        <!-- اتصال هاتفي -->
         <a href="tel:+201101076000" class="float-sub-btn phone" title="اتصال هاتفي">
-            <i class="fas fa-phone-alt"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon-svg" role="img" aria-hidden="true">
+                <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
+            </svg>
             <span class="label">اتصال</span>
         </a>
+
+        <!-- استشارة -->
         <a href="https://ostazlaw.vercel.app/contact.html?tab=consult" class="float-sub-btn consult" title="طلب استشارة">
-            <i class="fas fa-file-signature"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="icon-svg" role="img" aria-hidden="true">
+                <path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h128c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+            </svg>
             <span class="label">استشارة</span>
         </a>
+
+        <!-- حجز موعد -->
         <a href="https://ostazlaw.vercel.app/contact.html?tab=appointment" class="float-sub-btn appointment" title="حجز موعد">
-            <i class="fas fa-calendar-check"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon-svg" role="img" aria-hidden="true">
+                <path d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-64h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16z"/>
+            </svg>
             <span class="label">حجز موعد</span>
         </a>
     </div>
 
     <!-- ==========================================================
-    HEADER
+    HEADER (نفس الأصل)
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -2041,7 +2087,7 @@
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU
+    MOBILE MENU (نفس الأصل)
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -2063,7 +2109,7 @@
     </div>
 
     <!-- ==========================================================
-    HERO
+    HERO (نفس الأصل)
     ========================================================== -->
     <section class="hero" aria-label="الصفحة الرئيسية – بوابة الوصول إلى الخدمات القانونية">
         <div class="hero-bg">
@@ -2121,7 +2167,7 @@
     </section>
 
     <!-- ==========================================================
-    ABOUT + WHY
+    ABOUT + WHY (مختصر)
     ========================================================== -->
     <section class="section section-light" aria-label="عن المؤسسة ولماذا تختارنا">
         <div class="section-inner">
@@ -2170,7 +2216,7 @@
     </section>
 
     <!-- ==========================================================
-    PRACTICE AREAS
+    PRACTICE AREAS (مختصر)
     ========================================================== -->
     <section class="section section-gray" aria-label="مجالات الممارسة القانونية">
         <div class="section-inner">
@@ -2225,7 +2271,7 @@
     </section>
 
     <!-- ==========================================================
-    LEGAL PROCESS
+    LEGAL PROCESS (مختصر)
     ========================================================== -->
     <section class="section section-light" aria-label="سير العمل القانوني">
         <div class="section-inner">
@@ -2269,7 +2315,7 @@
     </section>
 
     <!-- ==========================================================
-    EXPERIENCE / SECTORS
+    EXPERIENCE / SECTORS (مختصر)
     ========================================================== -->
     <section class="section section-gray" aria-label="القطاعات التي نخدمها">
         <div class="section-inner">
@@ -2306,7 +2352,7 @@
     </section>
 
     <!-- ==========================================================
-    BLOG
+    BLOG (مختصر)
     ========================================================== -->
     <section class="section section-light" aria-label="المكتبة القانونية">
         <div class="section-inner">
@@ -2327,7 +2373,7 @@
     </section>
 
     <!-- ==========================================================
-    MAP SECTION
+    MAP SECTION (مختصر)
     ========================================================== -->
     <section class="map-section" aria-label="موقع المكتب">
         <div class="map-container">
@@ -2479,7 +2525,7 @@
             });
 
             // ==========================================================
-            // FLOATING BUTTONS – TOGGLE SUB BUTTONS (جهة اليمين)
+            // FLOATING BUTTONS TOGGLE (مع إغلاق خارجي)
             // ==========================================================
             const mainBtn = document.getElementById('floatMainBtn');
             const subBtns = document.getElementById('floatSubBtns');
@@ -2492,7 +2538,7 @@
                 subBtns.classList.toggle('open');
             });
 
-            // إغلاق الأزرار الفرعية عند النقر في أي مكان آخر
+            // إغلاق عند النقر خارج الأزرار
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.float-main-btn') && !e.target.closest('.float-sub-buttons')) {
                     if (isOpen) {

@@ -217,8 +217,8 @@
         }
         .hero-about .hero-title-wrap .sub {
             font-size: clamp(1rem, 1.3vw, 1.2rem);
-            font-weight: 500; /* ✅ رفع الوزن */
-            color: rgba(255, 255, 255, 0.8); /* ✅ أكثر وضوحاً */
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
             max-width: 700px;
             margin: 0.8rem auto 0;
             line-height: 1.7;
@@ -252,8 +252,8 @@
         }
 
         .hero-about .hero-text p {
-            color: #fff; /* ✅ أبيض ناصع */
-            font-weight: 600; /* ✅ رفع الوزن */
+            color: #fff;
+            font-weight: 600;
             font-size: 1.05rem;
             line-height: 1.9;
             margin-bottom: 0.8rem;
@@ -290,8 +290,8 @@
             align-items: center;
         }
         .about-definition .def-text p {
-            color: var(--charcoal); /* ✅ أسود داكن */
-            font-weight: 700; /* ✅ عريض */
+            color: var(--charcoal);
+            font-weight: 700;
             font-size: 1.05rem;
             line-height: 1.9;
             margin-bottom: 0.8rem;
@@ -432,8 +432,8 @@
         .section-head p {
             max-width: 640px;
             margin: 0.5rem auto 0;
-            color: var(--charcoal); /* ✅ أسود داكن */
-            font-weight: 700; /* ✅ عريض */
+            color: var(--charcoal);
+            font-weight: 700;
             font-size: 1.05rem;
             line-height: 1.8;
             font-family: var(--font-ar);
@@ -498,10 +498,10 @@
             font-family: var(--font-ar);
         }
         .philosophy-card p {
-            font-size: 0.9rem; /* ✅ زيادة الحجم */
-            color: var(--charcoal); /* ✅ أسود داكن */
+            font-size: 0.9rem;
+            color: var(--charcoal);
             line-height: 1.6;
-            font-weight: 700; /* ✅ عريض */
+            font-weight: 700;
             font-family: var(--font-ar);
         }
 
@@ -558,10 +558,10 @@
             font-family: var(--font-ar);
         }
         .value-card p {
-            font-size: 0.85rem; /* ✅ زيادة الحجم */
-            color: var(--charcoal); /* ✅ أسود داكن */
+            font-size: 0.85rem;
+            color: var(--charcoal);
             line-height: 1.5;
-            font-weight: 700; /* ✅ عريض */
+            font-weight: 700;
             font-family: var(--font-ar);
         }
 
@@ -618,8 +618,8 @@
             font-family: var(--font-ar);
         }
         .leadership-content p {
-            color: var(--charcoal); /* ✅ أسود داكن */
-            font-weight: 700; /* ✅ عريض */
+            color: var(--charcoal);
+            font-weight: 700;
             line-height: 1.8;
             font-size: 0.95rem;
             margin-bottom: 0.6rem;
@@ -673,8 +673,8 @@
             border-radius: 8px;
             font-family: var(--font-serif);
             font-size: 1.1rem;
-            font-weight: 700; /* ✅ عريض */
-            color: var(--charcoal); /* ✅ أسود داكن */
+            font-weight: 700;
+            color: var(--charcoal);
             line-height: 1.8;
             font-style: italic;
         }
@@ -739,9 +739,9 @@
             font-family: var(--font-ar);
         }
         .process-step .step-content p {
-            font-size: 0.95rem; /* ✅ زيادة الحجم */
-            color: var(--charcoal); /* ✅ أسود داكن */
-            font-weight: 700; /* ✅ عريض */
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            font-weight: 700;
             line-height: 1.7;
             font-family: var(--font-ar);
         }
@@ -751,8 +751,8 @@
             margin: 1.5rem auto 0;
             text-align: center;
             font-size: 0.95rem;
-            color: var(--charcoal); /* ✅ أسود داكن */
-            font-weight: 700; /* ✅ عريض */
+            color: var(--charcoal);
+            font-weight: 700;
             line-height: 1.8;
             padding: 1.2rem 2rem;
             border-right: 2px solid var(--matte-gold);
@@ -871,9 +871,9 @@
         .founder-message blockquote {
             font-family: var(--font-serif);
             font-size: clamp(1.2rem, 2vw, 1.6rem);
-            font-weight: 700; /* ✅ عريض */
+            font-weight: 700;
             line-height: 1.9;
-            color: rgba(255, 255, 255, 0.9); /* ✅ أكثر وضوحاً */
+            color: rgba(255, 255, 255, 0.9);
             margin-bottom: 1.5rem;
         }
         .founder-message .signature {
@@ -1173,10 +1173,14 @@
             <a href="https://ostazlaw.vercel.app/contact.html">اتصل بنا</a>
         </nav>
 
+        <!-- زر الهامبرغر (يظهر في الموبايل) -->
+        <div class="header-actions">
+            <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
+        </div>
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU
+    MOBILE MENU (معدل: تم حذف الأزرار الإضافية، متوافق مع template.html)
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -1188,8 +1192,7 @@
             <a href="https://ostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المكتبة</a>
             <a href="https://ostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://ostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
-            <div class="divider"></div>
-            
+            <!-- تم حذف <div class="actions"> بالكامل -->
         </nav>
     </div>
 

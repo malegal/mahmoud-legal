@@ -160,9 +160,7 @@
         </div>
     </header>
 
-    <!-- ==========================================================
-    القائمة المتنقلة (معدلة: تم حذف الأزرار الإضافية، وضبط التمرير)
-    ========================================================== -->
+    <!-- القائمة المتنقلة -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
         <nav>
@@ -173,10 +171,10 @@
             <a href="https://ostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المكتبة</a>
             <a href="https://ostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://ostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
-            <!-- تم حذف <div class="actions"> بالكامل -->
         </nav>
     </div>
 
+    <!-- ===== HERO ===== -->
     <section class="hero" aria-label="الصفحة الرئيسية">
         <div class="hero-bg">
             <div class="glow"></div>
@@ -212,6 +210,7 @@
         </div>
     </section>
 
+    <!-- ===== TRUST BAR ===== -->
     <section class="trust-bar" aria-label="شريط الثقة">
         <div class="trust-bar-inner">
             <div class="trust-item">
@@ -229,6 +228,7 @@
         </div>
     </section>
 
+    <!-- ===== ABOUT ===== -->
     <section class="section section-light" aria-label="عن المؤسسة">
         <div class="section-inner">
             <div class="about-why-grid">
@@ -275,6 +275,7 @@
         </div>
     </section>
 
+    <!-- ===== PRACTICE AREAS ===== -->
     <section class="section section-gray" aria-label="مجالات الممارسة القانونية">
         <div class="section-inner">
             <div class="section-head reveal">
@@ -327,6 +328,7 @@
         </div>
     </section>
 
+    <!-- ===== PROCESS ===== -->
     <section class="section section-light" aria-label="سير العمل القانوني">
         <div class="section-inner">
             <div class="section-head reveal">
@@ -368,6 +370,7 @@
         </div>
     </section>
 
+    <!-- ===== SECTORS ===== -->
     <section class="section section-gray" aria-label="القطاعات التي نخدمها">
         <div class="section-inner">
             <div class="section-head reveal">
@@ -403,7 +406,7 @@
     </section>
 
     <!-- ==========================================================
-    🆕 قــســم أخــبــار الـمـؤسـسـة (ديناميكي)
+    🆕 قــســم أخــبــار الـمـؤسـسـة (ديناميكي – مرتب من الأحدث إلى الأقدم)
     ========================================================== -->
     <section class="section section-gray" aria-label="أخبار وإنجازات المؤسسة">
         <div class="section-inner">
@@ -425,7 +428,7 @@
     </section>
 
     <!-- ==========================================================
-    قــســم الـمـكـتـبـة الـقـانـونـيـة (ديناميكي)
+    قــســم الـمـكـتـبـة الـقـانـونـيـة (ديناميكي – مرتب من الأحدث إلى الأقدم)
     ========================================================== -->
     <section class="section section-light" aria-label="المكتبة القانونية">
         <div class="section-inner">
@@ -446,6 +449,7 @@
         </div>
     </section>
 
+    <!-- ===== MAP ===== -->
     <section class="map-section" aria-label="موقع المكتب">
         <div class="map-container">
             <iframe 
@@ -462,6 +466,7 @@
         </div>
     </section>
 
+    <!-- ===== CTA ===== -->
     <section class="cta-section" aria-label="دعوة للتواصل">
         <div class="section-inner reveal">
             <span class="eyebrow">● تواصل معنا</span>
@@ -476,6 +481,7 @@
         </div>
     </section>
 
+    <!-- ===== FOOTER ===== -->
     <footer class="site-footer" role="contentinfo">
         <div class="footer-inner">
             <div class="footer-brand">
@@ -524,7 +530,7 @@
     </footer>
 
     <!-- ==========================================================
-    جـافـا سـكـريـبـت (التفاعلات والحركة + التحميل الديناميكي)
+    جـافـا سـكـريـبـت (التفاعلات + التحميل الديناميكي مع ترتيب زمني دقيق)
     ========================================================== -->
     <script>
         (function() {
@@ -539,7 +545,7 @@
             }, { passive: true });
 
             // ==========================================================
-            // 2. MOBILE MENU (مع تحسين التوافق)
+            // 2. MOBILE MENU
             // ==========================================================
             const mobileMenu = document.getElementById('mobileMenu');
             const menuToggle = document.getElementById('menuToggle');
@@ -562,7 +568,7 @@
             });
 
             // ==========================================================
-            // 3. REVEAL OBSERVER (لتأثيرات الظهور)
+            // 3. REVEAL OBSERVER
             // ==========================================================
             const revealObserver = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
@@ -598,7 +604,7 @@
             });
 
             // ==========================================================
-            // 5. FLOATING MAIN BUTTON (زر +)
+            // 5. FLOATING MAIN BUTTON
             // ==========================================================
             const mainBtn = document.getElementById('floatMainBtn');
             const subBtns = document.getElementById('floatSubBtns');
@@ -629,7 +635,7 @@
             });
 
             // ==========================================================
-            // 6. تحميل المحتوى ديناميكياً مع الترتيب من الأحدث إلى الأقدم
+            // 6. تحميل المحتوى ديناميكياً مع ترتيب زمني دقيق (الأحدث أولاً)
             // ==========================================================
             async function loadHomeContent() {
                 const owner = 'malegal';
@@ -639,9 +645,11 @@
                 const articlesContainer = document.getElementById('homeArticles');
                 const newsContainer = document.getElementById('homeNews');
 
-                // دالة مساعدة لاستخراج التاريخ من اسم الملف أو من المحتوى
+                // ==========================================================
+                // دالة متطورة لاستخراج التاريخ من الملف (Front Matter أو اسم الملف)
+                // ==========================================================
                 function extractDateFromFile(file, content) {
-                    // 1. محاولة استخراج التاريخ من Front Matter
+                    // محاولة استخراج التاريخ من Front Matter (الحقل date)
                     const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
                     if (yamlMatch) {
                         const dateMatch = yamlMatch[1].match(/date:\s*(.*)/i);
@@ -651,23 +659,27 @@
                             if (!isNaN(d.getTime())) return d.getTime();
                         }
                     }
-                    // 2. محاولة استخراج التاريخ من اسم الملف (مثل 2024-01-15-...)
+
+                    // محاولة استخراج التاريخ من اسم الملف (مثل 2024-01-15-...)
                     const nameMatch = file.name.match(/(\d{4})-(\d{2})-(\d{2})/);
                     if (nameMatch) {
                         const d = new Date(nameMatch[1], nameMatch[2] - 1, nameMatch[3]);
                         if (!isNaN(d.getTime())) return d.getTime();
                     }
-                    // 3. استخدام وقت التعديل من GitHub (إن وجد)
+
+                    // محاولة استخراج التاريخ من وقت التعديل في GitHub (إن وجد)
                     if (file.sha) {
-                        // استخدام وقت التعديل من GitHub (غير متاح مباشرة في API، لكن يمكن استخدام updated_at)
-                        // نعود إلى التاريخ الحالي كحل أخير
+                        // نستخدم وقت التعديل من GitHub (ليس دقيقاً جداً لكنه أفضل من 0)
+                        // في GitHub API، يمكننا الحصول على `updated_at` ولكن ليس في استجابة contents.
+                        // بدلاً من ذلك، نستخدم 0 كقيمة افتراضية ونعتمد على اسم الملف أو front matter.
                         return 0;
                     }
+
                     return 0;
                 }
 
                 // ==========================================================
-                // أ. جلب المقالات وترتيبها من الأحدث إلى الأقدم
+                // أ. جلب المقالات وترتيبها (الأحدث أولاً)
                 // ==========================================================
                 if (articlesContainer) {
                     try {
@@ -695,7 +707,7 @@
                         // الترتيب تنازلياً (الأحدث أولاً)
                         filesWithDate.sort((a, b) => b.date - a.date);
 
-                        // أخذ آخر 3
+                        // أخذ آخر 3 مقالات
                         const topFiles = filesWithDate.slice(0, 3);
 
                         articlesContainer.innerHTML = '';
@@ -709,12 +721,20 @@
                                 const content = item.content;
                                 const slug = file.name.replace('.md', '');
                                 let title = slug.replace(/-/g, ' ');
+                                let date = '';
 
-                                // استخراج العنوان من Front Matter
+                                // استخراج العنوان والتاريخ من Front Matter
                                 const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
                                 if (yamlMatch) {
                                     const titleMatch = yamlMatch[1].match(/title:\s*(.*)/i);
                                     if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+                                    const dateMatch = yamlMatch[1].match(/date:\s*(.*)/i);
+                                    if (dateMatch) {
+                                        const d = new Date(dateMatch[1].replace(/['"]/g, '').trim());
+                                        if (!isNaN(d.getTime())) {
+                                            date = d.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+                                        }
+                                    }
                                 }
 
                                 const card = document.createElement('div');
@@ -725,6 +745,7 @@
                                         <h3>${title}</h3>
                                         <div class="meta">
                                             <span><i class="far fa-clock" style="margin-left:4px;"></i> ${Math.ceil(title.length / 50) || 1} دقائق قراءة</span>
+                                            ${date ? `<span><i class="far fa-calendar-alt" style="margin-left:4px;"></i> ${date}</span>` : ''}
                                         </div>
                                         <a href="article.html?slug=${encodeURIComponent(slug)}" class="btn-read">
                                             استعراض الدراسة <i class="fas fa-arrow-left"></i>
@@ -743,7 +764,7 @@
                 }
 
                 // ==========================================================
-                // ب. جلب الأخبار وترتيبها من الأحدث إلى الأقدم
+                // ب. جلب الأخبار وترتيبها (الأحدث أولاً)
                 // ==========================================================
                 if (newsContainer) {
                     try {
@@ -771,7 +792,7 @@
                         // الترتيب تنازلياً (الأحدث أولاً)
                         filesWithDate.sort((a, b) => b.date - a.date);
 
-                        // أخذ آخر 3
+                        // أخذ آخر 3 أخبار
                         const topFiles = filesWithDate.slice(0, 3);
 
                         newsContainer.innerHTML = '';
@@ -800,7 +821,12 @@
                                     const iconMatch = front.match(/icon:\s*(.*)/i);
                                     if (iconMatch) icon = iconMatch[1].replace(/['"]/g, '').trim();
                                     const dateMatch = front.match(/date:\s*(.*)/i);
-                                    if (dateMatch) date = dateMatch[1].replace(/['"]/g, '').trim();
+                                    if (dateMatch) {
+                                        const d = new Date(dateMatch[1].replace(/['"]/g, '').trim());
+                                        if (!isNaN(d.getTime())) {
+                                            date = d.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+                                        }
+                                    }
                                     const descMatch = front.match(/description:\s*(.*)/i);
                                     if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
                                 }
@@ -820,7 +846,7 @@
                                         <div class="experience-card reveal" style="text-align:right; position:relative;">
                                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
                                                 <span style="${badgeStyle} padding:0.1rem 0.8rem; border-radius:20px; font-size:0.6rem; font-weight:800;">${category}</span>
-                                                <span style="font-size:0.7rem; color:var(--text-secondary);">${date}</span>
+                                                ${date ? `<span style="font-size:0.7rem; color:var(--text-secondary);"><i class="far fa-calendar-alt" style="margin-left:4px;"></i> ${date}</span>` : ''}
                                             </div>
                                             <span class="icon"><i class="fas ${icon}" style="font-size:1.5rem;"></i></span>
                                             <h4>${title}</h4>

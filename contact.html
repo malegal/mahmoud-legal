@@ -634,7 +634,7 @@
     </div>
 
     <!-- ==========================================================
-    HEADER – مطابق لـ about.html (بدون header-actions و menu-toggle)
+    HEADER – مع زر الهامبرغر للقائمة المتنقلة
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -659,11 +659,14 @@
             <a href="https://ostazlaw.vercel.app/contact.html" class="active">اتصل بنا</a>
         </nav>
 
-        <!-- تم حذف <div class="header-actions"> بالكامل -->
+        <!-- ✅ إضافة زر الهامبرغر للقائمة على الموبايل -->
+        <div class="header-actions">
+            <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
+        </div>
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU
+    MOBILE MENU – متوافقة مع باقي الصفحات (بدون أزرار إضافية)
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -676,7 +679,7 @@
             <a href="https://ostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://ostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
             <div class="divider"></div>
-            <!-- تم حذف <div class="actions"> بالكامل -->
+            <!-- ✅ تم حذف <div class="actions"> بالكامل -->
         </nav>
     </div>
 
@@ -1038,10 +1041,10 @@
             }, { passive: true });
 
             // ==========================================================
-            // MOBILE MENU
+            // MOBILE MENU (مع زر الهامبرغر)
             // ==========================================================
             const mobileMenu = document.getElementById('mobileMenu');
-            const menuToggle = document.getElementById('menuToggle'); // غير موجود
+            const menuToggle = document.getElementById('menuToggle');
             const menuClose = document.getElementById('menuClose');
 
             function openMobileMenu() {

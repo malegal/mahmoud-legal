@@ -54,6 +54,11 @@
     أنماط خاصة بصفحة استعلام القضايا فقط
     ========================================================== -->
     <style>
+        /* ✅ زيادة المسافة بين "تابع قضيتك" و "نظام الاستعلام الإلكتروني" بمقدار سطرين */
+        .hero-title {
+            margin-bottom: 2.8rem !important; /* كانت 0.8rem */
+        }
+
         /* ===== بطاقة الاستعلام ===== */
         .search-card {
             max-width: 600px;
@@ -213,6 +218,10 @@
                ========================================================== */
         @media (max-width: 820px) {
             .search-card { padding: 1.8rem 1.2rem; }
+            /* ✅ تقليل المسافة على الشاشات الصغيرة */
+            .hero-title {
+                margin-bottom: 1.8rem !important;
+            }
         }
 
         @media (max-width: 640px) {
@@ -221,6 +230,10 @@
             .input-group-custom .fixed-prefix { padding: 0.5rem 0.6rem; font-size: 0.75rem; }
             .legal-disclaimer { padding: 0.8rem 1rem; }
             .consent-wrapper { padding: 0.6rem 0.8rem; }
+            /* ✅ تقليل المسافة أكثر على الشاشات الصغيرة جداً */
+            .hero-title {
+                margin-bottom: 1.5rem !important;
+            }
         }
     </style>
 
@@ -349,7 +362,7 @@
     </div>
 
     <!-- ==========================================================
-    HERO – استعلام القضايا (مطابق لـ template من حيث الهيكل)
+    HERO – استعلام القضايا (مع زيادة المسافة بين السطور)
     ========================================================== -->
     <section class="hero" aria-label="استعلام القضايا">
         <div class="hero-bg">

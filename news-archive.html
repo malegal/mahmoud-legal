@@ -244,7 +244,7 @@
     </div>
 
     <!-- ==========================================================
-    HEADER – مطابق لـ about.html (بدون header-actions)
+    HEADER – مع زر الهامبرغر للقائمة المتنقلة
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -269,11 +269,14 @@
             <a href="https://ostazlaw.vercel.app/contact.html">اتصل بنا</a>
         </nav>
 
-        <!-- تم حذف <div class="header-actions"> بالكامل -->
+        <!-- ✅ إضافة زر الهامبرغر للقائمة على الموبايل -->
+        <div class="header-actions">
+            <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
+        </div>
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU
+    MOBILE MENU – متوافقة مع باقي الصفحات (بدون أزرار إضافية)
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -286,7 +289,7 @@
             <a href="https://ostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://ostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
             <div class="divider"></div>
-            <!-- تم حذف <div class="actions"> بالكامل -->
+            <!-- ✅ تم حذف <div class="actions"> بالكامل -->
         </nav>
     </div>
 
@@ -308,7 +311,7 @@
     </section>
 
     <!-- ==========================================================
-    NEWS GRID – يعرض جميع الأخبار
+    NEWS GRID – يعرض جميع الأخبار (مرتبة من الأحدث إلى الأقدم)
     ========================================================== -->
     <section class="blog-section" aria-label="قائمة الأخبار">
         <div class="inner">
@@ -370,7 +373,7 @@
     </footer>
 
     <!-- ==========================================================
-    جافا سكريبت – جلب جميع الأخبار + تفاعلات الهيدر والأزرار
+    جافا سكريبت – جلب جميع الأخبار مرتبة من الأحدث إلى الأقدم
     ========================================================== -->
     <script>
         (function() {
@@ -385,10 +388,10 @@
             }, { passive: true });
 
             // ==========================================================
-            // MOBILE MENU
+            // MOBILE MENU (مع زر الهامبرغر)
             // ==========================================================
             const mobileMenu = document.getElementById('mobileMenu');
-            const menuToggle = document.getElementById('menuToggle'); // غير موجود
+            const menuToggle = document.getElementById('menuToggle');
             const menuClose = document.getElementById('menuClose');
 
             function openMobileMenu() {
@@ -457,7 +460,7 @@
             });
 
             // ==========================================================
-            // LOAD ALL NEWS FROM GITHUB
+            // LOAD ALL NEWS FROM GITHUB (مرتبة من الأحدث إلى الأقدم)
             // ==========================================================
             const CONFIG = {
                 owner: 'malegal',
@@ -465,6 +468,28 @@
                 path: 'blog/news',
                 branch: 'main'
             };
+
+            // دالة مساعدة لاستخراج التاريخ من Front Matter أو اسم الملف
+            function extractDateFromFile(file, content) {
+                // 1. محاولة استخراج التاريخ من Front Matter
+                const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                if (yamlMatch) {
+                    const dateMatch = yamlMatch[1].match(/date:\s*(.*)/i);
+                    if (dateMatch) {
+                        const dateStr = dateMatch[1].replace(/['"]/g, '').trim();
+                        const d = new Date(dateStr);
+                        if (!isNaN(d.getTime())) return d.getTime();
+                    }
+                }
+                // 2. محاولة استخراج التاريخ من اسم الملف (مثل 2024-01-15-...)
+                const nameMatch = file.name.match(/(\d{4})-(\d{2})-(\d{2})/);
+                if (nameMatch) {
+                    const d = new Date(nameMatch[1], nameMatch[2] - 1, nameMatch[3]);
+                    if (!isNaN(d.getTime())) return d.getTime();
+                }
+                // 3. في حال عدم وجود تاريخ، نستخدم 0
+                return 0;
+            }
 
             async function loadNews() {
                 const grid = document.getElementById('news-grid');
@@ -503,10 +528,27 @@
                         return;
                     }
 
-                    mdFiles.reverse();
+                    // جلب محتوى كل ملف لاستخراج التواريخ
+                    const filesWithDate = [];
+                    for (const file of mdFiles) {
+                        try {
+                            const contentRes = await fetch(file.download_url);
+                            const content = await contentRes.text();
+                            const date = extractDateFromFile(file, content);
+                            filesWithDate.push({ file, content, date });
+                        } catch (e) {
+                            filesWithDate.push({ file, content: '', date: 0 });
+                        }
+                    }
+
+                    // الترتيب تنازلياً (الأحدث أولاً)
+                    filesWithDate.sort((a, b) => b.date - a.date);
+
                     grid.innerHTML = '';
 
-                    for (const file of mdFiles) {
+                    for (const item of filesWithDate) {
+                        const file = item.file;
+                        const content = item.content;
                         const slug = file.name.replace('.md', '');
                         let title = slug.replace(/-/g, ' ');
                         let category = 'خبر';
@@ -514,29 +556,23 @@
                         let date = '';
                         let description = '';
 
-                        try {
-                            const contentRes = await fetch(file.download_url);
-                            const content = await contentRes.text();
-                            const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
-                            if (yamlMatch) {
-                                const frontMatter = yamlMatch[1];
-                                const titleMatch = frontMatter.match(/title:\s*(.*)/i);
-                                if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+                        const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                        if (yamlMatch) {
+                            const frontMatter = yamlMatch[1];
+                            const titleMatch = frontMatter.match(/title:\s*(.*)/i);
+                            if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
 
-                                const categoryMatch = frontMatter.match(/category:\s*(.*)/i);
-                                if (categoryMatch) category = categoryMatch[1].replace(/['"]/g, '').trim();
+                            const categoryMatch = frontMatter.match(/category:\s*(.*)/i);
+                            if (categoryMatch) category = categoryMatch[1].replace(/['"]/g, '').trim();
 
-                                const iconMatch = frontMatter.match(/icon:\s*(.*)/i);
-                                if (iconMatch) icon = iconMatch[1].replace(/['"]/g, '').trim();
+                            const iconMatch = frontMatter.match(/icon:\s*(.*)/i);
+                            if (iconMatch) icon = iconMatch[1].replace(/['"]/g, '').trim();
 
-                                const dateMatch = frontMatter.match(/date:\s*(.*)/i);
-                                if (dateMatch) date = dateMatch[1].replace(/['"]/g, '').trim();
+                            const dateMatch = frontMatter.match(/date:\s*(.*)/i);
+                            if (dateMatch) date = dateMatch[1].replace(/['"]/g, '').trim();
 
-                                const descMatch = frontMatter.match(/description:\s*(.*)/i);
-                                if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
-                            }
-                        } catch (e) {
-                            console.warn('⚠️ تعذر استخراج البيانات من ' + file.name, e);
+                            const descMatch = frontMatter.match(/description:\s*(.*)/i);
+                            if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
                         }
 
                         const badgeColors = {

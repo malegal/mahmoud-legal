@@ -42,7 +42,7 @@
           referrerpolicy="no-referrer" />
 
     <!-- ==========================================================
-         ربط ملفات CSS الخارجية (الهوية الأساسية + أنماط المحتوى)
+         ربط ملفات CSS الخارجية
          ========================================================== -->
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="content.css" />
@@ -103,7 +103,7 @@
         }
     </script>
 
-    <!-- ===== أنماط إضافية خاصة بصفحة الأرشيف ===== -->
+    <!-- ===== أنماط خاصة بصفحة الأرشيف ===== -->
     <style>
         .hero-blog {
             padding: 120px 2rem 4rem;
@@ -266,6 +266,7 @@
             display: flex;
             align-items: center;
             gap: 0.8rem;
+            flex-wrap: wrap;
         }
         .blog-card .card-body .btn-read {
             display: inline-flex;
@@ -294,6 +295,20 @@
         .blog-card .card-body .btn-read:hover {
             gap: 0.8rem;
         }
+        
+        /* سبينر التحميل */
+        .spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(176, 141, 87, 0.15);
+            border-top-color: var(--matte-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
         @media (max-width: 1024px) {
             .blog-grid { grid-template-columns: repeat(2, 1fr); }
@@ -312,7 +327,7 @@
 <body>
 
     <!-- ==========================================================
-    الأزرار العائمة (مطابقة للصفحة الرئيسية)
+    الأزرار العائمة
     ========================================================== -->
     <a href="https://wa.me/201101076000" target="_blank" rel="noopener noreferrer" class="float-whatsapp" aria-label="تواصل عبر واتساب">
         <i class="fab fa-whatsapp"></i>
@@ -338,7 +353,7 @@
     </div>
 
     <!-- ==========================================================
-    HEADER – مع زر الهامبرغر للقائمة المتنقلة
+    HEADER
     ========================================================== -->
     <header class="site-header" id="siteHeader" role="banner">
         <div class="header-brand">
@@ -364,14 +379,13 @@
             <a href="https://ostazlaw.vercel.app/contact.html">اتصل بنا</a>
         </nav>
 
-        <!-- ✅ إضافة زر الهامبرغر للقائمة على الموبايل -->
         <div class="header-actions">
             <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة"><i class="fas fa-bars-staggered"></i></button>
         </div>
     </header>
 
     <!-- ==========================================================
-    MOBILE MENU – متوافقة مع باقي الصفحات (بدون أزرار إضافية)
+    MOBILE MENU
     ========================================================== -->
     <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
         <button class="mobile-menu-close" id="menuClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
@@ -384,13 +398,11 @@
             <a href="https://ostazlaw.vercel.app/blog.html" onclick="closeMobileMenu()">المكتبة</a>
             <a href="https://ostazlaw.vercel.app/client-inquiry.html" onclick="closeMobileMenu()">تابع قضيتك</a>
             <a href="https://ostazlaw.vercel.app/contact.html" onclick="closeMobileMenu()">اتصل بنا</a>
-            <div class="divider"></div>
-            <!-- ✅ تم حذف <div class="actions"> بالكامل -->
         </nav>
     </div>
 
     <!-- ==========================================================
-    HERO – المكتبة القانونية
+    HERO
     ========================================================== -->
     <section class="hero-blog" aria-label="المكتبة القانونية">
         <div class="hero-pattern"></div>
@@ -407,7 +419,7 @@
     </section>
 
     <!-- ==========================================================
-    BLOG GRID – يعرض جميع المقالات
+    BLOG GRID – يعرض جميع المقالات مرتبة من الأحدث إلى الأقدم
     ========================================================== -->
     <section class="blog-section" aria-label="قائمة المقالات">
         <div class="inner">
@@ -418,12 +430,11 @@
     </section>
 
     <!-- ==========================================================
-    FOOTER – مطابق للصفحة الرئيسية
+    FOOTER
     ========================================================== -->
     <footer class="site-footer" role="contentinfo">
         <div class="footer-inner">
             <div class="footer-brand">
-                
                 <h3>مؤسسة الأستاذ محمود عبد الحميد</h3>
                 <p>للمحاماة والاستشارات القانونية</p>
                 <div class="social">
@@ -470,7 +481,7 @@
     </footer>
 
     <!-- ==========================================================
-    جافا سكريبت – جلب جميع المقالات + تفاعلات الهيدر والأزرار
+    جافا سكريبت – جلب جميع المقالات + فرز ذكي حسب التاريخ
     ========================================================== -->
     <script>
         (function() {
@@ -485,7 +496,7 @@
             }, { passive: true });
 
             // ==========================================================
-            // MOBILE MENU (مع زر الهامبرغر)
+            // MOBILE MENU
             // ==========================================================
             const mobileMenu = document.getElementById('mobileMenu');
             const menuToggle = document.getElementById('menuToggle');
@@ -508,7 +519,7 @@
             });
 
             // ==========================================================
-            // FLOATING MAIN BUTTON
+            // FLOATING BUTTONS
             // ==========================================================
             const mainBtn = document.getElementById('floatMainBtn');
             const subBtns = document.getElementById('floatSubBtns');
@@ -541,7 +552,7 @@
             }
 
             // ==========================================================
-            // REVEAL
+            // REVEAL OBSERVER
             // ==========================================================
             const revealObserver = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
@@ -557,7 +568,46 @@
             });
 
             // ==========================================================
-            // LOAD BLOG POSTS FROM GITHUB
+            // دالة استخراج التاريخ (مطابقة للصفحة الرئيسية مع تحسينات)
+            // ==========================================================
+            function extractDateFromFile(file, content) {
+                // 1. محاولة استخراج التاريخ من Front Matter (بدون ^ لتجاوز BOM)
+                const yamlMatch = content.match(/---\s*([\s\S]*?)\s*---/);
+                if (yamlMatch) {
+                    const dateMatch = yamlMatch[1].match(/date:\s*(.*)/i);
+                    if (dateMatch) {
+                        const dateStr = dateMatch[1].replace(/['"]/g, '').trim();
+                        
+                        // محاولة بصيغة YYYY-MM-DD
+                        let d = new Date(dateStr);
+                        if (!isNaN(d.getTime())) return d.getTime();
+                        
+                        // محاولة بصيغة DD-MM-YYYY أو DD/MM/YYYY
+                        const parts = dateStr.split(/[-/]/);
+                        if (parts.length === 3 && parts[2].length === 4) {
+                            d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                            if (!isNaN(d.getTime())) return d.getTime();
+                        }
+                        
+                        // محاولة Date.parse كحل أخير (يدعم صيغاً متنوعة)
+                        const parsed = Date.parse(dateStr);
+                        if (!isNaN(parsed)) return parsed;
+                    }
+                }
+
+                // 2. محاولة استخراج التاريخ من اسم الملف (مثل 2024-01-15-...)
+                const nameMatch = file.name.match(/(\d{4})-(\d{2})-(\d{2})/);
+                if (nameMatch) {
+                    const d = new Date(nameMatch[1], nameMatch[2] - 1, nameMatch[3]);
+                    if (!isNaN(d.getTime())) return d.getTime();
+                }
+
+                // 3. إذا فشل كل شيء، نعطي 0 (وسيظهر في آخر القائمة)
+                return 0;
+            }
+
+            // ==========================================================
+            // تحميل وعرض جميع المقالات مع الفرز الذكي
             // ==========================================================
             const CONFIG = {
                 owner: 'malegal',
@@ -569,15 +619,17 @@
 
             async function loadBlog() {
                 const grid = document.getElementById('blog-grid');
-                grid.innerHTML = '<p class="col-span-full text-center text-charcoal/50">جاري تحميل المقالات...</p>';
+                
+                // عرض مؤشر تحميل أنيق
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-16">
+                        <div class="spinner"></div>
+                        <p class="mt-4 text-charcoal/50">جاري تحميل المكتبة القانونية...</p>
+                    </div>
+                `;
 
                 try {
-                    let url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents`;
-                    if (CONFIG.path) {
-                        url += `/${CONFIG.path}`;
-                    }
-                    url += `?ref=${CONFIG.branch}`;
-
+                    const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}?ref=${CONFIG.branch}`;
                     console.log('🔍 جاري جلب المقالات من:', url);
 
                     const response = await fetch(url);
@@ -598,46 +650,85 @@
 
                     if (mdFiles.length === 0) {
                         grid.innerHTML = `
-                            <div class="col-span-full text-center py-10">
-                                <p class="text-charcoal/50">لا توجد مقالات قانونية حالياً.</p>
-                                <p class="text-charcoal/30 text-sm mt-2">
-                                    تأكد من وجود ملفات .md في المسار: ${CONFIG.path || '(جذر المستودع)'}
-                                </p>
+                            <div class="col-span-full text-center py-16">
+                                <i class="fas fa-book-open text-4xl text-matte-gold/30 mb-4"></i>
+                                <p class="text-charcoal/50">لا توجد مقالات قانونية حالياً</p>
+                                <p class="text-charcoal/30 text-sm mt-2">سيتم نشر محتوى جديد قريباً</p>
                             </div>
                         `;
                         return;
                     }
 
-                    mdFiles.reverse();
-                    grid.innerHTML = '';
-
+                    // ===== الخطوة الذكية: استخراج التواريخ من كل ملف =====
+                    const filesWithDate = [];
                     for (const file of mdFiles) {
-                        const slug = file.name.replace(CONFIG.fileExtension, '');
-                        let displayTitle = slug.replace(/-/g, ' ');
-
                         try {
                             const contentRes = await fetch(file.download_url);
                             const content = await contentRes.text();
-                            const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
-                            if (yamlMatch) {
-                                const frontMatter = yamlMatch[1];
-                                const titleMatch = frontMatter.match(/title:\s*(.*)/i);
-                                if (titleMatch) {
-                                    displayTitle = titleMatch[1].replace(/['"]/g, '').trim();
+                            const date = extractDateFromFile(file, content);
+                            filesWithDate.push({ file, content, date });
+                        } catch (e) {
+                            console.warn('⚠️ تعذر قراءة الملف:', file.name, e);
+                            filesWithDate.push({ file, content: '', date: 0 });
+                        }
+                    }
+
+                    // ===== الترتيب من الأحدث إلى الأقدم =====
+                    filesWithDate.sort((a, b) => b.date - a.date);
+
+                    // ===== عرض جميع المقالات =====
+                    grid.innerHTML = '';
+                    const totalArticles = filesWithDate.length;
+
+                    // إضافة عداد في أعلى القائمة (لمسة احترافية)
+                    const counter = document.createElement('div');
+                    counter.className = 'col-span-full text-center mb-6';
+                    counter.innerHTML = `
+                        <span class="text-sm text-charcoal/40 border-b border-matte-gold/20 pb-2 inline-block">
+                            <i class="far fa-file-alt ml-2"></i>
+                            ${totalArticles} مقالة قانونية
+                        </span>
+                    `;
+                    grid.appendChild(counter);
+
+                    for (const item of filesWithDate) {
+                        const file = item.file;
+                        const content = item.content;
+                        const slug = file.name.replace(CONFIG.fileExtension, '');
+                        let title = slug.replace(/-/g, ' ');
+                        let dateDisplay = '';
+
+                        // استخراج العنوان والتاريخ للعرض
+                        const yamlMatch = content.match(/---\s*([\s\S]*?)\s*---/);
+                        if (yamlMatch) {
+                            const frontMatter = yamlMatch[1];
+                            const titleMatch = frontMatter.match(/title:\s*(.*)/i);
+                            if (titleMatch) {
+                                title = titleMatch[1].replace(/['"]/g, '').trim();
+                            }
+                            
+                            // عرض التاريخ بشكل أنيق (إذا كان موجوداً وصحيحاً)
+                            if (item.date !== 0) {
+                                const d = new Date(item.date);
+                                if (!isNaN(d.getTime())) {
+                                    dateDisplay = d.toLocaleDateString('ar-EG', { 
+                                        year: 'numeric', 
+                                        month: 'long', 
+                                        day: 'numeric' 
+                                    });
                                 }
                             }
-                        } catch (e) {
-                            console.warn('⚠️ تعذر استخراج العنوان من ' + file.name, e);
                         }
 
                         const card = document.createElement('div');
                         card.className = 'blog-card reveal';
                         card.innerHTML = `
                             <div class="card-body">
-                                <span class="badge">دراسة قانونية</span>
-                                <h3>${displayTitle}</h3>
+                                <span class="badge">📘 دراسة قانونية</span>
+                                <h3>${title}</h3>
                                 <div class="meta">
-                                    <span><i class="far fa-clock" style="margin-left:4px;"></i> ${Math.ceil(displayTitle.length / 50) || 1} دقائق قراءة</span>
+                                    <span><i class="far fa-clock" style="margin-left:4px;"></i> ${Math.ceil(title.length / 40) || 1} دقائق قراءة</span>
+                                    ${dateDisplay ? `<span><i class="far fa-calendar-alt" style="margin-left:4px;"></i> ${dateDisplay}</span>` : ''}
                                 </div>
                                 <a href="article.html?slug=${encodeURIComponent(slug)}" class="btn-read">
                                     استعراض الدراسة <i class="fas fa-arrow-left"></i>
@@ -649,17 +740,20 @@
                     }
 
                 } catch (error) {
-                    console.error('❌ خطأ في تحميل المدونة:', error);
+                    console.error('❌ خطأ في تحميل المكتبة:', error);
                     grid.innerHTML = `
-                        <div class="col-span-full text-center py-10">
-                            <p class="text-red-500">حدث خطأ أثناء تحميل المقالات.</p>
-                            <p class="text-charcoal/30 text-sm mt-2">${error.message}</p>
+                        <div class="col-span-full text-center py-16">
+                            <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-4"></i>
+                            <p class="text-red-500">عذراً، حدث خلل في تحميل المكتبة</p>
+                            <p class="text-charcoal/30 text-sm mt-2">الرجاء تحديث الصفحة أو المحاولة لاحقاً</p>
+                            <p class="text-charcoal/20 text-xs mt-4">${error.message}</p>
                         </div>
                     `;
                 }
             }
 
-            loadBlog();
+            // تشغيل التحميل عند اكتمال تحميل الصفحة
+            document.addEventListener('DOMContentLoaded', loadBlog);
 
         })();
     </script>

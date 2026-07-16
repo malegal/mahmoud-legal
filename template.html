@@ -647,36 +647,40 @@
                 const newsContainer = document.getElementById('homeNews');
 
                 // ==========================================================
-                // دالة متطورة لاستخراج التاريخ من الملف (Front Matter أو اسم الملف)
+                // دالة متطورة ومحسنة لاستخراج التاريخ
                 // ==========================================================
                 function extractDateFromFile(file, content) {
-                    // محاولة استخراج التاريخ من Front Matter (الحقل date)
-                    const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                    // 1. إزالة ^ من التعبير النمطي لتجاوز المسافات أو الرموز غير المرئية (BOM)
+                    const yamlMatch = content.match(/---\s*([\s\S]*?)\s*---/);
                     if (yamlMatch) {
                         const dateMatch = yamlMatch[1].match(/date:\s*(.*)/i);
                         if (dateMatch) {
                             const dateStr = dateMatch[1].replace(/['"]/g, '').trim();
-                            const d = new Date(dateStr);
+                            
+                            // محاولة قراءة التاريخ المباشر (صيغة YYYY-MM-DD)
+                            let d = new Date(dateStr);
                             if (!isNaN(d.getTime())) return d.getTime();
+                            
+                            // محاولة قراءة التواريخ المكتوبة بصيغة (DD-MM-YYYY) أو (DD/MM/YYYY)
+                            const parts = dateStr.split(/[-/]/);
+                            if (parts.length === 3) {
+                                // إذا كانت السنة في الخانة الثالثة
+                                if (parts[2].length === 4) {
+                                    d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                                    if (!isNaN(d.getTime())) return d.getTime();
+                                }
+                            }
                         }
                     }
 
-                    // محاولة استخراج التاريخ من اسم الملف (مثل 2024-01-15-...)
+                    // 2. محاولة استخراج التاريخ من اسم الملف (مثل 2024-01-15-...)
                     const nameMatch = file.name.match(/(\d{4})-(\d{2})-(\d{2})/);
                     if (nameMatch) {
                         const d = new Date(nameMatch[1], nameMatch[2] - 1, nameMatch[3]);
                         if (!isNaN(d.getTime())) return d.getTime();
                     }
 
-                    // محاولة استخراج التاريخ من وقت التعديل في GitHub (إن وجد)
-                    if (file.sha) {
-                        // نستخدم وقت التعديل من GitHub (ليس دقيقاً جداً لكنه أفضل من 0)
-                        // في GitHub API، يمكننا الحصول على `updated_at` ولكن ليس في استجابة contents.
-                        // بدلاً من ذلك، نستخدم 0 كقيمة افتراضية ونعتمد على اسم الملف أو front matter.
-                        return 0;
-                    }
-
-                    return 0;
+                    return 0; // إذا فشل الاستخراج، نعطيه 0 ليكون في آخر الترتيب
                 }
 
                 // ==========================================================
@@ -692,7 +696,6 @@
                         const articlesData = await articlesRes.json();
                         let mdFiles = articlesData.filter(f => f.type === 'file' && f.name.endsWith('.md'));
 
-                        // جلب المحتوى لكل ملف لاستخراج التواريخ
                         const filesWithDate = [];
                         for (const file of mdFiles) {
                             try {
@@ -705,10 +708,10 @@
                             }
                         }
 
-                        // الترتيب تنازلياً (الأحدث أولاً)
+                        // الترتيب تنازلياً (بناءً على التواريخ المستخرجة، الأحدث أولاً)
                         filesWithDate.sort((a, b) => b.date - a.date);
 
-                        // أخذ آخر 3 مقالات
+                        // أخذ أحدث 3 مقالات
                         const topFiles = filesWithDate.slice(0, 3);
 
                         articlesContainer.innerHTML = '';
@@ -724,16 +727,19 @@
                                 let title = slug.replace(/-/g, ' ');
                                 let date = '';
 
-                                // استخراج العنوان والتاريخ من Front Matter
-                                const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                                // استخراج العنوان والتاريخ للعرض (نفس التعديل لتخطي الرموز المخفية)
+                                const yamlMatch = content.match(/---\s*([\s\S]*?)\s*---/);
                                 if (yamlMatch) {
                                     const titleMatch = yamlMatch[1].match(/title:\s*(.*)/i);
                                     if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
                                     const dateMatch = yamlMatch[1].match(/date:\s*(.*)/i);
                                     if (dateMatch) {
-                                        const d = new Date(dateMatch[1].replace(/['"]/g, '').trim());
-                                        if (!isNaN(d.getTime())) {
+                                        // يمكن استخدام التاريخ المخزن في item.date للعرض المباشر بدلاً من إعادة المعالجة
+                                        const d = new Date(item.date);
+                                        if (!isNaN(d.getTime()) && item.date !== 0) {
                                             date = d.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+                                        } else {
+                                            date = dateMatch[1].replace(/['"]/g, '').trim(); // عرض النص كما هو إذا فشل التحويل
                                         }
                                     }
                                 }
@@ -777,7 +783,6 @@
                         const newsData = await newsRes.json();
                         let newsFiles = newsData.filter(f => f.type === 'file' && f.name.endsWith('.md'));
 
-                        // جلب المحتوى لكل ملف لاستخراج التواريخ
                         const filesWithDate = [];
                         for (const file of newsFiles) {
                             try {
@@ -793,7 +798,7 @@
                         // الترتيب تنازلياً (الأحدث أولاً)
                         filesWithDate.sort((a, b) => b.date - a.date);
 
-                        // أخذ آخر 3 أخبار
+                        // أخذ أحدث 3 أخبار
                         const topFiles = filesWithDate.slice(0, 3);
 
                         newsContainer.innerHTML = '';
@@ -812,7 +817,7 @@
                                 let date = '';
                                 let description = '';
 
-                                const yamlMatch = content.match(/^---\s*([\s\S]*?)\s*---/);
+                                const yamlMatch = content.match(/---\s*([\s\S]*?)\s*---/);
                                 if (yamlMatch) {
                                     const front = yamlMatch[1];
                                     const titleMatch = front.match(/title:\s*(.*)/i);
@@ -823,9 +828,11 @@
                                     if (iconMatch) icon = iconMatch[1].replace(/['"]/g, '').trim();
                                     const dateMatch = front.match(/date:\s*(.*)/i);
                                     if (dateMatch) {
-                                        const d = new Date(dateMatch[1].replace(/['"]/g, '').trim());
-                                        if (!isNaN(d.getTime())) {
+                                        const d = new Date(item.date);
+                                        if (!isNaN(d.getTime()) && item.date !== 0) {
                                             date = d.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+                                        } else {
+                                            date = dateMatch[1].replace(/['"]/g, '').trim();
                                         }
                                     }
                                     const descMatch = front.match(/description:\s*(.*)/i);

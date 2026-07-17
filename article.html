@@ -238,11 +238,6 @@
         <i class="fas fa-arrow-right"></i>
     </a>
 
-    <!-- ==========================================================
-    تم تعديل: حذف أيقونات المشاركة الجانبية (share-sidebar) بالكامل
-    واستبدالها بزر مشاركة وقائمة منبثقة (انظر أدناه)
-    ========================================================== -->
-
     <!-- زر المشاركة الرئيسي (عائم) -->
     <button class="float-share-btn" id="floatShareBtn" aria-label="مشاركة المقال">
         <i class="fas fa-share-alt"></i>
@@ -328,8 +323,13 @@
 
         <!-- Article Content -->
         <div id="article-container" class="hidden" style="display:none;">
+            <!-- ===== تم إضافة الكاتب والتاريخ هنا ===== -->
             <div class="article-meta">
                 <span><i class="far fa-clock" style="margin-left:4px;"></i> <span id="read-time">0</span> دقائق قراءة</span>
+                <span class="divider"></span>
+                <span><i class="fas fa-user" style="margin-left:4px;"></i> <span id="article-author"></span></span>
+                <span class="divider"></span>
+                <span><i class="far fa-calendar-alt" style="margin-left:4px;"></i> <span id="article-date"></span></span>
                 <span class="divider"></span>
                 <span>دراسة قانونية متخصصة</span>
             </div>
@@ -569,25 +569,41 @@
                     let md = await response.text();
 
                     // ==========================================================
-                    // EXTRACT FRONT MATTER
+                    // EXTRACT FRONT MATTER (مع إضافة author و date)
                     // ==========================================================
                     let title = '';
                     let image = '';
                     let description = '';
+                    let author = '';
+                    let date = '';
+
                     const yamlMatch = md.match(/^---\s*([\s\S]*?)\s*---/);
                     if (yamlMatch) {
                         const frontMatter = yamlMatch[1];
                         const titleMatch = frontMatter.match(/title:\s*(.*)/i);
                         if (titleMatch) title = titleMatch[1].replace(/['"]/g, '').trim();
+
                         const imageMatch = frontMatter.match(/image:\s*(.*)/i);
                         if (imageMatch) image = imageMatch[1].replace(/['"]/g, '').trim();
+
                         const descMatch = frontMatter.match(/description:\s*(.*)/i);
                         if (descMatch) description = descMatch[1].replace(/['"]/g, '').trim();
+
+                        // ===== استخراج الكاتب =====
+                        const authorMatch = frontMatter.match(/author:\s*(.*)/i);
+                        if (authorMatch) author = authorMatch[1].replace(/['"]/g, '').trim();
+
+                        // ===== استخراج التاريخ =====
+                        const dateMatch = frontMatter.match(/date:\s*(.*)/i);
+                        if (dateMatch) date = dateMatch[1].replace(/['"]/g, '').trim();
+
                         md = md.replace(/^---\s*[\s\S]*?\s*---/, '');
                     }
 
                     if (!title) title = decodeURIComponent(slug.replace(/-/g, ' '));
                     if (!description) description = 'تحليل قانوني متخصص في مجال القانون المصري.';
+                    if (!author) author = 'الأستاذ / محمود عبد الحميد'; // قيمة افتراضية
+                    // إذا لم يوجد تاريخ، نتركه فارغاً
 
                     // ==========================================================
                     // UPDATE META TAGS (SEO)
@@ -605,7 +621,7 @@
                     }
 
                     // ==========================================================
-                    // UPDATE JSON-LD
+                    // UPDATE JSON-LD (مع إضافة الكاتب والتاريخ)
                     // ==========================================================
                     const jsonLd = document.getElementById('json-ld');
                     if (jsonLd) {
@@ -617,6 +633,15 @@
                                     article.headline = title;
                                     article.description = description;
                                     if (image) article.image = image;
+                                    if (author) {
+                                        article.author = {
+                                            "@type": "Person",
+                                            "name": author
+                                        };
+                                    }
+                                    if (date) {
+                                        article.datePublished = date;
+                                    }
                                 }
                                 const webpage = data['@graph'].find(item => item['@type'] === 'WebPage');
                                 if (webpage) {
@@ -633,6 +658,29 @@
                     // ==========================================================
                     document.getElementById('article-title').textContent = title;
 
+                    // عرض الكاتب والتاريخ
+                    document.getElementById('article-author').textContent = author;
+                    if (date) {
+                        // تنسيق التاريخ للعرض (مثال: 2025-01-15 -> ١٥ يناير ٢٠٢٥)
+                        try {
+                            const d = new Date(date);
+                            if (!isNaN(d.getTime())) {
+                                document.getElementById('article-date').textContent = d.toLocaleDateString('ar-EG', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+                            } else {
+                                document.getElementById('article-date').textContent = date;
+                            }
+                        } catch (_) {
+                            document.getElementById('article-date').textContent = date;
+                        }
+                    } else {
+                        document.getElementById('article-date').textContent = 'غير محدد';
+                    }
+
+                    // عرض الصورة (إن وجدت)
                     const imageContainer = document.getElementById('article-image');
                     if (image) {
                         imageContainer.innerHTML =
@@ -642,6 +690,7 @@
                         imageContainer.style.display = 'none';
                     }
 
+                    // معالجة المحتوى باستخدام marked و DOMPurify
                     const rawHtml = marked.parse(md);
                     const sanitizedHtml = DOMPurify.sanitize(rawHtml, {
                         ALLOWED_TAGS: [
@@ -653,6 +702,7 @@
                     });
                     document.getElementById('article-body').innerHTML = sanitizedHtml;
 
+                    // حساب وقت القراءة
                     const words = md.split(/\s+/).length;
                     document.getElementById('read-time').textContent = Math.ceil(words / 200) || 1;
 

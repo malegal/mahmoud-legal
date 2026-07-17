@@ -122,7 +122,7 @@
         .bg-whatsapp { background: #25d366; }
         .bg-telegram { background: #0088cc; }
 
-        /* ===== معلومات المقال (الكاتب، التاريخ، مدة القراءة) ===== */
+        /* ===== معلومات المقال (المؤلف، التاريخ، مدة القراءة) ===== */
         .article-meta {
             display: flex;
             flex-direction: column;
@@ -130,8 +130,8 @@
             justify-content: center;
             gap: 0.3rem;
             margin-bottom: 2rem;
-            padding-top: 100px;   /* ✅ مسافة كافية لتجاوز الهيدر */
-            margin-top: -60px;    /* تعويض المسافة المضافة لضبط الموقع */
+            padding-top: 120px;   /* ✅ زيادة المسافة لتجاوز الهيدر */
+            margin-top: -70px;     /* تعويض إضافي لضبط الموقع */
         }
         .article-meta .meta-row {
             display: flex;
@@ -164,6 +164,53 @@
         .article-meta .author-label {
             font-weight: 400;
             color: rgba(34, 34, 34, 0.5);
+        }
+
+        /* ===== معلومات SEO (الكلمات المفتاحية والوسوم) ===== */
+        .seo-info {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--matte-gold-light);
+            border-radius: 12px;
+            border-right: 4px solid var(--matte-gold);
+        }
+        .seo-info h4 {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--deep-navy);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .seo-info h4 i {
+            color: var(--matte-gold);
+        }
+        .seo-info .seo-keyword {
+            display: inline-block;
+            background: var(--pure-white);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--deep-navy);
+            border: 1px solid rgba(176, 141, 87, 0.2);
+            margin: 0.2rem 0.2rem 0.2rem 0;
+        }
+        .seo-info .seo-tag {
+            display: inline-block;
+            background: var(--deep-navy);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #fff;
+            margin: 0.2rem 0.2rem 0.2rem 0;
+        }
+        .seo-info .seo-label {
+            font-weight: 700;
+            color: var(--deep-navy);
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
         }
 
         /* ===== باقي التنسيقات ===== */
@@ -352,8 +399,8 @@
                 padding: 1rem 1rem 3rem;
             }
             .article-meta {
-                padding-top: 90px;
-                margin-top: -50px;
+                padding-top: 110px;
+                margin-top: -60px;
             }
             .article-meta .meta-row {
                 font-size: 0.8rem;
@@ -362,6 +409,9 @@
             .article-body {
                 font-size: 1rem;
                 line-height: 2;
+            }
+            .seo-info {
+                padding: 1rem;
             }
         }
         @media (max-width: 480px) {
@@ -396,8 +446,8 @@
                 font-size: 1.1rem;
             }
             .article-meta {
-                padding-top: 80px;
-                margin-top: -40px;
+                padding-top: 100px;
+                margin-top: -50px;
             }
             .article-meta .meta-row {
                 font-size: 0.7rem;
@@ -406,6 +456,11 @@
             }
             .article-meta .meta-row .divider {
                 display: none;
+            }
+            .seo-info .seo-keyword,
+            .seo-info .seo-tag {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
             }
         }
     </style>
@@ -589,10 +644,10 @@
         </div>
 
         <div id="article-container" style="display:none;">
-            <!-- ===== معلومات المقال (الكاتب، التاريخ، مدة القراءة) ===== -->
+            <!-- ===== معلومات المقال (المؤلف، التاريخ، مدة القراءة) ===== -->
             <div class="article-meta">
                 <div class="meta-row">
-                    <span class="author-label"><i class="fas fa-user" style="margin-left:6px;"></i> الكاتب:</span>
+                    <span class="author-label"><i class="fas fa-user" style="margin-left:6px;"></i> المؤلف:</span>
                     <span class="author-name" id="article-author"></span>
                 </div>
                 <div class="meta-row">
@@ -607,6 +662,13 @@
             <div id="article-image" class="article-image"></div>
 
             <div id="article-body" class="article-body"></div>
+
+            <!-- ===== معلومات SEO (الكلمات المفتاحية والوسوم) ===== -->
+            <div id="seo-info" class="seo-info" style="display:none;">
+                <h4><i class="fas fa-search"></i> معلومات تحسين محركات البحث (SEO)</h4>
+                <div id="seo-keyword-container"></div>
+                <div id="seo-tags-container"></div>
+            </div>
 
             <!-- العودة إلى المكتبة -->
             <div style="text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(34,34,34,0.05);">
@@ -787,7 +849,10 @@
                     let description = '';
                     let author = '';
                     let date = '';
+                    let seoKeyword = '';
+                    let tags = [];
 
+                    // استخدام تعبير نمطي أكثر دقة لإزالة Front Matter
                     const yamlMatch = md.match(/^---\s*([\s\S]*?)\s*---/);
                     if (yamlMatch) {
                         const frontMatter = yamlMatch[1];
@@ -804,7 +869,7 @@
                         if (authorMatch) {
                             author = authorMatch[1].replace(/['"]/g, '').trim();
                         } else {
-                            author = 'الأستاذ / محمود عبد الحميد'; // قيمة افتراضية
+                            author = 'الأستاذ / محمود عبد الحميد';
                         }
 
                         const dateMatch = frontMatter.match(/date:\s*(.*)/i);
@@ -812,6 +877,20 @@
                             date = dateMatch[1].replace(/['"]/g, '').trim();
                         }
 
+                        // استخراج الكلمة المفتاحية
+                        const seoMatch = frontMatter.match(/seoKeyword:\s*(.*)/i);
+                        if (seoMatch) {
+                            seoKeyword = seoMatch[1].replace(/['"]/g, '').trim();
+                        }
+
+                        // استخراج الوسوم
+                        const tagsMatch = frontMatter.match(/tags:\s*(.*)/i);
+                        if (tagsMatch) {
+                            const rawTags = tagsMatch[1].replace(/['"]/g, '').trim();
+                            tags = rawTags.split(',').map(t => t.trim()).filter(t => t);
+                        }
+
+                        // إزالة Front Matter بشكل آمن
                         md = md.replace(/^---\s*[\s\S]*?\s*---/, '');
                     }
 
@@ -851,6 +930,9 @@
                                     if (date) {
                                         article.datePublished = date;
                                     }
+                                    if (seoKeyword) {
+                                        article.keywords = seoKeyword;
+                                    }
                                 }
                                 const webpage = data['@graph'].find(item => item['@type'] === 'WebPage');
                                 if (webpage) {
@@ -862,10 +944,10 @@
                         } catch (e) { /* ignore */ }
                     }
 
-                    // ===== عرض البيانات =====
+                    // ===== عرض البيانات الأساسية =====
                     document.getElementById('article-title').textContent = title;
 
-                    // الكاتب
+                    // المؤلف
                     document.getElementById('article-author').textContent = author;
 
                     // التاريخ
@@ -902,7 +984,7 @@
                         imageContainer.style.display = 'none';
                     }
 
-                    // المحتوى
+                    // المحتوى (تم إزالة Front Matter)
                     const rawHtml = marked.parse(md);
                     const sanitizedHtml = DOMPurify.sanitize(rawHtml, {
                         ALLOWED_TAGS: [
@@ -913,6 +995,43 @@
                         ALLOWED_ATTR: ['href', 'target', 'src', 'alt', 'title', 'class', 'style']
                     });
                     document.getElementById('article-body').innerHTML = sanitizedHtml;
+
+                    // ===== عرض معلومات SEO (الكلمات المفتاحية والوسوم) =====
+                    const seoInfo = document.getElementById('seo-info');
+                    const seoKeywordContainer = document.getElementById('seo-keyword-container');
+                    const seoTagsContainer = document.getElementById('seo-tags-container');
+
+                    let hasSeoData = false;
+
+                    // الكلمة المفتاحية الرئيسية
+                    if (seoKeyword) {
+                        hasSeoData = true;
+                        seoKeywordContainer.innerHTML = `
+                            <span class="seo-label"><i class="fas fa-key" style="margin-left:6px;"></i> الكلمة المفتاحية:</span>
+                            <span class="seo-keyword">${seoKeyword}</span>
+                        `;
+                    } else {
+                        seoKeywordContainer.innerHTML = '';
+                    }
+
+                    // الوسوم
+                    if (tags && tags.length > 0) {
+                        hasSeoData = true;
+                        let tagsHtml = `<span class="seo-label"><i class="fas fa-tags" style="margin-left:6px;"></i> الوسوم:</span> `;
+                        tags.forEach(tag => {
+                            tagsHtml += `<span class="seo-tag">#${tag}</span> `;
+                        });
+                        seoTagsContainer.innerHTML = tagsHtml;
+                    } else {
+                        seoTagsContainer.innerHTML = '';
+                    }
+
+                    // إظهار قسم SEO إذا وجدت أي بيانات
+                    if (hasSeoData) {
+                        seoInfo.style.display = 'block';
+                    } else {
+                        seoInfo.style.display = 'none';
+                    }
 
                     // ===== تحديث روابط المشاركة =====
                     const url = encodeURIComponent(`https://ostazlaw.vercel.app/article.html?slug=${slug}`);

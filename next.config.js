@@ -21,10 +21,11 @@ const nextConfig = {
       },
     ];
   },
-  // تحسين الضغط
   compress: true,
-  // تمكين التحسينات التلقائية
   swcMinify: true,
+  experimental: {
+    optimizeCss: true, // تحسين CSS التلقائي في Next.js 14+
+  },
 };
 
 module.exports = nextConfig;

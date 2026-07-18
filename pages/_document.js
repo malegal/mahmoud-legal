@@ -96,7 +96,6 @@ export default function Document() {
               .container { max-width:1200px; margin:0 auto; padding:0 20px; }
               .float-whatsapp { position:fixed; bottom:2rem; left:2rem; z-index:9999; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 30px rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.15); background:#25D366; text-decoration:none; color:#fff; }
               .float-whatsapp i { font-size:2rem; color:#fff; }
-              /* تحسين التباين الأساسي */
               .hero-subtitle, .hero-value, .hero-brand-signature { color:#fff !important; }
               .hero-value { opacity:0.9; }
             `,

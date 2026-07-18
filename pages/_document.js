@@ -6,9 +6,18 @@ export default function Document() {
       <Head>
         <meta name="google-site-verification" content="Uqbjr1w7Q831Lo6JPFEe9_lK86Kp55P79Lwfp1j6EX8" />
 
-        {/* ===== تحميل الخطوط مع display=swap ===== */}
+        {/* ===== Preconnect لتحسين تحميل الخطوط ===== */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* ===== Preload للخطوط الأساسية ===== */}
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;700&display=swap"
+          as="style"
+        />
+
+        {/* ===== تحميل الخطوط مع display=swap ===== */}
         <link
           href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;700&display=swap"
           rel="stylesheet"
@@ -45,7 +54,7 @@ export default function Document() {
         {/* ===== أيقونة الموقع ===== */}
         <link rel="icon" href="/favicon.ico" />
 
-        {/* ===== CSS الأساسي المضمن (Critical CSS) لتسريع العرض ===== */}
+        {/* ===== CSS الأساسي المضمن (Critical CSS) ===== */}
         <style
           dangerouslySetInnerHTML={{
             __html: `
@@ -87,6 +96,9 @@ export default function Document() {
               .container { max-width:1200px; margin:0 auto; padding:0 20px; }
               .float-whatsapp { position:fixed; bottom:2rem; left:2rem; z-index:9999; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 30px rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.15); background:#25D366; text-decoration:none; color:#fff; }
               .float-whatsapp i { font-size:2rem; color:#fff; }
+              /* تحسين التباين الأساسي */
+              .hero-subtitle, .hero-value, .hero-brand-signature { color:#fff !important; }
+              .hero-value { opacity:0.9; }
             `,
           }}
         />

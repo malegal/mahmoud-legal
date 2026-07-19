@@ -1,17 +1,33 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { useCaseData } from '../lib/useCaseData';
-import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 
 export default function ClientInquiryResult() {
-  const router = useRouter();
-  const { phone, code } = router.query;
-
-  const { data, error, isLoading } = useCaseData(phone, code);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem('caseData');
+      if (!stored) {
+        throw new Error('لا توجد بيانات في الجلسة');
+      }
+      const parsed = JSON.parse(stored);
+      const now = Date.now();
+      const maxAge = 5 * 60 * 1000;
+      const timestamp = parsed._timestamp || (now - maxAge - 1);
+      if (now - timestamp > maxAge) {
+        throw new Error('انتهت صلاحية البيانات');
+      }
+      setData(parsed);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -44,10 +60,11 @@ export default function ClientInquiryResult() {
   };
 
   const exitSystem = () => {
+    sessionStorage.removeItem('caseData');
     window.location.href = '/';
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <Layout>
         <div className="result-main">
@@ -64,7 +81,7 @@ export default function ClientInquiryResult() {
     );
   }
 
-  if (error || !data || !data.case) {
+  if (error || !data) {
     return (
       <Layout>
         <div className="result-main">
@@ -73,7 +90,7 @@ export default function ClientInquiryResult() {
               <div className="error-container">
                 <i className="fas fa-exclamation-triangle"></i>
                 <h3>عذراً</h3>
-                <p>{error?.message === 'انتهت صلاحية البيانات' ? 'انتهت صلاحية بيانات الاستعلام. يرجى إعادة البحث للحصول على أحدث البيانات.' : 'لا توجد بيانات استعلام حالياً. يرجى إجراء بحث جديد.'}</p>
+                <p>{error === 'انتهت صلاحية البيانات' ? 'انتهت صلاحية بيانات الاستعلام. يرجى إعادة البحث للحصول على أحدث البيانات.' : 'لا توجد بيانات استعلام حالياً. يرجى إجراء بحث جديد.'}</p>
                 <div className="error-actions">
                   <Link href="/client-inquiry" className="btn-gold">العودة للاستعلام</Link>
                   <button onClick={() => window.location.reload()} className="btn-outline-gold">إعادة المحاولة</button>
@@ -230,6 +247,7 @@ export default function ClientInquiryResult() {
           max-width: 900px;
           margin: 0 auto;
         }
+
         .result-card {
           background: var(--pure-white);
           border-radius: 16px;
@@ -257,6 +275,7 @@ export default function ClientInquiryResult() {
           border-color: var(--matte-gold);
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
         }
+
         .result-header {
           text-align: center;
           border-bottom: 1px solid rgba(0, 0, 0, 0.04);
@@ -279,6 +298,7 @@ export default function ClientInquiryResult() {
           font-weight: 500;
           display: inline-block;
         }
+
         .info-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -316,6 +336,7 @@ export default function ClientInquiryResult() {
         .info-item .info-value.status {
           color: var(--matte-gold);
         }
+
         .last-session-box {
           background: rgba(176, 141, 87, 0.03);
           border-right: 3px solid var(--matte-gold);
@@ -344,6 +365,7 @@ export default function ClientInquiryResult() {
           font-size: 0.85rem;
           margin-top: 0.2rem;
         }
+
         .modal-actions {
           display: flex;
           gap: 0.8rem;
@@ -389,6 +411,7 @@ export default function ClientInquiryResult() {
         .btn-exit:hover {
           background: #b91c1c;
         }
+
         .loading-container,
         .error-container {
           padding: 2rem 0;
@@ -433,6 +456,7 @@ export default function ClientInquiryResult() {
           flex-wrap: wrap;
           margin-top: 1.5rem;
         }
+
         .btn-gold {
           display: inline-block;
           background: var(--matte-gold);
@@ -472,6 +496,7 @@ export default function ClientInquiryResult() {
           transform: translateY(-2px);
           box-shadow: 0 8px 30px rgba(176, 141, 87, 0.15);
         }
+
         @media (max-width: 820px) {
           .result-main { padding: 2rem 1rem 3rem; }
           .result-card { padding: 1.8rem 1.2rem; }
@@ -503,15 +528,4 @@ export default function ClientInquiryResult() {
       `}</style>
     </Layout>
   );
-}
-
-// الحصول على بيانات من الرابط (phone و code)
-export async function getServerSideProps(context) {
-  const { phone, code } = context.query;
-  return {
-    props: {
-      phone: phone || null,
-      code: code || null,
-    },
-  };
 }

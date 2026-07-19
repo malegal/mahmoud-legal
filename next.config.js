@@ -1,30 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true, // تفعيل ضغط الكود باستخدام SWC
+  compress: true, // تفعيل ضغط gzip
   images: {
     domains: ['raw.githubusercontent.com', 'github.com'],
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
+  // إعادة توجيه http إلى https تلقائياً
   async redirects() {
     return [
       {
-        source: '/article.html',
-        destination: '/article/:slug',
-        permanent: true,
-      },
-      {
-        source: '/news.html',
-        destination: '/news/:slug',
+        source: '/:path*',
+        has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
+        destination: 'https://ostazlaw.vercel.app/:path*',
         permanent: true,
       },
     ];
-  },
-  compress: true,
-  swcMinify: true,
-  experimental: {
-    optimizeCss: true, // تحسين CSS التلقائي في Next.js 14+
   },
 };
 

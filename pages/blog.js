@@ -1,35 +1,11 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { FixedSizeList as List } from 'react-window';
+import { useEffect } from 'react';
 import { getAllArticles } from '../lib/github';
 import ArticleCard from '../components/ArticleCard';
-import SkeletonCard from '../components/SkeletonCard';
 
-export default function Blog({ initialArticles }) {
-  const [articles, setArticles] = useState(initialArticles || []);
-  const [loading, setLoading] = useState(!initialArticles);
-
-  useEffect(() => {
-    if (!initialArticles) {
-      const fetchArticles = async () => {
-        try {
-          const res = await fetch('/api/articles');
-          const data = await res.json();
-          setArticles(data);
-        } catch (e) {
-          console.error(e);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchArticles();
-    } else {
-      setLoading(false);
-    }
-  }, [initialArticles]);
-
+export default function Blog({ articles }) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -44,31 +20,7 @@ export default function Blog({ initialArticles }) {
     );
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [articles]);
-
-  // مكون الصف للقائمة الافتراضية
-  const Row = ({ index, style, data }) => {
-    const article = data[index];
-    return (
-      <div style={style} className="blog-list-item">
-        <ArticleCard article={article} />
-      </div>
-    );
-  };
-
-  if (loading) {
-    return (
-      <Layout>
-        <div className="blog-section">
-          <div className="inner">
-            <div className="blog-grid">
-              {Array(6).fill(0).map((_, i) => <SkeletonCard key={i} />)}
-            </div>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
+  }, []);
 
   return (
     <Layout>
@@ -156,7 +108,6 @@ export default function Blog({ initialArticles }) {
         />
       </Head>
 
-      {/* Hero */}
       <section className="hero-blog" aria-label="المكتبة القانونية">
         <div className="hero-pattern"></div>
         <div className="hero-glow"></div>
@@ -170,35 +121,35 @@ export default function Blog({ initialArticles }) {
         </div>
       </section>
 
-      {/* Blog Grid with Virtualization */}
       <section className="blog-section" aria-label="قائمة المقالات">
         <div className="inner">
-          {articles.length === 0 ? (
-            <div className="text-center py-16">
-              <i className="fas fa-book-open text-4xl text-matte-gold/30 mb-4"></i>
-              <p className="text-charcoal/50">لا توجد مقالات قانونية حالياً</p>
-              <p className="text-charcoal/30 text-sm mt-2">سيتم نشر محتوى جديد قريباً</p>
-            </div>
-          ) : (
-            <>
-              <div className="text-center mb-6">
-                <span className="text-sm text-charcoal/40 border-b border-matte-gold/20 pb-2 inline-block">
-                  <i className="far fa-file-alt ml-2"></i>
-                  {articles.length} مقالة قانونية
-                </span>
+          <div className="blog-grid">
+            {articles.length === 0 ? (
+              <div className="col-span-full text-center py-16">
+                <i className="fas fa-book-open text-4xl text-matte-gold/30 mb-4"></i>
+                <p className="text-charcoal/50">لا توجد مقالات قانونية حالياً</p>
+                <p className="text-charcoal/30 text-sm mt-2">سيتم نشر محتوى جديد قريباً</p>
               </div>
-              <List
-                height={800}
-                itemCount={articles.length}
-                itemSize={280}
-                width="100%"
-                itemData={articles}
-                className="virtualized-list"
-              >
-                {Row}
-              </List>
-            </>
-          )}
+            ) : (
+              articles.map((article) => (
+                <div className="blog-card reveal" key={article.slug}>
+                  <div className="card-body">
+                    <span className="badge">📘 دراسة قانونية</span>
+                    <h3>{article.title}</h3>
+                    <div className="meta">
+                      <span><i className="far fa-clock" style={{ marginLeft: '4px' }}></i> {Math.ceil(article.title.length / 40) || 1} دقائق قراءة</span>
+                      {article.date && (
+                        <span><i className="far fa-calendar-alt" style={{ marginLeft: '4px' }}></i> {new Date(article.date).toLocaleDateString('ar-EG')}</span>
+                      )}
+                    </div>
+                    <Link href={`/article/${article.slug}`} className="btn-read">
+                      استعراض الدراسة <i className="fas fa-arrow-left"></i>
+                    </Link>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </section>
 
@@ -284,6 +235,7 @@ export default function Blog({ initialArticles }) {
           margin: 0.8rem auto 0;
           line-height: 1.7;
         }
+
         .blog-section {
           padding: 5rem 2rem;
           background: var(--warm-off-white);
@@ -292,25 +244,116 @@ export default function Blog({ initialArticles }) {
           max-width: 1200px;
           margin: 0 auto;
         }
-        .text-center { text-align: center; }
-        .py-16 { padding: 4rem 0; }
-        .text-4xl { font-size: 2.5rem; }
-        .text-matte-gold\\/30 { color: rgba(176, 141, 87, 0.3); }
-        .mb-4 { margin-bottom: 1rem; }
-        .text-charcoal\\/50 { color: rgba(34, 34, 34, 0.5); }
-        .text-charcoal\\/30 { color: rgba(34, 34, 34, 0.3); }
-        .text-sm { font-size: 0.875rem; }
-        .mt-2 { margin-top: 0.5rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
-        .text-charcoal\\/40 { color: rgba(34, 34, 34, 0.4); }
-        .border-b { border-bottom: 1px solid; }
-        .border-matte-gold\\/20 { border-color: rgba(176, 141, 87, 0.2); }
-        .pb-2 { padding-bottom: 0.5rem; }
-        .inline-block { display: inline-block; }
-        .ml-2 { margin-right: 0.5rem; }
+
+        .blog-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+        }
+
+        .blog-card {
+          background: var(--pure-white);
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.04);
+          transition: all 0.4s var(--ease-out);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+          cursor: pointer;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+        }
+        .blog-card::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 0;
+          height: 3px;
+          background: var(--matte-gold);
+          transition: width 0.6s var(--ease-out);
+          border-radius: 0 0 10px 10px;
+        }
+        .blog-card:hover::after {
+          width: 100%;
+        }
+        .blog-card:hover {
+          border-color: var(--matte-gold);
+          transform: translateY(-6px);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+        }
+        .blog-card .card-body {
+          padding: 1.5rem 1.4rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        .blog-card .card-body .badge {
+          font-size: 0.55rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: var(--matte-gold);
+          margin-bottom: 0.4rem;
+          display: inline-block;
+        }
+        .blog-card .card-body h3 {
+          font-size: 1.05rem;
+          font-weight: 700;
+          color: var(--charcoal);
+          line-height: 1.5;
+          margin-bottom: 0.3rem;
+          flex: 1;
+        }
+        .blog-card .card-body .meta {
+          font-size: 0.7rem;
+          color: var(--charcoal);
+          font-weight: 700;
+          margin-top: 0.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          flex-wrap: wrap;
+        }
+        .blog-card .card-body .btn-read {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--matte-gold);
+          margin-top: 0.8rem;
+          transition: gap 0.3s ease;
+          position: relative;
+          text-decoration: none;
+        }
+        .blog-card .card-body .btn-read::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          right: 0;
+          width: 0;
+          height: 2px;
+          background: var(--matte-gold);
+          transition: width 0.4s var(--ease-out);
+        }
+        .blog-card .card-body .btn-read:hover::after {
+          width: 100%;
+        }
+        .blog-card .card-body .btn-read:hover {
+          gap: 0.8rem;
+        }
+
+        @media (max-width: 1024px) {
+          .blog-grid { grid-template-columns: repeat(2, 1fr); }
+        }
         @media (max-width: 820px) {
           .hero-blog { padding: 100px 1rem 3rem; min-height: 35vh; }
           .blog-section { padding: 2.5rem 1rem; }
+          .blog-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+          .blog-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
         }
       `}</style>
     </Layout>
@@ -321,7 +364,7 @@ export async function getStaticProps() {
   const articles = await getAllArticles();
   return {
     props: {
-      initialArticles: articles,
+      articles,
     },
     revalidate: 60,
   };

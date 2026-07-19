@@ -27,51 +27,28 @@ export default function FloatingButtons() {
 
   return (
     <>
-      <a
-        href="https://wa.me/201101076000"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="float-whatsapp"
-        aria-label="تواصل عبر واتساب"
-      >
-        <i className="fab fa-whatsapp" aria-hidden="true"></i>
+      <a href="https://wa.me/201101076000" target="_blank" rel="noopener noreferrer" className="float-whatsapp" aria-label="تواصل عبر واتساب">
+        <i className="fab fa-whatsapp"></i>
       </a>
-
       <button
         className={`float-main-btn ${subOpen ? 'active' : ''}`}
         onClick={toggleSub}
         aria-label={subOpen ? 'إغلاق خيارات التواصل' : 'فتح خيارات التواصل'}
         aria-expanded={subOpen}
       >
-        <i className="fas fa-plus" aria-hidden="true"></i>
+        <i className="fas fa-plus"></i>
       </button>
-
       <div className={`float-sub-buttons ${subOpen ? 'open' : ''}`} role="menu">
-        <a
-          href="tel:+201101076000"
-          className="float-sub-btn phone"
-          title="اتصال هاتفي"
-          role="menuitem"
-        >
-          <i className="fas fa-phone-alt" aria-hidden="true"></i>
+        <a href="tel:+201101076000" className="float-sub-btn phone" title="اتصال هاتفي" role="menuitem">
+          <i className="fas fa-phone-alt"></i>
           <span className="label">اتصال</span>
         </a>
-        <Link
-          href="/contact?tab=consult"
-          className="float-sub-btn consult"
-          title="طلب استشارة"
-          role="menuitem"
-        >
-          <i className="fas fa-file-signature" aria-hidden="true"></i>
+        <Link href="/contact?tab=consult" className="float-sub-btn consult" title="طلب استشارة" role="menuitem">
+          <i className="fas fa-file-signature"></i>
           <span className="label">استشارة</span>
         </Link>
-        <Link
-          href="/contact?tab=appointment"
-          className="float-sub-btn appointment"
-          title="حجز موعد"
-          role="menuitem"
-        >
-          <i className="fas fa-calendar-check" aria-hidden="true"></i>
+        <Link href="/contact?tab=appointment" className="float-sub-btn appointment" title="حجز موعد" role="menuitem">
+          <i className="fas fa-calendar-check"></i>
           <span className="label">حجز موعد</span>
         </Link>
       </div>

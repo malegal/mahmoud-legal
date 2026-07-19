@@ -1,7 +1,6 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 export default function About() {
@@ -118,7 +117,6 @@ export default function About() {
         />
       </Head>
 
-      {/* Hero */}
       <section className="hero-about" aria-label="عن المؤسسة">
         <div className="hero-pattern"></div>
         <div className="hero-glow"></div>
@@ -132,14 +130,7 @@ export default function About() {
           </div>
           <div className="hero-grid">
             <div className="hero-image reveal">
-              <Image
-                src="/about.png"
-                alt="مقر مؤسسة الأستاذ محمود عبد الحميد للمحاماة"
-                width={800}
-                height={600}
-                loading="lazy"
-                className="hero-image-img"
-              />
+              <img src="/about.png" alt="مقر مؤسسة الأستاذ محمود عبد الحميد للمحاماة" loading="lazy" width="800" height="600" />
             </div>
             <div className="hero-text reveal" style={{ transitionDelay: '0.15s' }}>
               <p><strong>مؤسسة قانونية تؤمن بأن العمل القانوني المتميز يبدأ بالفهم العميق، ويُبنى على التخطيط، ويُقاس بحماية مصالح العميل.</strong></p>
@@ -153,7 +144,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* About Definition */}
       <section className="about-definition" aria-label="من نحن">
         <div className="inner">
           <div className="def-grid">
@@ -171,19 +161,12 @@ export default function About() {
               </div>
             </div>
             <div className="def-image reveal" style={{ transitionDelay: '0.15s' }}>
-              <Image
-                src="/about.png"
-                alt="مقر مؤسسة الأستاذ محمود عبد الحميد للمحاماة"
-                width={800}
-                height={600}
-                loading="lazy"
-              />
+              <img src="/about.png" alt="مقر مؤسسة الأستاذ محمود عبد الحميد للمحاماة" loading="lazy" width="800" height="600" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Philosophy */}
       <section className="section section-gray" aria-label="فلسفتنا">
         <div className="section-inner">
           <div className="section-head reveal">
@@ -200,7 +183,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values */}
       <section className="section section-white" aria-label="قيم المؤسسة">
         <div className="section-inner">
           <div className="section-head reveal">
@@ -219,7 +201,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Leadership */}
       <section className="section section-gray" aria-label="القيادة">
         <div className="section-inner">
           <div className="section-head reveal">
@@ -229,14 +210,7 @@ export default function About() {
           </div>
           <div className="leadership-grid">
             <div className={`leadership-image reveal ${colorized ? 'colorized' : ''}`}>
-              <Image
-                src="/mahmoud-abdel-hamid-lawyer-portrait.jpg"
-                alt="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا"
-                width={400}
-                height={533}
-                loading="lazy"
-                className="leadership-img"
-              />
+              <img src="/mahmoud-abdel-hamid-lawyer-portrait.jpg" alt="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا" loading="lazy" width="400" height="533" />
             </div>
             <div className="leadership-content reveal" style={{ transitionDelay: '0.15s' }}>
               <h3>الأستاذ محمود عبد الحميد</h3>
@@ -261,7 +235,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Process */}
       <section className="section section-light" aria-label="منهج العمل">
         <div className="section-inner">
           <div className="section-head reveal">
@@ -280,7 +253,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Why Trust */}
       <section className="section section-gray" aria-label="لماذا يثق بنا عملاؤنا">
         <div className="section-inner">
           <div className="section-head reveal">
@@ -299,7 +271,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Gallery */}
       <section className="section section-light" aria-label="داخل المؤسسة">
         <div className="section-inner">
           <div className="section-head reveal">
@@ -318,7 +289,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Founder Message */}
       <section className="founder-message" aria-label="كلمة المؤسس">
         <div className="inner reveal">
           <span className="quote-icon">"</span>
@@ -328,7 +298,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section className="cta-final" aria-label="دعوة للتواصل">
         <div className="section-inner reveal">
           <h2>هل تبحث عن شريك قانوني يمكنك الاعتماد عليه؟</h2>
@@ -796,7 +765,6 @@ export default function About() {
           line-height: 1.8;
           font-style: italic;
         }
-
         .process-footer {
           max-width: 800px;
           margin: 1.5rem auto 0;
@@ -811,7 +779,6 @@ export default function About() {
           border-radius: 8px;
           font-family: var(--font-ar);
         }
-
         .trust-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -860,7 +827,6 @@ export default function About() {
           color: var(--charcoal);
           font-family: var(--font-ar);
         }
-
         .gallery-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -891,7 +857,6 @@ export default function About() {
           height: 100%;
           object-fit: cover;
         }
-
         .founder-message {
           padding: 4rem 2rem;
           background: var(--very-dark-navy);
@@ -932,7 +897,6 @@ export default function About() {
           letter-spacing: 0.06em;
           font-family: var(--font-ar);
         }
-
         .cta-final {
           background: var(--very-dark-navy);
           padding: 4.5rem 2rem;
@@ -962,51 +926,6 @@ export default function About() {
           justify-content: center;
           gap: 1rem;
         }
-
-        .btn-gold {
-          display: inline-block;
-          background: var(--matte-gold);
-          color: #000;
-          font-weight: 700;
-          padding: 16px 40px;
-          border-radius: 8px;
-          border: none;
-          transition: all 0.4s var(--ease-out);
-          text-align: center;
-          font-size: 0.95rem;
-          letter-spacing: 0.02em;
-          box-shadow: 0 2px 20px rgba(176, 141, 87, 0.15);
-          position: relative;
-          cursor: pointer;
-          text-decoration: none;
-        }
-        .btn-gold:hover {
-          background: #c4a06a;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(176, 141, 87, 0.25);
-        }
-
-        .btn-outline-white {
-          display: inline-block;
-          border: 1px solid rgba(255, 255, 255, 0.25);
-          color: #fff;
-          font-weight: 700;
-          padding: 16px 40px;
-          border-radius: 8px;
-          transition: all 0.4s var(--ease-out);
-          text-align: center;
-          font-size: 0.95rem;
-          background: transparent;
-          cursor: pointer;
-          text-decoration: none;
-        }
-        .btn-outline-white:hover {
-          border-color: var(--matte-gold);
-          color: var(--matte-gold);
-          background: rgba(176, 141, 87, 0.05);
-          transform: translateY(-2px);
-        }
-
         @media (max-width: 1024px) {
           .philosophy-grid { grid-template-columns: repeat(2, 1fr); }
           .values-grid { grid-template-columns: repeat(2, 1fr); }

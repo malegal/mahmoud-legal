@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /client-inquiry-result
+Disallow: /api/
+Disallow: /_next/
+
 Sitemap: https://ostazlaw.vercel.app/sitemap.xml

@@ -11,13 +11,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   poweredByHeader: false,
-  // إضافة output: 'standalone' لتحسين النشر
-  output: 'standalone',
-  // تحسين تجميع CSS
-  experimental: {
-    optimizeCss: true,
-  },
-  // إزالة redirects نهائياً
+  // نزيل output: 'standalone' و optimizeCss لتجنب الأخطاء
   async redirects() {
     return [];
   },

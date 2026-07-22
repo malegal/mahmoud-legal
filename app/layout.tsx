@@ -35,7 +35,8 @@ export const metadata: Metadata = {
     template: '%s | مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية',
     default: 'مؤسسة الأستاذ محمود عبد الحميد للمحاماة والاستشارات القانونية | OSTAZ LAW',
   },
-  description: 'مؤسسة قانونية مصرية تقدم استشارات، تمثيلاً قضائياً، وحلولاً قانونية للشركات والأفراد. خبرة في النقض والدستورية العليا.',
+  description:
+    'مؤسسة قانونية مصرية تقدم استشارات، تمثيلاً قضائياً، وحلولاً قانونية للشركات والأفراد. خبرة في النقض والدستورية العليا.',
   keywords: 'محامي, استشارات قانونية, محاماة, نقض, دستورية, شركات, أسوان, القاهرة, الإسكندرية',
   robots: 'index, follow',
   alternates: {
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
     siteName: 'OSTAZ LAW',
     images: [
       {
-        url: 'https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg',
+        url: '/images/mahmoud-abdel-hamid-lawyer-portrait.jpg',
         width: 600,
         height: 800,
         alt: 'الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا',
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://ostazlaw.vercel.app/mahmoud-abdel-hamid-lawyer-portrait.jpg'],
+    images: ['/images/mahmoud-abdel-hamid-lawyer-portrait.jpg'],
   },
   icons: {
     icon: '/favicon.ico',
@@ -73,11 +74,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className={`${tajawal.variable} ${amiri.variable} ${playfair.variable} ${montserrat.variable}`}>
       <head>

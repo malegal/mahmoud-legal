@@ -43,12 +43,8 @@ export default function Header() {
       </div>
 
       <nav className="header-nav">
-        {navLinks.map(link => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={pathname === link.href ? 'active' : ''}
-          >
+        {navLinks.map((link) => (
+          <Link key={link.href} href={link.href} className={pathname === link.href ? 'active' : ''}>
             {link.label}
           </Link>
         ))}
@@ -60,13 +56,12 @@ export default function Header() {
         </button>
       </div>
 
-      {/* القائمة المتنقلة */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} role="dialog" aria-modal="true">
         <button className="mobile-menu-close" onClick={closeMenu} aria-label="إغلاق القائمة">
           <i className="fas fa-times"></i>
         </button>
         <nav>
-          {navLinks.map(link => (
+          {navLinks.map((link) => (
             <Link key={link.href} href={link.href} onClick={closeMenu}>
               {link.label}
             </Link>

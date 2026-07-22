@@ -48,9 +48,15 @@ export default function Footer() {
 
         <div className="footer-col">
           <h4>اتصال</h4>
-          <a href="tel:+201101076000"><i className="fas fa-phone" style={{ marginLeft: '6px', opacity: 0.3 }}></i> +20 110 107 6000</a>
-          <a href="mailto:ma.law.firm@outlook.com"><i className="fas fa-envelope" style={{ marginLeft: '6px', opacity: 0.3 }}></i> ma.law.firm@outlook.com</a>
-          <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" rel="noopener noreferrer"><i className="fas fa-map-marker-alt" style={{ marginLeft: '6px', opacity: 0.3 }}></i> الموقع الجغرافي</a>
+          <a href="tel:+201101076000">
+            <i className="fas fa-phone" style={{ marginLeft: '6px', opacity: 0.3 }}></i> +20 110 107 6000
+          </a>
+          <a href="mailto:ma.law.firm@outlook.com">
+            <i className="fas fa-envelope" style={{ marginLeft: '6px', opacity: 0.3 }}></i> ma.law.firm@outlook.com
+          </a>
+          <a href="https://maps.app.goo.gl/inYTfr9Js78JwXqx5" target="_blank" rel="noopener noreferrer">
+            <i className="fas fa-map-marker-alt" style={{ marginLeft: '6px', opacity: 0.3 }}></i> الموقع الجغرافي
+          </a>
         </div>
       </div>
 

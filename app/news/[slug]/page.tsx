@@ -6,8 +6,12 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export async function generateStaticParams() {
-  const news = await getNews();
-  return news.map((item) => ({ slug: item.slug }));
+  try {
+    const news = await getNews();
+    return news.map((item) => ({ slug: item.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -31,7 +35,6 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   if (!news) notFound();
 
   const { meta, content } = news;
-  // ✅ إصلاح: استخدام marked.parse() للحصول على string مباشرة
   const html = marked.parse(content) as string;
   const sanitizedHtml = DOMPurify.sanitize(html);
 

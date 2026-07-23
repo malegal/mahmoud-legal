@@ -35,6 +35,7 @@ export default function AboutPage() {
                 width={800}
                 height={600}
                 loading="lazy"
+                priority
               />
             </div>
 
@@ -204,6 +205,7 @@ export default function AboutPage() {
                 width={400}
                 height={533}
                 loading="lazy"
+                priority
               />
             </div>
 

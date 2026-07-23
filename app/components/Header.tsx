@@ -56,6 +56,7 @@ export default function Header() {
         </button>
       </div>
 
+      {/* ===== القائمة المتنقلة – خلفية معتمة ونصوص بيضاء ===== */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} role="dialog" aria-modal="true">
         <button className="mobile-menu-close" onClick={closeMenu} aria-label="إغلاق القائمة">
           <i className="fas fa-times"></i>

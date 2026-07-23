@@ -41,8 +41,8 @@ export default async function NewsArchivePage() {
             {news.length === 0 ? (
               <div className="col-span-full text-center py-16">
                 <i className="fas fa-newspaper text-4xl text-matte-gold/30 mb-4"></i>
-                <p className="text-charcoal/50">لا توجد أخبار حالياً</p>
-                <p className="text-charcoal/30 text-sm mt-2">سيتم نشر أخبار جديدة قريباً</p>
+                <p className="text-charcoal/50 text-2xl font-bold">قريباً</p>
+                <p className="text-charcoal/30 text-sm mt-2">سيتم نشر أخبار وإنجازات جديدة</p>
               </div>
             ) : (
               news.map((item, index) => {
@@ -84,7 +84,7 @@ export default async function NewsArchivePage() {
         </div>
       </section>
 
-      {/* ===== أنماط إضافية مدمجة لهذه الصفحة ===== */}
+      {/* ===== أنماط إضافية ===== */}
       <style>{`
         .hero-archive {
           padding: 120px 2rem 4rem;

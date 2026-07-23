@@ -9,7 +9,7 @@ export default function AboutSection() {
           <div className="about-image reveal">
             <div className="frame">
               <Image
-                src="/images/mahmoud-abdel-hamid-lawyer-portrait.jpg"
+                src="/images/mahmoud-abdel-hamid-lawyer-portrait.webp"
                 alt="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا"
                 width={600}
                 height={800}

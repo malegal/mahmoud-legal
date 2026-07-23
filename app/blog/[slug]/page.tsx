@@ -6,8 +6,12 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export async function generateStaticParams() {
-  const articles = await getArticles();
-  return articles.map((article) => ({ slug: article.slug }));
+  try {
+    const articles = await getArticles();
+    return articles.map((article) => ({ slug: article.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -31,7 +35,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (!article) notFound();
 
   const { meta, content } = article;
-  // ✅ إصلاح: استخدام marked.parse() للحصول على string مباشرة
   const html = marked.parse(content) as string;
   const sanitizedHtml = DOMPurify.sanitize(html);
 
@@ -121,9 +124,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <Link href="/contact?tab=consult" className="btn-gold">احجز استشارتك الآن</Link>
       </div>
 
-      {/* ===== أنماط إضافية مدمجة لهذه الصفحة ===== */}
+      {/* ===== أنماط إضافية ===== */}
       <style>{`
-        /* ===== معلومات المقال ===== */
         .article-header-info {
           display: flex;
           flex-direction: column;
@@ -156,8 +158,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           font-size: 0.9rem;
           opacity: 0.6;
         }
-
-        /* ===== المختصر ===== */
         .article-intro {
           background: rgba(176,141,87,0.05);
           padding: 1.5rem 2rem;
@@ -180,8 +180,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           color: var(--matte-gold);
           margin-left: 0.4rem;
         }
-
-        /* ===== المحتوى ===== */
         .article-body {
           font-family: var(--font-serif);
           font-size: 1.15rem;
@@ -243,8 +241,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           background: rgba(176,141,87,0.05);
           font-weight: 700;
         }
-
-        /* ===== SEO FOOTER ===== */
         .seo-footer {
           margin-top: 2.5rem;
           padding: 1.5rem 2rem;
@@ -293,8 +289,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         .seo-footer .seo-label i {
           margin-left: 0.4rem;
         }
-
-        /* ===== التجاوب ===== */
         @media (max-width: 768px) {
           .article-header-info { padding-top: 110px; margin-top: -60px; }
           .article-header-info .meta-row { font-size: 0.8rem; gap: 0.5rem 1rem; }

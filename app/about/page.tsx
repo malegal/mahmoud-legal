@@ -30,7 +30,7 @@ export default function AboutPage() {
           <div className="hero-grid">
             <div className="hero-image reveal">
               <Image
-                src="/images/about.png"
+                src="/images/about.webp"
                 alt="مقر مؤسسة الأستاذ محمود عبد الحميد للمحاماة"
                 width={800}
                 height={600}
@@ -99,7 +99,7 @@ export default function AboutPage() {
 
             <div className="def-image reveal" style={{ transitionDelay: '0.15s' }}>
               <Image
-                src="/images/about.png"
+                src="/images/about.webp"
                 alt="مقر مؤسسة الأستاذ محمود عبد الحميد للمحاماة"
                 width={800}
                 height={600}
@@ -200,7 +200,7 @@ export default function AboutPage() {
           <div className="leadership-grid">
             <div className="leadership-image reveal" id="leadershipImage">
               <Image
-                src="/images/mahmoud-abdel-hamid-lawyer-portrait.jpg"
+                src="/images/mahmoud-abdel-hamid-lawyer-portrait.webp"
                 alt="الأستاذ محمود عبد الحميد – المحامي بالنقض والدستورية العليا"
                 width={400}
                 height={533}

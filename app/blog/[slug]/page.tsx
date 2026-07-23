@@ -31,7 +31,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (!article) notFound();
 
   const { meta, content } = article;
-  const html = marked(content);
+  // ✅ إصلاح: استخدام marked.parse() للحصول على string مباشرة
+  const html = marked.parse(content) as string;
   const sanitizedHtml = DOMPurify.sanitize(html);
 
   return (
